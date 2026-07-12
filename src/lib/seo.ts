@@ -46,7 +46,7 @@ export function generateToolMetadata(tool: {
   slug: string;
 }): Metadata {
   return generatePageMetadata({
-    title: `${tool.title} — Free Online ${tool.title} | ${siteConfig.name}`,
+    title: `${tool.title} — Free Online Calculator`,
     description: tool.description,
     path: `/tools/${tool.slug}`,
   });
