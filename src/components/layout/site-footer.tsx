@@ -42,7 +42,7 @@ export function SiteFooter() {
         {/* Bottom bar */}
         <div className="mt-16 pt-8 border-t border-border-soft flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <LogoSymbol className="w-5 h-5 opacity-60" />
+            <LogoSymbol className="w-5 h-5" />
             <span className="text-xs text-text-subtle">
               &copy; {new Date().getFullYear()} {siteConfig.name}
             </span>

@@ -7,6 +7,8 @@ import { siteConfig } from '@/config/site';
 import { categories } from '@/config/categories';
 import { getToolsByCategory } from '@/config/tools';
 import { Badge } from '@/components/ui/badge';
+import { JsonLd } from '@/components/seo/json-ld';
+import { collectionPageSchema, breadcrumbSchema } from '@/lib/structured-data';
 import { type ToolCategory } from '@/types/tool';
 
 function getIcon(name: string) {
@@ -45,6 +47,25 @@ export default async function CategoryPage({
   const tools = getToolsByCategory(slug);
 
   return (
+    <>
+      <JsonLd
+        data={collectionPageSchema({
+          title: `${category.title} Tools`,
+          description: category.description,
+          path: `/categories/${slug}`,
+          items: tools.map((t) => ({
+            name: t.title,
+            url: `${siteConfig.url}/tools/${t.slug}`,
+          })),
+        })}
+      />
+      <JsonLd
+        data={breadcrumbSchema([
+          { label: 'Home', href: '/' },
+          { label: 'Categories', href: '/categories' },
+          { label: category.title },
+        ])}
+      />
     <div className="py-8 md:py-12">
       <div className="container-main">
         {/* Header */}
@@ -96,5 +117,6 @@ export default async function CategoryPage({
         )}
       </div>
     </div>
+    </>
   );
 }

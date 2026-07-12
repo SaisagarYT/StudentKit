@@ -59,7 +59,10 @@ export function HeroSection() {
               ref={headingRef}
               className="text-display font-bold tracking-tighter leading-[0.92]"
             >
-              Calculate. Learn.{' '}
+              Calculate.
+              <br />
+              Learn.
+              <br />
               <span className="font-serif italic font-normal">Build</span>.
             </h1>
 

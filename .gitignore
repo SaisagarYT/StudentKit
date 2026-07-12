@@ -61,7 +61,6 @@ AGENTS.md
 
 # Firebase
 .firebase/
-.firebaserc
 
 # IDE
 .vscode/

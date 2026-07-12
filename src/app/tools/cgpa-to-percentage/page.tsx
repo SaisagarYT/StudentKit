@@ -1,24 +1,42 @@
 import { Metadata } from 'next';
 import { ToolPageShell } from '@/components/layout/tool-page-shell';
+import { ToolStructuredData } from '@/components/seo/tool-structured-data';
 import { CGPAToPercentageForm } from '@/features/percentage/cgpa-to-percentage-form';
 import { generateToolMetadata } from '@/lib/seo';
 import { getToolBySlug } from '@/config/tools';
 
 const tool = getToolBySlug('cgpa-to-percentage')!;
 
+const breadcrumbs = [
+  { label: 'Home', href: '/' },
+  { label: 'Tools', href: '/tools' },
+  { label: tool.title },
+];
+
+const faq = [
+  {
+    question: 'Which formula should I use?',
+    answer:
+      'Use the formula specified by your university. If unsure, the generic formula (CGPA × 9.5) is widely accepted for approximate conversions.',
+  },
+  {
+    question: 'Is the conversion exact?',
+    answer:
+      'These are approximate conversions. For official purposes like job applications or higher education, check if the institution requires a specific conversion method.',
+  },
+];
+
 export const metadata: Metadata = generateToolMetadata(tool);
 
 export default function CGPAToPercentagePage() {
   return (
+    <>
+    <ToolStructuredData tool={tool} breadcrumbs={breadcrumbs} faq={faq} />
     <ToolPageShell
       title={tool.title}
       description={tool.description}
       category={tool.category}
-      breadcrumbs={[
-        { label: 'Home', href: '/' },
-        { label: 'Tools', href: '/tools' },
-        { label: tool.title },
-      ]}
+      breadcrumbs={breadcrumbs}
       explanation={
         <p>
           Different universities use different formulas to convert CGPA to
@@ -35,18 +53,7 @@ export default function CGPAToPercentagePage() {
           <p>CBCS/UGC: Percentage = CGPA × 10 - 7.5</p>
         </div>
       }
-      faq={[
-        {
-          question: 'Which formula should I use?',
-          answer:
-            'Use the formula specified by your university. If unsure, the generic formula (CGPA × 9.5) is widely accepted for approximate conversions.',
-        },
-        {
-          question: 'Is the conversion exact?',
-          answer:
-            'These are approximate conversions. For official purposes like job applications or higher education, check if the institution requires a specific conversion method.',
-        },
-      ]}
+      faq={faq}
       relatedTools={[
         { slug: 'cgpa-calculator', title: 'CGPA Calculator', description: 'Calculate cumulative GPA' },
         { slug: 'marks-percentage-calculator', title: 'Marks Percentage', description: 'Calculate percentage from marks' },
@@ -54,5 +61,6 @@ export default function CGPAToPercentagePage() {
     >
       <CGPAToPercentageForm />
     </ToolPageShell>
+    </>
   );
 }

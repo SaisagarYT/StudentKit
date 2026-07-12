@@ -1,24 +1,47 @@
 import { Metadata } from 'next';
 import { ToolPageShell } from '@/components/layout/tool-page-shell';
+import { ToolStructuredData } from '@/components/seo/tool-structured-data';
 import { CGPAForm } from '@/features/cgpa/cgpa-form';
 import { generateToolMetadata } from '@/lib/seo';
 import { getToolBySlug } from '@/config/tools';
 
 const tool = getToolBySlug('cgpa-calculator')!;
 
+const breadcrumbs = [
+  { label: 'Home', href: '/' },
+  { label: 'Tools', href: '/tools' },
+  { label: tool.title },
+];
+
+const faq = [
+  {
+    question: 'What is the difference between SGPA and CGPA?',
+    answer:
+      'SGPA is your Grade Point Average for a single semester. CGPA is the cumulative average across all semesters, weighted by credits.',
+  },
+  {
+    question: 'Is CGPA calculated on a 10-point or 4-point scale?',
+    answer:
+      'This calculator works with any scale. Most Indian universities use a 10-point scale, while many international institutions use a 4-point scale. Enter your SGPAs in whatever scale your university uses.',
+  },
+  {
+    question: 'How do credits affect my CGPA?',
+    answer:
+      'Semesters with more credits have more weight in your CGPA calculation. A high SGPA in a credit-heavy semester impacts your overall CGPA more than one in a lighter semester.',
+  },
+];
+
 export const metadata: Metadata = generateToolMetadata(tool);
 
 export default function CGPACalculatorPage() {
   return (
+    <>
+    <ToolStructuredData tool={tool} breadcrumbs={breadcrumbs} faq={faq} />
     <ToolPageShell
       title={tool.title}
       description={tool.description}
       category={tool.category}
-      breadcrumbs={[
-        { label: 'Home', href: '/' },
-        { label: 'Tools', href: '/tools' },
-        { label: tool.title },
-      ]}
+      breadcrumbs={breadcrumbs}
       explanation={
         <p>
           CGPA (Cumulative Grade Point Average) is the weighted average of your
@@ -35,23 +58,7 @@ export default function CGPACalculatorPage() {
           </p>
         </div>
       }
-      faq={[
-        {
-          question: 'What is the difference between SGPA and CGPA?',
-          answer:
-            'SGPA is your Grade Point Average for a single semester. CGPA is the cumulative average across all semesters, weighted by credits.',
-        },
-        {
-          question: 'Is CGPA calculated on a 10-point or 4-point scale?',
-          answer:
-            'This calculator works with any scale. Most Indian universities use a 10-point scale, while many international institutions use a 4-point scale. Enter your SGPAs in whatever scale your university uses.',
-        },
-        {
-          question: 'How do credits affect my CGPA?',
-          answer:
-            'Semesters with more credits have more weight in your CGPA calculation. A high SGPA in a credit-heavy semester impacts your overall CGPA more than one in a lighter semester.',
-        },
-      ]}
+      faq={faq}
       relatedTools={[
         { slug: 'sgpa-calculator', title: 'SGPA Calculator', description: 'Calculate semester GPA' },
         { slug: 'cgpa-to-percentage', title: 'CGPA to Percentage', description: 'Convert CGPA to percentage' },
@@ -60,5 +67,6 @@ export default function CGPACalculatorPage() {
     >
       <CGPAForm />
     </ToolPageShell>
+    </>
   );
 }

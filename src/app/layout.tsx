@@ -4,6 +4,8 @@ import { siteConfig } from '@/config/site';
 import { SiteHeader } from '@/components/navigation/site-header';
 import { CommandSearch } from '@/components/navigation/command-search';
 import { SiteFooter } from '@/components/layout/site-footer';
+import { JsonLd } from '@/components/seo/json-ld';
+import { organizationSchema, websiteSchema } from '@/lib/structured-data';
 import './globals.css';
 
 const geist = Geist({
@@ -73,6 +75,8 @@ export default function RootLayout({
       className={`${geist.variable} ${instrumentSerif.variable}`}
     >
       <body className="min-h-screen flex flex-col bg-background text-foreground font-sans antialiased">
+        <JsonLd data={organizationSchema()} />
+        <JsonLd data={websiteSchema()} />
         <SiteHeader />
         <CommandSearch />
         <main className="flex-1">{children}</main>

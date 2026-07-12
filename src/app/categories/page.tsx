@@ -5,6 +5,8 @@ import * as Icons from 'lucide-react';
 import { siteConfig } from '@/config/site';
 import { categories } from '@/config/categories';
 import { getToolsByCategory } from '@/config/tools';
+import { JsonLd } from '@/components/seo/json-ld';
+import { breadcrumbSchema } from '@/lib/structured-data';
 
 export const metadata: Metadata = {
   title: `Categories | ${siteConfig.name}`,
@@ -25,6 +27,13 @@ const iconBgMap: Record<string, string> = {
 
 export default function CategoriesPage() {
   return (
+    <>
+    <JsonLd
+      data={breadcrumbSchema([
+        { label: 'Home', href: '/' },
+        { label: 'Categories' },
+      ])}
+    />
     <div className="py-8 md:py-12">
       <div className="container-main">
         <div className="max-w-2xl mb-12">
@@ -65,5 +74,6 @@ export default function CategoriesPage() {
         </div>
       </div>
     </div>
+    </>
   );
 }

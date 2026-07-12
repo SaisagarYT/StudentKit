@@ -1,24 +1,42 @@
 import { Metadata } from 'next';
 import { ToolPageShell } from '@/components/layout/tool-page-shell';
+import { ToolStructuredData } from '@/components/seo/tool-structured-data';
 import { SGPAForm } from '@/features/sgpa/sgpa-form';
 import { generateToolMetadata } from '@/lib/seo';
 import { getToolBySlug } from '@/config/tools';
 
 const tool = getToolBySlug('sgpa-calculator')!;
 
+const breadcrumbs = [
+  { label: 'Home', href: '/' },
+  { label: 'Tools', href: '/tools' },
+  { label: tool.title },
+];
+
+const faq = [
+  {
+    question: 'What grade points should I enter?',
+    answer:
+      'Enter the grade points awarded for each subject. On a 10-point scale, this is typically 10 for O/A+, 9 for A, 8 for B+, etc. Check your university\'s grading scheme.',
+  },
+  {
+    question: 'What are credits?',
+    answer:
+      'Credits represent the weightage or hours assigned to each subject. Core subjects typically have 3-4 credits, while labs may have 1-2.',
+  },
+];
+
 export const metadata: Metadata = generateToolMetadata(tool);
 
 export default function SGPACalculatorPage() {
   return (
+    <>
+    <ToolStructuredData tool={tool} breadcrumbs={breadcrumbs} faq={faq} />
     <ToolPageShell
       title={tool.title}
       description={tool.description}
       category={tool.category}
-      breadcrumbs={[
-        { label: 'Home', href: '/' },
-        { label: 'Tools', href: '/tools' },
-        { label: tool.title },
-      ]}
+      breadcrumbs={breadcrumbs}
       explanation={
         <p>
           SGPA (Semester Grade Point Average) is the weighted average of grade
@@ -35,18 +53,7 @@ export default function SGPACalculatorPage() {
           </p>
         </div>
       }
-      faq={[
-        {
-          question: 'What grade points should I enter?',
-          answer:
-            'Enter the grade points awarded for each subject. On a 10-point scale, this is typically 10 for O/A+, 9 for A, 8 for B+, etc. Check your university\'s grading scheme.',
-        },
-        {
-          question: 'What are credits?',
-          answer:
-            'Credits represent the weightage or hours assigned to each subject. Core subjects typically have 3-4 credits, while labs may have 1-2.',
-        },
-      ]}
+      faq={faq}
       relatedTools={[
         { slug: 'cgpa-calculator', title: 'CGPA Calculator', description: 'Calculate cumulative GPA' },
         { slug: 'cgpa-to-percentage', title: 'CGPA to Percentage', description: 'Convert CGPA to percentage' },
@@ -54,5 +61,6 @@ export default function SGPACalculatorPage() {
     >
       <SGPAForm />
     </ToolPageShell>
+    </>
   );
 }
