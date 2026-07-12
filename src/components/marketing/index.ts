@@ -1,0 +1,9 @@
+export { HeroSection } from './hero-section';
+export { HeroVisual } from './hero-visual';
+export { PopularToolsGrid } from './popular-tools-grid';
+export { CategoryShowcase } from './category-showcase';
+export { LiveDemo } from './live-demo';
+export { WhySection } from './why-section';
+export { HowItWorks } from './how-it-works';
+export { ToolDirectory } from './tool-directory';
+export { FinalCTA } from './final-cta';
