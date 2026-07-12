@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import { Geist, Instrument_Serif } from 'next/font/google';
 import { siteConfig } from '@/config/site';
 import { SiteHeader } from '@/components/navigation/site-header';
+import { CommandSearch } from '@/components/navigation/command-search';
 import { SiteFooter } from '@/components/layout/site-footer';
 import './globals.css';
 
@@ -73,6 +74,7 @@ export default function RootLayout({
     >
       <body className="min-h-screen flex flex-col bg-background text-foreground font-sans antialiased">
         <SiteHeader />
+        <CommandSearch />
         <main className="flex-1">{children}</main>
         <SiteFooter />
       </body>
