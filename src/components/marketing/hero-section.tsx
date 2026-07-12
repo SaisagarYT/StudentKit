@@ -59,17 +59,17 @@ export function HeroSection() {
               ref={headingRef}
               className="text-display font-bold tracking-tighter leading-[0.92]"
             >
-              Everything a student{' '}
-              <span className="font-serif italic font-normal">needs</span> to
-              calculate, convert &amp;&nbsp;simplify.
+              Calculate. Learn.{' '}
+              <span className="font-serif italic font-normal">Build</span>.
             </h1>
 
             <p
               ref={subtextRef}
               className="mt-6 md:mt-8 text-body-lg text-text-secondary max-w-lg leading-relaxed"
             >
-              Free calculators and utilities for college, exams, documents and
-              your career — fast, private and easy to use.
+              Free tools, interactive roadmaps, and project ideas for college
+              students, exam aspirants, and job seekers — everything you need to
+              move forward.
             </p>
 
             <div ref={ctaRef} className="mt-8 md:mt-10 flex flex-wrap gap-3">
@@ -100,7 +100,7 @@ export function HeroSection() {
                 </kbd>
               </div>
               <div className="mt-3 flex flex-wrap gap-2">
-                {['Attendance', 'CGPA', 'Salary', 'Image Compress'].map(
+                {['Attendance', 'CGPA', 'Frontend Roadmap', 'Projects', 'Salary'].map(
                   (tag) => (
                     <span
                       key={tag}

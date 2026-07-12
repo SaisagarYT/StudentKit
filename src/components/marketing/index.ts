@@ -1,5 +1,6 @@
 export { HeroSection } from './hero-section';
 export { HeroVisual } from './hero-visual';
+export { PillarsSection } from './pillars-section';
 export { PopularToolsGrid } from './popular-tools-grid';
 export { CategoryShowcase } from './category-showcase';
 export { LiveDemo } from './live-demo';

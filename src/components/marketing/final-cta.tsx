@@ -51,20 +51,28 @@ export function FinalCTA() {
           {/* Content */}
           <div className="relative z-10 max-w-xl">
             <h2 className="text-h2 font-bold tracking-tight text-[var(--text-inverse)]">
-              One less thing to{' '}
-              <span className="text-[var(--accent-primary)]">figure out</span>.
+              Your next step starts{' '}
+              <span className="text-[var(--accent-primary)]">here</span>.
             </h2>
             <p className="mt-5 text-base text-[var(--text-inverse)]/70 leading-relaxed max-w-md">
-              Find the tool you need and get back to what matters. No sign-up,
-              no clutter — just answers.
+              Calculate grades, discover your path, build real projects — everything
+              a student needs to move forward, in one place.
             </p>
-            <Link
-              href="/tools"
-              className="inline-flex items-center gap-2 mt-8 px-7 py-3.5 text-sm font-semibold bg-[var(--accent-primary)] text-[var(--text-primary)] rounded-xl hover:bg-[var(--accent-primary-hover)] transition-colors"
-            >
-              Explore StudentKit
-              <ArrowRight className="w-4 h-4" />
-            </Link>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link
+                href="/tools"
+                className="inline-flex items-center gap-2 px-7 py-3.5 text-sm font-semibold bg-[var(--accent-primary)] text-[var(--text-primary)] rounded-xl hover:bg-[var(--accent-primary-hover)] transition-colors"
+              >
+                Explore tools
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+              <Link
+                href="/roadmaps"
+                className="inline-flex items-center gap-2 px-7 py-3.5 text-sm font-semibold border border-white/20 text-[var(--text-inverse)] rounded-xl hover:bg-white/5 transition-colors"
+              >
+                View roadmaps
+              </Link>
+            </div>
           </div>
 
           {/* Decorative elements */}

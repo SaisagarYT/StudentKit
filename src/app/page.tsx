@@ -1,5 +1,6 @@
 import {
   HeroSection,
+  PillarsSection,
   PopularToolsGrid,
   CategoryShowcase,
   LiveDemo,
@@ -13,6 +14,7 @@ export default function HomePage() {
   return (
     <>
       <HeroSection />
+      <PillarsSection />
       <PopularToolsGrid />
       <CategoryShowcase />
       <LiveDemo />

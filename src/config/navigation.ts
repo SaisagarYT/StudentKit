@@ -5,12 +5,10 @@ export interface NavItem {
 }
 
 export const mainNavItems: NavItem[] = [
-  { label: 'Tools', href: '/tools', description: 'Browse all tools' },
-  { label: 'College', href: '/categories/college', description: 'Academic calculators' },
-  { label: 'Exams', href: '/categories/exams', description: 'Exam utilities' },
-  { label: 'Career', href: '/categories/career', description: 'Professional tools' },
-  { label: 'Documents', href: '/categories/documents', description: 'Document utilities' },
-  { label: 'Guides', href: '/guides', description: 'How-to guides' },
+  { label: 'Tools', href: '/tools', description: 'Calculators & utilities' },
+  { label: 'Roadmaps', href: '/roadmaps', description: 'Career & tech paths' },
+  { label: 'Projects', href: '/projects', description: 'Build something real' },
+  { label: 'Guides', href: '/guides', description: 'Step-by-step learning' },
 ];
 
 export const footerNavSections = [
@@ -24,10 +22,16 @@ export const footerNavSections = [
     ],
   },
   {
-    title: 'Resources',
+    title: 'Learn',
     links: [
-      { label: 'All Tools', href: '/tools' },
+      { label: 'Roadmaps', href: '/roadmaps' },
       { label: 'Guides', href: '/guides' },
+      { label: 'Projects', href: '/projects' },
+    ],
+  },
+  {
+    title: 'Company',
+    links: [
       { label: 'About', href: '/about' },
       { label: 'Contact', href: '/contact' },
     ],
