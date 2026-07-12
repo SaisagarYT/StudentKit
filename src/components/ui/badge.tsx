@@ -11,6 +11,7 @@ const badgeVariants = cva(
         exams: 'bg-[var(--accent-exams)]/20 text-[#8B6B00]',
         career: 'bg-[var(--accent-career)]/20 text-[#A85A00]',
         documents: 'bg-[var(--accent-documents)]/20 text-[#0F766E]',
+        developer: 'bg-[var(--accent-primary)]/20 text-[#4A6B00]',
         accent: 'bg-[var(--accent-primary)]/20 text-[var(--text-primary)]',
       },
     },

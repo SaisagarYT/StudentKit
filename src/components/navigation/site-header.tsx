@@ -36,7 +36,7 @@ export function SiteHeader() {
   }, []);
 
   useEffect(() => {
-    if (isMobileMenuOpen) {
+    if (isMobileMenuOpen || isMegaOpen) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
@@ -44,7 +44,7 @@ export function SiteHeader() {
     return () => {
       document.body.style.overflow = '';
     };
-  }, [isMobileMenuOpen]);
+  }, [isMobileMenuOpen, isMegaOpen]);
 
   // Close mega menu on route change
   useEffect(() => {
@@ -226,7 +226,7 @@ export function SiteHeader() {
           ref={megaRef}
           onMouseEnter={handleMegaEnter}
           onMouseLeave={handleMegaLeave}
-          className="hidden absolute top-full left-0 right-0 w-full"
+          className="hidden absolute top-full left-0 right-0 w-full max-h-[calc(100vh-4rem)] overflow-y-auto"
           style={{ display: 'none' }}
         >
           <div className="border-b border-[var(--border-soft)] bg-[var(--bg-surface)] shadow-xl">
@@ -252,7 +252,7 @@ export function SiteHeader() {
               </div>
 
               {/* Category columns */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 lg:gap-5">
                 {toolsByCategory.map((group) => (
                   <div key={group.category.slug} data-mega-col>
                     {/* Category header */}

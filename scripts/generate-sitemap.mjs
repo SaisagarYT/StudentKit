@@ -14,9 +14,19 @@ const tools = [
   'image-compressor',
   'image-resizer',
   'signature-resizer',
+  'readme-generator',
+  'gitignore-generator',
+  'project-structure-generator',
+  'color-palette-generator',
+  'image-color-picker',
+  'regex-tester',
+  'json-formatter',
+  'base64-encoder',
+  'lorem-ipsum-generator',
+  'uuid-generator',
 ];
 
-const categories = ['college', 'exams', 'career', 'documents'];
+const categories = ['college', 'exams', 'career', 'documents', 'developer'];
 
 const staticPages = [
   { path: '', priority: '1.0', changefreq: 'weekly' },

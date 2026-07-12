@@ -33,4 +33,12 @@ export const categories: Category[] = [
     accent: 'var(--accent-documents)',
     accentBg: 'bg-[#A8F0E6]/20',
   },
+  {
+    slug: 'developer',
+    title: 'Developer',
+    description: 'README generators, gitignore builders, and project scaffolding tools.',
+    icon: 'Code',
+    accent: 'var(--accent-primary)',
+    accentBg: 'bg-[#C7FF3D]/20',
+  },
 ];

@@ -1,4 +1,4 @@
-export type ToolCategory = 'college' | 'exams' | 'career' | 'documents';
+export type ToolCategory = 'college' | 'exams' | 'career' | 'documents' | 'developer';
 
 export type CardSize = 'small' | 'medium' | 'large';
 
