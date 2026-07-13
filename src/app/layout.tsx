@@ -74,6 +74,13 @@ export default function RootLayout({
       lang="en"
       className={`${geist.variable} ${instrumentSerif.variable}`}
     >
+      <head>
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4789559777617370"
+          crossOrigin="anonymous"
+        />
+      </head>
       <body className="min-h-screen flex flex-col bg-background text-foreground font-sans antialiased">
         <JsonLd data={organizationSchema()} />
         <JsonLd data={websiteSchema()} />
