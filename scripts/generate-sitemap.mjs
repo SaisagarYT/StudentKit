@@ -28,6 +28,13 @@ const tools = [
 
 const categories = ['college', 'exams', 'career', 'documents', 'developer'];
 
+const roadmapSlugs = [
+  'frontend-developer',
+  'backend-developer',
+  'full-stack-developer',
+  'placement-preparation',
+];
+
 const staticPages = [
   { path: '', priority: '1.0', changefreq: 'weekly' },
   { path: '/tools', priority: '0.9', changefreq: 'weekly' },
@@ -59,6 +66,12 @@ const urls = [
   })),
   ...tools.map((slug) => ({
     loc: `${BASE_URL}/tools/${slug}`,
+    lastmod: today,
+    changefreq: 'monthly',
+    priority: '0.8',
+  })),
+  ...roadmapSlugs.map((slug) => ({
+    loc: `${BASE_URL}/roadmaps/${slug}`,
     lastmod: today,
     changefreq: 'monthly',
     priority: '0.8',
