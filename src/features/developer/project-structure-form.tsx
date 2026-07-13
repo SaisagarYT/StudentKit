@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useCallback } from 'react';
+import { trackToolUsage } from '@/lib/analytics';
 import { Copy, Terminal, Check, FolderTree } from 'lucide-react';
 
 /* ─── Preset types ─── */
@@ -509,6 +510,7 @@ export function ProjectStructureForm() {
   const currentPreset = presets.find((p) => p.id === selectedPreset) ?? presets[0];
 
   const copyToClipboard = useCallback(async (text: string, type: 'tree' | 'mkdir') => {
+    trackToolUsage('project-structure-generator');
     try {
       await navigator.clipboard.writeText(text);
       if (type === 'tree') {

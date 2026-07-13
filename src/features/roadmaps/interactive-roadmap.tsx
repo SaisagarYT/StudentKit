@@ -23,6 +23,7 @@ import {
 } from 'lucide-react';
 import type { Roadmap, RoadmapStage, RoadmapTopic } from '@/types/roadmap';
 import { cn } from '@/lib/utils';
+import { trackRoadmapProgress } from '@/lib/analytics';
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
@@ -577,6 +578,9 @@ export function InteractiveRoadmap({ roadmap }: { roadmap: Roadmap }) {
       setProgress((prev) => {
         const next = { ...prev, [topicId]: !prev[topicId] };
         saveProgress(roadmap.slug, next);
+        if (next[topicId]) {
+          trackRoadmapProgress(roadmap.slug, topicId);
+        }
         return next;
       });
     },

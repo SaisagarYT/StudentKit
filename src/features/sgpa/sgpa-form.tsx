@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useCallback, useRef, useEffect } from 'react';
+import { trackToolUsage } from '@/lib/analytics';
 import { Plus, Trash2 } from 'lucide-react';
 import gsap from 'gsap';
 import { calculateSGPA } from './sgpa.calculator';
@@ -53,6 +54,7 @@ export function SGPAForm() {
   const handleCalculate = () => {
     const calcResult = calculateSGPA(subjects);
     setResult(calcResult);
+    trackToolUsage('sgpa-calculator');
   };
 
   useEffect(() => {

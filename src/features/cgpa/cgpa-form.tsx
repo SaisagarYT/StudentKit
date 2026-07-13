@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useCallback } from 'react';
+import { trackToolUsage } from '@/lib/analytics';
 import { Plus, Trash2 } from 'lucide-react';
 import { calculateCGPA } from './cgpa.calculator';
 import { type SemesterEntry, type CGPAResult } from './cgpa.types';
@@ -42,6 +43,7 @@ export function CGPAForm() {
   const handleCalculate = () => {
     const calcResult = calculateCGPA(semesters);
     setResult(calcResult);
+    trackToolUsage('cgpa-calculator');
   };
 
   return (

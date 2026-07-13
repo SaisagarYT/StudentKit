@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useMemo, useCallback, Fragment } from 'react';
+import { useState, useMemo, useCallback, useRef, Fragment } from 'react';
+import { trackToolUsage } from '@/lib/analytics';
 import { Copy, Check, ChevronDown, ChevronRight, Replace } from 'lucide-react';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
@@ -57,6 +58,7 @@ const COMMON_PATTERNS: PresetPattern[] = [
 // ─── Component ──────────────────────────────────────────────────────────────
 
 export function RegexTesterForm() {
+  const trackedRef = useRef(false);
   const [pattern, setPattern] = useState('');
   const [flagG, setFlagG] = useState(true);
   const [flagI, setFlagI] = useState(false);
@@ -118,6 +120,11 @@ export function RegexTesterForm() {
     }
     return results;
   }, [regex, testString]);
+
+  if (matches.length > 0 && !trackedRef.current) {
+    trackedRef.current = true;
+    trackToolUsage('regex-tester');
+  }
 
   const highlightedParts = useMemo(() => {
     if (!matches.length || !testString) return null;

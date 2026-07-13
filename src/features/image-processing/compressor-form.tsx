@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useCallback, useEffect } from 'react';
+import { trackToolUsage } from '@/lib/analytics';
 import { Upload, Download, Trash2, Image as ImageIcon } from 'lucide-react';
 import gsap from 'gsap';
 
@@ -88,6 +89,7 @@ export function CompressorForm() {
         blob,
         previewUrl,
       });
+      trackToolUsage('image-compressor');
     } catch {
       setError('Failed to compress image. Try a different file.');
     } finally {

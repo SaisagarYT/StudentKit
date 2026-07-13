@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useMemo, useCallback } from 'react';
+import { trackToolUsage } from '@/lib/analytics';
 import { Copy, Download, Check, Sparkles } from 'lucide-react';
 
 /* ─── Technology Presets ─── */
@@ -185,6 +186,7 @@ export function GitignoreGeneratorForm() {
 
   const handleCopy = useCallback(async () => {
     if (!generatedContent) return;
+    trackToolUsage('gitignore-generator');
     try {
       await navigator.clipboard.writeText(generatedContent);
       setCopied(true);

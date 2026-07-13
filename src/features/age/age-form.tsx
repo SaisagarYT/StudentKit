@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { trackToolUsage } from '@/lib/analytics';
 import gsap from 'gsap';
 import { calculateAge, type AgeResult } from './age.calculator';
 
@@ -29,6 +30,7 @@ export function AgeForm() {
     }
 
     setResult(calculateAge(birth, target));
+    trackToolUsage('age-calculator');
   };
 
   useEffect(() => {

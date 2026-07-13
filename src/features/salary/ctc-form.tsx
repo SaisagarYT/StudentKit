@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { trackToolUsage } from '@/lib/analytics';
 import gsap from 'gsap';
 import { calculateCTCToInHand, type CTCBreakdown } from './salary.calculator';
 
@@ -22,6 +23,7 @@ export function CTCForm() {
       return;
     }
     setResult(calculateCTCToInHand({ annualCTC: val }));
+    trackToolUsage('ctc-to-inhand-calculator');
   };
 
   useEffect(() => {

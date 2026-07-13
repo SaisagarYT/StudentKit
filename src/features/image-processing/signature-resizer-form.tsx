@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useCallback, useEffect } from 'react';
+import { trackToolUsage } from '@/lib/analytics';
 import { Upload, Download, Trash2, Image as ImageIcon } from 'lucide-react';
 import gsap from 'gsap';
 
@@ -76,6 +77,7 @@ export function SignatureResizerForm() {
       });
 
       setResult({ blob, previewUrl: URL.createObjectURL(blob), width: w, height: h });
+      trackToolUsage('signature-resizer');
     } catch {
       setError('Failed to resize signature.');
     } finally {

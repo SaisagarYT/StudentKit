@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { trackToolUsage } from '@/lib/analytics';
 import gsap from 'gsap';
 import { calculateMarksPercentage, type MarksPercentageResult } from './percentage.calculator';
 
@@ -34,6 +35,7 @@ export function MarksPercentageForm() {
     }
 
     setResult(calculateMarksPercentage(ob, tot));
+    trackToolUsage('marks-percentage-calculator');
   };
 
   useEffect(() => {

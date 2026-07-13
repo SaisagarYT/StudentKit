@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useMemo, useCallback } from 'react';
+import { trackToolUsage } from '@/lib/analytics';
 import { Copy, Check } from 'lucide-react';
 
 // ─── Color Math Utilities ────────────────────────────────────────────────────
@@ -469,6 +470,7 @@ function ColorRow({ color, index }: { color: PaletteColor; index: number }) {
   const allValues = `${color.hex} | rgb(${color.r}, ${color.g}, ${color.b}) | hsl(${color.h}, ${color.s}%, ${color.l}%)`;
 
   const handleCopy = async () => {
+    trackToolUsage('color-palette-generator');
     try {
       await navigator.clipboard.writeText(allValues);
     } catch {

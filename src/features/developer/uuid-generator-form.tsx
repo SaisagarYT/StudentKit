@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useCallback } from 'react';
+import { trackToolUsage } from '@/lib/analytics';
 import { Copy, Check, RefreshCw } from 'lucide-react';
 
 // ─── UUID Generation ────────────────────────────────────────────────────────
@@ -58,6 +59,7 @@ export function UuidGeneratorForm() {
 
   const handleGenerateSingle = useCallback(() => {
     setSingleUuid(generateUUID());
+    trackToolUsage('uuid-generator');
   }, []);
 
   const handleGenerateBulk = useCallback(() => {

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useCallback, useMemo } from 'react';
+import { trackToolUsage } from '@/lib/analytics';
 import { Copy, Check } from 'lucide-react';
 
 // ─── Lorem Ipsum Word Bank ──────────────────────────────────────────────────
@@ -111,6 +112,7 @@ export function LoremIpsumForm() {
   const handleGenerate = useCallback(() => {
     const clamped = Math.max(1, Math.min(50, amount));
     setOutput(generateText(mode, clamped, startClassic));
+    trackToolUsage('lorem-ipsum-generator');
   }, [mode, amount, startClassic]);
 
   const stats = useMemo(() => {

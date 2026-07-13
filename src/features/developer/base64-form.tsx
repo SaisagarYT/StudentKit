@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useCallback, useRef } from 'react';
+import { trackToolUsage } from '@/lib/analytics';
 import { Copy, Check, Upload } from 'lucide-react';
 
 export function Base64Form() {
@@ -36,6 +37,7 @@ export function Base64Form() {
     try {
       const encoded = encodeToBase64(textInput);
       setBase64Input(encoded);
+      trackToolUsage('base64-encoder');
     } catch {
       setError('Failed to encode text.');
     }

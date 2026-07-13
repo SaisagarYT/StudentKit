@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { trackToolUsage } from '@/lib/analytics';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { attendanceSchema, type AttendanceFormData } from './attendance.schema';
@@ -37,6 +38,7 @@ export function AttendanceForm() {
       targetPercentage: data.targetPercentage,
     });
     setResult(calcResult);
+    trackToolUsage('attendance-calculator');
   };
 
   return (

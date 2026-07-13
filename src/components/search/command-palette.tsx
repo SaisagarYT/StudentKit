@@ -8,6 +8,7 @@ import { tools } from '@/config/tools';
 import { categories } from '@/config/categories';
 import { mainNavItems } from '@/config/navigation';
 import { cn } from '@/lib/utils';
+import { trackSearch } from '@/lib/analytics';
 
 function getIcon(name: string, className?: string) {
   const Icon = Icons[name as keyof typeof Icons] as React.ElementType;
@@ -141,10 +142,11 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
 
   const navigate = useCallback(
     (href: string) => {
+      if (query.trim()) trackSearch(query.trim());
       onClose();
       router.push(href);
     },
-    [onClose, router]
+    [onClose, router, query]
   );
 
   const handleKeyDown = useCallback(

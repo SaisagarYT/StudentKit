@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useCallback, useEffect } from 'react';
+import { trackToolUsage } from '@/lib/analytics';
 import { Upload, Copy, Check, Trash2, Pipette } from 'lucide-react';
 
 /* ─── Color Conversion Utilities ─── */
@@ -331,6 +332,7 @@ export function ImageColorPickerForm() {
       const color = getPixelColor(e);
       if (color) {
         setSelectedColor(color);
+        trackToolUsage('image-color-picker');
         setHistory((prev) => {
           const updated = [color, ...prev.filter((c) => c.hex !== color.hex)];
           return updated.slice(0, 10);

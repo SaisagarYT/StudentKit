@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useCallback, useEffect } from 'react';
+import { trackToolUsage } from '@/lib/analytics';
 import { Upload, Download, Trash2, Lock, Unlock, Image as ImageIcon } from 'lucide-react';
 import gsap from 'gsap';
 
@@ -108,6 +109,7 @@ export function ResizerForm() {
         originalSize: file.size,
         newSize: blob.size,
       });
+      trackToolUsage('image-resizer');
     } catch {
       setError('Failed to resize image.');
     } finally {

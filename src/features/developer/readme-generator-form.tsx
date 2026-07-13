@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useMemo, useCallback } from 'react';
+import { trackToolUsage } from '@/lib/analytics';
 import { Copy, Download, Check } from 'lucide-react';
 
 type License = 'MIT' | 'Apache 2.0' | 'GPL 3.0' | 'ISC' | 'None';
@@ -254,6 +255,7 @@ export function ReadmeGeneratorForm() {
   const previewHtml = useMemo(() => renderMarkdownPreview(markdown), [markdown]);
 
   const handleCopy = async () => {
+    trackToolUsage('readme-generator');
     try {
       await navigator.clipboard.writeText(markdown);
       setCopied(true);

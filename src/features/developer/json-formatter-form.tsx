@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useCallback, useMemo } from 'react';
+import { trackToolUsage } from '@/lib/analytics';
 import {
   Copy,
   Check,
@@ -131,6 +132,7 @@ export function JsonFormatterForm() {
       const parsed = JSON.parse(input);
       const formatted = JSON.stringify(parsed, null, 2);
       setOutput(formatted);
+      trackToolUsage('json-formatter');
       setValidation({ status: 'valid', message: 'Valid JSON — formatted with 2-space indent' });
     } catch (e) {
       const message = e instanceof Error ? e.message : 'Invalid JSON';

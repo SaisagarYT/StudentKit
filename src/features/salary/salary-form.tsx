@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { trackToolUsage } from '@/lib/analytics';
 import gsap from 'gsap';
 
 interface SalaryBreakdown {
@@ -31,6 +32,7 @@ export function SalaryForm() {
       daily: annual / 260, // 5 working days × 52 weeks
       hourly: annual / (260 * 8),
     });
+    trackToolUsage('salary-calculator');
   };
 
   useEffect(() => {

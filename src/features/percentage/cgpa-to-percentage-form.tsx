@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { trackToolUsage } from '@/lib/analytics';
 import gsap from 'gsap';
 import {
   convertCGPAToPercentage,
@@ -21,6 +22,7 @@ export function CGPAToPercentageForm() {
     const val = parseFloat(cgpa);
     if (isNaN(val) || val < 0 || val > 10) return;
     setResult(convertCGPAToPercentage(val, formula));
+    trackToolUsage('cgpa-to-percentage');
   };
 
   useEffect(() => {
