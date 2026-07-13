@@ -7,6 +7,7 @@ import { Search, Menu, X, ArrowRight, ChevronDown } from 'lucide-react';
 import * as Icons from 'lucide-react';
 import gsap from 'gsap';
 import { Logo } from '@/components/brand/logo';
+import { CommandPalette } from '@/components/search/command-palette';
 import { mainNavItems } from '@/config/navigation';
 import { tools } from '@/config/tools';
 import { categories } from '@/config/categories';
@@ -21,6 +22,7 @@ export function SiteHeader() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMegaOpen, setIsMegaOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const megaRef = useRef<HTMLDivElement>(null);
   const megaContentRef = useRef<HTMLDivElement>(null);
   const megaTimelineRef = useRef<gsap.core.Timeline | null>(null);
@@ -33,6 +35,17 @@ export function SiteHeader() {
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        setIsSearchOpen((prev) => !prev);
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
   }, []);
 
   useEffect(() => {
@@ -185,6 +198,7 @@ export function SiteHeader() {
             <div className="flex items-center gap-2">
               <button
                 type="button"
+                onClick={() => setIsSearchOpen(true)}
                 className="flex items-center gap-2 px-3 py-1.5 text-sm text-text-subtle border border-border-soft rounded-lg hover:border-border hover:text-text-secondary transition-all"
                 aria-label="Search tools (Ctrl+K)"
               >
@@ -369,6 +383,9 @@ export function SiteHeader() {
           </div>
         </div>
       )}
+
+      {/* Command Palette */}
+      <CommandPalette isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
 
       {/* Spacer for fixed header */}
       <div className="h-16 md:h-18" />

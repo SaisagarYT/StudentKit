@@ -1,0 +1,80 @@
+import { Metadata } from 'next';
+import { notFound } from 'next/navigation';
+import Link from 'next/link';
+import { ArrowLeft, Clock, BookOpen } from 'lucide-react';
+import { getRoadmapBySlug, roadmaps } from '@/config/roadmaps';
+import { InteractiveRoadmap } from '@/features/roadmaps/interactive-roadmap';
+import { siteConfig } from '@/config/site';
+
+export function generateStaticParams() {
+  return roadmaps.map((r) => ({ slug: r.slug }));
+}
+
+type PageProps = {
+  params: Promise<{ slug: string }>;
+};
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const roadmap = getRoadmapBySlug(slug);
+  if (!roadmap) return {};
+
+  return {
+    title: `${roadmap.title} Roadmap | ${siteConfig.name}`,
+    description: roadmap.description,
+    openGraph: {
+      title: `${roadmap.title} Roadmap | ${siteConfig.name}`,
+      description: roadmap.description,
+      type: 'website',
+    },
+  };
+}
+
+export default async function RoadmapDetailPage({ params }: PageProps) {
+  const { slug } = await params;
+  const roadmap = getRoadmapBySlug(slug);
+  if (!roadmap) return notFound();
+
+  const totalTopics = roadmap.stages.reduce((sum, s) => sum + s.topics.length, 0);
+
+  return (
+    <div className="py-8 md:py-12">
+      <div className="container-main">
+        {/* Back link */}
+        <Link
+          href="/roadmaps"
+          className="inline-flex items-center gap-1.5 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors mb-8"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          All Roadmaps
+        </Link>
+
+        {/* Header */}
+        <div className="max-w-3xl">
+          <h1 className="text-h1 font-bold tracking-tight">
+            {roadmap.title}{' '}
+            <span className="font-serif italic font-normal">Roadmap</span>
+          </h1>
+          <p className="mt-4 text-body-lg text-[var(--text-secondary)] leading-relaxed">
+            {roadmap.description}
+          </p>
+          <div className="flex items-center gap-6 mt-6">
+            <span className="flex items-center gap-2 text-sm text-[var(--text-subtle)]">
+              <Clock className="w-4 h-4" />
+              {roadmap.totalTime}
+            </span>
+            <span className="flex items-center gap-2 text-sm text-[var(--text-subtle)]">
+              <BookOpen className="w-4 h-4" />
+              {totalTopics} topics across {roadmap.stages.length} stages
+            </span>
+          </div>
+        </div>
+
+        {/* Interactive Roadmap */}
+        <div className="mt-12">
+          <InteractiveRoadmap roadmap={roadmap} />
+        </div>
+      </div>
+    </div>
+  );
+}

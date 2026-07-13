@@ -1,20 +1,21 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { ArrowRight, Map, Code, Server, Smartphone, Brain, Shield, Cloud, Database } from 'lucide-react';
+import { ArrowRight, Map, Code, Server, Smartphone, Brain, Shield, Cloud, Database, Clock, BookOpen } from 'lucide-react';
 import { siteConfig } from '@/config/site';
+import { roadmaps as liveRoadmaps } from '@/config/roadmaps';
+import { cn } from '@/lib/utils';
 
 export const metadata: Metadata = {
   title: `Roadmaps | ${siteConfig.name}`,
-  description: 'Interactive career and technology roadmaps for students, developers, and job seekers. Find your path in frontend, backend, AI, and more.',
+  description: 'Interactive career and technology roadmaps for students. Step-by-step paths with progress tracking for frontend, backend, AI, placements and more.',
 };
 
-const roadmaps = [
+const allRoadmaps = [
   {
     slug: 'frontend-developer',
     title: 'Frontend Developer',
     description: 'HTML, CSS, JavaScript, React, and modern frontend tools.',
     icon: Code,
-    status: 'coming-soon' as const,
     accent: '#D8CCFF',
   },
   {
@@ -22,7 +23,6 @@ const roadmaps = [
     title: 'Backend Developer',
     description: 'APIs, databases, authentication, and server architecture.',
     icon: Server,
-    status: 'coming-soon' as const,
     accent: '#A8F0E6',
   },
   {
@@ -30,7 +30,6 @@ const roadmaps = [
     title: 'Full Stack Developer',
     description: 'End-to-end web development from frontend to deployment.',
     icon: Database,
-    status: 'coming-soon' as const,
     accent: '#FFB36B',
   },
   {
@@ -38,7 +37,6 @@ const roadmaps = [
     title: 'AI / ML Engineer',
     description: 'Machine learning, deep learning, NLP, and AI applications.',
     icon: Brain,
-    status: 'coming-soon' as const,
     accent: '#C7FF3D',
   },
   {
@@ -46,7 +44,6 @@ const roadmaps = [
     title: 'Mobile Developer',
     description: 'Flutter, React Native, and native app development.',
     icon: Smartphone,
-    status: 'coming-soon' as const,
     accent: '#FFE066',
   },
   {
@@ -54,7 +51,6 @@ const roadmaps = [
     title: 'DevOps Engineer',
     description: 'CI/CD, containers, cloud, and infrastructure as code.',
     icon: Cloud,
-    status: 'coming-soon' as const,
     accent: '#A8F0E6',
   },
   {
@@ -62,7 +58,6 @@ const roadmaps = [
     title: 'Cybersecurity',
     description: 'Network security, ethical hacking, and threat analysis.',
     icon: Shield,
-    status: 'coming-soon' as const,
     accent: '#D8CCFF',
   },
   {
@@ -70,7 +65,6 @@ const roadmaps = [
     title: 'Placement Preparation',
     description: 'DSA, aptitude, interviews, and campus placement strategy.',
     icon: Map,
-    status: 'coming-soon' as const,
     accent: '#FFB36B',
   },
 ];
@@ -96,13 +90,16 @@ export default function RoadmapsPage() {
 
         {/* Roadmap Grid */}
         <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {roadmaps.map((roadmap) => {
+          {allRoadmaps.map((roadmap) => {
             const Icon = roadmap.icon;
-            return (
-              <div
-                key={roadmap.slug}
-                className="group relative p-5 rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-surface)] hover:border-[var(--border-default)] transition-all duration-200"
-              >
+            const liveData = liveRoadmaps.find((r) => r.slug === roadmap.slug);
+            const isLive = !!liveData;
+            const totalTopics = liveData
+              ? liveData.stages.reduce((sum, s) => sum + s.topics.length, 0)
+              : 0;
+
+            const CardContent = (
+              <>
                 <div
                   className="flex items-center justify-center w-10 h-10 rounded-xl mb-4"
                   style={{ backgroundColor: `${roadmap.accent}20` }}
@@ -116,24 +113,60 @@ export default function RoadmapsPage() {
                   {roadmap.description}
                 </p>
                 <div className="mt-4 flex items-center justify-between">
-                  <span className="inline-flex px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider text-[var(--text-subtle)] bg-[var(--bg-subtle)] rounded-full">
-                    Coming Soon
-                  </span>
-                  <ArrowRight className="w-3.5 h-3.5 text-[var(--text-subtle)] opacity-0 group-hover:opacity-100 transition-opacity" />
+                  {isLive ? (
+                    <div className="flex items-center gap-3">
+                      <span className="flex items-center gap-1 text-[10px] text-[var(--text-subtle)]">
+                        <Clock className="w-3 h-3" />
+                        {liveData.totalTime}
+                      </span>
+                      <span className="flex items-center gap-1 text-[10px] text-[var(--text-subtle)]">
+                        <BookOpen className="w-3 h-3" />
+                        {totalTopics} topics
+                      </span>
+                    </div>
+                  ) : (
+                    <span className="inline-flex px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider text-[var(--text-subtle)] bg-[var(--bg-subtle)] rounded-full">
+                      Coming Soon
+                    </span>
+                  )}
+                  <ArrowRight className={cn(
+                    'w-3.5 h-3.5 transition-opacity',
+                    isLive ? 'text-[var(--accent-dark)] opacity-100' : 'text-[var(--text-subtle)] opacity-0 group-hover:opacity-100'
+                  )} />
                 </div>
+              </>
+            );
+
+            if (isLive) {
+              return (
+                <Link
+                  key={roadmap.slug}
+                  href={`/roadmaps/${roadmap.slug}`}
+                  className="group relative p-5 rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-surface)] hover:border-[var(--accent-primary)]/40 hover:shadow-md transition-all duration-200"
+                >
+                  {CardContent}
+                </Link>
+              );
+            }
+
+            return (
+              <div
+                key={roadmap.slug}
+                className="group relative p-5 rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-surface)] hover:border-[var(--border-default)] transition-all duration-200"
+              >
+                {CardContent}
               </div>
             );
           })}
         </div>
 
-        {/* Notify Section */}
+        {/* CTA */}
         <div className="mt-16 p-8 md:p-12 rounded-3xl bg-[var(--bg-subtle)] border border-[var(--border-soft)] text-center">
           <h2 className="text-xl font-semibold tracking-tight">
-            Roadmaps are launching soon
+            More roadmaps coming soon
           </h2>
           <p className="mt-3 text-sm text-[var(--text-secondary)] max-w-lg mx-auto">
-            Interactive, step-by-step paths with progress tracking, curated
-            resources, and project milestones. In the meantime, explore our tools.
+            We&apos;re building interactive paths for Backend, Full Stack, AI/ML, Mobile, DevOps, and Cybersecurity. In the meantime, start with our available roadmaps.
           </p>
           <Link
             href="/tools"
