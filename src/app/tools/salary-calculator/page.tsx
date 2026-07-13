@@ -54,7 +54,9 @@ export default function SalaryCalculatorPage() {
       }
       faq={faq}
       relatedTools={[
-        { slug: 'ctc-to-inhand-calculator', title: 'CTC to In-Hand', description: 'Estimate take-home salary' },
+        { slug: 'ctc-to-inhand-calculator', title: 'CTC to In-Hand Calculator', description: 'Estimate your take-home salary from CTC' },
+        { slug: 'age-calculator', title: 'Age Calculator', description: 'Calculate exact age & milestones' },
+        { slug: 'cgpa-to-percentage', title: 'CGPA to Percentage', description: 'Convert CGPA to percentage' },
       ]}
     >
       <SalaryForm />

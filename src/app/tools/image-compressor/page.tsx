@@ -51,8 +51,10 @@ export default function ImageCompressorPage() {
       }
       faq={faq}
       relatedTools={[
+        { slug: 'image-color-picker', title: 'Image Color Picker', description: 'Extract colors from any image' },
+        { slug: 'color-palette-generator', title: 'Color Palette Generator', description: 'Generate harmonious color palettes' },
         { slug: 'image-resizer', title: 'Image Resizer', description: 'Resize images to any dimension' },
-        { slug: 'signature-resizer', title: 'Signature Resizer', description: 'Resize signatures for forms' },
+        { slug: 'signature-resizer', title: 'Signature Resizer', description: 'Resize signatures for forms & documents' },
       ]}
     >
       <CompressorForm />

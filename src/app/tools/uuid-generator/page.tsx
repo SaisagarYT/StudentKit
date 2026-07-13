@@ -41,8 +41,10 @@ export default function UuidGeneratorPage() {
       breadcrumbs={breadcrumbs}
       faq={faq}
       relatedTools={[
-        { slug: 'base64-encoder', title: 'Base64 Encoder', description: 'Encode & decode Base64' },
-        { slug: 'json-formatter', title: 'JSON Formatter', description: 'Format & validate JSON' },
+        { slug: 'json-formatter', title: 'JSON Formatter', description: 'Format, validate & minify JSON' },
+        { slug: 'regex-tester', title: 'Regex Tester', description: 'Test & debug regular expressions' },
+        { slug: 'base64-encoder', title: 'Base64 Encoder', description: 'Encode & decode Base64 strings' },
+        { slug: 'lorem-ipsum-generator', title: 'Lorem Ipsum Generator', description: 'Generate placeholder text' },
       ]}
     >
       <UuidGeneratorForm />

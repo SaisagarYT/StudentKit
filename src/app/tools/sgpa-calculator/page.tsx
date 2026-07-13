@@ -55,8 +55,10 @@ export default function SGPACalculatorPage() {
       }
       faq={faq}
       relatedTools={[
-        { slug: 'cgpa-calculator', title: 'CGPA Calculator', description: 'Calculate cumulative GPA' },
+        { slug: 'cgpa-calculator', title: 'CGPA Calculator', description: 'Calculate cumulative GPA across all semesters' },
         { slug: 'cgpa-to-percentage', title: 'CGPA to Percentage', description: 'Convert CGPA to percentage' },
+        { slug: 'marks-percentage-calculator', title: 'Marks Calculator', description: 'Calculate percentage from marks' },
+        { slug: 'attendance-calculator', title: 'Attendance Calculator', description: 'Track & manage your attendance' },
       ]}
     >
       <SGPAForm />

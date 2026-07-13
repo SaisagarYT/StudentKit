@@ -46,8 +46,10 @@ export default function ImageResizerPage() {
       }
       faq={faq}
       relatedTools={[
-        { slug: 'image-compressor', title: 'Image Compressor', description: 'Compress images in-browser' },
-        { slug: 'signature-resizer', title: 'Signature Resizer', description: 'Resize signatures for forms' },
+        { slug: 'image-color-picker', title: 'Image Color Picker', description: 'Extract colors from any image' },
+        { slug: 'color-palette-generator', title: 'Color Palette Generator', description: 'Generate harmonious color palettes' },
+        { slug: 'image-compressor', title: 'Image Compressor', description: 'Compress images without losing quality' },
+        { slug: 'signature-resizer', title: 'Signature Resizer', description: 'Resize signatures for forms & documents' },
       ]}
     >
       <ResizerForm />

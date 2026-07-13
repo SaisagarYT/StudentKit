@@ -60,9 +60,10 @@ export default function CGPACalculatorPage() {
       }
       faq={faq}
       relatedTools={[
-        { slug: 'sgpa-calculator', title: 'SGPA Calculator', description: 'Calculate semester GPA' },
+        { slug: 'sgpa-calculator', title: 'SGPA Calculator', description: 'Calculate your semester GPA' },
         { slug: 'cgpa-to-percentage', title: 'CGPA to Percentage', description: 'Convert CGPA to percentage' },
-        { slug: 'attendance-calculator', title: 'Attendance Calculator', description: 'Track your attendance' },
+        { slug: 'marks-percentage-calculator', title: 'Marks Calculator', description: 'Calculate percentage from marks' },
+        { slug: 'attendance-calculator', title: 'Attendance Calculator', description: 'Track & manage your attendance' },
       ]}
     >
       <CGPAForm />

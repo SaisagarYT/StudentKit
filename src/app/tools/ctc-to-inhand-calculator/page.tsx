@@ -60,8 +60,9 @@ export default function CTCToInHandPage() {
       }
       faq={faq}
       relatedTools={[
-        { slug: 'salary-calculator', title: 'Salary Calculator', description: 'Calculate salary components' },
-        { slug: 'marks-percentage-calculator', title: 'Marks Percentage', description: 'Calculate percentage from marks' },
+        { slug: 'salary-calculator', title: 'Salary Calculator', description: 'Calculate detailed salary breakdown' },
+        { slug: 'age-calculator', title: 'Age Calculator', description: 'Calculate exact age & milestones' },
+        { slug: 'marks-percentage-calculator', title: 'Marks Calculator', description: 'Calculate percentage from marks' },
       ]}
     >
       <CTCForm />

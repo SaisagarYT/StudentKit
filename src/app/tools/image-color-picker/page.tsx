@@ -45,8 +45,10 @@ export default function ImageColorPickerPage() {
       breadcrumbs={breadcrumbs}
       faq={faq}
       relatedTools={[
-        { slug: 'color-palette-generator', title: 'Color Palette Generator', description: 'Generate harmonious palettes' },
-        { slug: 'image-compressor', title: 'Image Compressor', description: 'Compress images in-browser' },
+        { slug: 'color-palette-generator', title: 'Color Palette Generator', description: 'Generate harmonious color palettes' },
+        { slug: 'image-compressor', title: 'Image Compressor', description: 'Compress images without losing quality' },
+        { slug: 'image-resizer', title: 'Image Resizer', description: 'Resize images to any dimension' },
+        { slug: 'signature-resizer', title: 'Signature Resizer', description: 'Resize signatures for forms & documents' },
       ]}
     >
       <ImageColorPickerForm />

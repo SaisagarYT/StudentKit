@@ -41,8 +41,10 @@ export default function ColorPaletteGeneratorPage() {
       breadcrumbs={breadcrumbs}
       faq={faq}
       relatedTools={[
-        { slug: 'image-color-picker', title: 'Image Color Picker', description: 'Extract colors from images' },
-        { slug: 'readme-generator', title: 'README Generator', description: 'Generate professional READMEs' },
+        { slug: 'image-color-picker', title: 'Image Color Picker', description: 'Extract colors from any image' },
+        { slug: 'image-compressor', title: 'Image Compressor', description: 'Compress images without losing quality' },
+        { slug: 'image-resizer', title: 'Image Resizer', description: 'Resize images to any dimension' },
+        { slug: 'signature-resizer', title: 'Signature Resizer', description: 'Resize signatures for forms & documents' },
       ]}
     >
       <ColorPaletteForm />

@@ -15,6 +15,7 @@ export interface RoadmapTopic {
     title: string;
     description: string;
   };
+  variant?: string;
 }
 
 export interface RoadmapStage {
@@ -26,6 +27,17 @@ export interface RoadmapStage {
   topics: RoadmapTopic[];
 }
 
+export interface RelatedRoadmap {
+  slug: string;
+  relation: 'prerequisite' | 'builds-on' | 'shared-topics' | 'alternative';
+  description: string;
+}
+
+export interface RoadmapVariant {
+  id: string;
+  label: string;
+}
+
 export interface Roadmap {
   slug: string;
   title: string;
@@ -33,5 +45,8 @@ export interface Roadmap {
   icon: string;
   accent: string;
   totalTime: string;
+  languages?: string[];
+  variants?: RoadmapVariant[];
+  relatedRoadmaps?: RelatedRoadmap[];
   stages: RoadmapStage[];
 }

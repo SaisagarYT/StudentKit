@@ -50,8 +50,9 @@ export default function AgeCalculatorPage() {
       }
       faq={faq}
       relatedTools={[
-        { slug: 'attendance-calculator', title: 'Attendance Calculator', description: 'Track your attendance' },
-        { slug: 'marks-percentage-calculator', title: 'Marks Percentage', description: 'Calculate percentage from marks' },
+        { slug: 'ctc-to-inhand-calculator', title: 'CTC to In-Hand Calculator', description: 'Estimate your take-home salary from CTC' },
+        { slug: 'salary-calculator', title: 'Salary Calculator', description: 'Calculate detailed salary breakdown' },
+        { slug: 'attendance-calculator', title: 'Attendance Calculator', description: 'Track & manage your attendance' },
       ]}
     >
       <AgeForm />

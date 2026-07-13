@@ -7,6 +7,11 @@ export const placementPreparationRoadmap: Roadmap = {
   icon: 'Map',
   accent: '#FFB36B',
   totalTime: '4-5 months',
+  relatedRoadmaps: [
+    { slug: 'frontend-developer', relation: 'shared-topics', description: 'Build projects to strengthen your resume' },
+    { slug: 'backend-developer', relation: 'shared-topics', description: 'Backend projects are highly valued in placements' },
+    { slug: 'full-stack-developer', relation: 'builds-on', description: 'Full-stack skills give you an edge in interviews' },
+  ],
   stages: [
     {
       id: 'programming-fundamentals',

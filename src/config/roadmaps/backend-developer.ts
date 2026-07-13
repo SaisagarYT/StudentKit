@@ -7,6 +7,18 @@ export const backendDeveloperRoadmap: Roadmap = {
   icon: 'Server',
   accent: '#A8F0E6',
   totalTime: '6-8 months',
+  languages: ['JavaScript (Node.js)', 'Python (Django/FastAPI)', 'Java (Spring Boot)', 'Go'],
+  variants: [
+    { id: 'nodejs', label: 'Node.js' },
+    { id: 'python', label: 'Python' },
+    { id: 'java', label: 'Java' },
+  ],
+  relatedRoadmaps: [
+    { slug: 'frontend-developer', relation: 'shared-topics', description: 'Shares Git, HTTP, and deployment concepts' },
+    { slug: 'full-stack-developer', relation: 'builds-on', description: 'Combine with frontend for full-stack' },
+    { slug: 'devops-engineer', relation: 'builds-on', description: 'DevOps extends backend with infrastructure and CI/CD' },
+    { slug: 'ai-engineer', relation: 'shared-topics', description: 'ML model deployment uses backend API skills' },
+  ],
   stages: [
     {
       id: 'foundations',
@@ -42,6 +54,7 @@ export const backendDeveloperRoadmap: Roadmap = {
           id: 'javascript-nodejs',
           title: 'JavaScript & Node.js',
           description: 'Master JavaScript fundamentals and Node.js runtime for server-side development.',
+          variant: 'nodejs',
           timeEstimate: '10-14 days',
           whatToLearn: [
             'Variables, data types, and operators',
@@ -62,6 +75,60 @@ export const backendDeveloperRoadmap: Roadmap = {
           project: {
             title: 'CLI Task Manager',
             description: 'Build a command-line task manager that stores tasks in a JSON file. Support add, list, complete, and delete operations.',
+          },
+        },
+        {
+          id: 'python-backend',
+          title: 'Python for Backend',
+          description: 'Learn Python fundamentals and its ecosystem for building server-side applications.',
+          variant: 'python',
+          timeEstimate: '10-14 days',
+          whatToLearn: [
+            'Python syntax, data types, and control flow',
+            'Functions, classes, and OOP',
+            'Modules, packages, and virtual environments',
+            'File I/O and error handling',
+            'List comprehensions and generators',
+            'Type hints and modern Python (3.10+)',
+            'pip and dependency management',
+            'Working with JSON and environment variables',
+          ],
+          resources: [
+            { title: 'Python for Beginners - freeCodeCamp', url: 'https://www.youtube.com/watch?v=eWRfhZUzrAc', type: 'video' },
+            { title: 'Python Official Tutorial', url: 'https://docs.python.org/3/tutorial/', type: 'docs' },
+            { title: 'Automate the Boring Stuff with Python', url: 'https://automatetheboringstuff.com/', type: 'course' },
+            { title: 'Real Python Tutorials', url: 'https://realpython.com/', type: 'article' },
+          ],
+          project: {
+            title: 'CLI Task Manager',
+            description: 'Build a command-line task manager that stores tasks in a JSON file. Support add, list, complete, and delete operations.',
+          },
+        },
+        {
+          id: 'java-backend',
+          title: 'Java for Backend',
+          description: 'Learn Java fundamentals and its strong typing system for enterprise backend development.',
+          variant: 'java',
+          timeEstimate: '12-16 days',
+          whatToLearn: [
+            'Java syntax, primitives, and operators',
+            'OOP: classes, inheritance, interfaces, polymorphism',
+            'Collections framework (List, Map, Set)',
+            'Exception handling and I/O streams',
+            'Generics and lambda expressions',
+            'Maven/Gradle build tools',
+            'Java modules and packages',
+            'Multithreading basics',
+          ],
+          resources: [
+            { title: 'Java Full Course - Bro Code', url: 'https://www.youtube.com/watch?v=xk4_1vDrzzo', type: 'video' },
+            { title: 'Java Official Tutorial (Oracle)', url: 'https://docs.oracle.com/javase/tutorial/', type: 'docs' },
+            { title: 'MOOC.fi Java Programming', url: 'https://java-programming.mooc.fi/', type: 'course' },
+            { title: 'Baeldung Java Guides', url: 'https://www.baeldung.com/java-tutorial', type: 'article' },
+          ],
+          project: {
+            title: 'CLI Task Manager',
+            description: 'Build a command-line task manager that stores tasks in a file. Support add, list, complete, and delete operations.',
           },
         },
         {
@@ -92,7 +159,7 @@ export const backendDeveloperRoadmap: Roadmap = {
     {
       id: 'apis-servers',
       title: 'APIs & Servers',
-      description: 'Build RESTful APIs, handle routing, middleware, and learn Express.js.',
+      description: 'Build RESTful APIs with your chosen framework — Express.js, Django/FastAPI, or Spring Boot.',
       timeEstimate: '4-5 weeks',
       color: 'lime',
       topics: [
@@ -100,6 +167,7 @@ export const backendDeveloperRoadmap: Roadmap = {
           id: 'express-fundamentals',
           title: 'Express.js Fundamentals',
           description: 'Build web servers and APIs using Express.js, the most popular Node.js framework.',
+          variant: 'nodejs',
           timeEstimate: '7-10 days',
           whatToLearn: [
             'Setting up an Express server',
@@ -120,6 +188,60 @@ export const backendDeveloperRoadmap: Roadmap = {
           project: {
             title: 'Bookstore REST API',
             description: 'Build a CRUD API for a bookstore with routes for books, authors, and categories. Use Express Router for modularity.',
+          },
+        },
+        {
+          id: 'django-fastapi',
+          title: 'Django / FastAPI',
+          description: 'Build robust APIs with Python — Django REST Framework for full-featured apps or FastAPI for modern async APIs.',
+          variant: 'python',
+          timeEstimate: '8-12 days',
+          whatToLearn: [
+            'Django project structure and settings',
+            'Django REST Framework (serializers, viewsets)',
+            'URL routing and middleware',
+            'FastAPI with Pydantic models and type hints',
+            'Async request handling',
+            'Auto-generated API documentation',
+            'Dependency injection in FastAPI',
+            'File uploads and background tasks',
+          ],
+          resources: [
+            { title: 'Django REST Framework Tutorial - Tech With Tim', url: 'https://www.youtube.com/watch?v=c708Nf0cHrs', type: 'video' },
+            { title: 'FastAPI Full Course - freeCodeCamp', url: 'https://www.youtube.com/watch?v=tLKKmouUams', type: 'video' },
+            { title: 'Django REST Framework Docs', url: 'https://www.django-rest-framework.org/', type: 'docs' },
+            { title: 'FastAPI Official Tutorial', url: 'https://fastapi.tiangolo.com/tutorial/', type: 'docs' },
+          ],
+          project: {
+            title: 'Bookstore REST API',
+            description: 'Build a CRUD API for a bookstore with endpoints for books, authors, and categories using Django REST Framework or FastAPI.',
+          },
+        },
+        {
+          id: 'spring-boot',
+          title: 'Spring Boot',
+          description: 'Build production-grade APIs with Java Spring Boot — the enterprise standard for backend development.',
+          variant: 'java',
+          timeEstimate: '10-14 days',
+          whatToLearn: [
+            'Spring Boot project setup (Spring Initializr)',
+            'REST controllers and request mapping',
+            'Dependency injection and IoC container',
+            'Spring Data JPA for database access',
+            'Validation and error handling',
+            'Spring Security basics',
+            'Application properties and profiles',
+            'Building and packaging with Maven/Gradle',
+          ],
+          resources: [
+            { title: 'Spring Boot Tutorial - Amigoscode', url: 'https://www.youtube.com/watch?v=9SGDpanrc8U', type: 'video' },
+            { title: 'Spring Boot Official Getting Started', url: 'https://spring.io/guides/gs/spring-boot', type: 'docs' },
+            { title: 'Spring Boot Full Course - freeCodeCamp', url: 'https://www.youtube.com/watch?v=31KTdfRH6nY', type: 'video' },
+            { title: 'Baeldung Spring Guides', url: 'https://www.baeldung.com/spring-boot', type: 'article' },
+          ],
+          project: {
+            title: 'Bookstore REST API',
+            description: 'Build a CRUD API for a bookstore with endpoints for books, authors, and categories using Spring Boot and Spring Data JPA.',
           },
         },
         {

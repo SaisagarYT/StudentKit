@@ -52,8 +52,10 @@ export default function SignatureResizerPage() {
       }
       faq={faq}
       relatedTools={[
+        { slug: 'image-color-picker', title: 'Image Color Picker', description: 'Extract colors from any image' },
+        { slug: 'color-palette-generator', title: 'Color Palette Generator', description: 'Generate harmonious color palettes' },
+        { slug: 'image-compressor', title: 'Image Compressor', description: 'Compress images without losing quality' },
         { slug: 'image-resizer', title: 'Image Resizer', description: 'Resize images to any dimension' },
-        { slug: 'image-compressor', title: 'Image Compressor', description: 'Compress images in-browser' },
       ]}
     >
       <SignatureResizerForm />

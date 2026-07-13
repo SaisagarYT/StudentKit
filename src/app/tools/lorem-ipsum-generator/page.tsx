@@ -41,8 +41,10 @@ export default function LoremIpsumGeneratorPage() {
       breadcrumbs={breadcrumbs}
       faq={faq}
       relatedTools={[
-        { slug: 'readme-generator', title: 'README Generator', description: 'Generate professional READMEs' },
-        { slug: 'uuid-generator', title: 'UUID Generator', description: 'Generate unique UUIDs' },
+        { slug: 'json-formatter', title: 'JSON Formatter', description: 'Format, validate & minify JSON' },
+        { slug: 'regex-tester', title: 'Regex Tester', description: 'Test & debug regular expressions' },
+        { slug: 'base64-encoder', title: 'Base64 Encoder', description: 'Encode & decode Base64 strings' },
+        { slug: 'uuid-generator', title: 'UUID Generator', description: 'Generate unique identifiers (UUID v4)' },
       ]}
     >
       <LoremIpsumForm />

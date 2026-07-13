@@ -444,16 +444,22 @@ function TreeBranchSection({
   globalTopicOffset,
   progress,
   onToggleTopic,
+  activeVariant,
 }: {
   stage: RoadmapStage;
   stageIndex: number;
   globalTopicOffset: number;
   progress: Record<string, boolean>;
   onToggleTopic: (topicId: string) => void;
+  activeVariant: string;
 }) {
   const sectionRef = useRef<HTMLDivElement>(null);
   const branchSide = stageIndex % 2 === 0 ? 'right' : 'left';
-  const completedCount = stage.topics.filter((t) => progress[t.id]).length;
+
+  const visibleTopics = stage.topics.filter(
+    (t) => !t.variant || t.variant === activeVariant
+  );
+  const completedCount = visibleTopics.filter((t) => progress[t.id]).length;
 
   useEffect(() => {
     if (!sectionRef.current) return;
@@ -493,7 +499,7 @@ function TreeBranchSection({
         stage={stage}
         index={stageIndex}
         completedCount={completedCount}
-        totalCount={stage.topics.length}
+        totalCount={visibleTopics.length}
       />
 
       {/* Topic branches - Desktop: alternate left/right, Tablet: all right, Mobile: stacked */}
@@ -515,7 +521,7 @@ function TreeBranchSection({
 
         {/* Topics container */}
         <div className="space-y-3 lg:px-6">
-          {stage.topics.map((topic, topicIdx) => (
+          {visibleTopics.map((topic, topicIdx) => (
             <div key={topic.id} className="tree-node opacity-0 relative">
               {/* Horizontal branch connector - Desktop */}
               <div
@@ -560,17 +566,68 @@ function TreeBranchSection({
   );
 }
 
+// ─── Stack Tabs ─────────────────────────────────────────────────────────────
+
+function StackTabs({
+  variants,
+  activeVariant,
+  onSelect,
+}: {
+  variants: { id: string; label: string }[];
+  activeVariant: string;
+  onSelect: (id: string) => void;
+}) {
+  return (
+    <div className="mb-10">
+      <div className="flex items-center gap-2 mb-2">
+        <span className="text-[11px] font-semibold uppercase tracking-wider text-[var(--text-subtle)]">
+          Choose your stack
+        </span>
+      </div>
+      <div className="flex flex-wrap gap-2">
+        {variants.map((v) => (
+          <button
+            key={v.id}
+            type="button"
+            onClick={() => onSelect(v.id)}
+            className={cn(
+              'px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 border',
+              activeVariant === v.id
+                ? 'bg-[var(--accent-primary)] text-white border-[var(--accent-primary)] shadow-md scale-[1.02]'
+                : 'bg-[var(--bg-surface)] text-[var(--text-secondary)] border-[var(--border-default)] hover:border-[var(--accent-primary)]/60 hover:text-[var(--text-primary)]'
+            )}
+          >
+            {v.label}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 // ─── Main Component ──────────────────────────────────────────────────────────
 
 export function InteractiveRoadmap({ roadmap }: { roadmap: Roadmap }) {
   const [progress, setProgress] = useState<Record<string, boolean>>({});
   const [mounted, setMounted] = useState(false);
+  const [activeVariant, setActiveVariant] = useState<string>(() => {
+    if (typeof window !== 'undefined' && roadmap.variants?.length) {
+      const saved = localStorage.getItem(`roadmap-variant-${roadmap.slug}`);
+      if (saved && roadmap.variants.some((v) => v.id === saved)) return saved;
+    }
+    return roadmap.variants?.[0]?.id ?? '';
+  });
   const progressBarRef = useRef<HTMLDivElement>(null);
   const treeRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setProgress(loadProgress(roadmap.slug));
     setMounted(true);
+  }, [roadmap.slug]);
+
+  const handleVariantChange = useCallback((id: string) => {
+    setActiveVariant(id);
+    try { localStorage.setItem(`roadmap-variant-${roadmap.slug}`, id); } catch {}
   }, [roadmap.slug]);
 
   const toggleTopic = useCallback(
@@ -587,21 +644,24 @@ export function InteractiveRoadmap({ roadmap }: { roadmap: Roadmap }) {
     [roadmap.slug]
   );
 
-  const allTopics = useMemo(() => roadmap.stages.flatMap((s) => s.topics), [roadmap.stages]);
+  const allTopics = useMemo(
+    () => roadmap.stages.flatMap((s) => s.topics).filter((t) => !t.variant || t.variant === activeVariant),
+    [roadmap.stages, activeVariant]
+  );
   const totalTopics = allTopics.length;
   const completedTopics = allTopics.filter((t) => progress[t.id]).length;
   const overallPercent = totalTopics > 0 ? (completedTopics / totalTopics) * 100 : 0;
 
-  // Calculate global topic offsets per stage
+  // Calculate global topic offsets per stage (respecting variant filter)
   const stageOffsets = useMemo(() => {
     const offsets: number[] = [];
     let count = 0;
     for (const stage of roadmap.stages) {
       offsets.push(count);
-      count += stage.topics.length;
+      count += stage.topics.filter((t) => !t.variant || t.variant === activeVariant).length;
     }
     return offsets;
-  }, [roadmap.stages]);
+  }, [roadmap.stages, activeVariant]);
 
   // Animate progress bar
   useEffect(() => {
@@ -617,6 +677,15 @@ export function InteractiveRoadmap({ roadmap }: { roadmap: Roadmap }) {
     <div className="w-full">
       {/* Prerequisites & Tools */}
       <PrerequisitesAndTools />
+
+      {/* Stack Tabs */}
+      {roadmap.variants && roadmap.variants.length > 0 && (
+        <StackTabs
+          variants={roadmap.variants}
+          activeVariant={activeVariant}
+          onSelect={handleVariantChange}
+        />
+      )}
 
       {/* Sticky Progress Bar */}
       <div className="sticky top-16 md:top-[72px] z-30 -mx-4 px-4 md:-mx-0 md:px-0 mb-12">
@@ -682,16 +751,26 @@ export function InteractiveRoadmap({ roadmap }: { roadmap: Roadmap }) {
               globalTopicOffset={stageOffsets[idx]}
               progress={progress}
               onToggleTopic={toggleTopic}
+              activeVariant={activeVariant}
             />
 
             {/* Project Milestone between stages */}
-            {idx < roadmap.stages.length - 1 && stage.topics.length > 0 && (
-              <ProjectMilestone
-                title={stage.topics[stage.topics.length - 1].project.title}
-                description={stage.topics[stage.topics.length - 1].project.description}
-                stageIndex={idx + 1}
-              />
-            )}
+            {(() => {
+              const stageVisible = stage.topics.filter(
+                (t) => !t.variant || t.variant === activeVariant
+              );
+              const lastTopic = stageVisible[stageVisible.length - 1];
+              if (idx < roadmap.stages.length - 1 && lastTopic) {
+                return (
+                  <ProjectMilestone
+                    title={lastTopic.project.title}
+                    description={lastTopic.project.description}
+                    stageIndex={idx + 1}
+                  />
+                );
+              }
+              return null;
+            })()}
           </div>
         ))}
       </div>

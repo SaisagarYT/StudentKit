@@ -7,6 +7,17 @@ export const fullStackDeveloperRoadmap: Roadmap = {
   icon: 'Database',
   accent: '#FFB36B',
   totalTime: '8-10 months',
+  languages: ['JavaScript/TypeScript (MERN/Next.js)', 'Python (Django + React)', 'Java (Spring + Angular)'],
+  variants: [
+    { id: 'nodejs', label: 'MERN / Next.js' },
+    { id: 'python', label: 'Python + React' },
+  ],
+  relatedRoadmaps: [
+    { slug: 'frontend-developer', relation: 'prerequisite', description: 'Complete Frontend roadmap first or follow the frontend stage here' },
+    { slug: 'backend-developer', relation: 'prerequisite', description: 'Complete Backend roadmap first or follow the backend stage here' },
+    { slug: 'devops-engineer', relation: 'builds-on', description: 'Level up deployment with containers and cloud infrastructure' },
+    { slug: 'ai-engineer', relation: 'shared-topics', description: 'Add AI features to your full-stack apps' },
+  ],
   stages: [
     {
       id: 'frontend-core',
@@ -107,6 +118,7 @@ export const fullStackDeveloperRoadmap: Roadmap = {
           id: 'nodejs-express',
           title: 'Node.js & Express',
           description: 'Build RESTful APIs with Node.js and Express framework.',
+          variant: 'nodejs',
           timeEstimate: '10-12 days',
           whatToLearn: [
             'Node.js event loop and async model',
@@ -127,6 +139,33 @@ export const fullStackDeveloperRoadmap: Roadmap = {
           project: {
             title: 'Notes API',
             description: 'Build a complete REST API for a notes app: CRUD operations, validation, error handling, and organized route structure.',
+          },
+        },
+        {
+          id: 'python-django-fullstack',
+          title: 'Python & Django',
+          description: 'Build backends with Python using Django REST Framework for full-stack applications.',
+          variant: 'python',
+          timeEstimate: '12-14 days',
+          whatToLearn: [
+            'Python fundamentals and virtual environments',
+            'Django project structure and apps',
+            'Django REST Framework serializers and viewsets',
+            'URL routing and middleware',
+            'Django ORM (models, queries, migrations)',
+            'Admin panel customization',
+            'Environment variables and settings',
+            'CORS setup for frontend integration',
+          ],
+          resources: [
+            { title: 'Python Django Full Course - freeCodeCamp', url: 'https://www.youtube.com/watch?v=F5mRW0jo-U4', type: 'video' },
+            { title: 'Django REST Framework Tutorial', url: 'https://www.youtube.com/watch?v=c708Nf0cHrs', type: 'video' },
+            { title: 'Django Official Tutorial', url: 'https://docs.djangoproject.com/en/5.0/intro/tutorial01/', type: 'docs' },
+            { title: 'Django for Beginners (Book)', url: 'https://djangoforbeginners.com/', type: 'course' },
+          ],
+          project: {
+            title: 'Notes API',
+            description: 'Build a complete REST API for a notes app with Django REST Framework: CRUD operations, validation, and organized serializers.',
           },
         },
         {

@@ -41,8 +41,9 @@ export default function GitignoreGeneratorPage() {
       breadcrumbs={breadcrumbs}
       faq={faq}
       relatedTools={[
-        { slug: 'readme-generator', title: 'README Generator', description: 'Generate professional READMEs' },
-        { slug: 'project-structure-generator', title: 'Project Structure', description: 'Generate folder structures' },
+        { slug: 'readme-generator', title: 'README Generator', description: 'Generate professional README files' },
+        { slug: 'project-structure-generator', title: 'Project Structure Generator', description: 'Visualize folder structures' },
+        { slug: 'json-formatter', title: 'JSON Formatter', description: 'Format, validate & minify JSON' },
       ]}
     >
       <GitignoreGeneratorForm />

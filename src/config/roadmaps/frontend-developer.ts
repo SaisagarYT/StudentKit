@@ -7,6 +7,11 @@ export const frontendDeveloperRoadmap: Roadmap = {
   icon: 'Code',
   accent: '#D8CCFF',
   totalTime: '5-6 months',
+  relatedRoadmaps: [
+    { slug: 'full-stack-developer', relation: 'builds-on', description: 'Continue to full-stack by adding backend skills' },
+    { slug: 'backend-developer', relation: 'shared-topics', description: 'Shares Git, deployment, and API concepts' },
+    { slug: 'mobile-developer', relation: 'shared-topics', description: 'React Native reuses your React knowledge' },
+  ],
   stages: [
     {
       id: 'foundations',

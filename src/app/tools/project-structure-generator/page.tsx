@@ -41,8 +41,9 @@ export default function ProjectStructureGeneratorPage() {
       breadcrumbs={breadcrumbs}
       faq={faq}
       relatedTools={[
-        { slug: 'readme-generator', title: 'README Generator', description: 'Generate professional READMEs' },
-        { slug: 'gitignore-generator', title: '.gitignore Generator', description: 'Generate .gitignore files' },
+        { slug: 'readme-generator', title: 'README Generator', description: 'Generate professional README files' },
+        { slug: 'gitignore-generator', title: '.gitignore Generator', description: 'Generate .gitignore for any stack' },
+        { slug: 'json-formatter', title: 'JSON Formatter', description: 'Format, validate & minify JSON' },
       ]}
     >
       <ProjectStructureForm />

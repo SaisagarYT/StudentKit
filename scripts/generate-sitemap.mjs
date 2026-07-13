@@ -32,6 +32,10 @@ const roadmapSlugs = [
   'frontend-developer',
   'backend-developer',
   'full-stack-developer',
+  'ai-engineer',
+  'mobile-developer',
+  'devops-engineer',
+  'cybersecurity',
   'placement-preparation',
 ];
 

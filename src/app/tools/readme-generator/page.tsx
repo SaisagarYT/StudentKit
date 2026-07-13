@@ -41,8 +41,9 @@ export default function ReadmeGeneratorPage() {
       breadcrumbs={breadcrumbs}
       faq={faq}
       relatedTools={[
-        { slug: 'gitignore-generator', title: '.gitignore Generator', description: 'Generate .gitignore files' },
-        { slug: 'project-structure-generator', title: 'Project Structure', description: 'Generate folder structures' },
+        { slug: 'gitignore-generator', title: '.gitignore Generator', description: 'Generate .gitignore for any stack' },
+        { slug: 'project-structure-generator', title: 'Project Structure Generator', description: 'Visualize folder structures' },
+        { slug: 'json-formatter', title: 'JSON Formatter', description: 'Format, validate & minify JSON' },
       ]}
     >
       <ReadmeGeneratorForm />

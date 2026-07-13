@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { Geist, Instrument_Serif } from 'next/font/google';
+import Script from 'next/script';
 import { siteConfig } from '@/config/site';
 import { SiteHeader } from '@/components/navigation/site-header';
 import { CommandSearch } from '@/components/navigation/command-search';
@@ -74,28 +75,23 @@ export default function RootLayout({
       lang="en"
       className={`${geist.variable} ${instrumentSerif.variable}`}
     >
-      <head>
-        <script
-          async
+      <head />
+      <body className="min-h-screen flex flex-col bg-background text-foreground font-sans antialiased">
+        <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-X85YECWQZL"
+          strategy="afterInteractive"
         />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', 'G-X85YECWQZL');
-            `,
-          }}
-        />
-        <script
-          async
+        <Script id="gtag-init" strategy="afterInteractive">
+          {`window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-X85YECWQZL');`}
+        </Script>
+        <Script
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4789559777617370"
+          strategy="afterInteractive"
           crossOrigin="anonymous"
         />
-      </head>
-      <body className="min-h-screen flex flex-col bg-background text-foreground font-sans antialiased">
         <JsonLd data={organizationSchema()} />
         <JsonLd data={websiteSchema()} />
         <SiteHeader />
