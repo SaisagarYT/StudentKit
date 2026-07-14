@@ -47,6 +47,7 @@ const staticPages = [
   { path: '/tools', priority: '0.9', changefreq: 'weekly' },
   { path: '/roadmaps', priority: '0.8', changefreq: 'weekly' },
   { path: '/projects', priority: '0.8', changefreq: 'weekly' },
+  { path: '/open-source', priority: '0.7', changefreq: 'weekly' },
   { path: '/guides', priority: '0.7', changefreq: 'weekly' },
   { path: '/categories', priority: '0.7', changefreq: 'monthly' },
   { path: '/about', priority: '0.5', changefreq: 'monthly' },

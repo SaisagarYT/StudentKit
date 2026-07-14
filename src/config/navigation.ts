@@ -8,6 +8,7 @@ export const mainNavItems: NavItem[] = [
   { label: 'Tools', href: '/tools', description: 'Calculators & utilities' },
   { label: 'Roadmaps', href: '/roadmaps', description: 'Career & tech paths' },
   { label: 'Projects', href: '/projects', description: 'Build something real' },
+  { label: 'Open Source', href: '/open-source', description: 'Discover GitHub repos' },
   { label: 'Guides', href: '/guides', description: 'Step-by-step learning' },
 ];
 
@@ -25,8 +26,9 @@ export const footerNavSections = [
     title: 'Learn',
     links: [
       { label: 'Roadmaps', href: '/roadmaps' },
-      { label: 'Guides', href: '/guides' },
       { label: 'Projects', href: '/projects' },
+      { label: 'Open Source', href: '/open-source' },
+      { label: 'Guides', href: '/guides' },
     ],
   },
   {

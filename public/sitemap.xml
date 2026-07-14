@@ -25,6 +25,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://studentkit.app/open-source</loc>
+    <lastmod>2026-07-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://studentkit.app/guides</loc>
     <lastmod>2026-07-14</lastmod>
     <changefreq>weekly</changefreq>
