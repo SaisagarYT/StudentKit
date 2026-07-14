@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { ArrowRight, Map, Code, Server, Smartphone, Brain, Shield, Cloud, Database, Clock, BookOpen } from 'lucide-react';
+import { ArrowRight, Map, Code, Server, Smartphone, Brain, Shield, Cloud, Database, Clock, BookOpen, Blocks } from 'lucide-react';
 import { siteConfig } from '@/config/site';
 import { roadmaps as liveRoadmaps } from '@/config/roadmaps';
 import { cn } from '@/lib/utils';
@@ -8,6 +8,9 @@ import { cn } from '@/lib/utils';
 export const metadata: Metadata = {
   title: `Roadmaps | ${siteConfig.name}`,
   description: 'Interactive career and technology roadmaps for students. Step-by-step paths with progress tracking for frontend, backend, AI, placements and more.',
+  openGraph: {
+    images: [{ url: '/og/roadmaps.png', width: 1200, height: 630 }],
+  },
 };
 
 const allRoadmaps = [
@@ -66,6 +69,13 @@ const allRoadmaps = [
     description: 'DSA, aptitude, interviews, and campus placement strategy.',
     icon: Map,
     accent: '#FFB36B',
+  },
+  {
+    slug: 'object-oriented-programming',
+    title: 'Object Oriented Programming',
+    description: 'Classes, inheritance, polymorphism, and design patterns in Java, Python, C++, and JS.',
+    icon: Blocks,
+    accent: '#D8CCFF',
   },
 ];
 

@@ -39,12 +39,14 @@ export const metadata: Metadata = {
     siteName: siteConfig.name,
     title: siteConfig.name,
     description: siteConfig.description,
+    images: [{ url: '/og/home.png', width: 1200, height: 630, alt: 'StudentKit — Calculate. Learn. Build.' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: siteConfig.name,
     description: siteConfig.description,
     creator: siteConfig.social.twitter,
+    images: ['/og/home.png'],
   },
   robots: {
     index: true,

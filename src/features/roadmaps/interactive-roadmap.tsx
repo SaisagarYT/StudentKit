@@ -490,7 +490,7 @@ function TreeBranchSection({
     }, sectionRef);
 
     return () => ctx.revert();
-  }, [branchSide]);
+  }, [branchSide, activeVariant]);
 
   return (
     <div ref={sectionRef} className="relative">
@@ -591,9 +591,9 @@ function StackTabs({
             type="button"
             onClick={() => onSelect(v.id)}
             className={cn(
-              'px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 border',
+              'px-4 py-2 rounded-md text-sm font-semibold transition-all duration-200 border',
               activeVariant === v.id
-                ? 'bg-[var(--accent-primary)] text-white border-[var(--accent-primary)] shadow-md scale-[1.02]'
+                ? 'bg-[var(--accent-dark)] text-[var(--accent-primary)] border-[var(--accent-dark)] shadow-sm'
                 : 'bg-[var(--bg-surface)] text-[var(--text-secondary)] border-[var(--border-default)] hover:border-[var(--accent-primary)]/60 hover:text-[var(--text-primary)]'
             )}
           >

@@ -26,6 +26,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title: `${roadmap.title} Roadmap | ${siteConfig.name}`,
       description: roadmap.description,
       type: 'website',
+      images: [{ url: `/og/roadmaps-${slug}.png`, width: 1200, height: 630 }],
     },
   };
 }

@@ -7,6 +7,7 @@ import { mobileDeveloperRoadmap } from './mobile-developer';
 import { devopsEngineerRoadmap } from './devops-engineer';
 import { cybersecurityRoadmap } from './cybersecurity';
 import { placementPreparationRoadmap } from './placement-preparation';
+import { oopRoadmap } from './object-oriented-programming';
 
 export const roadmaps: Roadmap[] = [
   frontendDeveloperRoadmap,
@@ -17,6 +18,7 @@ export const roadmaps: Roadmap[] = [
   devopsEngineerRoadmap,
   cybersecurityRoadmap,
   placementPreparationRoadmap,
+  oopRoadmap,
 ];
 
 export function getRoadmapBySlug(slug: string): Roadmap | undefined {

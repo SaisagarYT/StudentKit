@@ -37,7 +37,10 @@ const roadmapSlugs = [
   'devops-engineer',
   'cybersecurity',
   'placement-preparation',
+  'object-oriented-programming',
 ];
+
+const projectSlugs = [];
 
 const staticPages = [
   { path: '', priority: '1.0', changefreq: 'weekly' },
@@ -79,6 +82,12 @@ const urls = [
     lastmod: today,
     changefreq: 'monthly',
     priority: '0.8',
+  })),
+  ...projectSlugs.map((slug) => ({
+    loc: `${BASE_URL}/projects/${slug}`,
+    lastmod: today,
+    changefreq: 'monthly',
+    priority: '0.7',
   })),
 ];
 

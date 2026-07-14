@@ -9,6 +9,9 @@ export const metadata: Metadata = {
   title: `All Tools | ${siteConfig.name}`,
   description:
     'Browse all free student tools — calculators for attendance, CGPA, salary, and image utilities for documents and applications.',
+  openGraph: {
+    images: [{ url: '/og/tools.png', width: 1200, height: 630 }],
+  },
 };
 
 export default function ToolsPage() {

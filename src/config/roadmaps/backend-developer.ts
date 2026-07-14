@@ -18,6 +18,7 @@ export const backendDeveloperRoadmap: Roadmap = {
     { slug: 'full-stack-developer', relation: 'builds-on', description: 'Combine with frontend for full-stack' },
     { slug: 'devops-engineer', relation: 'builds-on', description: 'DevOps extends backend with infrastructure and CI/CD' },
     { slug: 'ai-engineer', relation: 'shared-topics', description: 'ML model deployment uses backend API skills' },
+    { slug: 'object-oriented-programming', relation: 'prerequisite', description: 'OOP is essential for backend architecture and design patterns' },
   ],
   stages: [
     {
