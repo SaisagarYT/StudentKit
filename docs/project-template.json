@@ -1,0 +1,183 @@
+{
+  "slug": "your-project-slug",
+  "title": "Your Project Title",
+  "shortDescription": "A concise summary of what students will build (10-200 characters).",
+  "description": "A detailed description of the project — what it does, what students will learn, why it's valuable for their portfolio, and what real-world skills it covers.",
+  "category": "web-development",
+  "difficulty": "beginner",
+  "estimatedDuration": "2 weeks",
+  "projectType": "full-stack",
+  "experienceLevel": "beginner",
+  "technologies": [
+    "React",
+    "Node.js",
+    "Express",
+    "MongoDB",
+    "Tailwind CSS"
+  ],
+  "skills": [
+    "REST API design",
+    "State management",
+    "Database modeling",
+    "Authentication",
+    "Responsive design"
+  ],
+  "learningOutcomes": [
+    "Build a complete full-stack application",
+    "Implement user authentication",
+    "Design and consume REST APIs",
+    "Deploy to production"
+  ],
+  "features": [
+    {
+      "title": "User Authentication",
+      "description": "Secure login and registration with JWT tokens, password hashing, and session management."
+    },
+    {
+      "title": "CRUD Operations",
+      "description": "Create, read, update, and delete resources with proper validation and error handling."
+    },
+    {
+      "title": "Responsive Dashboard",
+      "description": "A clean, mobile-friendly dashboard that displays user data with charts and filters."
+    },
+    {
+      "title": "Search & Filtering",
+      "description": "Full-text search with category filters and pagination for browsing content."
+    }
+  ],
+  "requirements": [
+    "Node.js 18+ installed",
+    "MongoDB (local or Atlas free tier)",
+    "Code editor (VS Code recommended)",
+    "Basic JavaScript/React knowledge",
+    "Git for version control"
+  ],
+  "milestones": [
+    {
+      "title": "Project Setup & Planning",
+      "description": "Initialize the project, install dependencies, set up the folder structure, and plan the database schema.",
+      "order": 0,
+      "objectives": [
+        "Initialize frontend and backend repos",
+        "Configure environment variables",
+        "Design database schema",
+        "Set up Git with .gitignore"
+      ],
+      "tasks": [
+        "Run create-react-app or Vite for frontend",
+        "Initialize Express server with nodemon",
+        "Create MongoDB connection utility",
+        "Set up ESLint and Prettier",
+        "Create initial folder structure"
+      ],
+      "estimatedDuration": "1 day"
+    },
+    {
+      "title": "Backend API Development",
+      "description": "Build the REST API with all routes, controllers, middleware, and database models.",
+      "order": 1,
+      "objectives": [
+        "Create all Mongoose models",
+        "Implement authentication middleware",
+        "Build CRUD routes",
+        "Add input validation"
+      ],
+      "tasks": [
+        "Create User model with password hashing",
+        "Build auth routes (register, login, me)",
+        "Create resource models",
+        "Build CRUD routes for resources",
+        "Add error handling middleware",
+        "Test all endpoints with Postman/Thunder Client"
+      ],
+      "estimatedDuration": "3 days"
+    },
+    {
+      "title": "Frontend UI Development",
+      "description": "Build the React frontend with all pages, components, and state management.",
+      "order": 2,
+      "objectives": [
+        "Create reusable UI components",
+        "Implement page routing",
+        "Connect frontend to backend API",
+        "Handle loading and error states"
+      ],
+      "tasks": [
+        "Set up React Router",
+        "Create layout components (Header, Sidebar, Footer)",
+        "Build authentication pages (Login, Register)",
+        "Create dashboard page with data fetching",
+        "Build CRUD forms and list views",
+        "Add toast notifications for feedback"
+      ],
+      "estimatedDuration": "4 days"
+    },
+    {
+      "title": "Polish & Deployment",
+      "description": "Add finishing touches, write tests, optimize performance, and deploy to production.",
+      "order": 3,
+      "objectives": [
+        "Add responsive design",
+        "Write basic tests",
+        "Optimize for performance",
+        "Deploy frontend and backend"
+      ],
+      "tasks": [
+        "Make all pages mobile-responsive",
+        "Add loading skeletons",
+        "Write 3-5 unit tests",
+        "Set up environment variables for production",
+        "Deploy backend to Railway/Render",
+        "Deploy frontend to Vercel/Netlify",
+        "Test the live application end-to-end"
+      ],
+      "estimatedDuration": "2 days"
+    }
+  ],
+  "architecture": "Client-Server architecture:\n- Frontend: React SPA with React Router for navigation\n- Backend: Express.js REST API with MVC pattern\n- Database: MongoDB with Mongoose ODM\n- Auth: JWT-based with refresh tokens\n- Communication: Axios for HTTP requests",
+  "folderStructure": "project-root/\n├── client/\n│   ├── public/\n│   ├── src/\n│   │   ├── components/\n│   │   │   ├── ui/\n│   │   │   └── layout/\n│   │   ├── pages/\n│   │   ├── hooks/\n│   │   ├── services/\n│   │   ├── context/\n│   │   ├── utils/\n│   │   ├── App.jsx\n│   │   └── main.jsx\n│   └── package.json\n├── server/\n│   ├── src/\n│   │   ├── controllers/\n│   │   ├── models/\n│   │   ├── routes/\n│   │   ├── middleware/\n│   │   ├── utils/\n│   │   └── app.js\n│   ├── .env\n│   └── package.json\n└── README.md",
+  "databaseConsiderations": "Use MongoDB with Mongoose ODM. Design schemas with proper indexing for query performance. Use references (ObjectId) for relationships between collections. Add timestamps to all documents. Consider using MongoDB Atlas free tier (512MB) for development and production.",
+  "apiConsiderations": "RESTful API design with consistent response format: { success: boolean, data: any, message: string }. Use HTTP status codes properly (200, 201, 400, 401, 404, 500). Implement rate limiting for auth routes. Use helmet.js for security headers. Add CORS configuration for frontend domain.",
+  "testingGuidance": "Start with unit tests for utility functions and API route handlers using Jest. Add integration tests for the auth flow (register → login → access protected route). Use React Testing Library for component tests. Aim for at least 60% coverage on critical paths.",
+  "securityConsiderations": "Hash passwords with bcrypt (12 rounds). Store JWT secret in environment variables, never in code. Sanitize all user inputs to prevent XSS and injection. Use helmet.js for HTTP security headers. Implement rate limiting on authentication endpoints. Validate request bodies with Joi or Zod.",
+  "deploymentGuidance": "Frontend: Deploy to Vercel (connect GitHub repo, auto-deploys on push). Backend: Deploy to Railway or Render (free tier available). Database: Use MongoDB Atlas free tier. Set environment variables in each platform's dashboard. Use a custom domain if available.",
+  "extensionIdeas": [
+    {
+      "level": "beginner",
+      "ideas": [
+        "Add dark mode toggle",
+        "Add pagination to list views",
+        "Add profile avatar upload",
+        "Implement password reset via email"
+      ]
+    },
+    {
+      "level": "intermediate",
+      "ideas": [
+        "Add real-time notifications with Socket.io",
+        "Implement role-based access control (admin/user)",
+        "Add data export (CSV/PDF)",
+        "Build an admin dashboard with analytics"
+      ]
+    },
+    {
+      "level": "advanced",
+      "ideas": [
+        "Add CI/CD pipeline with GitHub Actions",
+        "Implement caching with Redis",
+        "Add full-text search with Elasticsearch",
+        "Containerize with Docker and docker-compose",
+        "Add monitoring with Sentry error tracking"
+      ]
+    }
+  ],
+  "tags": ["react", "nodejs", "mongodb", "fullstack", "portfolio"],
+  "seo": {
+    "title": "Build a Full-Stack App — Guided Project",
+    "description": "Step-by-step guided project to build a production-ready full-stack application with React, Node.js, and MongoDB."
+  },
+  "relatedRoadmapIds": [],
+  "prerequisiteRoadmapIds": [],
+  "relatedProjectIds": []
+}

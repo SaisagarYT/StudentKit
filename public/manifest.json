@@ -1,0 +1,28 @@
+{
+  "name": "StudentKit — Calculate. Learn. Build.",
+  "short_name": "StudentKit",
+  "description": "Free tools, interactive roadmaps, and curated projects for students.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F7F7F2",
+  "theme_color": "#151515",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education", "productivity"],
+  "screenshots": [],
+  "prefer_related_applications": false
+}

@@ -5,6 +5,7 @@ import { collection, query, where, orderBy, getDocs } from 'firebase/firestore';
 import { getFirebaseDb } from '@/lib/firebase/client';
 import Link from 'next/link';
 import { Clock, Code2, FolderOpen, Search } from 'lucide-react';
+import { BookmarkButton } from '@/components/engagement/bookmark-button';
 
 interface PublicProject {
   id: string;
@@ -122,9 +123,12 @@ export function PublicProjectsList() {
           {filtered.map((project) => (
             <Link
               key={project.id}
-              href={`/projects/${project.slug}`}
-              className="group p-5 rounded-xl border border-[var(--border-soft)] bg-[var(--bg-surface)] hover:border-[var(--border-default)] transition-colors"
+              href={`/projects/view?slug=${project.slug}`}
+              className="group relative p-5 rounded-xl border border-[var(--border-soft)] bg-[var(--bg-surface)] hover:border-[var(--border-default)] transition-colors"
             >
+              <div className="absolute top-3 right-3">
+                <BookmarkButton type="project" slug={project.slug} title={project.title} size="sm" />
+              </div>
               <div className="flex items-center gap-2 mb-3">
                 <span className={`px-2 py-0.5 rounded text-[10px] font-medium ${DIFFICULTY_COLORS[project.difficulty] || ''}`}>
                   {project.difficulty}

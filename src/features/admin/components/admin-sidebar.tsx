@@ -1,8 +1,9 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, Map, FolderOpen, LogOut, ChevronRight } from 'lucide-react';
+import { LayoutDashboard, Map, FolderOpen, LogOut, ChevronRight, Menu, X } from 'lucide-react';
 import { useAuth } from '@/lib/firebase/auth';
 
 const navItems = [
@@ -14,12 +15,13 @@ const navItems = [
 export function AdminSidebar() {
   const pathname = usePathname();
   const { user, signOut } = useAuth();
+  const [open, setOpen] = useState(false);
 
-  return (
-    <aside className="fixed left-0 top-0 bottom-0 w-60 bg-[var(--bg-surface)] border-r border-[var(--border-soft)] flex flex-col z-40">
+  const sidebarContent = (
+    <>
       {/* Brand */}
       <div className="p-5 border-b border-[var(--border-soft)]">
-        <Link href="/admin" className="flex items-center gap-2.5">
+        <Link href="/admin" className="flex items-center gap-2.5" onClick={() => setOpen(false)}>
           <div className="w-8 h-8 rounded-lg bg-[var(--accent-dark)] flex items-center justify-center">
             <span className="text-[var(--accent-primary)] text-xs font-bold">SK</span>
           </div>
@@ -42,6 +44,7 @@ export function AdminSidebar() {
             <Link
               key={item.href}
               href={item.href}
+              onClick={() => setOpen(false)}
               className={`group flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 ${
                 isActive
                   ? 'bg-[var(--accent-dark)] text-[var(--accent-primary)] shadow-sm'
@@ -90,6 +93,40 @@ export function AdminSidebar() {
           </button>
         </div>
       </div>
-    </aside>
+    </>
+  );
+
+  return (
+    <>
+      {/* Mobile top bar */}
+      <div className="lg:hidden fixed top-0 left-0 right-0 h-14 bg-[var(--bg-surface)] border-b border-[var(--border-soft)] flex items-center px-4 z-50">
+        <button
+          onClick={() => setOpen(!open)}
+          className="p-2 -ml-2 rounded-lg hover:bg-[var(--bg-subtle)] text-[var(--text-primary)] transition-colors"
+        >
+          {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+        </button>
+        <div className="flex items-center gap-2 ml-3">
+          <div className="w-6 h-6 rounded bg-[var(--accent-dark)] flex items-center justify-center">
+            <span className="text-[var(--accent-primary)] text-[9px] font-bold">SK</span>
+          </div>
+          <span className="text-sm font-bold text-[var(--text-primary)]">Admin</span>
+        </div>
+      </div>
+
+      {/* Mobile overlay */}
+      {open && (
+        <div className="lg:hidden fixed inset-0 z-40 bg-black/40" onClick={() => setOpen(false)} />
+      )}
+
+      {/* Sidebar - mobile: slide over, desktop: fixed */}
+      <aside
+        className={`fixed left-0 top-0 bottom-0 w-60 bg-[var(--bg-surface)] border-r border-[var(--border-soft)] flex flex-col z-50 transition-transform duration-200 lg:translate-x-0 ${
+          open ? 'translate-x-0' : '-translate-x-full'
+        }`}
+      >
+        {sidebarContent}
+      </aside>
+    </>
   );
 }

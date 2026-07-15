@@ -1,0 +1,184 @@
+{
+  "slug": "your-roadmap-slug",
+  "title": "Your Roadmap Title",
+  "shortDescription": "A concise summary of what this roadmap covers (10-200 characters).",
+  "description": "A detailed description explaining what learners will gain from this roadmap, who it's for, and what makes it valuable.",
+  "category": "web-development",
+  "difficulty": "beginner",
+  "estimatedDuration": "3 months",
+  "icon": "Code",
+  "accent": "#4F46E5",
+  "targetAudience": [
+    "College students",
+    "Self-taught developers",
+    "Career switchers"
+  ],
+  "learningOutcomes": [
+    "Understand core fundamentals",
+    "Build production-ready projects",
+    "Prepare for job interviews"
+  ],
+  "prerequisites": [
+    "Basic computer literacy",
+    "Willingness to practice daily"
+  ],
+  "tags": ["web", "frontend", "javascript"],
+  "variants": [],
+  "relationships": [],
+  "sections": [
+    {
+      "id": "section-1",
+      "title": "Foundation & Setup",
+      "description": "Build your foundation — learn the basics, set up your environment, and understand core concepts.",
+      "timeEstimate": "2 weeks",
+      "color": "green",
+      "order": 0,
+      "projectIds": [],
+      "topics": [
+        {
+          "id": "topic-1-1",
+          "title": "Introduction & Overview",
+          "description": "Get a high-level understanding of the field, its career prospects, and what you'll build by the end.",
+          "timeEstimate": "2 hours",
+          "whatToLearn": [
+            "What this field is about",
+            "Career opportunities",
+            "Roadmap overview",
+            "Tools you'll need"
+          ],
+          "resources": [
+            {
+              "title": "Official Documentation",
+              "url": "https://example.com/docs",
+              "type": "docs"
+            },
+            {
+              "title": "Beginner Crash Course",
+              "url": "https://youtube.com/watch?v=example1",
+              "type": "video"
+            },
+            {
+              "title": "Getting Started Guide",
+              "url": "https://example.com/guide",
+              "type": "article"
+            }
+          ],
+          "project": {
+            "title": "Environment Setup",
+            "description": "Install all necessary tools, configure your editor, and create your first 'Hello World' project to verify everything works."
+          }
+        },
+        {
+          "id": "topic-1-2",
+          "title": "Core Concepts",
+          "description": "Learn the fundamental building blocks that everything else is built upon.",
+          "timeEstimate": "1 week",
+          "whatToLearn": [
+            "Core concept 1",
+            "Core concept 2",
+            "Core concept 3",
+            "How they connect together"
+          ],
+          "resources": [
+            {
+              "title": "Deep Dive Tutorial",
+              "url": "https://example.com/tutorial",
+              "type": "course"
+            },
+            {
+              "title": "Concepts Explained",
+              "url": "https://youtube.com/watch?v=example2",
+              "type": "video"
+            }
+          ],
+          "project": {
+            "title": "Mini Project: Basics",
+            "description": "Build a small project that uses all the core concepts you just learned. Keep it simple but functional."
+          }
+        }
+      ]
+    },
+    {
+      "id": "section-2",
+      "title": "Intermediate Skills",
+      "description": "Level up your skills with more complex patterns, tools, and real-world techniques.",
+      "timeEstimate": "3 weeks",
+      "color": "lime",
+      "order": 1,
+      "projectIds": [],
+      "topics": [
+        {
+          "id": "topic-2-1",
+          "title": "Advanced Patterns",
+          "description": "Learn industry-standard patterns and best practices used in production codebases.",
+          "timeEstimate": "1 week",
+          "whatToLearn": [
+            "Pattern 1",
+            "Pattern 2",
+            "When to use each",
+            "Common pitfalls"
+          ],
+          "resources": [
+            {
+              "title": "Patterns Guide",
+              "url": "https://example.com/patterns",
+              "type": "article"
+            },
+            {
+              "title": "Video Walkthrough",
+              "url": "https://youtube.com/watch?v=example3",
+              "type": "video"
+            }
+          ],
+          "project": {
+            "title": "Real-World Mini App",
+            "description": "Build a practical application that demonstrates the patterns you've learned. This should be something you could show in a portfolio."
+          }
+        }
+      ]
+    },
+    {
+      "id": "section-3",
+      "title": "Advanced & Production",
+      "description": "Master advanced topics, deployment, testing, and production-grade practices.",
+      "timeEstimate": "4 weeks",
+      "color": "yellow",
+      "order": 2,
+      "projectIds": [],
+      "topics": [
+        {
+          "id": "topic-3-1",
+          "title": "Testing & Quality",
+          "description": "Learn how to write tests, maintain code quality, and set up CI/CD pipelines.",
+          "timeEstimate": "1 week",
+          "whatToLearn": [
+            "Unit testing",
+            "Integration testing",
+            "CI/CD basics",
+            "Code quality tools"
+          ],
+          "resources": [
+            {
+              "title": "Testing Masterclass",
+              "url": "https://example.com/testing",
+              "type": "course"
+            },
+            {
+              "title": "CI/CD Setup Guide",
+              "url": "https://example.com/cicd",
+              "type": "article"
+            }
+          ],
+          "project": {
+            "title": "Capstone Project",
+            "description": "Build a complete, production-ready application with tests, proper architecture, and deployment. This is your portfolio showpiece."
+          }
+        }
+      ]
+    }
+  ],
+  "seo": {
+    "title": "Your Roadmap Title — Complete Learning Path",
+    "description": "Step-by-step roadmap to master this skill with curated resources, projects, and timelines."
+  }
+}

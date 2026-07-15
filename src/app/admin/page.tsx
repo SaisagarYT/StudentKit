@@ -2,6 +2,7 @@
 
 import { AdminShell } from '@/features/admin/components/admin-shell';
 import { MigrateRoadmaps } from '@/features/admin/components/migrate-roadmaps';
+import { AnalyticsWidget } from '@/features/admin/components/analytics-widget';
 import { useAuth } from '@/lib/firebase/auth';
 import { roadmapService, projectService } from '@/lib/cms';
 import { useEffect, useState } from 'react';
@@ -224,8 +225,11 @@ function DashboardContent() {
         </div>
       </div>
 
-      {/* Migration Tool */}
-      <MigrateRoadmaps />
+      {/* Analytics + Migration */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <AnalyticsWidget />
+        <MigrateRoadmaps />
+      </div>
 
       {/* Footer Links */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">

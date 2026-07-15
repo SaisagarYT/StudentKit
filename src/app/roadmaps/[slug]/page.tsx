@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { ArrowLeft, Clock, BookOpen, Code2, ArrowRight } from 'lucide-react';
 import { getRoadmapBySlug, roadmaps } from '@/config/roadmaps';
 import { InteractiveRoadmap } from '@/features/roadmaps/interactive-roadmap';
+import { TrackView } from '@/features/roadmaps/track-view';
 import { siteConfig } from '@/config/site';
 
 export function generateStaticParams() {
@@ -87,6 +88,7 @@ export default async function RoadmapDetailPage({ params }: PageProps) {
         </div>
 
         {/* Interactive Roadmap */}
+        <TrackView type="roadmap" slug={slug} />
         <div className="mt-12">
           <InteractiveRoadmap roadmap={roadmap} />
         </div>

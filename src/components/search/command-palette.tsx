@@ -6,6 +6,7 @@ import { Search, ArrowRight, X, CornerDownLeft } from 'lucide-react';
 import * as Icons from 'lucide-react';
 import { tools } from '@/config/tools';
 import { categories } from '@/config/categories';
+import { roadmaps } from '@/config/roadmaps';
 import { mainNavItems } from '@/config/navigation';
 import { cn } from '@/lib/utils';
 import { trackSearch } from '@/lib/analytics';
@@ -21,7 +22,7 @@ interface SearchItem {
   description: string;
   href: string;
   icon: string;
-  type: 'tool' | 'category' | 'page';
+  type: 'tool' | 'category' | 'page' | 'roadmap';
   keywords: string[];
 }
 
@@ -34,6 +35,15 @@ const searchItems: SearchItem[] = [
     icon: t.icon,
     type: 'tool' as const,
     keywords: t.keywords,
+  })),
+  ...roadmaps.map((r) => ({
+    id: `roadmap-${r.slug}`,
+    title: `${r.title} Roadmap`,
+    description: r.description.slice(0, 80),
+    href: `/roadmaps/${r.slug}`,
+    icon: 'Map',
+    type: 'roadmap' as const,
+    keywords: [r.slug, r.title.toLowerCase(), 'roadmap', 'career', 'path'],
   })),
   ...categories.map((c) => ({
     id: `cat-${c.slug}`,
@@ -199,6 +209,7 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
     tool: 'Tool',
     category: 'Category',
     page: 'Page',
+    roadmap: 'Roadmap',
   };
 
   return (

@@ -290,3 +290,16 @@ select.form-input {
   border-color: var(--accent-dark);
   box-shadow: 0 0 0 2px var(--accent-primary)/20;
 }
+
+.tour-highlight {
+  position: relative;
+  z-index: 96;
+  box-shadow: 0 0 0 4px var(--accent-primary), 0 0 0 8px var(--accent-primary)/20;
+  border-radius: 12px;
+  animation: tour-pulse 2s ease-in-out infinite;
+}
+
+@keyframes tour-pulse {
+  0%, 100% { box-shadow: 0 0 0 4px var(--accent-primary), 0 0 0 8px var(--accent-primary)/20; }
+  50% { box-shadow: 0 0 0 4px var(--accent-primary), 0 0 0 12px var(--accent-primary)/10; }
+}

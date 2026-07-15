@@ -22,6 +22,13 @@ service cloud.firestore {
       allow delete: if isAdmin() && resource.data.status != 'published';
     }
 
+    // Analytics: anyone can increment views, admins can read all
+    match /analytics/{docId} {
+      allow read: if isAdmin();
+      allow create, update: if true;
+      allow delete: if isAdmin();
+    }
+
     // Admins collection: only readable by the admin themselves
     match /admins/{uid} {
       allow read: if request.auth != null && request.auth.uid == uid;

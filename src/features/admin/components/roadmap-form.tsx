@@ -1,9 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/firebase/auth';
-import { roadmapService } from '@/lib/cms';
+import { roadmapService, projectService, type ProjectListItem } from '@/lib/cms';
 import { ROADMAP_CATEGORIES, DIFFICULTIES, STAGE_COLORS } from '@/lib/cms/schemas';
 import {
   ArrowLeft,
@@ -13,6 +13,8 @@ import {
   Plus,
   Trash2,
   GripVertical,
+  FolderOpen,
+  X,
 } from 'lucide-react';
 
 type Section = {
@@ -278,6 +280,7 @@ export function RoadmapForm() {
             addTopic={addTopic}
             updateTopic={updateTopic}
             removeTopic={removeTopic}
+            update={update}
           />
         )}
         {step === 4 && <StepReview form={form} />}
@@ -372,7 +375,26 @@ function StepAudience({ form, update }: { form: any; update: (f: any) => void })
   );
 }
 
-function StepSections({ form, addSection, updateSection, removeSection, addTopic, updateTopic, removeTopic }: any) {
+function StepSections({ form, addSection, updateSection, removeSection, addTopic, updateTopic, removeTopic, update }: any) {
+  const [allProjects, setAllProjects] = useState<ProjectListItem[]>([]);
+  const [projectsLoaded, setProjectsLoaded] = useState(false);
+
+  useEffect(() => {
+    projectService.list({ status: 'published' }).then((p) => {
+      setAllProjects(p);
+      setProjectsLoaded(true);
+    }).catch(() => setProjectsLoaded(true));
+  }, []);
+
+  function addProjectToSection(sIdx: number, projectId: string) {
+    if (form.sections[sIdx].projectIds.includes(projectId)) return;
+    updateSection(sIdx, { projectIds: [...form.sections[sIdx].projectIds, projectId] });
+  }
+
+  function removeProjectFromSection(sIdx: number, projectId: string) {
+    updateSection(sIdx, { projectIds: form.sections[sIdx].projectIds.filter((id: string) => id !== projectId) });
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -404,6 +426,43 @@ function StepSections({ form, addSection, updateSection, removeSection, addTopic
             </div>
           </div>
           <textarea value={section.description} onChange={(e) => updateSection(sIdx, { description: e.target.value })} placeholder="Section description" rows={2} className="input-field resize-none" />
+
+          {/* Linked Projects */}
+          <div className="space-y-2">
+            <div className="flex items-center gap-2">
+              <FolderOpen className="w-3.5 h-3.5 text-purple-500" />
+              <span className="text-xs font-medium text-[var(--text-primary)]">Linked Projects</span>
+            </div>
+            {section.projectIds.length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                {section.projectIds.map((pid: string) => {
+                  const proj = allProjects.find((p) => p.id === pid);
+                  return (
+                    <span key={pid} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium bg-purple-500/10 text-purple-600">
+                      {proj?.title || pid}
+                      <button onClick={() => removeProjectFromSection(sIdx, pid)} className="hover:text-red-500 transition-colors">
+                        <X className="w-3 h-3" />
+                      </button>
+                    </span>
+                  );
+                })}
+              </div>
+            )}
+            {projectsLoaded && allProjects.length > 0 ? (
+              <select
+                value=""
+                onChange={(e) => { if (e.target.value) addProjectToSection(sIdx, e.target.value); }}
+                className="input-field text-xs"
+              >
+                <option value="">+ Add a project...</option>
+                {allProjects.filter((p) => !section.projectIds.includes(p.id)).map((p) => (
+                  <option key={p.id} value={p.id}>{p.title}</option>
+                ))}
+              </select>
+            ) : projectsLoaded ? (
+              <p className="text-[10px] text-[var(--text-subtle)]">No published projects available. Create projects first.</p>
+            ) : null}
+          </div>
 
           {/* Topics */}
           <div className="pl-4 border-l-2 border-[var(--border-soft)] space-y-3">

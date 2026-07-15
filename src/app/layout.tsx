@@ -2,9 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import { Geist, Instrument_Serif } from 'next/font/google';
 import Script from 'next/script';
 import { siteConfig } from '@/config/site';
-import { SiteHeader } from '@/components/navigation/site-header';
-import { CommandSearch } from '@/components/navigation/command-search';
-import { SiteFooter } from '@/components/layout/site-footer';
+import { LayoutShell } from '@/components/layout/layout-shell';
 import { JsonLd } from '@/components/seo/json-ld';
 import { organizationSchema, websiteSchema } from '@/lib/structured-data';
 import './globals.css';
@@ -24,6 +22,12 @@ const instrumentSerif = Instrument_Serif({
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
+  manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: siteConfig.name,
+  },
   title: {
     default: `${siteConfig.name} — ${siteConfig.tagline}`,
     template: `%s | ${siteConfig.name}`,
@@ -96,10 +100,7 @@ gtag('config', 'G-X85YECWQZL');`}
         />
         <JsonLd data={organizationSchema()} />
         <JsonLd data={websiteSchema()} />
-        <SiteHeader />
-        <CommandSearch />
-        <main className="flex-1">{children}</main>
-        <SiteFooter />
+        <LayoutShell>{children}</LayoutShell>
       </body>
     </html>
   );

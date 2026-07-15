@@ -3,11 +3,12 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Search, Menu, X, ArrowRight, ChevronDown } from 'lucide-react';
+import { Search, Menu, X, ArrowRight, ChevronDown, Bookmark } from 'lucide-react';
 import * as Icons from 'lucide-react';
 import gsap from 'gsap';
 import { Logo } from '@/components/brand/logo';
 import { CommandPalette } from '@/components/search/command-palette';
+import { BookmarksPanel } from '@/components/engagement/bookmarks-panel';
 import { mainNavItems } from '@/config/navigation';
 import { tools } from '@/config/tools';
 import { categories } from '@/config/categories';
@@ -23,6 +24,7 @@ export function SiteHeader() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMegaOpen, setIsMegaOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isBookmarksOpen, setIsBookmarksOpen] = useState(false);
   const megaRef = useRef<HTMLDivElement>(null);
   const megaContentRef = useRef<HTMLDivElement>(null);
   const megaTimelineRef = useRef<gsap.core.Timeline | null>(null);
@@ -167,6 +169,7 @@ export function SiteHeader() {
                 onMouseEnter={handleMegaEnter}
                 onMouseLeave={handleMegaLeave}
                 onClick={() => setIsMegaOpen(!isMegaOpen)}
+                data-tour="nav-tools"
                 className={cn(
                   'flex items-center gap-1 px-3.5 py-2 text-sm font-medium rounded-lg transition-colors',
                   isMegaOpen
@@ -187,6 +190,7 @@ export function SiteHeader() {
                 <Link
                   key={item.href}
                   href={item.href}
+                  data-tour={`nav-${item.label.toLowerCase().replace(/\s+/g, '')}`}
                   className="px-3.5 py-2 text-sm font-medium text-text-secondary hover:text-text-primary transition-colors rounded-lg hover:bg-subtle/60"
                 >
                   {item.label}
@@ -199,6 +203,7 @@ export function SiteHeader() {
               <button
                 type="button"
                 onClick={() => setIsSearchOpen(true)}
+                data-tour="search"
                 className="flex items-center gap-2 px-3 py-1.5 text-sm text-text-subtle border border-border-soft rounded-lg hover:border-border hover:text-text-secondary transition-all"
                 aria-label="Search tools (Ctrl+K)"
               >
@@ -207,6 +212,15 @@ export function SiteHeader() {
                 <kbd className="hidden md:inline-flex items-center gap-0.5 px-1.5 py-0.5 text-xs text-text-subtle bg-subtle rounded font-mono">
                   ⌘K
                 </kbd>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setIsBookmarksOpen(true)}
+                className="hidden sm:flex items-center justify-center w-9 h-9 rounded-lg text-text-subtle hover:text-text-primary hover:bg-subtle transition-all"
+                aria-label="Bookmarks"
+              >
+                <Bookmark className="w-4 h-4" />
               </button>
 
               <Link
@@ -386,6 +400,9 @@ export function SiteHeader() {
 
       {/* Command Palette */}
       <CommandPalette isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
+
+      {/* Bookmarks Panel */}
+      <BookmarksPanel isOpen={isBookmarksOpen} onClose={() => setIsBookmarksOpen(false)} />
 
       {/* Spacer for fixed header */}
       <div className="h-16 md:h-18" />
