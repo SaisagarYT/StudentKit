@@ -24,6 +24,7 @@ import {
 import type { Roadmap, RoadmapStage, RoadmapTopic } from '@/types/roadmap';
 import { cn } from '@/lib/utils';
 import { trackRoadmapProgress } from '@/lib/analytics';
+import { ShareProgress } from '@/components/engagement/share-progress';
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
@@ -704,9 +705,17 @@ export function InteractiveRoadmap({ roadmap }: { roadmap: Roadmap }) {
                 </p>
               </div>
             </div>
-            <span className="text-2xl font-bold text-[var(--text-primary)]">
-              {Math.round(overallPercent)}%
-            </span>
+            <div className="flex items-center gap-3">
+              <ShareProgress
+                roadmapTitle={roadmap.title}
+                roadmapSlug={roadmap.slug}
+                completedTopics={completedTopics}
+                totalTopics={totalTopics}
+              />
+              <span className="text-2xl font-bold text-[var(--text-primary)]">
+                {Math.round(overallPercent)}%
+              </span>
+            </div>
           </div>
           <div className="relative h-2 rounded-full bg-[var(--border-soft)] overflow-hidden">
             <div

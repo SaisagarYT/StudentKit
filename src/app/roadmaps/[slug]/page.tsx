@@ -6,6 +6,8 @@ import { getRoadmapBySlug, roadmaps } from '@/config/roadmaps';
 import { InteractiveRoadmap } from '@/features/roadmaps/interactive-roadmap';
 import { TrackView } from '@/features/roadmaps/track-view';
 import { siteConfig } from '@/config/site';
+import { JsonLd } from '@/components/seo/json-ld';
+import { courseSchema } from '@/lib/structured-data';
 
 export function generateStaticParams() {
   return roadmaps.map((r) => ({ slug: r.slug }));
@@ -41,6 +43,7 @@ export default async function RoadmapDetailPage({ params }: PageProps) {
 
   return (
     <div className="py-8 md:py-12">
+      <JsonLd data={courseSchema(roadmap)} />
       <div className="container-main">
         {/* Back link */}
         <Link

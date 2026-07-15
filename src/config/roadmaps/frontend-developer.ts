@@ -343,6 +343,8 @@ export const frontendDeveloperRoadmap: Roadmap = {
             'Test-driven development workflow',
           ],
           resources: [
+            { title: 'React Testing Tutorial - Net Ninja', url: 'https://www.youtube.com/playlist?list=PL4cUxeGkcC9gm4_-5UsNmLqMosM-dzuvQ', type: 'video' },
+            { title: 'Vitest Crash Course - Traversy Media', url: 'https://www.youtube.com/watch?v=7f-71kYhK00', type: 'video' },
             { title: 'Testing Library Docs', url: 'https://testing-library.com/docs/react-testing-library/intro/', type: 'docs' },
             { title: 'Vitest Docs', url: 'https://vitest.dev/guide/', type: 'docs' },
             { title: 'Testing React Apps - Kent C. Dodds', url: 'https://kentcdodds.com/blog/common-mistakes-with-react-testing-library', type: 'article' },
@@ -366,6 +368,8 @@ export const frontendDeveloperRoadmap: Roadmap = {
             'Virtualization for long lists',
           ],
           resources: [
+            { title: 'Web Performance - Fireship', url: 'https://www.youtube.com/watch?v=0fONene3OIA', type: 'video' },
+            { title: 'React Performance Optimization - Jack Herrington', url: 'https://www.youtube.com/watch?v=uojLJFt9SzY', type: 'video' },
             { title: 'web.dev Performance', url: 'https://web.dev/explore/fast', type: 'docs' },
             { title: 'React Performance - Kent C. Dodds', url: 'https://kentcdodds.com/blog/fix-the-slow-render-before-you-fix-the-re-render', type: 'article' },
             { title: 'Chrome DevTools Performance', url: 'https://developer.chrome.com/docs/devtools/performance/', type: 'docs' },
@@ -422,6 +426,9 @@ export const frontendDeveloperRoadmap: Roadmap = {
             'Monitoring and error tracking basics',
           ],
           resources: [
+            { title: 'Vite in 100 Seconds - Fireship', url: 'https://www.youtube.com/watch?v=KCrXgy8qtjM', type: 'video' },
+            { title: 'Deploy to Vercel - Lee Robinson', url: 'https://www.youtube.com/watch?v=2HBIzEx6IZA', type: 'video' },
+            { title: 'GitHub Actions Tutorial - TechWorld with Nana', url: 'https://www.youtube.com/watch?v=R8_veQiYBjI', type: 'video' },
             { title: 'Vite Docs', url: 'https://vitejs.dev/guide/', type: 'docs' },
             { title: 'Vercel Deployment Guide', url: 'https://vercel.com/docs/deployments/overview', type: 'docs' },
             { title: 'GitHub Actions Docs', url: 'https://docs.github.com/en/actions', type: 'docs' },
@@ -445,6 +452,8 @@ export const frontendDeveloperRoadmap: Roadmap = {
             'Frontend interview preparation (basics)',
           ],
           resources: [
+            { title: 'Build a Developer Portfolio - ForrestKnight', url: 'https://www.youtube.com/watch?v=1eEnboVooiY', type: 'video' },
+            { title: 'Frontend Interview Prep - Namaste Dev', url: 'https://www.youtube.com/watch?v=abbdJ4Yfm54', type: 'video' },
             { title: 'Developer Portfolio Tips', url: 'https://www.joshwcomeau.com/effective-portfolio/', type: 'article' },
             { title: 'GitHub Profile README Guide', url: 'https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-github-profile', type: 'docs' },
             { title: 'Frontend Interview Handbook', url: 'https://www.frontendinterviewhandbook.com/', type: 'article' },

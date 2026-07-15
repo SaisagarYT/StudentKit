@@ -116,3 +116,45 @@ export function collectionPageSchema(page: {
     },
   };
 }
+
+export function courseSchema(roadmap: {
+  title: string;
+  description: string;
+  slug: string;
+  totalTime: string;
+  stages: { title: string; topics: { title: string }[] }[];
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Course',
+    name: `${roadmap.title} Roadmap`,
+    description: roadmap.description,
+    url: `${siteConfig.url}/roadmaps/${roadmap.slug}`,
+    provider: {
+      '@type': 'Organization',
+      name: siteConfig.name,
+      url: siteConfig.url,
+    },
+    isAccessibleForFree: true,
+    offers: {
+      '@type': 'Offer',
+      price: '0',
+      priceCurrency: 'INR',
+      availability: 'https://schema.org/InStock',
+    },
+    hasCourseInstance: {
+      '@type': 'CourseInstance',
+      courseMode: 'online',
+      courseWorkload: roadmap.totalTime,
+    },
+    syllabusSections: roadmap.stages.map((stage) => ({
+      '@type': 'Syllabus',
+      name: stage.title,
+      numberOfLessons: stage.topics.length,
+    })),
+    totalHistoricalEnrollment: roadmap.stages.reduce(
+      (sum, s) => sum + s.topics.length,
+      0
+    ),
+  };
+}

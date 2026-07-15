@@ -4,6 +4,8 @@ import { ArrowRight, Map, Code, Server, Smartphone, Brain, Shield, Cloud, Databa
 import { siteConfig } from '@/config/site';
 import { roadmaps as liveRoadmaps } from '@/config/roadmaps';
 import { cn } from '@/lib/utils';
+import { StreakBanner } from '@/components/engagement/streak-banner';
+import { RoadmapProgressCard } from '@/components/engagement/roadmap-progress-card';
 
 export const metadata: Metadata = {
   title: `Roadmaps | ${siteConfig.name}`,
@@ -98,8 +100,13 @@ export default function RoadmapsPage() {
           </p>
         </div>
 
+        {/* Streak */}
+        <div className="mt-8">
+          <StreakBanner />
+        </div>
+
         {/* Roadmap Grid */}
-        <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {allRoadmaps.map((roadmap) => {
             const Icon = roadmap.icon;
             const liveData = liveRoadmaps.find((r) => r.slug === roadmap.slug);
@@ -144,6 +151,7 @@ export default function RoadmapsPage() {
                     isLive ? 'text-[var(--accent-dark)] opacity-100' : 'text-[var(--text-subtle)] opacity-0 group-hover:opacity-100'
                   )} />
                 </div>
+                {isLive && <RoadmapProgressCard slug={roadmap.slug} totalTopics={totalTopics} />}
               </>
             );
 
