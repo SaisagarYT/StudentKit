@@ -9,7 +9,7 @@ export const mainNavItems: NavItem[] = [
   { label: 'Roadmaps', href: '/roadmaps', description: 'Career & tech paths' },
   { label: 'Projects', href: '/projects', description: 'Build something real' },
   { label: 'Open Source', href: '/open-source', description: 'Discover GitHub repos' },
-  { label: 'Guides', href: '/guides', description: 'Step-by-step learning' },
+  { label: 'Placement', href: '/placement', description: 'DSA, CS & interview prep' },
 ];
 
 export const footerNavSections = [
@@ -28,7 +28,7 @@ export const footerNavSections = [
       { label: 'Roadmaps', href: '/roadmaps' },
       { label: 'Projects', href: '/projects' },
       { label: 'Open Source', href: '/open-source' },
-      { label: 'Guides', href: '/guides' },
+      { label: 'Placement', href: '/placement' },
     ],
   },
   {

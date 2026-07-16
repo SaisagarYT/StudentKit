@@ -253,6 +253,18 @@ export const tools: Tool[] = [
     featured: false,
     cardSize: 'small',
   },
+  {
+    slug: 'typing-practice',
+    title: 'Typing Practice',
+    shortDescription: 'Improve your typing speed & accuracy',
+    description:
+      'Practice touch typing with real-time WPM, accuracy tracking, and multiple difficulty modes. Track your personal records and improve your coding speed.',
+    category: 'career',
+    icon: 'Keyboard',
+    keywords: ['typing', 'speed', 'wpm', 'accuracy', 'practice', 'touch typing', 'keyboard', 'test'],
+    featured: true,
+    cardSize: 'medium',
+  },
 ];
 
 export function getToolBySlug(slug: string): Tool | undefined {

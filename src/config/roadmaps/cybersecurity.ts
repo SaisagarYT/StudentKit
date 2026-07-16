@@ -406,6 +406,8 @@ export const cybersecurityRoadmap: Roadmap = {
             'Resume and LinkedIn for security roles',
           ],
           resources: [
+            { title: 'CTF for Beginners - John Hammond', url: 'https://www.youtube.com/watch?v=ca_Bkwb9QpY', type: 'video' },
+            { title: 'Bug Bounty Hunting Tutorial - InsiderPhD', url: 'https://www.youtube.com/watch?v=yCUQBc2rY9Y', type: 'video' },
             { title: 'PicoCTF (Beginner CTF)', url: 'https://picoctf.org/', type: 'course' },
             { title: 'HackTheBox Starting Point', url: 'https://www.hackthebox.com/starting-point', type: 'course' },
             { title: 'Bug Bounty Hunter - HackerOne', url: 'https://www.hackerone.com/hackers', type: 'docs' },

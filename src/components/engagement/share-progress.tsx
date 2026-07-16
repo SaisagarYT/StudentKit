@@ -22,9 +22,11 @@ export function ShareProgress({
   const percent = totalTopics > 0 ? Math.round((completedTopics / totalTopics) * 100) : 0;
   const url = `https://studentkit.app/roadmaps/${roadmapSlug}`;
 
-  const shareText = percent === 100
-    ? `I just completed the ${roadmapTitle} Roadmap on StudentKit! 🎉`
-    : `I'm ${percent}% through the ${roadmapTitle} Roadmap on StudentKit! 🚀`;
+  const shareText = completedTopics === 0
+    ? `Check out the ${roadmapTitle} Roadmap on StudentKit!`
+    : percent === 100
+      ? `I just completed the ${roadmapTitle} Roadmap on StudentKit! 🎉`
+      : `I'm ${percent}% through the ${roadmapTitle} Roadmap on StudentKit! 🚀`;
 
   const handleCopyLink = useCallback(async () => {
     try {
@@ -39,8 +41,6 @@ export function ShareProgress({
   const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(url)}`;
   const linkedinUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
 
-  if (completedTopics === 0) return null;
-
   return (
     <div className="relative">
       <button
@@ -49,7 +49,7 @@ export function ShareProgress({
         className="inline-flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-medium rounded-lg border border-[var(--border-default)] bg-[var(--bg-surface)] text-[var(--text-secondary)] hover:border-[var(--accent-primary)]/50 hover:text-[var(--text-primary)] transition-all"
       >
         <Share2 className="w-3.5 h-3.5" />
-        Share Progress
+        Share
       </button>
 
       {showMenu && (
@@ -60,7 +60,7 @@ export function ShareProgress({
           />
           <div className="absolute top-full mt-2 right-0 z-50 w-52 p-2 rounded-xl border border-[var(--border-default)] bg-[var(--bg-surface)] shadow-lg">
             <p className="px-2 py-1.5 text-[10px] font-medium uppercase tracking-wider text-[var(--text-subtle)]">
-              Share your {percent}% progress
+              {completedTopics > 0 ? `Share your ${percent}% progress` : 'Share this roadmap'}
             </p>
             <a
               href={twitterUrl}

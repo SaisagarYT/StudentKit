@@ -317,6 +317,8 @@ export const mobileDeveloperRoadmap: Roadmap = {
             'Beta testing (TestFlight, Firebase Distribution)',
           ],
           resources: [
+            { title: 'Flutter Testing Full Guide - Reso Coder', url: 'https://www.youtube.com/watch?v=RDY6UYh-4bE', type: 'video' },
+            { title: 'React Native Testing - Academind', url: 'https://www.youtube.com/watch?v=jSvo-KXDpnM', type: 'video' },
             { title: 'Flutter Testing Guide', url: 'https://docs.flutter.dev/testing', type: 'docs' },
             { title: 'React Native Testing Library', url: 'https://callstack.github.io/react-native-testing-library/', type: 'docs' },
             { title: 'Detox E2E Testing', url: 'https://wix.github.io/Detox/', type: 'docs' },
