@@ -30,6 +30,7 @@ export default function AdminLoginPage() {
     try {
       await signInWithGoogle();
       router.replace('/admin');
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       setError(err.message || 'Sign in failed.');
     } finally {

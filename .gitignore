@@ -61,6 +61,7 @@ AGENTS.md
 
 # Firebase
 .firebase/
+serviceAccountKey.json
 
 # IDE
 .vscode/

@@ -5,6 +5,15 @@ export interface DsaProblem {
   link: string;
   tags: string[];
   companies: string[];
+  hint?: string;
+  videoSolution?: string;
+  editorial?: string;
+}
+
+export interface TopicResource {
+  title: string;
+  url: string;
+  type: 'video' | 'article' | 'practice';
 }
 
 export interface DsaTopic {
@@ -12,6 +21,8 @@ export interface DsaTopic {
   title: string;
   description: string;
   icon: string;
+  pattern: string;
+  resources: TopicResource[];
   problems: DsaProblem[];
 }
 
@@ -25,6 +36,11 @@ export const dsaTopics: DsaTopic[] = [
     description:
       'Foundation of DSA — master array traversals, hash maps, frequency counting, and prefix techniques.',
     icon: 'grid-3x3',
+    pattern: 'Use hash maps for O(1) lookups, prefix sums for range queries, and sorting + two pointers for pair problems.',
+    resources: [
+      { title: 'NeetCode — Arrays & Hashing', url: 'https://neetcode.io/roadmap', type: 'video' },
+      { title: 'Striver — Array Series', url: 'https://takeuforward.org/strivers-a2z-dsa-course/strivers-a2z-dsa-course-sheet-2/', type: 'article' },
+    ],
     problems: [
       {
         id: 1,
@@ -33,6 +49,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/two-sum/',
         tags: ['array', 'hash-map'],
         companies: ['Google', 'Amazon', 'Microsoft', 'Meta', 'Apple'],
+        videoSolution: 'https://www.youtube.com/watch?v=KLlXCFG5TnA',
+        editorial: 'https://leetcode.com/problems/two-sum/editorial/',
       },
       {
         id: 2,
@@ -41,6 +59,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/contains-duplicate/',
         tags: ['array', 'hash-set'],
         companies: ['Amazon', 'Apple', 'Adobe'],
+        videoSolution: 'https://www.youtube.com/watch?v=3OamzN90kPg',
+        editorial: 'https://leetcode.com/problems/contains-duplicate/editorial/',
       },
       {
         id: 3,
@@ -49,6 +69,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/valid-anagram/',
         tags: ['string', 'hash-map', 'sorting'],
         companies: ['Google', 'Amazon', 'Microsoft'],
+        videoSolution: 'https://www.youtube.com/watch?v=9UtInBqnCgA',
+        editorial: 'https://leetcode.com/problems/valid-anagram/editorial/',
       },
       {
         id: 4,
@@ -57,6 +79,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/group-anagrams/',
         tags: ['string', 'hash-map', 'sorting'],
         companies: ['Amazon', 'Meta', 'Google', 'Microsoft'],
+        videoSolution: 'https://www.youtube.com/watch?v=vzdNOK2oB2E',
+        editorial: 'https://leetcode.com/problems/group-anagrams/editorial/',
       },
       {
         id: 5,
@@ -65,6 +89,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/top-k-frequent-elements/',
         tags: ['array', 'hash-map', 'heap', 'bucket-sort'],
         companies: ['Amazon', 'Meta', 'Google', 'Apple'],
+        videoSolution: 'https://www.youtube.com/watch?v=YPTqKIgVk-k',
+        editorial: 'https://leetcode.com/problems/top-k-frequent-elements/editorial/',
       },
       {
         id: 6,
@@ -73,6 +99,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/product-of-array-except-self/',
         tags: ['array', 'prefix-sum'],
         companies: ['Amazon', 'Meta', 'Apple', 'Microsoft', 'Google'],
+        videoSolution: 'https://www.youtube.com/watch?v=bNvIQI2wAjk',
+        editorial: 'https://leetcode.com/problems/product-of-array-except-self/editorial/',
       },
       {
         id: 7,
@@ -81,6 +109,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/longest-consecutive-sequence/',
         tags: ['array', 'hash-set', 'union-find'],
         companies: ['Google', 'Amazon', 'Meta', 'Microsoft'],
+        videoSolution: 'https://www.youtube.com/watch?v=P6RZZMu_maU',
+        editorial: 'https://leetcode.com/problems/longest-consecutive-sequence/editorial/',
       },
       {
         id: 8,
@@ -89,6 +119,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/encode-and-decode-strings/',
         tags: ['string', 'design'],
         companies: ['Google', 'Meta', 'Apple'],
+        videoSolution: 'https://www.youtube.com/watch?v=B1k_sxOSgv8',
+        editorial: 'https://leetcode.com/problems/encode-and-decode-strings/editorial/',
       },
       {
         id: 9,
@@ -97,6 +129,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/move-zeroes/',
         tags: ['array', 'two-pointers'],
         companies: ['Meta', 'Amazon', 'Apple', 'Bloomberg'],
+        editorial: 'https://leetcode.com/problems/move-zeroes/editorial/',
       },
       {
         id: 10,
@@ -105,6 +138,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/majority-element/',
         tags: ['array', 'hash-map', 'sorting', 'divide-and-conquer'],
         companies: ['Amazon', 'Google', 'Microsoft'],
+        editorial: 'https://leetcode.com/problems/majority-element/editorial/',
       },
       {
         id: 11,
@@ -113,6 +147,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/sort-colors/',
         tags: ['array', 'two-pointers', 'sorting'],
         companies: ['Microsoft', 'Amazon', 'Meta', 'Google'],
+        editorial: 'https://leetcode.com/problems/sort-colors/editorial/',
       },
       {
         id: 12,
@@ -121,6 +156,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/next-permutation/',
         tags: ['array', 'two-pointers'],
         companies: ['Google', 'Amazon', 'Meta', 'Microsoft'],
+        editorial: 'https://leetcode.com/problems/next-permutation/editorial/',
       },
       {
         id: 13,
@@ -129,6 +165,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/maximum-subarray/',
         tags: ['array', 'dynamic-programming', 'divide-and-conquer'],
         companies: ['Amazon', 'Microsoft', 'Google', 'Apple', 'Meta'],
+        videoSolution: 'https://www.youtube.com/watch?v=5WZl3MMT0Eg',
+        editorial: 'https://leetcode.com/problems/maximum-subarray/editorial/',
       },
       {
         id: 14,
@@ -137,6 +175,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/',
         tags: ['array', 'greedy', 'dynamic-programming'],
         companies: ['Amazon', 'Goldman Sachs', 'Microsoft'],
+        editorial: 'https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/editorial/',
       },
       {
         id: 15,
@@ -145,6 +184,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/subarray-sum-equals-k/',
         tags: ['array', 'hash-map', 'prefix-sum'],
         companies: ['Meta', 'Google', 'Amazon', 'Microsoft'],
+        editorial: 'https://leetcode.com/problems/subarray-sum-equals-k/editorial/',
       },
       {
         id: 16,
@@ -153,6 +193,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/set-matrix-zeroes/',
         tags: ['array', 'matrix', 'hash-set'],
         companies: ['Amazon', 'Microsoft', 'Meta'],
+        editorial: 'https://leetcode.com/problems/set-matrix-zeroes/editorial/',
       },
       {
         id: 17,
@@ -161,6 +202,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/spiral-matrix/',
         tags: ['array', 'matrix', 'simulation'],
         companies: ['Amazon', 'Microsoft', 'Apple', 'Google'],
+        editorial: 'https://leetcode.com/problems/spiral-matrix/editorial/',
       },
       {
         id: 18,
@@ -169,6 +211,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/rotate-image/',
         tags: ['array', 'matrix', 'math'],
         companies: ['Amazon', 'Microsoft', 'Apple', 'Google'],
+        editorial: 'https://leetcode.com/problems/rotate-image/editorial/',
       },
       {
         id: 19,
@@ -177,6 +220,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/pascals-triangle/',
         tags: ['array', 'dynamic-programming'],
         companies: ['Amazon', 'Google', 'Microsoft'],
+        editorial: 'https://leetcode.com/problems/pascals-triangle/editorial/',
       },
       {
         id: 20,
@@ -185,6 +229,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/find-all-duplicates-in-an-array/',
         tags: ['array', 'hash-map'],
         companies: ['Amazon', 'Microsoft', 'Apple'],
+        editorial: 'https://leetcode.com/problems/find-all-duplicates-in-an-array/editorial/',
       },
       {
         id: 21,
@@ -193,6 +238,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/first-missing-positive/',
         tags: ['array', 'hash-set', 'cyclic-sort'],
         companies: ['Amazon', 'Google', 'Microsoft', 'Meta'],
+        editorial: 'https://leetcode.com/problems/first-missing-positive/editorial/',
       },
       {
         id: 22,
@@ -201,6 +247,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/longest-substring-without-repeating-characters/',
         tags: ['string', 'hash-map', 'sliding-window'],
         companies: ['Amazon', 'Google', 'Meta', 'Microsoft', 'Apple'],
+        videoSolution: 'https://www.youtube.com/watch?v=wiGpQwVHdE0',
+        editorial: 'https://leetcode.com/problems/longest-substring-without-repeating-characters/editorial/',
       },
       {
         id: 23,
@@ -209,6 +257,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/4sum/',
         tags: ['array', 'two-pointers', 'sorting'],
         companies: ['Amazon', 'Google', 'Microsoft'],
+        editorial: 'https://leetcode.com/problems/4sum/editorial/',
       },
       {
         id: 24,
@@ -217,6 +266,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/continuous-subarray-sum/',
         tags: ['array', 'hash-map', 'prefix-sum', 'math'],
         companies: ['Meta', 'Amazon', 'Google'],
+        editorial: 'https://leetcode.com/problems/continuous-subarray-sum/editorial/',
       },
       {
         id: 25,
@@ -225,6 +275,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/range-sum-query-immutable/',
         tags: ['array', 'prefix-sum', 'design'],
         companies: ['Google', 'Amazon'],
+        editorial: 'https://leetcode.com/problems/range-sum-query-immutable/editorial/',
       },
       {
         id: 26,
@@ -233,6 +284,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/maximum-product-subarray/',
         tags: ['array', 'dynamic-programming'],
         companies: ['Amazon', 'Google', 'Microsoft', 'LinkedIn'],
+        editorial: 'https://leetcode.com/problems/maximum-product-subarray/editorial/',
       },
       {
         id: 27,
@@ -241,6 +293,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/find-the-duplicate-number/',
         tags: ['array', 'two-pointers', 'binary-search'],
         companies: ['Amazon', 'Google', 'Microsoft', 'Meta'],
+        editorial: 'https://leetcode.com/problems/find-the-duplicate-number/editorial/',
       },
       {
         id: 28,
@@ -249,6 +302,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/brick-wall/',
         tags: ['array', 'hash-map'],
         companies: ['Meta', 'Bloomberg'],
+        editorial: 'https://leetcode.com/problems/brick-wall/editorial/',
       },
       {
         id: 29,
@@ -257,6 +311,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/replace-elements-with-greatest-element-on-right-side/',
         tags: ['array'],
         companies: ['Amazon'],
+        editorial: 'https://leetcode.com/problems/replace-elements-with-greatest-element-on-right-side/editorial/',
       },
       {
         id: 30,
@@ -265,6 +320,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/valid-sudoku/',
         tags: ['array', 'hash-set', 'matrix'],
         companies: ['Amazon', 'Apple', 'Microsoft', 'Uber'],
+        videoSolution: 'https://www.youtube.com/watch?v=TjFXEUCMqI8',
+        editorial: 'https://leetcode.com/problems/valid-sudoku/editorial/',
       },
     ],
   },
@@ -278,6 +335,11 @@ export const dsaTopics: DsaTopic[] = [
     description:
       'Efficiently solve problems using two converging or diverging pointers — eliminates unnecessary nested loops.',
     icon: 'arrow-left-right',
+    pattern: 'Sort the array first, then use left/right pointers moving inward. For linked lists, use slow/fast pointers.',
+    resources: [
+      { title: 'NeetCode — Two Pointers', url: 'https://neetcode.io/roadmap', type: 'video' },
+      { title: 'Two Pointer Technique', url: 'https://www.geeksforgeeks.org/two-pointers-technique/', type: 'article' },
+    ],
     problems: [
       {
         id: 31,
@@ -286,6 +348,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/valid-palindrome/',
         tags: ['string', 'two-pointers'],
         companies: ['Meta', 'Microsoft', 'Amazon'],
+        videoSolution: 'https://www.youtube.com/watch?v=jJXJ16kPFWg',
+        editorial: 'https://leetcode.com/problems/valid-palindrome/editorial/',
       },
       {
         id: 32,
@@ -294,6 +358,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/',
         tags: ['array', 'two-pointers', 'binary-search'],
         companies: ['Amazon', 'Google', 'Microsoft'],
+        videoSolution: 'https://www.youtube.com/watch?v=cQ1Oz4ckceM',
+        editorial: 'https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/editorial/',
       },
       {
         id: 33,
@@ -302,6 +368,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/3sum/',
         tags: ['array', 'two-pointers', 'sorting'],
         companies: ['Amazon', 'Meta', 'Google', 'Microsoft', 'Apple'],
+        videoSolution: 'https://www.youtube.com/watch?v=jzZsG8n2R9A',
+        editorial: 'https://leetcode.com/problems/3sum/editorial/',
       },
       {
         id: 34,
@@ -310,6 +378,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/container-with-most-water/',
         tags: ['array', 'two-pointers', 'greedy'],
         companies: ['Amazon', 'Google', 'Meta', 'Microsoft', 'Goldman Sachs'],
+        videoSolution: 'https://www.youtube.com/watch?v=UuiTKBwPgAo',
+        editorial: 'https://leetcode.com/problems/container-with-most-water/editorial/',
       },
       {
         id: 35,
@@ -318,6 +388,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/trapping-rain-water/',
         tags: ['array', 'two-pointers', 'stack', 'dynamic-programming'],
         companies: ['Amazon', 'Google', 'Meta', 'Microsoft', 'Goldman Sachs', 'Apple'],
+        videoSolution: 'https://www.youtube.com/watch?v=ZI2z5pq0TqA',
+        editorial: 'https://leetcode.com/problems/trapping-rain-water/editorial/',
       },
       {
         id: 36,
@@ -326,6 +398,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/remove-duplicates-from-sorted-array/',
         tags: ['array', 'two-pointers'],
         companies: ['Meta', 'Amazon', 'Microsoft'],
+        editorial: 'https://leetcode.com/problems/remove-duplicates-from-sorted-array/editorial/',
       },
       {
         id: 37,
@@ -334,6 +407,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/remove-element/',
         tags: ['array', 'two-pointers'],
         companies: ['Amazon', 'Microsoft'],
+        editorial: 'https://leetcode.com/problems/remove-element/editorial/',
       },
       {
         id: 38,
@@ -342,6 +416,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/boats-to-save-people/',
         tags: ['array', 'two-pointers', 'greedy', 'sorting'],
         companies: ['Google', 'Amazon', 'Microsoft'],
+        editorial: 'https://leetcode.com/problems/boats-to-save-people/editorial/',
       },
       {
         id: 39,
@@ -350,6 +425,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/sort-colors/',
         tags: ['array', 'two-pointers', 'sorting'],
         companies: ['Microsoft', 'Amazon', 'Meta', 'Google'],
+        editorial: 'https://leetcode.com/problems/sort-colors/editorial/',
       },
       {
         id: 40,
@@ -358,6 +434,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/squares-of-a-sorted-array/',
         tags: ['array', 'two-pointers', 'sorting'],
         companies: ['Meta', 'Amazon', 'Google'],
+        editorial: 'https://leetcode.com/problems/squares-of-a-sorted-array/editorial/',
       },
       {
         id: 41,
@@ -366,6 +443,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/merge-sorted-array/',
         tags: ['array', 'two-pointers', 'sorting'],
         companies: ['Meta', 'Amazon', 'Microsoft', 'Apple'],
+        editorial: 'https://leetcode.com/problems/merge-sorted-array/editorial/',
       },
       {
         id: 42,
@@ -374,6 +452,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/longest-palindromic-substring/',
         tags: ['string', 'two-pointers', 'dynamic-programming'],
         companies: ['Amazon', 'Microsoft', 'Google', 'Meta'],
+        editorial: 'https://leetcode.com/problems/longest-palindromic-substring/editorial/',
       },
       {
         id: 43,
@@ -382,6 +461,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/palindrome-linked-list/',
         tags: ['linked-list', 'two-pointers', 'stack'],
         companies: ['Meta', 'Amazon', 'Microsoft'],
+        editorial: 'https://leetcode.com/problems/palindrome-linked-list/editorial/',
       },
       {
         id: 44,
@@ -390,6 +470,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/string-compression/',
         tags: ['string', 'two-pointers'],
         companies: ['Meta', 'Goldman Sachs', 'Apple'],
+        editorial: 'https://leetcode.com/problems/string-compression/editorial/',
       },
       {
         id: 45,
@@ -398,6 +479,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/partition-labels/',
         tags: ['string', 'two-pointers', 'greedy', 'hash-map'],
         companies: ['Amazon', 'Google', 'Meta'],
+        editorial: 'https://leetcode.com/problems/partition-labels/editorial/',
       },
     ],
   },
@@ -411,6 +493,11 @@ export const dsaTopics: DsaTopic[] = [
     description:
       'Maintain a dynamic window over data to solve substring and subarray problems in linear time.',
     icon: 'panel-right-open',
+    pattern: 'Expand window right, shrink from left when condition breaks. Track state with a hash map or counter.',
+    resources: [
+      { title: 'Sliding Window — Aditya Verma', url: 'https://www.youtube.com/playlist?list=PL_z_8CaSLPWeM8BDJmIYDnRPO1Jkt4f2N', type: 'video' },
+      { title: 'Sliding Window Patterns', url: 'https://leetcode.com/discuss/general-discussion/657507/', type: 'article' },
+    ],
     problems: [
       {
         id: 46,
@@ -419,6 +506,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/best-time-to-buy-and-sell-stock/',
         tags: ['array', 'sliding-window', 'dynamic-programming'],
         companies: ['Amazon', 'Meta', 'Google', 'Microsoft', 'Apple'],
+        videoSolution: 'https://www.youtube.com/watch?v=1pkOgXD63yU',
+        editorial: 'https://leetcode.com/problems/best-time-to-buy-and-sell-stock/editorial/',
       },
       {
         id: 47,
@@ -427,6 +516,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/longest-substring-without-repeating-characters/',
         tags: ['string', 'hash-map', 'sliding-window'],
         companies: ['Amazon', 'Google', 'Meta', 'Microsoft', 'Apple'],
+        videoSolution: 'https://www.youtube.com/watch?v=wiGpQwVHdE0',
+        editorial: 'https://leetcode.com/problems/longest-substring-without-repeating-characters/editorial/',
       },
       {
         id: 48,
@@ -435,6 +526,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/longest-repeating-character-replacement/',
         tags: ['string', 'hash-map', 'sliding-window'],
         companies: ['Google', 'Amazon', 'Microsoft'],
+        videoSolution: 'https://www.youtube.com/watch?v=gqXU1UyA8pk',
+        editorial: 'https://leetcode.com/problems/longest-repeating-character-replacement/editorial/',
       },
       {
         id: 49,
@@ -443,6 +536,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/permutation-in-string/',
         tags: ['string', 'hash-map', 'sliding-window'],
         companies: ['Microsoft', 'Amazon', 'Google'],
+        editorial: 'https://leetcode.com/problems/permutation-in-string/editorial/',
       },
       {
         id: 50,
@@ -451,6 +545,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/minimum-window-substring/',
         tags: ['string', 'hash-map', 'sliding-window'],
         companies: ['Meta', 'Amazon', 'Google', 'Microsoft', 'Apple', 'Uber'],
+        videoSolution: 'https://www.youtube.com/watch?v=jSto1O4AJbM',
+        editorial: 'https://leetcode.com/problems/minimum-window-substring/editorial/',
       },
       {
         id: 51,
@@ -459,6 +555,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/sliding-window-maximum/',
         tags: ['array', 'sliding-window', 'deque', 'monotonic-queue'],
         companies: ['Amazon', 'Google', 'Microsoft', 'Meta'],
+        editorial: 'https://leetcode.com/problems/sliding-window-maximum/editorial/',
       },
       {
         id: 52,
@@ -467,6 +564,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/find-all-anagrams-in-a-string/',
         tags: ['string', 'hash-map', 'sliding-window'],
         companies: ['Amazon', 'Meta', 'Microsoft'],
+        editorial: 'https://leetcode.com/problems/find-all-anagrams-in-a-string/editorial/',
       },
       {
         id: 53,
@@ -475,6 +573,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/maximum-average-subarray-i/',
         tags: ['array', 'sliding-window'],
         companies: ['Google', 'Amazon'],
+        editorial: 'https://leetcode.com/problems/maximum-average-subarray-i/editorial/',
       },
       {
         id: 54,
@@ -483,6 +582,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/minimum-size-subarray-sum/',
         tags: ['array', 'sliding-window', 'binary-search', 'prefix-sum'],
         companies: ['Meta', 'Amazon', 'Goldman Sachs'],
+        editorial: 'https://leetcode.com/problems/minimum-size-subarray-sum/editorial/',
       },
       {
         id: 55,
@@ -491,6 +591,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/fruit-into-baskets/',
         tags: ['array', 'hash-map', 'sliding-window'],
         companies: ['Google', 'Amazon'],
+        editorial: 'https://leetcode.com/problems/fruit-into-baskets/editorial/',
       },
       {
         id: 56,
@@ -499,6 +600,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/substring-with-concatenation-of-all-words/',
         tags: ['string', 'hash-map', 'sliding-window'],
         companies: ['Amazon', 'Google', 'Microsoft'],
+        editorial: 'https://leetcode.com/problems/substring-with-concatenation-of-all-words/editorial/',
       },
       {
         id: 57,
@@ -507,6 +609,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/max-consecutive-ones-iii/',
         tags: ['array', 'sliding-window', 'binary-search', 'prefix-sum'],
         companies: ['Google', 'Meta', 'Microsoft'],
+        editorial: 'https://leetcode.com/problems/max-consecutive-ones-iii/editorial/',
       },
     ],
   },
@@ -520,6 +623,11 @@ export const dsaTopics: DsaTopic[] = [
     description:
       'Last-in-first-out data structure — essential for parsing expressions, monotonic patterns, and backtracking.',
     icon: 'layers',
+    pattern: 'Use monotonic stack for next-greater-element patterns. Stack is ideal when you need to match pairs or process in reverse order.',
+    resources: [
+      { title: 'Monotonic Stack — NeetCode', url: 'https://neetcode.io/roadmap', type: 'video' },
+      { title: 'Stack Problems Patterns', url: 'https://leetcode.com/discuss/general-discussion/1152256/', type: 'article' },
+    ],
     problems: [
       {
         id: 58,
@@ -528,6 +636,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/valid-parentheses/',
         tags: ['string', 'stack'],
         companies: ['Amazon', 'Meta', 'Google', 'Microsoft', 'Bloomberg'],
+        videoSolution: 'https://www.youtube.com/watch?v=WTzjTskDFMg',
+        editorial: 'https://leetcode.com/problems/valid-parentheses/editorial/',
       },
       {
         id: 59,
@@ -536,6 +646,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/min-stack/',
         tags: ['stack', 'design'],
         companies: ['Amazon', 'Google', 'Microsoft', 'Bloomberg'],
+        videoSolution: 'https://www.youtube.com/watch?v=qkLl7nAwDPo',
+        editorial: 'https://leetcode.com/problems/min-stack/editorial/',
       },
       {
         id: 60,
@@ -544,6 +656,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/evaluate-reverse-polish-notation/',
         tags: ['stack', 'math'],
         companies: ['Amazon', 'Google', 'Microsoft', 'LinkedIn'],
+        videoSolution: 'https://www.youtube.com/watch?v=iu0082c4HDE',
+        editorial: 'https://leetcode.com/problems/evaluate-reverse-polish-notation/editorial/',
       },
       {
         id: 61,
@@ -552,6 +666,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/generate-parentheses/',
         tags: ['string', 'stack', 'backtracking'],
         companies: ['Amazon', 'Google', 'Meta', 'Microsoft'],
+        editorial: 'https://leetcode.com/problems/generate-parentheses/editorial/',
       },
       {
         id: 62,
@@ -560,6 +675,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/daily-temperatures/',
         tags: ['array', 'stack', 'monotonic-stack'],
         companies: ['Amazon', 'Google', 'Meta', 'Microsoft'],
+        videoSolution: 'https://www.youtube.com/watch?v=cTBiBSnjO60',
+        editorial: 'https://leetcode.com/problems/daily-temperatures/editorial/',
       },
       {
         id: 63,
@@ -568,6 +685,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/car-fleet/',
         tags: ['array', 'stack', 'sorting', 'monotonic-stack'],
         companies: ['Google', 'Amazon'],
+        editorial: 'https://leetcode.com/problems/car-fleet/editorial/',
       },
       {
         id: 64,
@@ -576,6 +694,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/largest-rectangle-in-histogram/',
         tags: ['array', 'stack', 'monotonic-stack'],
         companies: ['Amazon', 'Google', 'Microsoft', 'Meta'],
+        videoSolution: 'https://www.youtube.com/watch?v=zx5Sw9130L0',
+        editorial: 'https://leetcode.com/problems/largest-rectangle-in-histogram/editorial/',
       },
       {
         id: 65,
@@ -584,6 +704,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/next-greater-element-i/',
         tags: ['array', 'stack', 'hash-map', 'monotonic-stack'],
         companies: ['Amazon', 'Bloomberg'],
+        editorial: 'https://leetcode.com/problems/next-greater-element-i/editorial/',
       },
       {
         id: 66,
@@ -592,6 +713,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/simplify-path/',
         tags: ['string', 'stack'],
         companies: ['Meta', 'Amazon', 'Microsoft'],
+        editorial: 'https://leetcode.com/problems/simplify-path/editorial/',
       },
       {
         id: 67,
@@ -600,6 +722,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/asteroid-collision/',
         tags: ['array', 'stack', 'simulation'],
         companies: ['Amazon', 'Google', 'Microsoft'],
+        editorial: 'https://leetcode.com/problems/asteroid-collision/editorial/',
       },
       {
         id: 68,
@@ -608,6 +731,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/decode-string/',
         tags: ['string', 'stack', 'recursion'],
         companies: ['Google', 'Amazon', 'Meta', 'Microsoft'],
+        editorial: 'https://leetcode.com/problems/decode-string/editorial/',
       },
       {
         id: 69,
@@ -616,6 +740,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/online-stock-span/',
         tags: ['stack', 'monotonic-stack', 'design'],
         companies: ['Amazon', 'Bloomberg'],
+        editorial: 'https://leetcode.com/problems/online-stock-span/editorial/',
       },
     ],
   },
@@ -629,6 +754,11 @@ export const dsaTopics: DsaTopic[] = [
     description:
       'Divide-and-conquer search over sorted or monotonic spaces — reduces O(n) to O(log n).',
     icon: 'search',
+    pattern: 'Identify the monotonic property. Binary search on answer space when direct search is unclear. Handle edge cases with lo <= hi vs lo < hi carefully.',
+    resources: [
+      { title: 'Binary Search — Striver', url: 'https://takeuforward.org/data-structure/binary-search-explained/', type: 'video' },
+      { title: 'Powerful Binary Search Template', url: 'https://leetcode.com/discuss/general-discussion/786126/', type: 'article' },
+    ],
     problems: [
       {
         id: 70,
@@ -637,6 +767,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/binary-search/',
         tags: ['array', 'binary-search'],
         companies: ['Amazon', 'Microsoft', 'Google'],
+        videoSolution: 'https://www.youtube.com/watch?v=s4DPM8ct1pI',
+        editorial: 'https://leetcode.com/problems/binary-search/editorial/',
       },
       {
         id: 71,
@@ -645,6 +777,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/search-a-2d-matrix/',
         tags: ['array', 'binary-search', 'matrix'],
         companies: ['Amazon', 'Microsoft', 'Meta'],
+        editorial: 'https://leetcode.com/problems/search-a-2d-matrix/editorial/',
       },
       {
         id: 72,
@@ -653,6 +786,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/koko-eating-bananas/',
         tags: ['array', 'binary-search'],
         companies: ['Google', 'Amazon', 'Meta'],
+        editorial: 'https://leetcode.com/problems/koko-eating-bananas/editorial/',
       },
       {
         id: 73,
@@ -661,6 +795,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/',
         tags: ['array', 'binary-search'],
         companies: ['Amazon', 'Microsoft', 'Google', 'Meta'],
+        videoSolution: 'https://www.youtube.com/watch?v=nIVW4P8b1VA',
+        editorial: 'https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/editorial/',
       },
       {
         id: 74,
@@ -669,6 +805,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/search-in-rotated-sorted-array/',
         tags: ['array', 'binary-search'],
         companies: ['Amazon', 'Meta', 'Google', 'Microsoft', 'Apple'],
+        videoSolution: 'https://www.youtube.com/watch?v=U8XENwh8Oy8',
+        editorial: 'https://leetcode.com/problems/search-in-rotated-sorted-array/editorial/',
       },
       {
         id: 75,
@@ -677,6 +815,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/time-based-key-value-store/',
         tags: ['hash-map', 'binary-search', 'design'],
         companies: ['Google', 'Amazon', 'Netflix'],
+        editorial: 'https://leetcode.com/problems/time-based-key-value-store/editorial/',
       },
       {
         id: 76,
@@ -685,6 +824,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/median-of-two-sorted-arrays/',
         tags: ['array', 'binary-search', 'divide-and-conquer'],
         companies: ['Amazon', 'Google', 'Microsoft', 'Meta', 'Apple', 'Goldman Sachs'],
+        editorial: 'https://leetcode.com/problems/median-of-two-sorted-arrays/editorial/',
       },
       {
         id: 77,
@@ -693,6 +833,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/find-peak-element/',
         tags: ['array', 'binary-search'],
         companies: ['Meta', 'Google', 'Amazon', 'Microsoft'],
+        editorial: 'https://leetcode.com/problems/find-peak-element/editorial/',
       },
       {
         id: 78,
@@ -701,6 +842,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/search-in-rotated-sorted-array-ii/',
         tags: ['array', 'binary-search'],
         companies: ['Amazon', 'Microsoft', 'Meta'],
+        editorial: 'https://leetcode.com/problems/search-in-rotated-sorted-array-ii/editorial/',
       },
       {
         id: 79,
@@ -709,6 +851,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/',
         tags: ['array', 'binary-search'],
         companies: ['Meta', 'Amazon', 'Google', 'Microsoft'],
+        editorial: 'https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/editorial/',
       },
       {
         id: 80,
@@ -717,6 +860,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/capacity-to-ship-packages-within-d-days/',
         tags: ['array', 'binary-search', 'greedy'],
         companies: ['Amazon', 'Google', 'Microsoft'],
+        editorial: 'https://leetcode.com/problems/capacity-to-ship-packages-within-d-days/editorial/',
       },
       {
         id: 81,
@@ -725,6 +869,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/split-array-largest-sum/',
         tags: ['array', 'binary-search', 'dynamic-programming', 'greedy'],
         companies: ['Google', 'Amazon', 'Meta'],
+        editorial: 'https://leetcode.com/problems/split-array-largest-sum/editorial/',
       },
       {
         id: 82,
@@ -733,6 +878,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/magnetic-force-between-two-balls/',
         tags: ['array', 'binary-search', 'sorting'],
         companies: ['Google', 'Amazon'],
+        editorial: 'https://leetcode.com/problems/magnetic-force-between-two-balls/editorial/',
       },
       {
         id: 83,
@@ -741,6 +887,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/split-array-largest-sum/',
         tags: ['array', 'binary-search', 'greedy'],
         companies: ['Google', 'Amazon', 'Microsoft'],
+        editorial: 'https://leetcode.com/problems/split-array-largest-sum/editorial/',
       },
       {
         id: 84,
@@ -749,6 +896,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/single-element-in-a-sorted-array/',
         tags: ['array', 'binary-search'],
         companies: ['Amazon', 'Microsoft', 'Google'],
+        editorial: 'https://leetcode.com/problems/single-element-in-a-sorted-array/editorial/',
       },
     ],
   },
@@ -762,6 +910,11 @@ export const dsaTopics: DsaTopic[] = [
     description:
       'Dynamic linear data structure — practice pointer manipulation, reversal, and cycle detection.',
     icon: 'link',
+    pattern: 'Use dummy head nodes for edge cases. Fast/slow pointers for cycle detection and finding middle. Reverse in-place with prev/curr/next.',
+    resources: [
+      { title: 'Linked List — NeetCode', url: 'https://neetcode.io/roadmap', type: 'video' },
+      { title: 'Linked List Patterns', url: 'https://www.geeksforgeeks.org/top-20-linked-list-interview-question/', type: 'article' },
+    ],
     problems: [
       {
         id: 85,
@@ -770,6 +923,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/reverse-linked-list/',
         tags: ['linked-list', 'recursion'],
         companies: ['Amazon', 'Microsoft', 'Google', 'Meta', 'Apple'],
+        videoSolution: 'https://www.youtube.com/watch?v=G0_I-ZF0S38',
+        editorial: 'https://leetcode.com/problems/reverse-linked-list/editorial/',
       },
       {
         id: 86,
@@ -778,6 +933,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/merge-two-sorted-lists/',
         tags: ['linked-list', 'recursion'],
         companies: ['Amazon', 'Microsoft', 'Google', 'Apple'],
+        videoSolution: 'https://www.youtube.com/watch?v=XIdigk956u0',
+        editorial: 'https://leetcode.com/problems/merge-two-sorted-lists/editorial/',
       },
       {
         id: 87,
@@ -786,6 +943,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/linked-list-cycle/',
         tags: ['linked-list', 'two-pointers', 'hash-set'],
         companies: ['Amazon', 'Microsoft', 'Meta', 'Apple'],
+        videoSolution: 'https://www.youtube.com/watch?v=gBTe7lFR3vc',
+        editorial: 'https://leetcode.com/problems/linked-list-cycle/editorial/',
       },
       {
         id: 88,
@@ -794,6 +953,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/reorder-list/',
         tags: ['linked-list', 'two-pointers', 'stack'],
         companies: ['Amazon', 'Meta', 'Microsoft'],
+        editorial: 'https://leetcode.com/problems/reorder-list/editorial/',
       },
       {
         id: 89,
@@ -802,6 +962,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/remove-nth-node-from-end-of-list/',
         tags: ['linked-list', 'two-pointers'],
         companies: ['Amazon', 'Meta', 'Google', 'Microsoft'],
+        editorial: 'https://leetcode.com/problems/remove-nth-node-from-end-of-list/editorial/',
       },
       {
         id: 90,
@@ -810,6 +971,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/copy-list-with-random-pointer/',
         tags: ['linked-list', 'hash-map'],
         companies: ['Amazon', 'Meta', 'Microsoft', 'Google'],
+        editorial: 'https://leetcode.com/problems/copy-list-with-random-pointer/editorial/',
       },
       {
         id: 91,
@@ -818,6 +980,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/add-two-numbers/',
         tags: ['linked-list', 'math', 'recursion'],
         companies: ['Amazon', 'Microsoft', 'Google', 'Meta', 'Apple'],
+        editorial: 'https://leetcode.com/problems/add-two-numbers/editorial/',
       },
       {
         id: 92,
@@ -826,6 +989,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/find-the-duplicate-number/',
         tags: ['linked-list', 'two-pointers', 'binary-search'],
         companies: ['Amazon', 'Google', 'Microsoft', 'Meta'],
+        editorial: 'https://leetcode.com/problems/find-the-duplicate-number/editorial/',
       },
       {
         id: 93,
@@ -834,6 +998,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/lru-cache/',
         tags: ['linked-list', 'hash-map', 'design'],
         companies: ['Amazon', 'Meta', 'Google', 'Microsoft', 'Apple', 'Netflix'],
+        editorial: 'https://leetcode.com/problems/lru-cache/editorial/',
       },
       {
         id: 94,
@@ -842,6 +1007,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/merge-k-sorted-lists/',
         tags: ['linked-list', 'heap', 'divide-and-conquer'],
         companies: ['Amazon', 'Meta', 'Google', 'Microsoft', 'Apple'],
+        videoSolution: 'https://www.youtube.com/watch?v=q5a5OiGbT6Q',
+        editorial: 'https://leetcode.com/problems/merge-k-sorted-lists/editorial/',
       },
       {
         id: 95,
@@ -850,6 +1017,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/reverse-nodes-in-k-group/',
         tags: ['linked-list', 'recursion'],
         companies: ['Amazon', 'Microsoft', 'Meta', 'Google'],
+        editorial: 'https://leetcode.com/problems/reverse-nodes-in-k-group/editorial/',
       },
       {
         id: 96,
@@ -858,6 +1026,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/middle-of-the-linked-list/',
         tags: ['linked-list', 'two-pointers'],
         companies: ['Amazon', 'Microsoft', 'Google'],
+        editorial: 'https://leetcode.com/problems/middle-of-the-linked-list/editorial/',
       },
       {
         id: 97,
@@ -866,6 +1035,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/intersection-of-two-linked-lists/',
         tags: ['linked-list', 'two-pointers', 'hash-set'],
         companies: ['Amazon', 'Meta', 'Microsoft'],
+        editorial: 'https://leetcode.com/problems/intersection-of-two-linked-lists/editorial/',
       },
       {
         id: 98,
@@ -874,6 +1044,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/sort-list/',
         tags: ['linked-list', 'two-pointers', 'divide-and-conquer', 'sorting', 'merge-sort'],
         companies: ['Meta', 'Amazon', 'Google'],
+        editorial: 'https://leetcode.com/problems/sort-list/editorial/',
       },
       {
         id: 99,
@@ -882,6 +1053,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/flatten-a-multilevel-doubly-linked-list/',
         tags: ['linked-list', 'dfs', 'stack'],
         companies: ['Meta', 'Microsoft', 'Amazon'],
+        editorial: 'https://leetcode.com/problems/flatten-a-multilevel-doubly-linked-list/editorial/',
       },
     ],
   },
@@ -895,6 +1067,11 @@ export const dsaTopics: DsaTopic[] = [
     description:
       'Hierarchical data structures — binary trees, BSTs, and traversal techniques are interview staples.',
     icon: 'git-branch',
+    pattern: 'Think recursively: base case (null node) + recursive case. DFS (pre/in/post-order) vs BFS (level-order). BST property: left < root < right.',
+    resources: [
+      { title: 'Trees — Striver Playlist', url: 'https://www.youtube.com/playlist?list=PLgUwDviBIf0q8Hkd7bK2Bpryj2xVJk8Vk', type: 'video' },
+      { title: 'Tree Traversal Patterns', url: 'https://leetcode.com/discuss/general-discussion/937307/', type: 'article' },
+    ],
     problems: [
       {
         id: 100,
@@ -903,6 +1080,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/invert-binary-tree/',
         tags: ['tree', 'bfs', 'dfs', 'recursion'],
         companies: ['Google', 'Amazon', 'Meta'],
+        videoSolution: 'https://www.youtube.com/watch?v=OnSn2XEQ4MY',
+        editorial: 'https://leetcode.com/problems/invert-binary-tree/editorial/',
       },
       {
         id: 101,
@@ -911,6 +1090,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/maximum-depth-of-binary-tree/',
         tags: ['tree', 'dfs', 'bfs', 'recursion'],
         companies: ['Amazon', 'Google', 'Microsoft', 'Apple'],
+        videoSolution: 'https://www.youtube.com/watch?v=hTM3phVI6YQ',
+        editorial: 'https://leetcode.com/problems/maximum-depth-of-binary-tree/editorial/',
       },
       {
         id: 102,
@@ -919,6 +1100,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/diameter-of-binary-tree/',
         tags: ['tree', 'dfs', 'recursion'],
         companies: ['Meta', 'Amazon', 'Google', 'Microsoft'],
+        editorial: 'https://leetcode.com/problems/diameter-of-binary-tree/editorial/',
       },
       {
         id: 103,
@@ -927,6 +1109,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/balanced-binary-tree/',
         tags: ['tree', 'dfs', 'recursion'],
         companies: ['Amazon', 'Google', 'Bloomberg'],
+        editorial: 'https://leetcode.com/problems/balanced-binary-tree/editorial/',
       },
       {
         id: 104,
@@ -935,6 +1118,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/same-tree/',
         tags: ['tree', 'dfs', 'bfs', 'recursion'],
         companies: ['Amazon', 'Microsoft', 'Google'],
+        videoSolution: 'https://www.youtube.com/watch?v=vRbbcPXzA4o',
+        editorial: 'https://leetcode.com/problems/same-tree/editorial/',
       },
       {
         id: 105,
@@ -943,6 +1128,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/subtree-of-another-tree/',
         tags: ['tree', 'dfs', 'string-matching', 'hash'],
         companies: ['Amazon', 'Meta', 'Microsoft'],
+        videoSolution: 'https://www.youtube.com/watch?v=E36O5SWp-LE',
+        editorial: 'https://leetcode.com/problems/subtree-of-another-tree/editorial/',
       },
       {
         id: 106,
@@ -951,6 +1138,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/',
         tags: ['tree', 'bst', 'dfs'],
         companies: ['Amazon', 'Meta', 'Microsoft', 'Google'],
+        videoSolution: 'https://www.youtube.com/watch?v=gs2LMfuOR9k',
+        editorial: 'https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/editorial/',
       },
       {
         id: 107,
@@ -959,6 +1148,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/binary-tree-level-order-traversal/',
         tags: ['tree', 'bfs'],
         companies: ['Amazon', 'Meta', 'Microsoft', 'Google', 'Apple'],
+        videoSolution: 'https://www.youtube.com/watch?v=6ZnyEApgFYg',
+        editorial: 'https://leetcode.com/problems/binary-tree-level-order-traversal/editorial/',
       },
       {
         id: 108,
@@ -967,6 +1158,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/binary-tree-right-side-view/',
         tags: ['tree', 'bfs', 'dfs'],
         companies: ['Meta', 'Amazon', 'Microsoft'],
+        editorial: 'https://leetcode.com/problems/binary-tree-right-side-view/editorial/',
       },
       {
         id: 109,
@@ -975,6 +1167,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/count-good-nodes-in-binary-tree/',
         tags: ['tree', 'dfs', 'bfs'],
         companies: ['Amazon', 'Microsoft'],
+        editorial: 'https://leetcode.com/problems/count-good-nodes-in-binary-tree/editorial/',
       },
       {
         id: 110,
@@ -983,6 +1176,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/validate-binary-search-tree/',
         tags: ['tree', 'bst', 'dfs', 'recursion'],
         companies: ['Amazon', 'Meta', 'Microsoft', 'Google', 'Apple'],
+        videoSolution: 'https://www.youtube.com/watch?v=s6ATEkipzow',
+        editorial: 'https://leetcode.com/problems/validate-binary-search-tree/editorial/',
       },
       {
         id: 111,
@@ -991,6 +1186,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/kth-smallest-element-in-a-bst/',
         tags: ['tree', 'bst', 'dfs', 'inorder'],
         companies: ['Amazon', 'Meta', 'Google', 'Microsoft'],
+        videoSolution: 'https://www.youtube.com/watch?v=5LUXSvjmGCw',
+        editorial: 'https://leetcode.com/problems/kth-smallest-element-in-a-bst/editorial/',
       },
       {
         id: 112,
@@ -999,6 +1196,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/',
         tags: ['tree', 'divide-and-conquer', 'hash-map', 'recursion'],
         companies: ['Amazon', 'Microsoft', 'Google', 'Meta'],
+        editorial: 'https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/editorial/',
       },
       {
         id: 113,
@@ -1007,6 +1205,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/binary-tree-maximum-path-sum/',
         tags: ['tree', 'dfs', 'dynamic-programming'],
         companies: ['Meta', 'Amazon', 'Google', 'Microsoft'],
+        editorial: 'https://leetcode.com/problems/binary-tree-maximum-path-sum/editorial/',
       },
       {
         id: 114,
@@ -1015,6 +1214,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/serialize-and-deserialize-binary-tree/',
         tags: ['tree', 'bfs', 'dfs', 'design'],
         companies: ['Meta', 'Amazon', 'Google', 'Microsoft', 'Apple'],
+        editorial: 'https://leetcode.com/problems/serialize-and-deserialize-binary-tree/editorial/',
       },
       {
         id: 115,
@@ -1023,6 +1223,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/',
         tags: ['tree', 'dfs', 'recursion'],
         companies: ['Meta', 'Amazon', 'Google', 'Microsoft', 'Apple'],
+        editorial: 'https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/editorial/',
       },
       {
         id: 116,
@@ -1031,6 +1232,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal/',
         tags: ['tree', 'bfs'],
         companies: ['Amazon', 'Meta', 'Microsoft', 'Google'],
+        editorial: 'https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal/editorial/',
       },
       {
         id: 117,
@@ -1039,6 +1241,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/path-sum-ii/',
         tags: ['tree', 'dfs', 'backtracking'],
         companies: ['Amazon', 'Meta', 'Microsoft'],
+        editorial: 'https://leetcode.com/problems/path-sum-ii/editorial/',
       },
       {
         id: 118,
@@ -1047,6 +1250,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/flatten-binary-tree-to-linked-list/',
         tags: ['tree', 'dfs', 'stack', 'linked-list'],
         companies: ['Meta', 'Amazon', 'Microsoft'],
+        editorial: 'https://leetcode.com/problems/flatten-binary-tree-to-linked-list/editorial/',
       },
       {
         id: 119,
@@ -1055,6 +1259,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/symmetric-tree/',
         tags: ['tree', 'dfs', 'bfs', 'recursion'],
         companies: ['Amazon', 'Microsoft', 'Google', 'Apple'],
+        editorial: 'https://leetcode.com/problems/symmetric-tree/editorial/',
       },
     ],
   },
@@ -1068,6 +1273,11 @@ export const dsaTopics: DsaTopic[] = [
     description:
       'Prefix tree data structure — optimized for string searching, autocomplete, and word games.',
     icon: 'text-search',
+    pattern: 'Each node has up to 26 children (a-z). Insert character by character. Use a flag to mark end-of-word. Combine with DFS for word search.',
+    resources: [
+      { title: 'Tries Explained — NeetCode', url: 'https://neetcode.io/roadmap', type: 'video' },
+      { title: 'Implement Trie Tutorial', url: 'https://www.geeksforgeeks.org/trie-insert-and-search/', type: 'article' },
+    ],
     problems: [
       {
         id: 120,
@@ -1076,6 +1286,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/implement-trie-prefix-tree/',
         tags: ['trie', 'string', 'design'],
         companies: ['Amazon', 'Google', 'Microsoft', 'Meta'],
+        videoSolution: 'https://www.youtube.com/watch?v=oobqoCJlHA0',
+        editorial: 'https://leetcode.com/problems/implement-trie-prefix-tree/editorial/',
       },
       {
         id: 121,
@@ -1084,6 +1296,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/design-add-and-search-words-data-structure/',
         tags: ['trie', 'string', 'dfs', 'design'],
         companies: ['Meta', 'Amazon', 'Google'],
+        editorial: 'https://leetcode.com/problems/design-add-and-search-words-data-structure/editorial/',
       },
       {
         id: 122,
@@ -1092,6 +1305,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/word-search-ii/',
         tags: ['trie', 'backtracking', 'matrix'],
         companies: ['Amazon', 'Google', 'Microsoft', 'Meta', 'Apple'],
+        videoSolution: 'https://www.youtube.com/watch?v=asbcE9mZz_U',
+        editorial: 'https://leetcode.com/problems/word-search-ii/editorial/',
       },
       {
         id: 123,
@@ -1100,6 +1315,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/replace-words/',
         tags: ['trie', 'string', 'hash-set'],
         companies: ['Uber', 'Amazon'],
+        editorial: 'https://leetcode.com/problems/replace-words/editorial/',
       },
       {
         id: 124,
@@ -1108,6 +1324,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/search-suggestions-system/',
         tags: ['trie', 'string', 'sorting', 'binary-search'],
         companies: ['Amazon', 'Google', 'Microsoft'],
+        editorial: 'https://leetcode.com/problems/search-suggestions-system/editorial/',
       },
     ],
   },
@@ -1121,6 +1338,11 @@ export const dsaTopics: DsaTopic[] = [
     description:
       'Efficiently find min/max elements — critical for scheduling, streaming data, and top-K problems.',
     icon: 'bar-chart-3',
+    pattern: 'Use min-heap for "K largest" and max-heap for "K smallest". Two heaps (max + min) for running median. O(log n) insert/extract.',
+    resources: [
+      { title: 'Heap/Priority Queue — NeetCode', url: 'https://neetcode.io/roadmap', type: 'video' },
+      { title: 'Heap Pattern Problems', url: 'https://leetcode.com/discuss/general-discussion/1127238/', type: 'article' },
+    ],
     problems: [
       {
         id: 125,
@@ -1129,6 +1351,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/kth-largest-element-in-a-stream/',
         tags: ['heap', 'design', 'bst'],
         companies: ['Amazon', 'Google', 'Meta'],
+        editorial: 'https://leetcode.com/problems/kth-largest-element-in-a-stream/editorial/',
       },
       {
         id: 126,
@@ -1137,6 +1360,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/last-stone-weight/',
         tags: ['array', 'heap'],
         companies: ['Amazon', 'Google'],
+        editorial: 'https://leetcode.com/problems/last-stone-weight/editorial/',
       },
       {
         id: 127,
@@ -1145,6 +1369,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/k-closest-points-to-origin/',
         tags: ['array', 'heap', 'sorting', 'divide-and-conquer'],
         companies: ['Amazon', 'Meta', 'Google', 'Microsoft'],
+        editorial: 'https://leetcode.com/problems/k-closest-points-to-origin/editorial/',
       },
       {
         id: 128,
@@ -1153,6 +1378,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/kth-largest-element-in-an-array/',
         tags: ['array', 'heap', 'divide-and-conquer', 'sorting', 'quickselect'],
         companies: ['Meta', 'Amazon', 'Google', 'Microsoft', 'Apple'],
+        videoSolution: 'https://www.youtube.com/watch?v=XEmy13g1Qxc',
+        editorial: 'https://leetcode.com/problems/kth-largest-element-in-an-array/editorial/',
       },
       {
         id: 129,
@@ -1161,6 +1388,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/task-scheduler/',
         tags: ['array', 'heap', 'greedy', 'hash-map'],
         companies: ['Meta', 'Amazon', 'Google', 'Microsoft'],
+        editorial: 'https://leetcode.com/problems/task-scheduler/editorial/',
       },
       {
         id: 130,
@@ -1169,6 +1397,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/design-twitter/',
         tags: ['heap', 'hash-map', 'linked-list', 'design'],
         companies: ['Amazon', 'Twitter'],
+        editorial: 'https://leetcode.com/problems/design-twitter/editorial/',
       },
       {
         id: 131,
@@ -1177,6 +1406,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/find-median-from-data-stream/',
         tags: ['heap', 'design', 'sorting'],
         companies: ['Amazon', 'Google', 'Meta', 'Microsoft', 'Apple'],
+        videoSolution: 'https://www.youtube.com/watch?v=itmhHWaHupI',
+        editorial: 'https://leetcode.com/problems/find-median-from-data-stream/editorial/',
       },
       {
         id: 132,
@@ -1185,6 +1416,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/merge-k-sorted-lists/',
         tags: ['linked-list', 'heap', 'divide-and-conquer'],
         companies: ['Amazon', 'Meta', 'Google', 'Microsoft', 'Apple'],
+        videoSolution: 'https://www.youtube.com/watch?v=q5a5OiGbT6Q',
+        editorial: 'https://leetcode.com/problems/merge-k-sorted-lists/editorial/',
       },
       {
         id: 133,
@@ -1193,6 +1426,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/top-k-frequent-words/',
         tags: ['string', 'heap', 'hash-map', 'sorting', 'trie'],
         companies: ['Amazon', 'Google', 'Meta', 'Bloomberg'],
+        editorial: 'https://leetcode.com/problems/top-k-frequent-words/editorial/',
       },
       {
         id: 134,
@@ -1201,6 +1435,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/reorganize-string/',
         tags: ['string', 'heap', 'greedy', 'hash-map'],
         companies: ['Amazon', 'Google', 'Meta'],
+        editorial: 'https://leetcode.com/problems/reorganize-string/editorial/',
       },
     ],
   },
@@ -1214,6 +1449,11 @@ export const dsaTopics: DsaTopic[] = [
     description:
       'Explore all possibilities through recursive choice-making — fundamental for combinatorial problems.',
     icon: 'undo-2',
+    pattern: 'Template: choose → explore → unchoose. Prune early to avoid TLE. Sort input first for duplicate handling. Use visited set for grid problems.',
+    resources: [
+      { title: 'Backtracking — Striver', url: 'https://takeuforward.org/data-structure/rat-in-a-maze/', type: 'video' },
+      { title: 'Backtracking Template', url: 'https://leetcode.com/discuss/general-discussion/680269/', type: 'article' },
+    ],
     problems: [
       {
         id: 135,
@@ -1222,6 +1462,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/subsets/',
         tags: ['array', 'backtracking', 'bit-manipulation'],
         companies: ['Amazon', 'Meta', 'Google', 'Microsoft'],
+        videoSolution: 'https://www.youtube.com/watch?v=REOH22Xwdkk',
+        editorial: 'https://leetcode.com/problems/subsets/editorial/',
       },
       {
         id: 136,
@@ -1230,6 +1472,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/combination-sum/',
         tags: ['array', 'backtracking'],
         companies: ['Amazon', 'Meta', 'Google', 'Microsoft'],
+        videoSolution: 'https://www.youtube.com/watch?v=GBKI9VSKdGg',
+        editorial: 'https://leetcode.com/problems/combination-sum/editorial/',
       },
       {
         id: 137,
@@ -1238,6 +1482,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/permutations/',
         tags: ['array', 'backtracking'],
         companies: ['Amazon', 'Meta', 'Google', 'Microsoft'],
+        videoSolution: 'https://www.youtube.com/watch?v=s7AvT7cGdSo',
+        editorial: 'https://leetcode.com/problems/permutations/editorial/',
       },
       {
         id: 138,
@@ -1246,6 +1492,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/subsets-ii/',
         tags: ['array', 'backtracking', 'bit-manipulation'],
         companies: ['Amazon', 'Meta', 'Google'],
+        editorial: 'https://leetcode.com/problems/subsets-ii/editorial/',
       },
       {
         id: 139,
@@ -1254,6 +1501,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/combination-sum-ii/',
         tags: ['array', 'backtracking'],
         companies: ['Amazon', 'Meta', 'Google'],
+        editorial: 'https://leetcode.com/problems/combination-sum-ii/editorial/',
       },
       {
         id: 140,
@@ -1262,6 +1510,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/word-search/',
         tags: ['array', 'backtracking', 'matrix'],
         companies: ['Amazon', 'Meta', 'Google', 'Microsoft', 'Apple'],
+        editorial: 'https://leetcode.com/problems/word-search/editorial/',
       },
       {
         id: 141,
@@ -1270,6 +1519,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/palindrome-partitioning/',
         tags: ['string', 'backtracking', 'dynamic-programming'],
         companies: ['Amazon', 'Google', 'Meta'],
+        editorial: 'https://leetcode.com/problems/palindrome-partitioning/editorial/',
       },
       {
         id: 142,
@@ -1278,6 +1528,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/letter-combinations-of-a-phone-number/',
         tags: ['string', 'backtracking'],
         companies: ['Amazon', 'Meta', 'Google', 'Microsoft'],
+        editorial: 'https://leetcode.com/problems/letter-combinations-of-a-phone-number/editorial/',
       },
       {
         id: 143,
@@ -1286,6 +1537,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/n-queens/',
         tags: ['array', 'backtracking'],
         companies: ['Amazon', 'Google', 'Microsoft', 'Meta'],
+        videoSolution: 'https://www.youtube.com/watch?v=Ph95IHmRp5M',
+        editorial: 'https://leetcode.com/problems/n-queens/editorial/',
       },
       {
         id: 144,
@@ -1294,6 +1547,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/sudoku-solver/',
         tags: ['array', 'backtracking', 'matrix'],
         companies: ['Amazon', 'Google', 'Microsoft', 'Apple'],
+        editorial: 'https://leetcode.com/problems/sudoku-solver/editorial/',
       },
       {
         id: 145,
@@ -1302,6 +1556,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/permutations-ii/',
         tags: ['array', 'backtracking'],
         companies: ['Amazon', 'Meta', 'Microsoft'],
+        editorial: 'https://leetcode.com/problems/permutations-ii/editorial/',
       },
       {
         id: 146,
@@ -1310,6 +1565,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/restore-ip-addresses/',
         tags: ['string', 'backtracking'],
         companies: ['Amazon', 'Google', 'Microsoft'],
+        editorial: 'https://leetcode.com/problems/restore-ip-addresses/editorial/',
       },
     ],
   },
@@ -1323,6 +1579,11 @@ export const dsaTopics: DsaTopic[] = [
     description:
       'Model relationships between entities — master BFS, DFS, topological sort, shortest path, and union-find.',
     icon: 'share-2',
+    pattern: 'BFS for shortest path (unweighted), DFS for connected components and cycles. Topological sort for dependencies. Union-Find for dynamic connectivity.',
+    resources: [
+      { title: 'Graph Series — Striver', url: 'https://www.youtube.com/playlist?list=PLgUwDviBIf0oE3Ez5k196YDnIjY9aTFT3', type: 'video' },
+      { title: 'Graph Algorithms Patterns', url: 'https://leetcode.com/discuss/general-discussion/655708/', type: 'article' },
+    ],
     problems: [
       {
         id: 147,
@@ -1331,6 +1592,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/number-of-islands/',
         tags: ['graph', 'bfs', 'dfs', 'matrix', 'union-find'],
         companies: ['Amazon', 'Meta', 'Google', 'Microsoft', 'Apple'],
+        videoSolution: 'https://www.youtube.com/watch?v=pV2kpPD66nE',
+        editorial: 'https://leetcode.com/problems/number-of-islands/editorial/',
       },
       {
         id: 148,
@@ -1339,6 +1602,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/clone-graph/',
         tags: ['graph', 'bfs', 'dfs', 'hash-map'],
         companies: ['Meta', 'Amazon', 'Google', 'Microsoft'],
+        videoSolution: 'https://www.youtube.com/watch?v=mQeF6bN8hMk',
+        editorial: 'https://leetcode.com/problems/clone-graph/editorial/',
       },
       {
         id: 149,
@@ -1347,6 +1612,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/max-area-of-island/',
         tags: ['graph', 'bfs', 'dfs', 'matrix', 'union-find'],
         companies: ['Amazon', 'Google', 'Meta'],
+        editorial: 'https://leetcode.com/problems/max-area-of-island/editorial/',
       },
       {
         id: 150,
@@ -1355,6 +1621,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/pacific-atlantic-water-flow/',
         tags: ['graph', 'bfs', 'dfs', 'matrix'],
         companies: ['Amazon', 'Google', 'Meta'],
+        videoSolution: 'https://www.youtube.com/watch?v=s-VkcjHqkGI',
+        editorial: 'https://leetcode.com/problems/pacific-atlantic-water-flow/editorial/',
       },
       {
         id: 151,
@@ -1363,6 +1631,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/surrounded-regions/',
         tags: ['graph', 'bfs', 'dfs', 'matrix', 'union-find'],
         companies: ['Amazon', 'Google', 'Microsoft'],
+        editorial: 'https://leetcode.com/problems/surrounded-regions/editorial/',
       },
       {
         id: 152,
@@ -1371,6 +1640,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/rotting-oranges/',
         tags: ['graph', 'bfs', 'matrix'],
         companies: ['Amazon', 'Google', 'Microsoft', 'Meta'],
+        editorial: 'https://leetcode.com/problems/rotting-oranges/editorial/',
       },
       {
         id: 153,
@@ -1379,6 +1649,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/course-schedule/',
         tags: ['graph', 'dfs', 'bfs', 'topological-sort'],
         companies: ['Amazon', 'Google', 'Meta', 'Microsoft'],
+        videoSolution: 'https://www.youtube.com/watch?v=EgI5nU9etnU',
+        editorial: 'https://leetcode.com/problems/course-schedule/editorial/',
       },
       {
         id: 154,
@@ -1387,6 +1659,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/course-schedule-ii/',
         tags: ['graph', 'dfs', 'bfs', 'topological-sort'],
         companies: ['Amazon', 'Google', 'Meta', 'Microsoft'],
+        editorial: 'https://leetcode.com/problems/course-schedule-ii/editorial/',
       },
       {
         id: 155,
@@ -1395,6 +1668,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/graph-valid-tree/',
         tags: ['graph', 'dfs', 'bfs', 'union-find'],
         companies: ['Amazon', 'Google', 'Meta'],
+        editorial: 'https://leetcode.com/problems/graph-valid-tree/editorial/',
       },
       {
         id: 156,
@@ -1403,6 +1677,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/',
         tags: ['graph', 'dfs', 'bfs', 'union-find'],
         companies: ['Amazon', 'Google', 'Meta', 'Microsoft'],
+        editorial: 'https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/editorial/',
       },
       {
         id: 157,
@@ -1411,6 +1686,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/redundant-connection/',
         tags: ['graph', 'union-find', 'dfs'],
         companies: ['Amazon', 'Google'],
+        editorial: 'https://leetcode.com/problems/redundant-connection/editorial/',
       },
       {
         id: 158,
@@ -1419,6 +1695,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/word-ladder/',
         tags: ['graph', 'bfs', 'string', 'hash-set'],
         companies: ['Amazon', 'Meta', 'Google', 'Microsoft'],
+        editorial: 'https://leetcode.com/problems/word-ladder/editorial/',
       },
       {
         id: 159,
@@ -1427,6 +1704,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/cheapest-flights-within-k-stops/',
         tags: ['graph', 'bfs', 'dynamic-programming', 'dijkstra', 'bellman-ford'],
         companies: ['Amazon', 'Google', 'Meta', 'Microsoft'],
+        editorial: 'https://leetcode.com/problems/cheapest-flights-within-k-stops/editorial/',
       },
       {
         id: 160,
@@ -1435,6 +1713,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/network-delay-time/',
         tags: ['graph', 'dijkstra', 'bfs', 'heap'],
         companies: ['Amazon', 'Google', 'Microsoft'],
+        editorial: 'https://leetcode.com/problems/network-delay-time/editorial/',
       },
       {
         id: 161,
@@ -1443,6 +1722,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/swim-in-rising-water/',
         tags: ['graph', 'binary-search', 'heap', 'matrix', 'union-find'],
         companies: ['Amazon', 'Google'],
+        editorial: 'https://leetcode.com/problems/swim-in-rising-water/editorial/',
       },
       {
         id: 162,
@@ -1451,6 +1731,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/alien-dictionary/',
         tags: ['graph', 'topological-sort', 'string'],
         companies: ['Meta', 'Amazon', 'Google', 'Microsoft', 'Apple'],
+        editorial: 'https://leetcode.com/problems/alien-dictionary/editorial/',
       },
       {
         id: 163,
@@ -1459,6 +1740,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/accounts-merge/',
         tags: ['graph', 'dfs', 'bfs', 'union-find', 'string'],
         companies: ['Meta', 'Amazon', 'Google', 'Microsoft'],
+        editorial: 'https://leetcode.com/problems/accounts-merge/editorial/',
       },
       {
         id: 164,
@@ -1467,6 +1749,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/is-graph-bipartite/',
         tags: ['graph', 'dfs', 'bfs', 'union-find'],
         companies: ['Meta', 'Amazon', 'Google'],
+        editorial: 'https://leetcode.com/problems/is-graph-bipartite/editorial/',
       },
       {
         id: 165,
@@ -1475,6 +1758,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/minimum-height-trees/',
         tags: ['graph', 'bfs', 'topological-sort'],
         companies: ['Amazon', 'Google', 'Meta'],
+        editorial: 'https://leetcode.com/problems/minimum-height-trees/editorial/',
       },
       {
         id: 166,
@@ -1483,6 +1767,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/shortest-path-in-binary-matrix/',
         tags: ['graph', 'bfs', 'matrix'],
         companies: ['Meta', 'Amazon', 'Google'],
+        editorial: 'https://leetcode.com/problems/shortest-path-in-binary-matrix/editorial/',
       },
     ],
   },
@@ -1496,6 +1781,12 @@ export const dsaTopics: DsaTopic[] = [
     description:
       'Break complex problems into overlapping subproblems — the most frequently tested advanced topic.',
     icon: 'brain',
+    pattern: '1D DP: define dp[i] = answer for first i items. 2D DP: dp[i][j] for two constraints. Identify state, transition, base case. Optimize space with rolling arrays.',
+    resources: [
+      { title: 'DP Playlist — Aditya Verma', url: 'https://www.youtube.com/playlist?list=PL_z_8CaSLPWekqhdCPmFI4nKs-h2ywPnR', type: 'video' },
+      { title: 'DP Patterns — LeetCode', url: 'https://leetcode.com/discuss/general-discussion/458695/', type: 'article' },
+      { title: 'Striver DP Series', url: 'https://takeuforward.org/dynamic-programming/striver-dp-series/', type: 'video' },
+    ],
     problems: [
       {
         id: 167,
@@ -1504,6 +1795,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/climbing-stairs/',
         tags: ['dynamic-programming', 'math', 'memoization'],
         companies: ['Amazon', 'Google', 'Microsoft', 'Apple'],
+        videoSolution: 'https://www.youtube.com/watch?v=Y0lT9Fck7qI',
+        editorial: 'https://leetcode.com/problems/climbing-stairs/editorial/',
       },
       {
         id: 168,
@@ -1512,6 +1805,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/min-cost-climbing-stairs/',
         tags: ['array', 'dynamic-programming'],
         companies: ['Amazon', 'Google', 'Microsoft'],
+        editorial: 'https://leetcode.com/problems/min-cost-climbing-stairs/editorial/',
       },
       {
         id: 169,
@@ -1520,6 +1814,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/house-robber/',
         tags: ['array', 'dynamic-programming'],
         companies: ['Amazon', 'Google', 'Microsoft', 'Apple'],
+        videoSolution: 'https://www.youtube.com/watch?v=73r3KWiEvyk',
+        editorial: 'https://leetcode.com/problems/house-robber/editorial/',
       },
       {
         id: 170,
@@ -1528,6 +1824,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/house-robber-ii/',
         tags: ['array', 'dynamic-programming'],
         companies: ['Amazon', 'Google', 'Microsoft'],
+        editorial: 'https://leetcode.com/problems/house-robber-ii/editorial/',
       },
       {
         id: 171,
@@ -1536,6 +1833,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/longest-palindromic-substring/',
         tags: ['string', 'dynamic-programming'],
         companies: ['Amazon', 'Microsoft', 'Google', 'Meta'],
+        editorial: 'https://leetcode.com/problems/longest-palindromic-substring/editorial/',
       },
       {
         id: 172,
@@ -1544,6 +1842,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/palindromic-substrings/',
         tags: ['string', 'dynamic-programming'],
         companies: ['Meta', 'Amazon', 'Google'],
+        editorial: 'https://leetcode.com/problems/palindromic-substrings/editorial/',
       },
       {
         id: 173,
@@ -1552,6 +1851,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/decode-ways/',
         tags: ['string', 'dynamic-programming'],
         companies: ['Meta', 'Amazon', 'Google', 'Microsoft'],
+        editorial: 'https://leetcode.com/problems/decode-ways/editorial/',
       },
       {
         id: 174,
@@ -1560,6 +1860,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/coin-change/',
         tags: ['array', 'dynamic-programming', 'bfs'],
         companies: ['Amazon', 'Google', 'Microsoft', 'Apple', 'Goldman Sachs'],
+        videoSolution: 'https://www.youtube.com/watch?v=H9bfqYoSS68',
+        editorial: 'https://leetcode.com/problems/coin-change/editorial/',
       },
       {
         id: 175,
@@ -1568,6 +1870,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/maximum-product-subarray/',
         tags: ['array', 'dynamic-programming'],
         companies: ['Amazon', 'Google', 'Microsoft', 'LinkedIn'],
+        editorial: 'https://leetcode.com/problems/maximum-product-subarray/editorial/',
       },
       {
         id: 176,
@@ -1576,6 +1879,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/word-break/',
         tags: ['string', 'dynamic-programming', 'hash-set', 'trie'],
         companies: ['Amazon', 'Meta', 'Google', 'Microsoft', 'Apple'],
+        videoSolution: 'https://www.youtube.com/watch?v=Sx9NNgInc3A',
+        editorial: 'https://leetcode.com/problems/word-break/editorial/',
       },
       {
         id: 177,
@@ -1584,6 +1889,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/longest-increasing-subsequence/',
         tags: ['array', 'dynamic-programming', 'binary-search'],
         companies: ['Amazon', 'Google', 'Microsoft', 'Meta'],
+        videoSolution: 'https://www.youtube.com/watch?v=cjWnW0hdVeY',
+        editorial: 'https://leetcode.com/problems/longest-increasing-subsequence/editorial/',
       },
       {
         id: 178,
@@ -1592,6 +1899,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/partition-equal-subset-sum/',
         tags: ['array', 'dynamic-programming'],
         companies: ['Amazon', 'Meta', 'Google'],
+        editorial: 'https://leetcode.com/problems/partition-equal-subset-sum/editorial/',
       },
       {
         id: 179,
@@ -1600,6 +1908,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/unique-paths/',
         tags: ['math', 'dynamic-programming', 'combinatorics'],
         companies: ['Amazon', 'Google', 'Microsoft', 'Meta'],
+        videoSolution: 'https://www.youtube.com/watch?v=IlEsdxuD4lY',
+        editorial: 'https://leetcode.com/problems/unique-paths/editorial/',
       },
       {
         id: 180,
@@ -1608,6 +1918,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/longest-common-subsequence/',
         tags: ['string', 'dynamic-programming'],
         companies: ['Amazon', 'Google', 'Microsoft', 'Meta'],
+        videoSolution: 'https://www.youtube.com/watch?v=Ua0GhRJMWnc',
+        editorial: 'https://leetcode.com/problems/longest-common-subsequence/editorial/',
       },
       {
         id: 181,
@@ -1616,6 +1928,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/target-sum/',
         tags: ['array', 'dynamic-programming', 'backtracking'],
         companies: ['Meta', 'Amazon', 'Google'],
+        editorial: 'https://leetcode.com/problems/target-sum/editorial/',
       },
       {
         id: 182,
@@ -1624,6 +1937,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/interleaving-string/',
         tags: ['string', 'dynamic-programming'],
         companies: ['Amazon', 'Google', 'Microsoft'],
+        editorial: 'https://leetcode.com/problems/interleaving-string/editorial/',
       },
       {
         id: 183,
@@ -1632,6 +1946,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/ones-and-zeroes/',
         tags: ['array', 'dynamic-programming'],
         companies: ['Amazon', 'Google', 'Microsoft'],
+        editorial: 'https://leetcode.com/problems/ones-and-zeroes/editorial/',
       },
       {
         id: 184,
@@ -1640,6 +1955,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/edit-distance/',
         tags: ['string', 'dynamic-programming'],
         companies: ['Amazon', 'Google', 'Microsoft', 'Meta'],
+        editorial: 'https://leetcode.com/problems/edit-distance/editorial/',
       },
       {
         id: 185,
@@ -1648,6 +1964,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/distinct-subsequences/',
         tags: ['string', 'dynamic-programming'],
         companies: ['Amazon', 'Google', 'Meta'],
+        editorial: 'https://leetcode.com/problems/distinct-subsequences/editorial/',
       },
       {
         id: 186,
@@ -1656,6 +1973,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/burst-balloons/',
         tags: ['array', 'dynamic-programming', 'divide-and-conquer'],
         companies: ['Amazon', 'Google', 'Microsoft'],
+        editorial: 'https://leetcode.com/problems/burst-balloons/editorial/',
       },
       {
         id: 187,
@@ -1664,6 +1982,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/regular-expression-matching/',
         tags: ['string', 'dynamic-programming', 'recursion'],
         companies: ['Google', 'Meta', 'Amazon', 'Microsoft'],
+        editorial: 'https://leetcode.com/problems/regular-expression-matching/editorial/',
       },
       {
         id: 188,
@@ -1672,6 +1991,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/longest-increasing-path-in-a-matrix/',
         tags: ['dynamic-programming', 'dfs', 'memoization', 'matrix', 'topological-sort'],
         companies: ['Google', 'Amazon', 'Meta', 'Microsoft'],
+        editorial: 'https://leetcode.com/problems/longest-increasing-path-in-a-matrix/editorial/',
       },
       {
         id: 189,
@@ -1680,6 +2000,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/minimum-path-sum/',
         tags: ['array', 'dynamic-programming', 'matrix'],
         companies: ['Amazon', 'Google', 'Goldman Sachs'],
+        editorial: 'https://leetcode.com/problems/minimum-path-sum/editorial/',
       },
       {
         id: 190,
@@ -1688,6 +2009,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/coin-change-ii/',
         tags: ['array', 'dynamic-programming'],
         companies: ['Amazon', 'Google', 'Meta'],
+        editorial: 'https://leetcode.com/problems/coin-change-ii/editorial/',
       },
       {
         id: 191,
@@ -1696,6 +2018,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/',
         tags: ['array', 'dynamic-programming'],
         companies: ['Amazon', 'Google', 'Goldman Sachs'],
+        editorial: 'https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/editorial/',
       },
       {
         id: 192,
@@ -1704,6 +2027,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/maximal-square/',
         tags: ['array', 'dynamic-programming', 'matrix'],
         companies: ['Amazon', 'Google', 'Apple', 'Microsoft'],
+        editorial: 'https://leetcode.com/problems/maximal-square/editorial/',
       },
       {
         id: 193,
@@ -1712,6 +2036,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/jump-game/',
         tags: ['array', 'dynamic-programming', 'greedy'],
         companies: ['Amazon', 'Google', 'Microsoft', 'Apple'],
+        videoSolution: 'https://www.youtube.com/watch?v=Yan0cv2cLy8',
+        editorial: 'https://leetcode.com/problems/jump-game/editorial/',
       },
       {
         id: 194,
@@ -1720,6 +2046,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/jump-game-ii/',
         tags: ['array', 'dynamic-programming', 'greedy'],
         companies: ['Amazon', 'Google', 'Microsoft', 'Meta'],
+        editorial: 'https://leetcode.com/problems/jump-game-ii/editorial/',
       },
       {
         id: 195,
@@ -1728,6 +2055,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/word-break-ii/',
         tags: ['string', 'dynamic-programming', 'backtracking', 'memoization'],
         companies: ['Amazon', 'Meta', 'Google', 'Apple'],
+        editorial: 'https://leetcode.com/problems/word-break-ii/editorial/',
       },
       {
         id: 196,
@@ -1736,6 +2064,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/minimum-cost-tree-from-leaf-values/',
         tags: ['array', 'dynamic-programming', 'stack'],
         companies: ['Amazon', 'Google', 'Microsoft'],
+        editorial: 'https://leetcode.com/problems/minimum-cost-tree-from-leaf-values/editorial/',
       },
     ],
   },
@@ -1749,6 +2078,11 @@ export const dsaTopics: DsaTopic[] = [
     description:
       'Make locally optimal choices to find global optima — requires proving greedy choice property.',
     icon: 'zap',
+    pattern: 'Sort by end time for interval scheduling. Sort by start for merging. Greedy works when local optimal leads to global optimal — prove or verify with examples.',
+    resources: [
+      { title: 'Greedy Algorithms — Abdul Bari', url: 'https://www.youtube.com/watch?v=ARvQcqJ_-NY', type: 'video' },
+      { title: 'Greedy Approach Guide', url: 'https://www.geeksforgeeks.org/greedy-algorithms/', type: 'article' },
+    ],
     problems: [
       {
         id: 197,
@@ -1757,6 +2091,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/maximum-subarray/',
         tags: ['array', 'greedy', 'dynamic-programming', 'divide-and-conquer'],
         companies: ['Amazon', 'Microsoft', 'Google', 'Apple', 'Meta'],
+        videoSolution: 'https://www.youtube.com/watch?v=5WZl3MMT0Eg',
+        editorial: 'https://leetcode.com/problems/maximum-subarray/editorial/',
       },
       {
         id: 198,
@@ -1765,6 +2101,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/jump-game/',
         tags: ['array', 'greedy', 'dynamic-programming'],
         companies: ['Amazon', 'Google', 'Microsoft', 'Apple'],
+        videoSolution: 'https://www.youtube.com/watch?v=Yan0cv2cLy8',
+        editorial: 'https://leetcode.com/problems/jump-game/editorial/',
       },
       {
         id: 199,
@@ -1773,6 +2111,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/jump-game-ii/',
         tags: ['array', 'greedy', 'dynamic-programming'],
         companies: ['Amazon', 'Google', 'Microsoft', 'Meta'],
+        editorial: 'https://leetcode.com/problems/jump-game-ii/editorial/',
       },
       {
         id: 200,
@@ -1781,6 +2120,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/gas-station/',
         tags: ['array', 'greedy'],
         companies: ['Amazon', 'Google', 'Microsoft', 'Bloomberg'],
+        editorial: 'https://leetcode.com/problems/gas-station/editorial/',
       },
       {
         id: 201,
@@ -1789,6 +2129,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/hand-of-straights/',
         tags: ['array', 'greedy', 'hash-map', 'sorting'],
         companies: ['Google', 'Amazon'],
+        editorial: 'https://leetcode.com/problems/hand-of-straights/editorial/',
       },
       {
         id: 202,
@@ -1797,6 +2138,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/merge-triplets-to-form-target-triplet/',
         tags: ['array', 'greedy'],
         companies: ['Google'],
+        editorial: 'https://leetcode.com/problems/merge-triplets-to-form-target-triplet/editorial/',
       },
       {
         id: 203,
@@ -1805,6 +2147,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/partition-labels/',
         tags: ['string', 'greedy', 'hash-map', 'two-pointers'],
         companies: ['Amazon', 'Google', 'Meta'],
+        editorial: 'https://leetcode.com/problems/partition-labels/editorial/',
       },
       {
         id: 204,
@@ -1813,6 +2156,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/valid-parenthesis-string/',
         tags: ['string', 'greedy', 'stack', 'dynamic-programming'],
         companies: ['Amazon', 'Meta', 'Google'],
+        editorial: 'https://leetcode.com/problems/valid-parenthesis-string/editorial/',
       },
       {
         id: 205,
@@ -1821,6 +2165,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/non-overlapping-intervals/',
         tags: ['array', 'greedy', 'sorting', 'dynamic-programming'],
         companies: ['Amazon', 'Google', 'Meta', 'Microsoft'],
+        editorial: 'https://leetcode.com/problems/non-overlapping-intervals/editorial/',
       },
       {
         id: 206,
@@ -1829,6 +2174,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/minimum-number-of-arrows-to-burst-balloons/',
         tags: ['array', 'greedy', 'sorting'],
         companies: ['Meta', 'Amazon', 'Google'],
+        editorial: 'https://leetcode.com/problems/minimum-number-of-arrows-to-burst-balloons/editorial/',
       },
     ],
   },
@@ -1842,6 +2188,11 @@ export const dsaTopics: DsaTopic[] = [
     description:
       'Merge, insert, and manage overlapping ranges — common in scheduling and calendar problems.',
     icon: 'git-merge',
+    pattern: 'Sort intervals by start time. Merge if current.start <= prev.end. For min meeting rooms, use a min-heap of end times.',
+    resources: [
+      { title: 'Intervals — NeetCode', url: 'https://neetcode.io/roadmap', type: 'video' },
+      { title: 'Interval Patterns Guide', url: 'https://leetcode.com/discuss/general-discussion/794725/', type: 'article' },
+    ],
     problems: [
       {
         id: 207,
@@ -1850,6 +2201,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/insert-interval/',
         tags: ['array', 'intervals'],
         companies: ['Google', 'Meta', 'Amazon', 'Microsoft'],
+        videoSolution: 'https://www.youtube.com/watch?v=A8NUOmlJCOc',
+        editorial: 'https://leetcode.com/problems/insert-interval/editorial/',
       },
       {
         id: 208,
@@ -1858,6 +2211,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/merge-intervals/',
         tags: ['array', 'intervals', 'sorting'],
         companies: ['Amazon', 'Google', 'Meta', 'Microsoft', 'Apple', 'Bloomberg'],
+        videoSolution: 'https://www.youtube.com/watch?v=44H3cEC2fFM',
+        editorial: 'https://leetcode.com/problems/merge-intervals/editorial/',
       },
       {
         id: 209,
@@ -1866,6 +2221,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/non-overlapping-intervals/',
         tags: ['array', 'intervals', 'greedy', 'sorting', 'dynamic-programming'],
         companies: ['Amazon', 'Google', 'Meta', 'Microsoft'],
+        videoSolution: 'https://www.youtube.com/watch?v=nONCGxWoUfM',
+        editorial: 'https://leetcode.com/problems/non-overlapping-intervals/editorial/',
       },
       {
         id: 210,
@@ -1874,6 +2231,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/meeting-rooms/',
         tags: ['array', 'intervals', 'sorting'],
         companies: ['Amazon', 'Meta', 'Bloomberg'],
+        editorial: 'https://leetcode.com/problems/meeting-rooms/editorial/',
       },
       {
         id: 211,
@@ -1882,6 +2240,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/meeting-rooms-ii/',
         tags: ['array', 'intervals', 'sorting', 'heap', 'two-pointers'],
         companies: ['Amazon', 'Meta', 'Google', 'Microsoft', 'Bloomberg'],
+        editorial: 'https://leetcode.com/problems/meeting-rooms-ii/editorial/',
       },
       {
         id: 212,
@@ -1890,6 +2249,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/minimum-interval-to-include-each-query/',
         tags: ['array', 'intervals', 'sorting', 'heap', 'binary-search'],
         companies: ['Google', 'Amazon'],
+        editorial: 'https://leetcode.com/problems/minimum-interval-to-include-each-query/editorial/',
       },
       {
         id: 213,
@@ -1898,6 +2258,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/interval-list-intersections/',
         tags: ['array', 'intervals', 'two-pointers'],
         companies: ['Meta', 'Amazon', 'Google'],
+        editorial: 'https://leetcode.com/problems/interval-list-intersections/editorial/',
       },
       {
         id: 214,
@@ -1906,6 +2267,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/employee-free-time/',
         tags: ['array', 'intervals', 'sorting', 'heap'],
         companies: ['Amazon', 'Google', 'Meta', 'Uber'],
+        editorial: 'https://leetcode.com/problems/employee-free-time/editorial/',
       },
     ],
   },
@@ -1919,6 +2281,11 @@ export const dsaTopics: DsaTopic[] = [
     description:
       'Low-level operations and mathematical tricks — XOR, bit shifting, and number theory fundamentals.',
     icon: 'calculator',
+    pattern: 'XOR: a^a=0, a^0=a — find unique elements. Bit masking for subsets. Check bit: n & (1<<i). Common: n&(n-1) removes lowest set bit.',
+    resources: [
+      { title: 'Bit Manipulation — Striver', url: 'https://takeuforward.org/data-structure/bit-manipulation/', type: 'video' },
+      { title: 'Bit Tricks for Competitive Programming', url: 'https://www.geeksforgeeks.org/bit-tricks-competitive-programming/', type: 'article' },
+    ],
     problems: [
       {
         id: 215,
@@ -1927,6 +2294,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/single-number/',
         tags: ['array', 'bit-manipulation'],
         companies: ['Amazon', 'Google', 'Apple', 'Microsoft'],
+        videoSolution: 'https://www.youtube.com/watch?v=qMPX1AOa83k',
+        editorial: 'https://leetcode.com/problems/single-number/editorial/',
       },
       {
         id: 216,
@@ -1935,6 +2304,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/number-of-1-bits/',
         tags: ['bit-manipulation'],
         companies: ['Microsoft', 'Apple', 'Amazon'],
+        videoSolution: 'https://www.youtube.com/watch?v=5Km3utixwZs',
+        editorial: 'https://leetcode.com/problems/number-of-1-bits/editorial/',
       },
       {
         id: 217,
@@ -1943,6 +2314,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/counting-bits/',
         tags: ['dynamic-programming', 'bit-manipulation'],
         companies: ['Amazon', 'Google', 'Microsoft'],
+        videoSolution: 'https://www.youtube.com/watch?v=RyBM56RIWrM',
+        editorial: 'https://leetcode.com/problems/counting-bits/editorial/',
       },
       {
         id: 218,
@@ -1951,6 +2324,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/reverse-bits/',
         tags: ['bit-manipulation', 'divide-and-conquer'],
         companies: ['Apple', 'Amazon'],
+        videoSolution: 'https://www.youtube.com/watch?v=UcoN6UjAI64',
+        editorial: 'https://leetcode.com/problems/reverse-bits/editorial/',
       },
       {
         id: 219,
@@ -1959,6 +2334,8 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/missing-number/',
         tags: ['array', 'bit-manipulation', 'math', 'hash-set', 'sorting'],
         companies: ['Amazon', 'Microsoft', 'Apple', 'Google'],
+        videoSolution: 'https://www.youtube.com/watch?v=WnPLSRLSANE',
+        editorial: 'https://leetcode.com/problems/missing-number/editorial/',
       },
       {
         id: 220,
@@ -1967,6 +2344,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/sum-of-two-integers/',
         tags: ['math', 'bit-manipulation'],
         companies: ['Meta', 'Amazon', 'Google'],
+        editorial: 'https://leetcode.com/problems/sum-of-two-integers/editorial/',
       },
       {
         id: 221,
@@ -1975,6 +2353,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/reverse-integer/',
         tags: ['math'],
         companies: ['Amazon', 'Microsoft', 'Apple', 'Bloomberg'],
+        editorial: 'https://leetcode.com/problems/reverse-integer/editorial/',
       },
       {
         id: 222,
@@ -1983,6 +2362,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/powx-n/',
         tags: ['math', 'recursion', 'binary-search'],
         companies: ['Meta', 'Amazon', 'Google', 'Microsoft'],
+        editorial: 'https://leetcode.com/problems/powx-n/editorial/',
       },
       {
         id: 223,
@@ -1991,6 +2371,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/happy-number/',
         tags: ['math', 'hash-set', 'two-pointers'],
         companies: ['Amazon', 'Apple', 'Google'],
+        editorial: 'https://leetcode.com/problems/happy-number/editorial/',
       },
       {
         id: 224,
@@ -1999,6 +2380,7 @@ export const dsaTopics: DsaTopic[] = [
         link: 'https://leetcode.com/problems/plus-one/',
         tags: ['array', 'math'],
         companies: ['Google', 'Amazon', 'Microsoft'],
+        editorial: 'https://leetcode.com/problems/plus-one/editorial/',
       },
     ],
   },

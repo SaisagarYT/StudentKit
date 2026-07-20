@@ -622,6 +622,7 @@ export function InteractiveRoadmap({ roadmap }: { roadmap: Roadmap }) {
   const treeRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setProgress(loadProgress(roadmap.slug));
     setMounted(true);
   }, [roadmap.slug]);

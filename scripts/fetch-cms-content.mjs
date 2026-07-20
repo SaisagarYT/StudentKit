@@ -1,24 +1,16 @@
-/**
- * Pre-build script: fetches published CMS content from Firestore
- * and writes static JSON files that Next.js pages can import at build time.
- *
- * This gives CMS roadmaps/projects proper static HTML for SEO.
- * Run before `next build` (added to prebuild script in package.json).
- */
-
 import { initializeApp, cert } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
 import { readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { configDotenv } from 'dotenv';
+configDotenv();
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = resolve(__dirname, '..');
 const dataDir = resolve(root, 'src/data/cms');
 
-// Initialize Firebase Admin with project ID only (uses ADC or env)
-// For CI/CD, set GOOGLE_APPLICATION_CREDENTIALS or FIREBASE_SERVICE_ACCOUNT
-const projectId = 'studentkit-b8418';
+const projectId = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID;
 
 let db;
 try {
@@ -32,8 +24,8 @@ try {
   }
   db = getFirestore();
 } catch (e) {
-  console.log('⚠️  Firebase Admin not configured — generating empty manifests');
-  console.log('   Set FIREBASE_SERVICE_ACCOUNT env var for full build-time SEO.');
+  console.log('Firebase Admin not configured — generating empty manifests');
+  console.log('Set FIREBASE_SERVICE_ACCOUNT env var for full build-time SEO.');
   generateEmptyManifests();
   process.exit(0);
 }
@@ -43,6 +35,8 @@ async function fetchPublishedRoadmaps() {
     .where('status', '==', 'published')
     .orderBy('order', 'asc')
     .get();
+
+    console.log(snap);
 
   return snap.docs.map((doc) => {
     const data = doc.data();
@@ -87,7 +81,7 @@ async function fetchPublishedProjects() {
     .where('status', '==', 'published')
     .orderBy('order', 'asc')
     .get();
-
+  console.log(snap);
   return snap.docs.map((doc) => {
     const data = doc.data();
     return {
@@ -116,11 +110,11 @@ function generateEmptyManifests() {
   writeFileSync(resolve(dataDir, 'roadmaps.json'), JSON.stringify([], null, 2));
   writeFileSync(resolve(dataDir, 'projects.json'), JSON.stringify([], null, 2));
   writeFileSync(resolve(dataDir, 'manifest.json'), JSON.stringify({ roadmapSlugs: [], projectSlugs: [], generatedAt: new Date().toISOString() }, null, 2));
-  console.log('📄 Empty CMS manifests generated');
+  console.log('Empty CMS manifests generated');
 }
 
 async function main() {
-  console.log('📦 Fetching CMS content for static build...\n');
+  console.log('Fetching CMS content for static build...\n');
 
   mkdirSync(dataDir, { recursive: true });
 
@@ -143,12 +137,12 @@ async function main() {
     // Update sitemap slugs
     updateSitemapSlugs(roadmaps.map((r) => r.slug), projects.map((p) => p.slug));
 
-    console.log(`  ✅ ${roadmaps.length} roadmaps`);
-    console.log(`  ✅ ${projects.length} projects`);
-    console.log(`\n✨ CMS content fetched!`);
+    console.log(`${roadmaps.length} roadmaps`);
+    console.log(`${projects.length} projects`);
+    console.log(`\nCMS content fetched!`);
   } catch (e) {
-    console.error('❌ Failed to fetch CMS content:', e.message);
-    console.log('   Generating empty manifests...');
+    console.error('Failed to fetch CMS content:', e.message);
+    console.log('Generating empty manifests...');
     generateEmptyManifests();
   }
 

@@ -3,7 +3,7 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { Search, ExternalLink, Check, Filter, ChevronDown, RotateCcw, Trophy } from 'lucide-react';
 import * as Icons from 'lucide-react';
-import { dsaTopics, type DsaTopic, type DsaProblem } from '@/config/placement/dsa';
+import { dsaTopics, type DsaTopic, type DsaProblem, type TopicResource } from '@/config/placement/dsa';
 
 const STORAGE_KEY = 'sk-dsa-progress';
 const DIFFICULTY_COLORS = {
@@ -249,9 +249,9 @@ export function DsaSheet() {
 
         .dsa-problem {
           display: grid;
-          grid-template-columns: 32px 1fr auto auto auto;
+          grid-template-columns: 32px 1fr auto auto auto auto;
           align-items: center;
-          gap: 12px;
+          gap: 10px;
           padding: 12px 20px;
           border-bottom: 1px solid var(--border-soft);
           transition: background 0.1s;
@@ -319,9 +319,94 @@ export function DsaSheet() {
 
         .dsa-problem-link:hover { background: var(--bg-subtle); color: var(--accent-primary); }
 
+        .dsa-topic-resources {
+          padding: 14px 20px;
+          border-bottom: 1px solid var(--border-soft);
+          background: var(--bg-subtle);
+        }
+
+        .dsa-pattern {
+          display: flex;
+          align-items: flex-start;
+          gap: 10px;
+          margin-bottom: 10px;
+        }
+
+        .dsa-pattern-label {
+          font-size: 10px;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+          color: var(--accent-primary);
+          padding: 2px 7px;
+          border-radius: 4px;
+          background: var(--accent-primary)/10;
+          flex-shrink: 0;
+          margin-top: 1px;
+        }
+
+        .dsa-pattern-text {
+          font-size: 12px;
+          color: var(--text-secondary);
+          line-height: 1.5;
+        }
+
+        .dsa-resources-row {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 6px;
+        }
+
+        .dsa-resource-chip {
+          display: inline-flex;
+          align-items: center;
+          gap: 5px;
+          padding: 4px 10px;
+          border-radius: 6px;
+          font-size: 11px;
+          font-weight: 500;
+          text-decoration: none;
+          transition: all 0.2s;
+          border: 1px solid var(--border-soft);
+          color: var(--text-secondary);
+        }
+
+        .dsa-resource-chip:hover { border-color: var(--accent-primary); color: var(--accent-primary); transform: translateY(-1px); }
+
+        .dsa-resource-video { background: rgba(239, 68, 68, 0.05); border-color: rgba(239, 68, 68, 0.2); }
+        .dsa-resource-video:hover { border-color: #ef4444; color: #ef4444; }
+        .dsa-resource-article { background: rgba(59, 130, 246, 0.05); border-color: rgba(59, 130, 246, 0.2); }
+        .dsa-resource-article:hover { border-color: #3b82f6; color: #3b82f6; }
+        .dsa-resource-practice { background: rgba(34, 197, 94, 0.05); border-color: rgba(34, 197, 94, 0.2); }
+        .dsa-resource-practice:hover { border-color: #22c55e; color: #22c55e; }
+
+        .dsa-problem-solutions {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+        }
+
+        .dsa-sol-btn {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 26px;
+          height: 26px;
+          border-radius: 6px;
+          color: var(--text-subtle);
+          transition: all 0.15s;
+          text-decoration: none;
+        }
+
+        .dsa-sol-btn:hover { transform: scale(1.1); }
+        .dsa-sol-video { color: #ef4444; }
+        .dsa-sol-video:hover { background: rgba(239, 68, 68, 0.1); }
+        .dsa-sol-article { color: #3b82f6; }
+        .dsa-sol-article:hover { background: rgba(59, 130, 246, 0.1); }
+
         @media (max-width: 768px) {
           .dsa-problem {
-            grid-template-columns: 28px 1fr auto;
+            grid-template-columns: 28px 1fr auto auto;
             gap: 8px;
           }
           .dsa-problem-companies { display: none; }
@@ -414,6 +499,13 @@ export function DsaSheet() {
 
             {isExpanded && (
               <div className="dsa-problems">
+                {/* Pattern hint */}
+                <div className="dsa-topic-resources">
+                  <div className="dsa-pattern">
+                    <span className="dsa-pattern-label">Pattern</span>
+                    <span className="dsa-pattern-text">{topic.pattern}</span>
+                  </div>
+                </div>
                 {topic.problems.map(problem => {
                   const isDone = !!progress[problem.id];
                   const colors = DIFFICULTY_COLORS[problem.difficulty];
@@ -437,6 +529,32 @@ export function DsaSheet() {
                       <span className="dsa-problem-companies" title={problem.companies.join(', ')}>
                         {problem.companies.slice(0, 3).join(', ')}
                       </span>
+                      <div className="dsa-problem-solutions">
+                        {problem.videoSolution && (
+                          <a
+                            href={problem.videoSolution}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="dsa-sol-btn dsa-sol-video"
+                            title="Video Solution"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                          </a>
+                        )}
+                        {problem.editorial && (
+                          <a
+                            href={problem.editorial}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="dsa-sol-btn dsa-sol-article"
+                            title="Editorial / Solution"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                          </a>
+                        )}
+                      </div>
                       <a
                         href={problem.link}
                         target="_blank"

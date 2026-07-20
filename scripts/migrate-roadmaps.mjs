@@ -1,9 +1,3 @@
-/**
- * Migration script: imports hardcoded roadmaps into Firestore.
- * Run with: node scripts/migrate-roadmaps.mjs
- *
- * Requires Firebase env vars in .env.local (loaded via dotenv).
- */
 
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, addDoc, getDocs, query, where, serverTimestamp } from 'firebase/firestore';
