@@ -20,7 +20,7 @@ export function ShareProgress({
   const [copied, setCopied] = useState(false);
 
   const percent = totalTopics > 0 ? Math.round((completedTopics / totalTopics) * 100) : 0;
-  const url = `https://studentkit.app/roadmaps/${roadmapSlug}`;
+  const url = `https://studentkit.app/roadmaps/view?slug=${roadmapSlug}`;
 
   const shareText = completedTopics === 0
     ? `Check out the ${roadmapTitle} Roadmap on StudentKit!`

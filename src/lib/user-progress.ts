@@ -1,5 +1,7 @@
 'use client';
 
+import { emitProgressChanged } from '@/lib/firebase/user-progress-sync';
+
 const STREAK_KEY = 'sk-streak';
 const BOOKMARKS_KEY = 'sk-bookmarks';
 const LAST_ACTIVE_KEY = 'sk-last-active';
@@ -63,6 +65,7 @@ export function recordActivity(): StreakData {
 
   try {
     localStorage.setItem(STREAK_KEY, JSON.stringify(updated));
+    emitProgressChanged();
   } catch { /* */ }
 
   return updated;
@@ -101,6 +104,7 @@ export function addBookmark(item: Omit<Bookmark, 'addedAt'>): Bookmark[] {
   const updated = [...bookmarks, { ...item, addedAt: new Date().toISOString() }];
   try {
     localStorage.setItem(BOOKMARKS_KEY, JSON.stringify(updated));
+    emitProgressChanged();
   } catch { /* */ }
   return updated;
 }
@@ -110,6 +114,7 @@ export function removeBookmark(type: string, slug: string): Bookmark[] {
   const updated = bookmarks.filter((b) => !(b.type === type && b.slug === slug));
   try {
     localStorage.setItem(BOOKMARKS_KEY, JSON.stringify(updated));
+    emitProgressChanged();
   } catch { /* */ }
   return updated;
 }

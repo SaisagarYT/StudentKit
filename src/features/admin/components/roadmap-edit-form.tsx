@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/lib/firebase/auth';
-import { roadmapService } from '@/lib/cms';
+import { roadmapService, projectRepository, type ProjectListItem } from '@/lib/cms';
 import { ROADMAP_CATEGORIES, DIFFICULTIES, STAGE_COLORS } from '@/lib/cms/schemas';
 import {
   ArrowLeft,
@@ -13,6 +13,9 @@ import {
   Trash2,
   GripVertical,
   Save,
+  FolderOpen,
+  X,
+  PlusCircle,
 } from 'lucide-react';
 
 type Section = {
@@ -256,57 +259,15 @@ export function RoadmapEditForm() {
       </div>
 
       {/* Sections */}
-      <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-surface)] p-6">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-sm font-semibold text-[var(--text-primary)]">Sections ({form.sections.length})</h2>
-          <button onClick={addSection} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-[var(--accent-dark)] text-[var(--accent-primary)]">
-            <Plus className="w-3.5 h-3.5" /> Add Section
-          </button>
-        </div>
-
-        <div className="space-y-4">
-          {form.sections.map((section, sIdx) => (
-            <div key={section.id} className="border border-[var(--border-soft)] rounded-xl p-4 space-y-3">
-              <div className="flex items-start justify-between">
-                <div className="flex items-center gap-2">
-                  <GripVertical className="w-4 h-4 text-[var(--text-subtle)]" />
-                  <span className="text-xs font-semibold text-[var(--text-subtle)] uppercase">Section {sIdx + 1}</span>
-                </div>
-                <button onClick={() => removeSection(sIdx)} className="p-1.5 rounded-md hover:bg-red-50 text-[var(--text-subtle)] hover:text-red-500"><Trash2 className="w-4 h-4" /></button>
-              </div>
-              <div className="grid grid-cols-3 gap-3">
-                <input value={section.title} onChange={(e) => updateSection(sIdx, { title: e.target.value })} placeholder="Title" className="input-field col-span-1" />
-                <select value={section.color} onChange={(e) => updateSection(sIdx, { color: e.target.value })} className="input-field">
-                  {STAGE_COLORS.map((c) => <option key={c.value} value={c.value}>{c.label}</option>)}
-                </select>
-                <input value={section.timeEstimate} onChange={(e) => updateSection(sIdx, { timeEstimate: e.target.value })} placeholder="e.g. 2 weeks" className="input-field" />
-              </div>
-              <textarea value={section.description} onChange={(e) => updateSection(sIdx, { description: e.target.value })} placeholder="Description" rows={2} className="input-field resize-none" />
-
-              {/* Topics */}
-              <div className="pl-4 border-l-2 border-[var(--border-soft)] space-y-3 mt-3">
-                {section.topics.map((topic, tIdx) => (
-                  <div key={topic.id} className="bg-[var(--bg-subtle)] rounded-lg p-3 space-y-2">
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-medium text-[var(--text-subtle)]">Topic {tIdx + 1}</span>
-                      <button onClick={() => removeTopic(sIdx, tIdx)} className="text-[var(--text-subtle)] hover:text-red-500"><Trash2 className="w-3.5 h-3.5" /></button>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2">
-                      <input value={topic.title} onChange={(e) => updateTopic(sIdx, tIdx, { title: e.target.value })} placeholder="Title" className="input-field" />
-                      <input value={topic.timeEstimate} onChange={(e) => updateTopic(sIdx, tIdx, { timeEstimate: e.target.value })} placeholder="Time" className="input-field" />
-                    </div>
-                    <textarea value={topic.description} onChange={(e) => updateTopic(sIdx, tIdx, { description: e.target.value })} placeholder="Description" rows={2} className="input-field resize-none" />
-                    <textarea value={topic.whatToLearn.join('\n')} onChange={(e) => updateTopic(sIdx, tIdx, { whatToLearn: e.target.value.split('\n') })} placeholder="What to learn (one per line)" rows={3} className="input-field resize-none font-mono text-xs" />
-                  </div>
-                ))}
-                <button onClick={() => addTopic(sIdx)} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium text-[var(--text-secondary)] hover:bg-[var(--bg-subtle)] border border-dashed border-[var(--border-default)]">
-                  <Plus className="w-3 h-3" /> Add Topic
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+      <SectionsEditor
+        form={form}
+        addSection={addSection}
+        updateSection={updateSection}
+        removeSection={removeSection}
+        addTopic={addTopic}
+        updateTopic={updateTopic}
+        removeTopic={removeTopic}
+      />
 
       {/* Bottom save */}
       <div className="mt-6 flex justify-end">
@@ -314,6 +275,190 @@ export function RoadmapEditForm() {
           {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
           {saving ? 'Saving...' : 'Save Changes'}
         </button>
+      </div>
+    </div>
+  );
+}
+
+function SectionsEditor({ form, addSection, updateSection, removeSection, addTopic, updateTopic, removeTopic }: any) {
+  const { user } = useAuth();
+  const [allProjects, setAllProjects] = useState<ProjectListItem[]>([]);
+  const [projectsLoaded, setProjectsLoaded] = useState(false);
+  const [creatingForSection, setCreatingForSection] = useState<number | null>(null);
+  const [newProject, setNewProject] = useState({ title: '', slug: '', shortDescription: '', difficulty: 'beginner', technologies: '', estimatedDuration: '' });
+  const [createSaving, setCreateSaving] = useState(false);
+  const [createError, setCreateError] = useState('');
+
+  useEffect(() => {
+    projectRepository.list({ status: 'published' as any }).then((p) => {
+      setAllProjects(p);
+      setProjectsLoaded(true);
+    }).catch(() => setProjectsLoaded(true));
+  }, []);
+
+  function addProjectToSection(sIdx: number, projectId: string) {
+    if (form.sections[sIdx].projectIds.includes(projectId)) return;
+    updateSection(sIdx, { projectIds: [...form.sections[sIdx].projectIds, projectId] });
+  }
+
+  function removeProjectFromSection(sIdx: number, projectId: string) {
+    updateSection(sIdx, { projectIds: form.sections[sIdx].projectIds.filter((id: string) => id !== projectId) });
+  }
+
+  async function handleCreateProject() {
+    if (!user || creatingForSection === null) return;
+    if (!newProject.title || !newProject.slug) { setCreateError('Title and slug are required.'); return; }
+    setCreateSaving(true);
+    setCreateError('');
+    try {
+      const id = await projectRepository.create({
+        title: newProject.title,
+        slug: newProject.slug,
+        shortDescription: newProject.shortDescription || `Learn by building: ${newProject.title}`,
+        description: newProject.shortDescription || `Learn by building: ${newProject.title}`,
+        category: 'web',
+        difficulty: newProject.difficulty,
+        estimatedDuration: newProject.estimatedDuration || '1-2 weeks',
+        technologies: newProject.technologies.split(',').map((t: string) => t.trim()).filter(Boolean),
+        projectType: 'guided',
+        experienceLevel: newProject.difficulty,
+        skills: [], learningOutcomes: [], features: [], requirements: [], milestones: [],
+        architecture: '', folderStructure: '', databaseConsiderations: '', apiConsiderations: '',
+        testingGuidance: '', securityConsiderations: '', deploymentGuidance: '',
+        extensionIdeas: [], tags: [], seo: {},
+        relatedRoadmapIds: [], prerequisiteRoadmapIds: [], relatedProjectIds: [],
+      }, user.uid);
+      await projectRepository.publish(id, user.uid);
+      const newEntry: ProjectListItem = { id, slug: newProject.slug, title: newProject.title, status: 'published', category: 'web', difficulty: newProject.difficulty as any, featured: false, technologies: newProject.technologies.split(',').map((t: string) => t.trim()).filter(Boolean), updatedAt: new Date(), publishedAt: new Date() };
+      setAllProjects(prev => [newEntry, ...prev]);
+      addProjectToSection(creatingForSection, id);
+      setCreatingForSection(null);
+    } catch (e: unknown) {
+      setCreateError(e instanceof Error ? e.message : 'Failed to create project');
+    } finally {
+      setCreateSaving(false);
+    }
+  }
+
+  return (
+    <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-surface)] p-6">
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-sm font-semibold text-[var(--text-primary)]">Sections ({form.sections.length})</h2>
+        <button onClick={addSection} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-[var(--accent-dark)] text-[var(--accent-primary)]">
+          <Plus className="w-3.5 h-3.5" /> Add Section
+        </button>
+      </div>
+
+      <div className="space-y-4">
+        {form.sections.map((section: Section, sIdx: number) => (
+          <div key={section.id} className="border border-[var(--border-soft)] rounded-xl p-4 space-y-3">
+            <div className="flex items-start justify-between">
+              <div className="flex items-center gap-2">
+                <GripVertical className="w-4 h-4 text-[var(--text-subtle)]" />
+                <span className="text-xs font-semibold text-[var(--text-subtle)] uppercase">Section {sIdx + 1}</span>
+              </div>
+              <button onClick={() => removeSection(sIdx)} className="p-1.5 rounded-md hover:bg-red-50 text-[var(--text-subtle)] hover:text-red-500"><Trash2 className="w-4 h-4" /></button>
+            </div>
+            <div className="grid grid-cols-3 gap-3">
+              <input value={section.title} onChange={(e: any) => updateSection(sIdx, { title: e.target.value })} placeholder="Title" className="input-field col-span-1" />
+              <select value={section.color} onChange={(e: any) => updateSection(sIdx, { color: e.target.value })} className="input-field">
+                {STAGE_COLORS.map((c) => <option key={c.value} value={c.value}>{c.label}</option>)}
+              </select>
+              <input value={section.timeEstimate} onChange={(e: any) => updateSection(sIdx, { timeEstimate: e.target.value })} placeholder="e.g. 2 weeks" className="input-field" />
+            </div>
+            <textarea value={section.description} onChange={(e: any) => updateSection(sIdx, { description: e.target.value })} placeholder="Description" rows={2} className="input-field resize-none" />
+
+            {/* Linked Projects */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <FolderOpen className="w-3.5 h-3.5 text-[var(--text-secondary)]" />
+                  <span className="text-xs font-medium text-[var(--text-primary)]">Linked Projects</span>
+                </div>
+                <button
+                  onClick={() => { setCreatingForSection(sIdx); setNewProject({ title: '', slug: '', shortDescription: '', difficulty: 'beginner', technologies: '', estimatedDuration: '' }); setCreateError(''); }}
+                  className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-[10px] font-medium text-[var(--accent-dark)] hover:bg-[var(--bg-subtle)] border border-[var(--border-soft)] transition-colors"
+                >
+                  <PlusCircle className="w-3 h-3" /> Create New
+                </button>
+              </div>
+              {section.projectIds.length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                  {section.projectIds.map((pid: string) => {
+                    const proj = allProjects.find((p) => p.id === pid);
+                    return (
+                      <span key={pid} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium bg-[var(--accent-primary)]/15 text-[var(--accent-dark)]">
+                        {proj?.title || pid}
+                        <button onClick={() => removeProjectFromSection(sIdx, pid)} className="hover:text-red-500 transition-colors"><X className="w-3 h-3" /></button>
+                      </span>
+                    );
+                  })}
+                </div>
+              )}
+              {projectsLoaded && allProjects.length > 0 ? (
+                <select value="" onChange={(e) => { if (e.target.value) addProjectToSection(sIdx, e.target.value); }} className="input-field text-xs">
+                  <option value="">+ Link an existing project...</option>
+                  {allProjects.filter((p) => !section.projectIds.includes(p.id)).map((p) => (
+                    <option key={p.id} value={p.id}>{p.title} ({p.difficulty})</option>
+                  ))}
+                </select>
+              ) : projectsLoaded ? (
+                <p className="text-[10px] text-[var(--text-subtle)]">No published projects yet. Use &quot;Create New&quot; to add one.</p>
+              ) : null}
+
+              {creatingForSection === sIdx && (
+                <div className="mt-3 p-4 rounded-lg border border-[var(--border-soft)] bg-[var(--bg-subtle)] space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-semibold text-[var(--text-primary)]">Quick Create Project</span>
+                    <button onClick={() => setCreatingForSection(null)} className="text-[var(--text-subtle)] hover:text-red-500"><X className="w-3.5 h-3.5" /></button>
+                  </div>
+                  {createError && <p className="text-[10px] text-red-500">{createError}</p>}
+                  <div className="grid grid-cols-2 gap-2">
+                    <input value={newProject.title} onChange={(e) => setNewProject(p => ({ ...p, title: e.target.value, slug: e.target.value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') }))} placeholder="Project title *" className="input-field" />
+                    <input value={newProject.slug} onChange={(e) => setNewProject(p => ({ ...p, slug: e.target.value }))} placeholder="slug *" className="input-field font-mono text-xs" />
+                  </div>
+                  <textarea value={newProject.shortDescription} onChange={(e) => setNewProject(p => ({ ...p, shortDescription: e.target.value }))} placeholder="Short description" rows={2} className="input-field resize-none" />
+                  <div className="grid grid-cols-3 gap-2">
+                    <select value={newProject.difficulty} onChange={(e) => setNewProject(p => ({ ...p, difficulty: e.target.value }))} className="input-field text-xs">
+                      {DIFFICULTIES.map((d) => <option key={d.value} value={d.value}>{d.label}</option>)}
+                    </select>
+                    <input value={newProject.technologies} onChange={(e) => setNewProject(p => ({ ...p, technologies: e.target.value }))} placeholder="Tech (comma-sep)" className="input-field text-xs" />
+                    <input value={newProject.estimatedDuration} onChange={(e) => setNewProject(p => ({ ...p, estimatedDuration: e.target.value }))} placeholder="e.g. 1-2 weeks" className="input-field text-xs" />
+                  </div>
+                  <button onClick={handleCreateProject} disabled={createSaving} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-[var(--accent-dark)] text-[var(--accent-primary)] hover:opacity-90 disabled:opacity-50 transition-opacity">
+                    {createSaving ? <Loader2 className="w-3 h-3 animate-spin" /> : <Check className="w-3 h-3" />}
+                    {createSaving ? 'Creating...' : 'Create & Link'}
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* Topics */}
+            <div className="pl-4 border-l-2 border-[var(--border-soft)] space-y-3 mt-3">
+              {section.topics.map((topic: Topic, tIdx: number) => (
+                <div key={topic.id} className="bg-[var(--bg-subtle)] rounded-lg p-3 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-medium text-[var(--text-subtle)]">Topic {tIdx + 1}</span>
+                    <button onClick={() => removeTopic(sIdx, tIdx)} className="text-[var(--text-subtle)] hover:text-red-500"><Trash2 className="w-3.5 h-3.5" /></button>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <input value={topic.title} onChange={(e: any) => updateTopic(sIdx, tIdx, { title: e.target.value })} placeholder="Title" className="input-field" />
+                    <input value={topic.timeEstimate} onChange={(e: any) => updateTopic(sIdx, tIdx, { timeEstimate: e.target.value })} placeholder="Time" className="input-field" />
+                  </div>
+                  <textarea value={topic.description} onChange={(e: any) => updateTopic(sIdx, tIdx, { description: e.target.value })} placeholder="Description" rows={2} className="input-field resize-none" />
+                  <textarea value={topic.whatToLearn.join('\n')} onChange={(e: any) => updateTopic(sIdx, tIdx, { whatToLearn: e.target.value.split('\n') })} placeholder="What to learn (one per line)" rows={3} className="input-field resize-none font-mono text-xs" />
+                  <div className="grid grid-cols-2 gap-2">
+                    <input value={topic.project.title} onChange={(e: any) => updateTopic(sIdx, tIdx, { project: { ...topic.project, title: e.target.value } })} placeholder="Mini-project title" className="input-field" />
+                    <input value={topic.project.description} onChange={(e: any) => updateTopic(sIdx, tIdx, { project: { ...topic.project, description: e.target.value } })} placeholder="Mini-project desc" className="input-field" />
+                  </div>
+                </div>
+              ))}
+              <button onClick={() => addTopic(sIdx)} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium text-[var(--text-secondary)] hover:bg-[var(--bg-subtle)] border border-dashed border-[var(--border-default)]">
+                <Plus className="w-3 h-3" /> Add Topic
+              </button>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );

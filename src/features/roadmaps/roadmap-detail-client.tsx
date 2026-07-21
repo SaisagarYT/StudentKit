@@ -130,7 +130,7 @@ export function RoadmapDetailClient({ slug }: { slug: string }) {
               {roadmap.relatedRoadmaps.map((related) => (
                 <Link
                   key={related.slug}
-                  href={`/roadmaps/${related.slug}`}
+                  href={`/roadmaps/view?slug=${related.slug}`}
                   className="group flex flex-col gap-2 p-5 rounded-xl border border-[var(--border-default)] bg-[var(--bg-card)] hover:border-[var(--border-strong)] hover:shadow-md transition-all"
                 >
                   <div className="flex items-center justify-between">

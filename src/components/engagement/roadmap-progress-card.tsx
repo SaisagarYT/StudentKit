@@ -22,6 +22,7 @@ export function RoadmapProgressCard({ slug, totalTopics }: RoadmapProgressProps)
 
   useEffect(() => {
     const progress = loadProgress(slug);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setCompleted(Object.values(progress).filter(Boolean).length);
   }, [slug]);
 

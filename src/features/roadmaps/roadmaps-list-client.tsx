@@ -132,7 +132,7 @@ export function RoadmapsListClient() {
             return (
               <Link
                 key={roadmap.slug}
-                href={`/roadmaps/${roadmap.slug}`}
+                href={`/roadmaps/view?slug=${roadmap.slug}`}
                 className="group relative p-5 rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-surface)] hover:border-[var(--accent-primary)]/40 hover:shadow-md transition-all duration-200"
               >
                 <div

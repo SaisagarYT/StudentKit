@@ -3,7 +3,7 @@
 import { doc, increment, setDoc, getDoc, collection, getDocs, query, orderBy, limit } from 'firebase/firestore';
 import { getFirebaseDb, isFirebaseConfigured } from '@/lib/firebase/client';
 
-export async function trackPageView(type: 'roadmap' | 'project', slug: string) {
+export async function trackPageView(type: 'roadmap' | 'project' | 'resource', slug: string) {
   if (!isFirebaseConfigured || typeof window === 'undefined') return;
 
   try {
@@ -50,7 +50,7 @@ export async function getTopContent(limitCount = 10): Promise<ContentAnalytics[]
   }
 }
 
-export async function getContentViews(type: 'roadmap' | 'project', slug: string): Promise<number> {
+export async function getContentViews(type: 'roadmap' | 'project' | 'resource', slug: string): Promise<number> {
   if (!isFirebaseConfigured) return 0;
 
   try {

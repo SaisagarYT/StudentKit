@@ -40,7 +40,7 @@ const searchItems: SearchItem[] = [
     id: `roadmap-${r.slug}`,
     title: `${r.title} Roadmap`,
     description: r.description.slice(0, 80),
-    href: `/roadmaps/${r.slug}`,
+    href: `/roadmaps/view?slug=${r.slug}`,
     icon: 'Map',
     type: 'roadmap' as const,
     keywords: [r.slug, r.title.toLowerCase(), 'roadmap', 'career', 'path'],

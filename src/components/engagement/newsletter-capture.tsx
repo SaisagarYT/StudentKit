@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Mail, ArrowRight, Check, Loader2 } from 'lucide-react';
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { getFirebaseDb, isFirebaseConfigured } from '@/lib/firebase/client';
@@ -10,10 +10,13 @@ const DISMISSED_KEY = 'sk-newsletter-dismissed';
 export function NewsletterCapture() {
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
-  const [dismissed, setDismissed] = useState(() => {
-    if (typeof window === 'undefined') return false;
-    return localStorage.getItem(DISMISSED_KEY) === 'true';
-  });
+  const [dismissed, setDismissed] = useState(false);
+
+  useEffect(() => {
+    if (localStorage.getItem(DISMISSED_KEY) === 'true') {
+      setDismissed(true);
+    }
+  }, []);
 
   if (dismissed || status === 'success') {
     if (status === 'success') {

@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { Check, ChevronDown, ChevronRight, Search, BookOpen } from 'lucide-react';
 import * as Icons from 'lucide-react';
 import { csSubjects, type CsSubject, type CsSubtopic } from '@/config/placement/cs-fundamentals';
+import { emitProgressChanged } from '@/lib/firebase/user-progress-sync';
 
 const STORAGE_KEY = 'sk-cs-progress';
 
@@ -20,6 +21,7 @@ function loadProgress(): Record<string, boolean> {
 function saveProgress(progress: Record<string, boolean>) {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+    emitProgressChanged();
   } catch {}
 }
 

@@ -129,7 +129,7 @@ export function courseSchema(roadmap: {
     '@type': 'Course',
     name: `${roadmap.title} Roadmap`,
     description: roadmap.description,
-    url: `${siteConfig.url}/roadmaps/${roadmap.slug}`,
+    url: `${siteConfig.url}/roadmaps/view?slug=${roadmap.slug}`,
     provider: {
       '@type': 'Organization',
       name: siteConfig.name,

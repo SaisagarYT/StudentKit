@@ -63,6 +63,9 @@ AGENTS.md
 .firebase/
 serviceAccountKey.json
 
+# Private docs
+docs/monetization-plan.txt
+
 # IDE
 .vscode/
 .idea/

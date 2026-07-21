@@ -1,9 +1,14 @@
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from 'react';
-import { Search, ExternalLink, Check, Filter, ChevronDown, RotateCcw, Trophy } from 'lucide-react';
+import { Search, ExternalLink, Check, Filter, ChevronDown, RotateCcw, Trophy, Cloud } from 'lucide-react';
 import * as Icons from 'lucide-react';
-import { dsaTopics, type DsaTopic, type DsaProblem, type TopicResource } from '@/config/placement/dsa';
+import Link from 'next/link';
+import { useUserAuth } from '@/lib/firebase/user-auth';
+import { emitProgressChanged } from '@/lib/firebase/user-progress-sync';
+import { dsaTopicsMeta, type DsaTopicMeta } from '@/config/placement/dsa-topics';
+import { dsaProblemRepository, resourceRepository } from '@/lib/cms/repository';
+import type { DsaProblemListItem, ResourceListItem } from '@/lib/cms/types';
 
 const STORAGE_KEY = 'sk-dsa-progress';
 const DIFFICULTY_COLORS = {
@@ -12,7 +17,7 @@ const DIFFICULTY_COLORS = {
   hard: { bg: 'rgba(239, 68, 68, 0.1)', text: '#ef4444', border: 'rgba(239, 68, 68, 0.3)' },
 };
 
-function loadProgress(): Record<number, boolean> {
+function loadProgress(): Record<string, boolean> {
   if (typeof window === 'undefined') return {};
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -22,9 +27,10 @@ function loadProgress(): Record<number, boolean> {
   }
 }
 
-function saveProgress(progress: Record<number, boolean>) {
+function saveProgress(progress: Record<string, boolean>) {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+    emitProgressChanged();
   } catch {}
 }
 
@@ -38,32 +44,80 @@ function getIcon(name: string, className?: string) {
   return Icon ? <Icon className={className || 'w-5 h-5'} /> : null;
 }
 
+interface TopicWithProblems extends DsaTopicMeta {
+  problems: DsaProblemListItem[];
+}
+
 export function DsaSheet() {
-  const [progress, setProgress] = useState<Record<number, boolean>>({});
+  const { user: authUser } = useUserAuth();
+  const [progress, setProgress] = useState<Record<string, boolean>>({});
   const [search, setSearch] = useState('');
   const [difficultyFilter, setDifficultyFilter] = useState<string>('all');
   const [expandedTopic, setExpandedTopic] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
+  const [problems, setProblems] = useState<DsaProblemListItem[]>([]);
+  const [publishedSlugs, setPublishedSlugs] = useState<Set<string>>(new Set());
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     setProgress(loadProgress());
     setMounted(true);
   }, []);
 
-  const toggleProblem = useCallback((id: number) => {
+  useEffect(() => {
+    Promise.all([
+      dsaProblemRepository.listPublished(),
+      resourceRepository.listPublished('dsa'),
+    ]).then(([probs, resources]) => {
+      // If dsa-problems collection has data, use it
+      if (probs.length > 0) {
+        setProblems(probs);
+      } else {
+        // Fallback: derive problem entries from published resources
+        const derived: DsaProblemListItem[] = resources.map((r, i) => ({
+          id: r.id,
+          title: r.title,
+          slug: r.slug,
+          difficulty: r.difficulty === 'beginner' ? 'easy' as const : r.difficulty === 'intermediate' ? 'medium' as const : 'hard' as const,
+          category: (r.tags.find(t => dsaTopicsMeta.some(topic => topic.id === t)) || 'arrays-hashing') as any,
+          link: '',
+          videoSolution: '',
+          tags: r.tags,
+          companies: [],
+          editorial: r.slug,
+          order: i,
+          status: 'published' as const,
+        }));
+        setProblems(derived);
+      }
+      setPublishedSlugs(new Set(resources.map(r => r.slug)));
+      setLoading(false);
+    }).catch(() => setLoading(false));
+  }, []);
+
+  const toggleProblem = useCallback((slug: string) => {
     setProgress(prev => {
-      const next = { ...prev, [id]: !prev[id] };
+      const next = { ...prev, [slug]: !prev[slug] };
       saveProgress(next);
       return next;
     });
   }, []);
 
-  const totalProblems = useMemo(() => dsaTopics.reduce((sum, t) => sum + t.problems.length, 0), []);
-  const completedCount = useMemo(() => Object.values(progress).filter(Boolean).length, [progress]);
+  const topicsWithProblems: TopicWithProblems[] = useMemo(() => {
+    return dsaTopicsMeta.map(topic => ({
+      ...topic,
+      problems: problems.filter(p => p.category === topic.id),
+    }));
+  }, [problems]);
+
+  const totalProblems = problems.length;
+  const completedCount = useMemo(() => {
+    return problems.filter(p => progress[p.slug]).length;
+  }, [progress, problems]);
   const overallPercent = totalProblems > 0 ? Math.round((completedCount / totalProblems) * 100) : 0;
 
   const filteredTopics = useMemo(() => {
-    return dsaTopics.map(topic => {
+    return topicsWithProblems.map(topic => {
       let filtered = topic.problems;
 
       if (search) {
@@ -81,7 +135,7 @@ export function DsaSheet() {
 
       return { ...topic, problems: filtered };
     }).filter(t => t.problems.length > 0);
-  }, [search, difficultyFilter]);
+  }, [topicsWithProblems, search, difficultyFilter]);
 
   const resetProgress = useCallback(() => {
     if (window.confirm('Reset all progress? This cannot be undone.')) {
@@ -329,7 +383,6 @@ export function DsaSheet() {
           display: flex;
           align-items: flex-start;
           gap: 10px;
-          margin-bottom: 10px;
         }
 
         .dsa-pattern-label {
@@ -350,35 +403,6 @@ export function DsaSheet() {
           color: var(--text-secondary);
           line-height: 1.5;
         }
-
-        .dsa-resources-row {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 6px;
-        }
-
-        .dsa-resource-chip {
-          display: inline-flex;
-          align-items: center;
-          gap: 5px;
-          padding: 4px 10px;
-          border-radius: 6px;
-          font-size: 11px;
-          font-weight: 500;
-          text-decoration: none;
-          transition: all 0.2s;
-          border: 1px solid var(--border-soft);
-          color: var(--text-secondary);
-        }
-
-        .dsa-resource-chip:hover { border-color: var(--accent-primary); color: var(--accent-primary); transform: translateY(-1px); }
-
-        .dsa-resource-video { background: rgba(239, 68, 68, 0.05); border-color: rgba(239, 68, 68, 0.2); }
-        .dsa-resource-video:hover { border-color: #ef4444; color: #ef4444; }
-        .dsa-resource-article { background: rgba(59, 130, 246, 0.05); border-color: rgba(59, 130, 246, 0.2); }
-        .dsa-resource-article:hover { border-color: #3b82f6; color: #3b82f6; }
-        .dsa-resource-practice { background: rgba(34, 197, 94, 0.05); border-color: rgba(34, 197, 94, 0.2); }
-        .dsa-resource-practice:hover { border-color: #22c55e; color: #22c55e; }
 
         .dsa-problem-solutions {
           display: flex;
@@ -414,169 +438,200 @@ export function DsaSheet() {
         }
       `}</style>
 
-      {/* Sticky progress */}
-      <div className="dsa-progress-bar">
-        <div className="flex items-center justify-between mb-2">
-          <div className="flex items-center gap-3">
-            <Trophy className="w-4 h-4 text-[var(--accent-primary)]" />
-            <span className="text-sm font-semibold text-[var(--text-primary)]">
-              {mounted ? completedCount : 0}/{totalProblems} solved
-            </span>
-          </div>
-          <div className="flex items-center gap-3">
-            <span className="text-xs font-bold text-[var(--accent-primary)]">{mounted ? overallPercent : 0}%</span>
-            <button onClick={resetProgress} className="p-1.5 rounded-md hover:bg-[var(--bg-subtle)] text-[var(--text-subtle)] hover:text-[var(--text-primary)] transition-colors" title="Reset progress">
-              <RotateCcw className="w-3.5 h-3.5" />
-            </button>
-          </div>
+      {/* Loading state */}
+      {loading && (
+        <div className="py-16 text-center">
+          <div className="inline-block w-6 h-6 border-2 border-[var(--accent-primary)] border-t-transparent rounded-full animate-spin" />
+          <p className="mt-3 text-xs text-[var(--text-subtle)]">Loading problems...</p>
         </div>
-        <div className="h-2 rounded-full bg-[var(--border-soft)] overflow-hidden">
-          <div
-            className="h-full rounded-full transition-all duration-500"
-            style={{
-              width: mounted ? `${overallPercent}%` : '0%',
-              background: overallPercent === 100 ? '#22c55e' : 'var(--accent-primary)',
-            }}
-          />
-        </div>
-      </div>
+      )}
 
-      {/* Filters */}
-      <div className="dsa-filters">
-        <div className="dsa-search">
-          <Search className="w-4 h-4" />
-          <input
-            type="text"
-            placeholder="Search problems, tags, or companies..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
+      {!loading && problems.length === 0 && (
+        <div className="py-16 text-center">
+          <p className="text-sm text-[var(--text-subtle)]">No problems added yet. Add problems from the admin panel.</p>
         </div>
-        <div className="flex items-center gap-1.5">
-          <Filter className="w-3.5 h-3.5 text-[var(--text-subtle)]" />
-          {['all', 'easy', 'medium', 'hard'].map(d => (
-            <button
-              key={d}
-              className={`dsa-diff-btn ${difficultyFilter === d ? 'active' : ''}`}
-              onClick={() => setDifficultyFilter(d)}
-            >
-              {d === 'all' ? 'All' : d}
-            </button>
-          ))}
-        </div>
-      </div>
+      )}
 
-      {/* Topics */}
-      {filteredTopics.map(topic => {
-        const topicCompleted = topic.problems.filter(p => progress[p.id]).length;
-        const isExpanded = expandedTopic === topic.id;
-        const percent = topic.problems.length > 0 ? (topicCompleted / topic.problems.length) * 100 : 0;
-
-        return (
-          <div key={topic.id} className="dsa-topic">
-            <div
-              className="dsa-topic-header"
-              onClick={() => setExpandedTopic(isExpanded ? null : topic.id)}
-            >
-              <div className="dsa-topic-icon">
-                {getIcon(topic.icon, 'w-5 h-5')}
+      {!loading && problems.length > 0 && (
+        <>
+          {/* Sticky progress */}
+          <div className="dsa-progress-bar">
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-3">
+                <Trophy className="w-4 h-4 text-[var(--accent-primary)]" />
+                <span className="text-sm font-semibold text-[var(--text-primary)]">
+                  {mounted ? completedCount : 0}/{totalProblems} solved
+                </span>
               </div>
-              <div className="dsa-topic-info">
-                <div className="dsa-topic-title">{topic.title}</div>
-                <div className="dsa-topic-desc">{topic.description}</div>
+              <div className="flex items-center gap-3">
+                <span className="text-xs font-bold text-[var(--accent-primary)]">{mounted ? overallPercent : 0}%</span>
+                <button onClick={resetProgress} className="p-1.5 rounded-md hover:bg-[var(--bg-subtle)] text-[var(--text-subtle)] hover:text-[var(--text-primary)] transition-colors" title="Reset progress">
+                  <RotateCcw className="w-3.5 h-3.5" />
+                </button>
               </div>
-              <div className="dsa-topic-progress">
-                <div className="dsa-topic-progress-bar">
-                  <div
-                    className={`dsa-topic-progress-fill ${percent === 100 ? 'complete' : ''}`}
-                    style={{ width: `${mounted ? percent : 0}%` }}
-                  />
-                </div>
-                <span className="dsa-topic-count">{mounted ? topicCompleted : 0}/{topic.problems.length}</span>
-              </div>
-              <ChevronDown className={`dsa-chevron ${isExpanded ? 'open' : ''}`} size={18} />
             </div>
-
-            {isExpanded && (
-              <div className="dsa-problems">
-                {/* Pattern hint */}
-                <div className="dsa-topic-resources">
-                  <div className="dsa-pattern">
-                    <span className="dsa-pattern-label">Pattern</span>
-                    <span className="dsa-pattern-text">{topic.pattern}</span>
-                  </div>
-                </div>
-                {topic.problems.map(problem => {
-                  const isDone = !!progress[problem.id];
-                  const colors = DIFFICULTY_COLORS[problem.difficulty];
-                  return (
-                    <div key={problem.id} className="dsa-problem">
-                      <button
-                        className={`dsa-problem-check ${isDone ? 'done' : ''}`}
-                        onClick={() => toggleProblem(problem.id)}
-                      >
-                        {isDone && <Check className="w-3 h-3 text-white" strokeWidth={3} />}
-                      </button>
-                      <span className={`dsa-problem-title ${isDone ? 'done' : ''}`}>
-                        {problem.title}
-                      </span>
-                      <span
-                        className="dsa-problem-diff"
-                        style={{ background: colors.bg, color: colors.text }}
-                      >
-                        {problem.difficulty}
-                      </span>
-                      <span className="dsa-problem-companies" title={problem.companies.join(', ')}>
-                        {problem.companies.slice(0, 3).join(', ')}
-                      </span>
-                      <div className="dsa-problem-solutions">
-                        {problem.videoSolution && (
-                          <a
-                            href={problem.videoSolution}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="dsa-sol-btn dsa-sol-video"
-                            title="Video Solution"
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-                          </a>
-                        )}
-                        {problem.editorial && (
-                          <a
-                            href={problem.editorial}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="dsa-sol-btn dsa-sol-article"
-                            title="Editorial / Solution"
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-                          </a>
-                        )}
-                      </div>
-                      <a
-                        href={problem.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="dsa-problem-link"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        <ExternalLink className="w-3.5 h-3.5" />
-                      </a>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
+            <div className="h-2 rounded-full bg-[var(--border-soft)] overflow-hidden">
+              <div
+                className="h-full rounded-full transition-all duration-500"
+                style={{
+                  width: mounted ? `${overallPercent}%` : '0%',
+                  background: overallPercent === 100 ? '#22c55e' : 'var(--accent-primary)',
+                }}
+              />
+            </div>
           </div>
-        );
-      })}
 
-      {filteredTopics.length === 0 && (
-        <div className="text-center py-16">
-          <p className="text-sm text-[var(--text-subtle)]">No problems match your filters.</p>
-        </div>
+          {/* Sign-in nudge */}
+          {!authUser && mounted && completedCount >= 3 && (
+            <Link
+              href="/login"
+              className="flex items-center gap-2.5 px-4 py-3 mb-4 rounded-xl border border-[var(--border-soft)] bg-[var(--bg-surface)] hover:border-[var(--accent-primary)] transition-colors group"
+            >
+              <Cloud className="w-4 h-4 text-[var(--accent-primary)] shrink-0" />
+              <span className="text-xs text-[var(--text-secondary)] group-hover:text-[var(--text-primary)] transition-colors">
+                <strong className="text-[var(--text-primary)]">Sign in</strong> to save your progress across devices — never lose your streak
+              </span>
+            </Link>
+          )}
+
+          {/* Filters */}
+          <div className="dsa-filters">
+            <div className="dsa-search">
+              <Search className="w-4 h-4" />
+              <input
+                type="text"
+                placeholder="Search problems, tags, or companies..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </div>
+            <div className="flex items-center gap-1.5">
+              <Filter className="w-3.5 h-3.5 text-[var(--text-subtle)]" />
+              {['all', 'easy', 'medium', 'hard'].map(d => (
+                <button
+                  key={d}
+                  className={`dsa-diff-btn ${difficultyFilter === d ? 'active' : ''}`}
+                  onClick={() => setDifficultyFilter(d)}
+                >
+                  {d === 'all' ? 'All' : d}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Topics */}
+          {filteredTopics.map(topic => {
+            const topicCompleted = topic.problems.filter(p => progress[p.slug]).length;
+            const isExpanded = expandedTopic === topic.id;
+            const percent = topic.problems.length > 0 ? (topicCompleted / topic.problems.length) * 100 : 0;
+
+            return (
+              <div key={topic.id} className="dsa-topic">
+                <div
+                  className="dsa-topic-header"
+                  onClick={() => setExpandedTopic(isExpanded ? null : topic.id)}
+                >
+                  <div className="dsa-topic-icon">
+                    {getIcon(topic.icon, 'w-5 h-5')}
+                  </div>
+                  <div className="dsa-topic-info">
+                    <div className="dsa-topic-title">{topic.title}</div>
+                    <div className="dsa-topic-desc">{topic.description}</div>
+                  </div>
+                  <div className="dsa-topic-progress">
+                    <div className="dsa-topic-progress-bar">
+                      <div
+                        className={`dsa-topic-progress-fill ${percent === 100 ? 'complete' : ''}`}
+                        style={{ width: `${mounted ? percent : 0}%` }}
+                      />
+                    </div>
+                    <span className="dsa-topic-count">{mounted ? topicCompleted : 0}/{topic.problems.length}</span>
+                  </div>
+                  <ChevronDown className={`dsa-chevron ${isExpanded ? 'open' : ''}`} size={18} />
+                </div>
+
+                {isExpanded && (
+                  <div className="dsa-problems">
+                    {/* Pattern hint */}
+                    <div className="dsa-topic-resources">
+                      <div className="dsa-pattern">
+                        <span className="dsa-pattern-label">Pattern</span>
+                        <span className="dsa-pattern-text">{topic.pattern}</span>
+                      </div>
+                    </div>
+                    {topic.problems.map(problem => {
+                      const isDone = !!progress[problem.slug];
+                      const colors = DIFFICULTY_COLORS[problem.difficulty];
+                      return (
+                        <div key={problem.id} className="dsa-problem">
+                          <button
+                            className={`dsa-problem-check ${isDone ? 'done' : ''}`}
+                            onClick={() => toggleProblem(problem.slug)}
+                          >
+                            {isDone && <Check className="w-3 h-3 text-white" strokeWidth={3} />}
+                          </button>
+                          <span className={`dsa-problem-title ${isDone ? 'done' : ''}`}>
+                            {problem.title}
+                          </span>
+                          <span
+                            className="dsa-problem-diff"
+                            style={{ background: colors.bg, color: colors.text }}
+                          >
+                            {problem.difficulty}
+                          </span>
+                          <span className="dsa-problem-companies" title={problem.companies.join(', ')}>
+                            {problem.companies.slice(0, 3).join(', ')}
+                          </span>
+                          <div className="dsa-problem-solutions">
+                            {problem.videoSolution && (
+                              <a
+                                href={problem.videoSolution}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="dsa-sol-btn dsa-sol-video"
+                                title="Video Solution"
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                              </a>
+                            )}
+                            {problem.editorial && publishedSlugs.has(problem.editorial) && (
+                              <Link
+                                href={`/resources/view?slug=${problem.editorial}`}
+                                className="dsa-sol-btn dsa-sol-article"
+                                title="StudentKit Editorial"
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                              </Link>
+                            )}
+                          </div>
+                          {problem.link && (
+                            <a
+                              href={problem.link}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="dsa-problem-link"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <ExternalLink className="w-3.5 h-3.5" />
+                            </a>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+
+          {filteredTopics.length === 0 && (
+            <div className="text-center py-16">
+              <p className="text-sm text-[var(--text-subtle)]">No problems match your filters.</p>
+            </div>
+          )}
+        </>
       )}
     </div>
   );

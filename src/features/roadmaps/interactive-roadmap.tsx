@@ -25,6 +25,7 @@ import type { Roadmap, RoadmapStage, RoadmapTopic } from '@/types/roadmap';
 import { cn } from '@/lib/utils';
 import { trackRoadmapProgress } from '@/lib/analytics';
 import { ShareProgress } from '@/components/engagement/share-progress';
+import { emitProgressChanged } from '@/lib/firebase/user-progress-sync';
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
@@ -76,6 +77,7 @@ function loadProgress(slug: string): Record<string, boolean> {
 function saveProgress(slug: string, progress: Record<string, boolean>) {
   try {
     localStorage.setItem(getStorageKey(slug), JSON.stringify(progress));
+    emitProgressChanged();
   } catch {
     // silently fail
   }

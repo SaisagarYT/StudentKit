@@ -3,13 +3,14 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, Map, FolderOpen, LogOut, ChevronRight, Menu, X } from 'lucide-react';
+import { LayoutDashboard, Map, FolderOpen, BookOpen, LogOut, ChevronRight, Menu, X } from 'lucide-react';
 import { useAuth } from '@/lib/firebase/auth';
 
 const navItems = [
   { href: '/admin', label: 'Dashboard', icon: LayoutDashboard, exact: true },
   { href: '/admin/roadmaps', label: 'Roadmaps', icon: Map, exact: false },
   { href: '/admin/projects', label: 'Projects', icon: FolderOpen, exact: false },
+  { href: '/admin/resources', label: 'Resources', icon: BookOpen, exact: false },
 ];
 
 export function AdminSidebar() {

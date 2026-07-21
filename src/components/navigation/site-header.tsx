@@ -3,7 +3,8 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Search, Menu, X, ArrowRight, ChevronDown, Bookmark } from 'lucide-react';
+import { Search, Menu, X, ArrowRight, ChevronDown, Bookmark, User, LogIn } from 'lucide-react';
+import { useUserAuth } from '@/lib/firebase/user-auth';
 import * as Icons from 'lucide-react';
 import gsap from 'gsap';
 import { Logo } from '@/components/brand/logo';
@@ -17,6 +18,73 @@ import { cn } from '@/lib/utils';
 function getIcon(name: string, className?: string) {
   const Icon = Icons[name as keyof typeof Icons] as React.ElementType;
   return Icon ? <Icon className={className || 'w-4 h-4'} /> : null;
+}
+
+function UserButton() {
+  const { user, loading } = useUserAuth();
+
+  if (loading) {
+    return <div className="hidden sm:block w-9 h-9" />;
+  }
+
+  if (user) {
+    return (
+      <Link
+        href="/profile"
+        className="hidden sm:flex items-center justify-center w-9 h-9 rounded-lg overflow-hidden hover:ring-2 hover:ring-[var(--accent-primary)]/50 transition-all"
+        aria-label="Profile"
+      >
+        {user.photoURL ? (
+          <img src={user.photoURL} alt="" className="w-9 h-9 rounded-lg object-cover" />
+        ) : (
+          <div className="w-9 h-9 rounded-lg bg-[var(--accent-primary)] flex items-center justify-center text-xs font-bold text-[var(--accent-dark)]">
+            {(user.displayName || user.email || 'U')[0].toUpperCase()}
+          </div>
+        )}
+      </Link>
+    );
+  }
+
+  return (
+    <Link
+      href="/login"
+      className="hidden sm:flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-text-subtle hover:text-text-primary hover:bg-subtle transition-all"
+      aria-label="Sign In"
+    >
+      <LogIn className="w-3.5 h-3.5" />
+      Sign In
+    </Link>
+  );
+}
+
+function MobileAuthLink({ onClose }: { onClose: () => void }) {
+  const { user, loading } = useUserAuth();
+
+  if (loading) return null;
+
+  if (user) {
+    return (
+      <Link
+        href="/profile"
+        onClick={onClose}
+        className="flex items-center justify-center gap-2 w-full px-4 py-3 text-sm font-medium border border-border-soft text-text-primary rounded-lg hover:bg-subtle transition-colors"
+      >
+        <User className="w-4 h-4" />
+        My Profile
+      </Link>
+    );
+  }
+
+  return (
+    <Link
+      href="/login"
+      onClick={onClose}
+      className="flex items-center justify-center gap-2 w-full px-4 py-3 text-sm font-medium border border-border-soft text-text-primary rounded-lg hover:bg-subtle transition-colors"
+    >
+      <LogIn className="w-4 h-4" />
+      Sign In
+    </Link>
+  );
 }
 
 export function SiteHeader() {
@@ -223,6 +291,8 @@ export function SiteHeader() {
                 <Bookmark className="w-4 h-4" />
               </button>
 
+              <UserButton />
+
               <Link
                 href="/tools"
                 className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium bg-accent-dark text-text-inverse rounded-lg hover:bg-accent-dark/90 transition-colors"
@@ -384,7 +454,7 @@ export function SiteHeader() {
                 </Link>
               ))}
             </nav>
-            <div className="mt-6 pt-6 border-t border-border-soft">
+            <div className="mt-6 pt-6 border-t border-border-soft space-y-3">
               <Link
                 href="/tools"
                 onClick={() => setIsMobileMenuOpen(false)}
@@ -393,6 +463,7 @@ export function SiteHeader() {
                 Explore All Tools
                 <ArrowRight className="w-4 h-4" />
               </Link>
+              <MobileAuthLink onClose={() => setIsMobileMenuOpen(false)} />
             </div>
           </div>
         </div>

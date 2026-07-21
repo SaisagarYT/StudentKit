@@ -8,10 +8,12 @@ import { getFirebaseDb, isFirebaseConfigured } from '@/lib/firebase/client';
 import { trackPageView } from '@/lib/cms/analytics';
 import { InteractiveRoadmap } from './interactive-roadmap';
 import type { Roadmap } from '@/types/roadmap';
-import { ArrowLeft, Clock, BookOpen, Code2, Loader2, FolderOpen } from 'lucide-react';
+import { ArrowLeft, Clock, BookOpen, Code2, Loader2, FolderOpen, FileText } from 'lucide-react';
 import Link from 'next/link';
 import { ViewCounter } from '@/components/engagement/view-counter';
 import { BookmarkButton } from '@/components/engagement/bookmark-button';
+import { resourceRepository } from '@/lib/cms/repository';
+import type { ResourceListItem } from '@/lib/cms/types';
 
 interface CmsRoadmapData {
   slug: string;
@@ -87,6 +89,7 @@ export function CmsRoadmapViewer() {
   const slug = searchParams.get('slug');
   const [roadmap, setRoadmap] = useState<Roadmap | null>(null);
   const [linkedProjects, setLinkedProjects] = useState<LinkedProject[]>([]);
+  const [linkedResources, setLinkedResources] = useState<ResourceListItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -128,6 +131,11 @@ export function CmsRoadmapViewer() {
             })
           );
         }
+        // Fetch related resources
+        resourceRepository.listPublished().then(all => {
+          setLinkedResources(all.filter(r => r.tags.includes(slug!) || r.tags.includes(data.slug)).slice(0, 6));
+        }).catch(() => {});
+
       } catch {
         setError('Failed to load roadmap');
       } finally {
@@ -214,6 +222,45 @@ export function CmsRoadmapViewer() {
                       {proj.technologies.slice(0, 3).map((tech) => (
                         <span key={tech} className="px-1.5 py-0.5 rounded text-[10px] bg-[var(--bg-subtle)] text-[var(--text-subtle)]">
                           {tech}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Linked Resources */}
+        {linkedResources.length > 0 && (
+          <div className="mt-16 border-t border-[var(--border-soft)] pt-12">
+            <h2 className="text-xl font-bold text-[var(--text-primary)] mb-2 flex items-center gap-2">
+              <FileText className="w-5 h-5 text-blue-500" />
+              Related Resources
+            </h2>
+            <p className="text-sm text-[var(--text-secondary)] mb-6">Deep-dive into concepts covered in this roadmap.</p>
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {linkedResources.map((res) => (
+                <Link
+                  key={res.id}
+                  href={`/resources/view?slug=${res.slug}`}
+                  className="group p-5 rounded-xl border border-[var(--border-soft)] bg-[var(--bg-surface)] hover:border-blue-300 hover:shadow-sm transition-all"
+                >
+                  <h3 className="text-sm font-semibold text-[var(--text-primary)] group-hover:text-blue-500 transition-colors">
+                    {res.title}
+                  </h3>
+                  <div className="flex items-center gap-2 mt-2">
+                    <span className="px-2 py-0.5 rounded text-[10px] font-medium bg-blue-500/10 text-blue-500 capitalize">
+                      {res.category.replace('-', ' ')}
+                    </span>
+                    <span className="text-[10px] text-[var(--text-subtle)]">{res.readTime} min</span>
+                  </div>
+                  {res.tags.length > 0 && (
+                    <div className="flex flex-wrap gap-1 mt-3">
+                      {res.tags.slice(0, 3).map((tag) => (
+                        <span key={tag} className="px-1.5 py-0.5 rounded text-[10px] bg-[var(--bg-subtle)] text-[var(--text-subtle)]">
+                          {tag}
                         </span>
                       ))}
                     </div>
