@@ -77,3 +77,4 @@ docs/monetization-plan.txt
 .DS_Store
 Thumbs.db
 Desktop.ini
+firebase-debug.log
