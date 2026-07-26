@@ -40,7 +40,7 @@ export default function CategoriesPage() {
         <div className="container-main">
           {/* Hero header */}
           <div className="text-center max-w-2xl mx-auto mb-16">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[var(--bg-subtle)] border border-[var(--border-soft)] mb-5">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-sm bg-[var(--bg-subtle)] border border-[var(--border-soft)] mb-5">
               <Sparkles className="w-3.5 h-3.5 text-[var(--accent-dark)]" />
               <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)]">
                 {categories.length} Categories
@@ -64,17 +64,17 @@ export default function CategoriesPage() {
                 <Link
                   key={cat.slug}
                   href={`/categories/${cat.slug}`}
-                  className="group relative p-8 md:p-10 border border-[var(--border-soft)] rounded-2xl bg-[var(--bg-surface)] hover:border-[var(--border-default)] transition-all overflow-hidden"
+                  className="group relative p-8 md:p-10 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)] hover:border-[var(--border-default)] transition-all overflow-hidden"
                 >
                   {/* Accent glow */}
                   <div
-                    className="absolute top-0 right-0 w-48 h-48 rounded-full blur-[80px] opacity-20 group-hover:opacity-30 transition-opacity"
+                    className="absolute top-0 right-0 w-48 h-48 rounded-sm blur-[80px] opacity-20 group-hover:opacity-30 transition-opacity"
                     style={{ background: accent }}
                   />
 
                   <div className="relative">
                     <div
-                      className="inline-flex items-center justify-center w-14 h-14 rounded-2xl mb-5"
+                      className="inline-flex items-center justify-center w-14 h-14 rounded-sm mb-5"
                       style={{ backgroundColor: `${accent}25` }}
                     >
                       {getIcon(cat.icon, 'w-6 h-6')}
@@ -88,7 +88,7 @@ export default function CategoriesPage() {
                     </p>
 
                     <div className="mt-5 flex items-center gap-4">
-                      <span className="text-xs font-semibold px-2.5 py-1 rounded-lg bg-[var(--bg-subtle)] text-[var(--text-primary)]">
+                      <span className="text-xs font-semibold px-2.5 py-1 rounded-sm bg-[var(--bg-subtle)] text-[var(--text-primary)]">
                         {tools.length} tool{tools.length !== 1 ? 's' : ''}
                       </span>
                       <div className="flex items-center gap-1 text-xs font-medium text-[var(--text-subtle)] group-hover:text-[var(--text-primary)] group-hover:gap-2 transition-all">
@@ -102,13 +102,13 @@ export default function CategoriesPage() {
                       {tools.slice(0, 4).map((tool) => (
                         <span
                           key={tool.slug}
-                          className="text-[11px] font-medium px-2.5 py-1 rounded-lg border border-[var(--border-soft)] bg-[var(--bg-primary)] text-[var(--text-secondary)]"
+                          className="text-[11px] font-medium px-2.5 py-1 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-primary)] text-[var(--text-secondary)]"
                         >
                           {tool.title}
                         </span>
                       ))}
                       {tools.length > 4 && (
-                        <span className="text-[11px] font-medium px-2.5 py-1 rounded-lg border border-[var(--border-soft)] bg-[var(--bg-primary)] text-[var(--text-subtle)]">
+                        <span className="text-[11px] font-medium px-2.5 py-1 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-primary)] text-[var(--text-subtle)]">
                           +{tools.length - 4} more
                         </span>
                       )}
@@ -128,16 +128,16 @@ export default function CategoriesPage() {
                 <Link
                   key={cat.slug}
                   href={`/categories/${cat.slug}`}
-                  className="group relative p-6 md:p-7 border border-[var(--border-soft)] rounded-2xl bg-[var(--bg-surface)] hover:border-[var(--border-default)] transition-all overflow-hidden"
+                  className="group relative p-6 md:p-7 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)] hover:border-[var(--border-default)] transition-all overflow-hidden"
                 >
                   <div
-                    className="absolute top-0 right-0 w-32 h-32 rounded-full blur-[60px] opacity-15 group-hover:opacity-25 transition-opacity"
+                    className="absolute top-0 right-0 w-32 h-32 rounded-sm blur-[60px] opacity-15 group-hover:opacity-25 transition-opacity"
                     style={{ background: accent }}
                   />
 
                   <div className="relative">
                     <div
-                      className="inline-flex items-center justify-center w-11 h-11 rounded-xl mb-4"
+                      className="inline-flex items-center justify-center w-11 h-11 rounded-sm mb-4"
                       style={{ backgroundColor: `${accent}25` }}
                     >
                       {getIcon(cat.icon, 'w-5 h-5')}
@@ -151,7 +151,7 @@ export default function CategoriesPage() {
                     </p>
 
                     <div className="mt-4 flex items-center justify-between">
-                      <span className="text-[11px] font-semibold px-2 py-0.5 rounded-md bg-[var(--bg-subtle)] text-[var(--text-subtle)]">
+                      <span className="text-[11px] font-semibold px-2 py-0.5 rounded-sm bg-[var(--bg-subtle)] text-[var(--text-subtle)]">
                         {tools.length} tool{tools.length !== 1 ? 's' : ''}
                       </span>
                       <div className="flex items-center gap-1 text-xs font-medium text-[var(--text-subtle)] group-hover:text-[var(--text-primary)] transition-colors">

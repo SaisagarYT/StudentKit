@@ -87,14 +87,14 @@ export default async function CategoryPage({
           </nav>
 
           {/* Hero header */}
-          <div className="relative p-8 md:p-10 rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-surface)] mb-10 overflow-hidden">
+          <div className="relative p-8 md:p-10 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] mb-10 overflow-hidden">
             <div
-              className="absolute top-0 right-0 w-64 h-64 rounded-full blur-[100px] opacity-20"
+              className="absolute top-0 right-0 w-64 h-64 rounded-sm blur-[100px] opacity-20"
               style={{ background: accent }}
             />
             <div className="relative flex flex-col md:flex-row md:items-center gap-5">
               <div
-                className="flex items-center justify-center w-16 h-16 rounded-2xl shrink-0"
+                className="flex items-center justify-center w-16 h-16 rounded-sm shrink-0"
                 style={{ backgroundColor: `${accent}25` }}
               >
                 {getIcon(category.icon, 'w-7 h-7')}
@@ -108,7 +108,7 @@ export default async function CategoryPage({
                 </p>
               </div>
               <div className="flex items-center gap-3 shrink-0">
-                <div className="text-center px-4 py-2 rounded-xl bg-[var(--bg-subtle)] border border-[var(--border-soft)]">
+                <div className="text-center px-4 py-2 rounded-sm bg-[var(--bg-subtle)] border border-[var(--border-soft)]">
                   <p className="text-2xl font-bold text-[var(--text-primary)]">{tools.length}</p>
                   <p className="text-[10px] font-medium text-[var(--text-subtle)] uppercase tracking-wider">Tools</p>
                 </div>
@@ -123,11 +123,11 @@ export default async function CategoryPage({
                 <Link
                   key={tool.slug}
                   href={`/tools/${tool.slug}`}
-                  className="group relative flex flex-col p-6 border border-[var(--border-soft)] rounded-2xl bg-[var(--bg-surface)] hover:border-[var(--border-default)] hover:shadow-sm transition-all"
+                  className="group relative flex flex-col p-6 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)] hover:border-[var(--border-default)] hover:shadow-sm transition-all"
                 >
                   <div className="flex items-start justify-between mb-4">
                     <div
-                      className="flex items-center justify-center w-10 h-10 rounded-xl"
+                      className="flex items-center justify-center w-10 h-10 rounded-sm"
                       style={{ backgroundColor: `${accent}15` }}
                     >
                       {getIcon(tool.icon, 'w-4 h-4 text-[var(--text-secondary)]')}
@@ -155,8 +155,8 @@ export default async function CategoryPage({
               ))}
             </div>
           ) : (
-            <div className="text-center py-20 rounded-2xl border border-dashed border-[var(--border-soft)]">
-              <div className="w-12 h-12 mx-auto rounded-xl bg-[var(--bg-subtle)] flex items-center justify-center mb-4">
+            <div className="text-center py-20 rounded-sm border border-dashed border-[var(--border-soft)]">
+              <div className="w-12 h-12 mx-auto rounded-sm bg-[var(--bg-subtle)] flex items-center justify-center mb-4">
                 {getIcon(category.icon, 'w-5 h-5 text-[var(--text-subtle)]')}
               </div>
               <p className="text-sm font-medium text-[var(--text-secondary)]">
@@ -176,7 +176,7 @@ export default async function CategoryPage({
                 <Link
                   key={cat.slug}
                   href={`/categories/${cat.slug}`}
-                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-[var(--border-soft)] bg-[var(--bg-surface)] hover:border-[var(--border-default)] text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-all"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] hover:border-[var(--border-default)] text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-all"
                 >
                   {getIcon(cat.icon, 'w-4 h-4')}
                   {cat.title}
