@@ -5,6 +5,7 @@ import { Check, ChevronDown, ChevronRight, Search, BookOpen } from 'lucide-react
 import * as Icons from 'lucide-react';
 import { csSubjects, type CsSubject, type CsSubtopic } from '@/config/placement/cs-fundamentals';
 import { emitProgressChanged } from '@/lib/firebase/user-progress-sync';
+import { logXpEvent } from '@/lib/xp';
 
 const STORAGE_KEY = 'sk-cs-progress';
 
@@ -51,6 +52,9 @@ export function CsFundamentalsView() {
     setProgress(prev => {
       const next = { ...prev, [conceptId]: !prev[conceptId] };
       saveProgress(next);
+      if (next[conceptId]) {
+        logXpEvent('CS_TOPIC', 'CS concept completed');
+      }
       return next;
     });
   }, []);

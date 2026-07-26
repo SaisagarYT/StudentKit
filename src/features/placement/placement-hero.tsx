@@ -252,7 +252,7 @@ export function PlacementHero() {
       <div className="container-main relative">
         {/* Hero Section */}
         <div ref={heroRef} className="max-w-3xl mb-16">
-          <div className="ph-badge inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[var(--accent-primary)]/20 bg-[var(--accent-primary)]/5 mb-6">
+          <div className="ph-badge inline-flex items-center gap-2 px-3 py-1.5 rounded-sm border border-[var(--accent-primary)]/20 bg-[var(--accent-primary)]/5 mb-6">
             <Sparkles className="w-3.5 h-3.5 text-[var(--accent-primary)]" />
             <span className="text-xs font-semibold text-[var(--accent-primary)] uppercase tracking-wider">Placement Hub</span>
           </div>
@@ -292,12 +292,12 @@ export function PlacementHero() {
 
                 <div className="flex items-center justify-between mb-5">
                   <div
-                    className="flex items-center justify-center w-12 h-12 rounded-xl"
+                    className="flex items-center justify-center w-12 h-12 rounded-sm"
                     style={{ backgroundColor: `${section.color}15` }}
                   >
                     <Icon className="w-6 h-6" style={{ color: section.color }} />
                   </div>
-                  <span className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider rounded-full" style={{ backgroundColor: `${section.color}12`, color: section.color }}>
+                  <span className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider rounded-sm" style={{ backgroundColor: `${section.color}12`, color: section.color }}>
                     {section.tag}
                   </span>
                 </div>
@@ -351,7 +351,7 @@ export function PlacementHero() {
 
         {/* CTA Section */}
         <div className="ph-cta relative p-8 md:p-12 rounded-3xl bg-gradient-to-br from-[var(--bg-subtle)] to-[var(--bg-surface)] border border-[rgba(255,255,255,0.08)] overflow-hidden">
-          <div className="absolute top-0 right-0 w-96 h-96 rounded-full bg-[var(--accent-primary)] opacity-[0.03] blur-3xl pointer-events-none" />
+          <div className="absolute top-0 right-0 w-96 h-96 rounded-sm bg-[var(--accent-primary)] opacity-[0.03] blur-3xl pointer-events-none" />
 
           <div className="relative flex flex-col md:flex-row md:items-center md:justify-between gap-6">
             <div>
@@ -365,14 +365,14 @@ export function PlacementHero() {
             <div className="flex flex-wrap gap-3">
               <Link
                 href="/placement/dsa"
-                className="inline-flex items-center gap-2 px-6 py-3.5 text-sm font-semibold bg-[var(--accent-primary)] text-[var(--bg-base)] rounded-xl hover:opacity-90 transition-all hover:shadow-lg hover:shadow-[var(--accent-primary)]/20"
+                className="inline-flex items-center gap-2 px-6 py-3.5 text-sm font-semibold bg-[var(--accent-primary)] text-[var(--bg-base)] rounded-sm hover:opacity-90 transition-all hover:shadow-lg hover:shadow-[var(--accent-primary)]/20"
               >
                 <BookOpen className="w-4 h-4" />
                 Start DSA Sheet
               </Link>
               <Link
                 href="/placement/interview"
-                className="inline-flex items-center gap-2 px-6 py-3.5 text-sm font-medium border border-[var(--border-default)] bg-[var(--bg-surface)] text-[var(--text-primary)] rounded-xl hover:border-[var(--accent-primary)]/40 transition-all"
+                className="inline-flex items-center gap-2 px-6 py-3.5 text-sm font-medium border border-[var(--border-default)] bg-[var(--bg-surface)] text-[var(--text-primary)] rounded-sm hover:border-[var(--accent-primary)]/40 transition-all"
               >
                 Interview Prep
                 <ArrowRight className="w-4 h-4" />
