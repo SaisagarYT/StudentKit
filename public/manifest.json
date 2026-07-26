@@ -3,7 +3,9 @@
   "short_name": "StudentKit",
   "description": "Free tools, interactive roadmaps, and curated projects for students.",
   "start_url": "/",
+  "id": "/",
   "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone"],
   "background_color": "#F7F7F2",
   "theme_color": "#151515",
   "orientation": "portrait-primary",
@@ -13,16 +15,56 @@
       "src": "/icons/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
     },
     {
       "src": "/icons/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ],
   "categories": ["education", "productivity"],
-  "screenshots": [],
-  "prefer_related_applications": false
+  "shortcuts": [
+    {
+      "name": "DSA Sheet",
+      "short_name": "DSA",
+      "url": "/placement/dsa",
+      "description": "Practice DSA problems"
+    },
+    {
+      "name": "Roadmaps",
+      "short_name": "Roadmaps",
+      "url": "/roadmaps",
+      "description": "Career learning paths"
+    },
+    {
+      "name": "Tools",
+      "short_name": "Tools",
+      "url": "/tools",
+      "description": "Student calculators & utilities"
+    },
+    {
+      "name": "Profile",
+      "short_name": "Profile",
+      "url": "/profile",
+      "description": "Your progress dashboard"
+    }
+  ],
+  "prefer_related_applications": false,
+  "launch_handler": {
+    "client_mode": "navigate-existing"
+  }
 }
