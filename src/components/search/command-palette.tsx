@@ -7,7 +7,7 @@ import * as Icons from 'lucide-react';
 import { tools } from '@/config/tools';
 import { categories } from '@/config/categories';
 import { roadmaps } from '@/config/roadmaps';
-import { mainNavItems } from '@/config/navigation';
+import { mainNavItems, secondaryNavItems } from '@/config/navigation';
 import { cn } from '@/lib/utils';
 import { trackSearch } from '@/lib/analytics';
 
@@ -54,12 +54,23 @@ const searchItems: SearchItem[] = [
     type: 'category' as const,
     keywords: [c.slug, c.title.toLowerCase()],
   })),
-  ...mainNavItems.map((n) => ({
+  ...mainNavItems.flatMap((group) =>
+    group.children.map((n) => ({
+      id: `page-${n.href}`,
+      title: n.label,
+      description: n.description || '',
+      href: n.href,
+      icon: n.icon || 'FileText',
+      type: 'page' as const,
+      keywords: [n.label.toLowerCase(), group.label.toLowerCase()],
+    }))
+  ),
+  ...secondaryNavItems.map((n) => ({
     id: `page-${n.href}`,
     title: n.label,
     description: n.description || '',
     href: n.href,
-    icon: 'FileText',
+    icon: n.icon || 'FileText',
     type: 'page' as const,
     keywords: [n.label.toLowerCase()],
   })),
@@ -226,7 +237,7 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
       <div className="relative flex items-start justify-center pt-[15vh] px-4">
         <div
           ref={dialogRef}
-          className="w-full max-w-xl bg-[var(--bg-surface)] border border-[var(--border-soft)] rounded-2xl shadow-2xl overflow-hidden animate-in fade-in slide-in-from-top-4 duration-200"
+          className="w-full max-w-xl bg-[var(--bg-surface)] border border-[var(--border-soft)] rounded-sm shadow-2xl overflow-hidden animate-in fade-in slide-in-from-top-4 duration-200"
           role="dialog"
           aria-modal="true"
           aria-label="Search tools"
@@ -249,12 +260,12 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
               <button
                 type="button"
                 onClick={() => setQuery('')}
-                className="p-1 rounded-md hover:bg-[var(--bg-subtle)] transition-colors"
+                className="p-1 rounded-sm hover:bg-[var(--bg-subtle)] transition-colors"
               >
                 <X className="w-4 h-4 text-[var(--text-subtle)]" />
               </button>
             )}
-            <kbd className="hidden sm:flex items-center px-2 py-1 text-[11px] font-mono text-[var(--text-subtle)] bg-[var(--bg-subtle)] border border-[var(--border-soft)] rounded-md">
+            <kbd className="hidden sm:flex items-center px-2 py-1 text-[11px] font-mono text-[var(--text-subtle)] bg-[var(--bg-subtle)] border border-[var(--border-soft)] rounded-sm">
               ESC
             </kbd>
           </div>
@@ -290,7 +301,7 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
                   >
                     <div
                       className={cn(
-                        'flex items-center justify-center w-9 h-9 rounded-xl shrink-0 transition-colors',
+                        'flex items-center justify-center w-9 h-9 rounded-sm shrink-0 transition-colors',
                         i === activeIndex
                           ? 'bg-[var(--accent-primary)]/20'
                           : 'bg-[var(--bg-subtle)]'
@@ -309,7 +320,7 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
                         {item.description}
                       </p>
                     </div>
-                    <span className="hidden sm:inline-flex px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider text-[var(--text-subtle)] bg-[var(--bg-subtle)] rounded-full shrink-0">
+                    <span className="hidden sm:inline-flex px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider text-[var(--text-subtle)] bg-[var(--bg-subtle)] rounded-sm shrink-0">
                       {typeLabels[item.type]}
                     </span>
                     {i === activeIndex && (
@@ -328,11 +339,11 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
               Open
             </span>
             <span className="flex items-center gap-1.5 text-xs text-[var(--text-subtle)]">
-              <span className="inline-flex px-1.5 py-0.5 text-[10px] font-mono bg-[var(--bg-subtle)] border border-[var(--border-soft)] rounded">↑↓</span>
+              <span className="inline-flex px-1.5 py-0.5 text-[10px] font-mono bg-[var(--bg-subtle)] border border-[var(--border-soft)] rounded-sm">↑↓</span>
               Navigate
             </span>
             <span className="flex items-center gap-1.5 text-xs text-[var(--text-subtle)]">
-              <span className="inline-flex px-1.5 py-0.5 text-[10px] font-mono bg-[var(--bg-subtle)] border border-[var(--border-soft)] rounded">esc</span>
+              <span className="inline-flex px-1.5 py-0.5 text-[10px] font-mono bg-[var(--bg-subtle)] border border-[var(--border-soft)] rounded-sm">esc</span>
               Close
             </span>
           </div>

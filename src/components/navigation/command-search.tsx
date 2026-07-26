@@ -118,7 +118,7 @@ export function CommandSearch() {
           role="dialog"
           aria-modal="true"
           aria-label="Search tools"
-          className="relative w-full max-w-lg bg-[var(--bg-surface)] rounded-2xl shadow-lg border border-[var(--border-soft)] overflow-hidden"
+          className="relative w-full max-w-lg bg-[var(--bg-surface)] rounded-sm shadow-lg border border-[var(--border-soft)] overflow-hidden"
         >
           {/* Search input */}
           <div className="flex items-center gap-3 px-4 border-b border-[var(--border-soft)]">
@@ -132,7 +132,7 @@ export function CommandSearch() {
               placeholder="Search tools..."
               className="flex-1 h-12 bg-transparent text-sm text-[var(--text-primary)] placeholder:text-[var(--text-subtle)] focus:outline-none"
             />
-            <kbd className="hidden sm:inline-flex px-1.5 py-0.5 text-xs text-[var(--text-subtle)] bg-[var(--bg-subtle)] rounded font-mono">
+            <kbd className="hidden sm:inline-flex px-1.5 py-0.5 text-xs text-[var(--text-subtle)] bg-[var(--bg-subtle)] rounded-sm font-mono">
               esc
             </kbd>
           </div>
@@ -195,13 +195,13 @@ export function CommandSearch() {
           {/* Footer hint */}
           <div className="flex items-center gap-4 px-4 py-2.5 border-t border-[var(--border-soft)] text-xs text-[var(--text-subtle)]">
             <span className="flex items-center gap-1">
-              <kbd className="px-1 py-0.5 bg-[var(--bg-subtle)] rounded font-mono">↑↓</kbd> navigate
+              <kbd className="px-1 py-0.5 bg-[var(--bg-subtle)] rounded-sm font-mono">↑↓</kbd> navigate
             </span>
             <span className="flex items-center gap-1">
-              <kbd className="px-1 py-0.5 bg-[var(--bg-subtle)] rounded font-mono">↵</kbd> select
+              <kbd className="px-1 py-0.5 bg-[var(--bg-subtle)] rounded-sm font-mono">↵</kbd> select
             </span>
             <span className="flex items-center gap-1">
-              <kbd className="px-1 py-0.5 bg-[var(--bg-subtle)] rounded font-mono">esc</kbd> close
+              <kbd className="px-1 py-0.5 bg-[var(--bg-subtle)] rounded-sm font-mono">esc</kbd> close
             </span>
           </div>
         </div>
@@ -239,13 +239,13 @@ function SearchResultItem({
     <button
       ref={ref}
       onClick={() => onSelect(slug)}
-      className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-colors ${
+      className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-sm text-left transition-colors ${
         isSelected
           ? 'bg-[var(--bg-subtle)]'
           : 'hover:bg-[var(--bg-subtle)]/60'
       }`}
     >
-      <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-[var(--bg-surface)] border border-[var(--border-soft)] text-[var(--text-secondary)] shrink-0">
+      <div className="flex items-center justify-center w-8 h-8 rounded-sm bg-[var(--bg-surface)] border border-[var(--border-soft)] text-[var(--text-secondary)] shrink-0">
         {getIcon(icon)}
       </div>
       <div className="flex-1 min-w-0">
