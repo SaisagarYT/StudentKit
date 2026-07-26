@@ -19,9 +19,9 @@ export default function ContactPage() {
             work as expected? We&apos;d like to hear from you.
           </p>
 
-          <div className="p-6 border border-[var(--border-soft)] rounded-2xl bg-[var(--bg-surface)]">
+          <div className="p-6 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)]">
             <div className="flex items-center gap-3 mb-4">
-              <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-[var(--bg-subtle)]">
+              <div className="flex items-center justify-center w-10 h-10 rounded-sm bg-[var(--bg-subtle)]">
                 <Mail className="w-5 h-5 text-[var(--text-secondary)]" />
               </div>
               <div>

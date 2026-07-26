@@ -28,7 +28,7 @@ export default function Error({
         </p>
         <button
           onClick={reset}
-          className="mt-8 inline-flex items-center gap-2 px-6 py-3 text-sm font-medium bg-[var(--accent-dark)] text-[var(--text-inverse)] rounded-xl hover:bg-[var(--accent-dark)]/90 transition-colors"
+          className="mt-8 inline-flex items-center gap-2 px-6 py-3 text-sm font-medium bg-[var(--accent-dark)] text-[var(--text-inverse)] rounded-sm hover:bg-[var(--accent-dark)]/90 transition-colors"
         >
           Try again
         </button>

@@ -56,9 +56,9 @@ export default function GuidesPage() {
             return (
               <div
                 key={cat.title}
-                className="p-6 rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-surface)]"
+                className="p-6 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)]"
               >
-                <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-[var(--bg-subtle)] mb-4">
+                <div className="flex items-center justify-center w-10 h-10 rounded-sm bg-[var(--bg-subtle)] mb-4">
                   <Icon className="w-5 h-5 text-[var(--text-secondary)]" />
                 </div>
                 <h3 className="text-sm font-semibold text-[var(--text-primary)]">
@@ -67,7 +67,7 @@ export default function GuidesPage() {
                 <p className="mt-1.5 text-xs text-[var(--text-subtle)] leading-relaxed">
                   {cat.description}
                 </p>
-                <span className="inline-flex mt-4 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider text-[var(--text-subtle)] bg-[var(--bg-subtle)] rounded-full">
+                <span className="inline-flex mt-4 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider text-[var(--text-subtle)] bg-[var(--bg-subtle)] rounded-sm">
                   {cat.count}
                 </span>
               </div>
@@ -75,7 +75,7 @@ export default function GuidesPage() {
           })}
         </div>
 
-        <div className="mt-12 p-8 md:p-10 rounded-2xl bg-[var(--bg-subtle)] border border-[var(--border-soft)] text-center">
+        <div className="mt-12 p-8 md:p-10 rounded-sm bg-[var(--bg-subtle)] border border-[var(--border-soft)] text-center">
           <p className="text-sm text-[var(--text-secondary)]">
             Guides are being written. In the meantime, each tool page includes
             explanations and FAQs, and our roadmaps provide structured learning paths.

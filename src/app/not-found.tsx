@@ -18,14 +18,14 @@ export default function NotFound() {
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 px-6 py-3 text-sm font-medium bg-[var(--accent-dark)] text-[var(--text-inverse)] rounded-xl hover:bg-[var(--accent-dark)]/90 transition-colors"
+            className="inline-flex items-center gap-2 px-6 py-3 text-sm font-medium bg-[var(--accent-dark)] text-[var(--text-inverse)] rounded-sm hover:bg-[var(--accent-dark)]/90 transition-colors"
           >
             Go home
             <ArrowRight className="w-4 h-4" />
           </Link>
           <Link
             href="/tools"
-            className="inline-flex items-center gap-2 px-6 py-3 text-sm font-medium border border-[var(--border-default)] text-[var(--text-primary)] rounded-xl hover:bg-[var(--bg-subtle)] transition-colors"
+            className="inline-flex items-center gap-2 px-6 py-3 text-sm font-medium border border-[var(--border-default)] text-[var(--text-primary)] rounded-sm hover:bg-[var(--bg-subtle)] transition-colors"
           >
             Browse tools
           </Link>
