@@ -36,10 +36,10 @@
   --color-error: #EF4444;
 
   /* Radius */
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 14px;
-  --radius-xl: 20px;
+  --radius-sm: 2px;
+  --radius-md: 3px;
+  --radius-lg: 4px;
+  --radius-xl: 6px;
   --radius-full: 9999px;
 
   /* Shadows */
@@ -74,6 +74,42 @@
   --leading-display: 0.95;
   --leading-heading: 1.1;
   --leading-body: 1.6;
+}
+
+[data-theme="dark"] {
+  /* Background */
+  --bg-primary: #0F0F0F;
+  --bg-surface: #1A1A1A;
+  --bg-dark: #FFFFFF;
+  --bg-subtle: #242424;
+  --bg-muted: #141414;
+
+  /* Text */
+  --text-primary: #F5F5F5;
+  --text-secondary: #A0A09A;
+  --text-subtle: #6B6B65;
+  --text-inverse: #0F0F0F;
+
+  /* Border */
+  --border-default: #333330;
+  --border-soft: #272724;
+  --border-strong: #444440;
+
+  /* Brand — swapped: accent-dark (lime) for button bg + link text, accent-primary (dark) for button text */
+  --accent-primary: #111111;
+  --accent-primary-hover: #222222;
+  --accent-dark: #C7FF3D;
+
+  /* Category accents */
+  --accent-college: #D8CCFF;
+  --accent-career: #FFB36B;
+  --accent-documents: #A8F0E6;
+  --accent-exams: #FFE066;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.5);
 }
 
 @theme inline {
@@ -120,6 +156,11 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
 }
 
 /* Focus styles */
