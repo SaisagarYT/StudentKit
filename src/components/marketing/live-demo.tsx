@@ -77,7 +77,7 @@ export function LiveDemo() {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
             {/* Input side */}
-            <div className="p-6 md:p-8 border border-[var(--border-soft)] rounded-2xl bg-[var(--bg-surface)]">
+            <div className="p-6 md:p-8 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)]">
               <div className="space-y-5">
                 <DemoInput
                   label="Total Classes"
@@ -104,7 +104,7 @@ export function LiveDemo() {
             </div>
 
             {/* Result side */}
-            <div className="p-6 md:p-8 border border-[var(--border-soft)] rounded-2xl bg-[var(--bg-surface)]">
+            <div className="p-6 md:p-8 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)]">
               <span className="text-xs font-medium uppercase tracking-wider text-[var(--text-subtle)]">
                 Current Attendance
               </span>
@@ -121,9 +121,9 @@ export function LiveDemo() {
 
               {/* Progress bar */}
               <div className="mt-6 relative">
-                <div className="h-3 bg-[var(--bg-subtle)] rounded-full overflow-hidden">
+                <div className="h-3 bg-[var(--bg-subtle)] rounded-sm overflow-hidden">
                   <div
-                    className="h-full rounded-full transition-all duration-500 ease-out"
+                    className="h-full rounded-sm transition-all duration-500 ease-out"
                     style={{
                       width: `${Math.min(percentage, 100)}%`,
                       backgroundColor: isAboveTarget
@@ -184,7 +184,7 @@ function DemoInput({ label, value, onChange, min, max }: DemoInputProps) {
         max={max}
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
-        className="w-full h-2 bg-[var(--bg-subtle)] rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[var(--accent-dark)] [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[var(--bg-surface)] [&::-webkit-slider-thumb]:shadow-md"
+        className="w-full h-2 bg-[var(--bg-subtle)] rounded-sm appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:rounded-sm [&::-webkit-slider-thumb]:bg-[var(--accent-dark)] [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[var(--bg-surface)] [&::-webkit-slider-thumb]:shadow-md"
       />
     </div>
   );

@@ -103,11 +103,11 @@ export function PillarsSection() {
               <Link
                 key={pillar.number}
                 href={pillar.href}
-                className="group relative p-7 md:p-8 rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-surface)] hover:border-[var(--border-default)] hover:shadow-sm transition-all duration-200"
+                className="group relative p-7 md:p-8 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] hover:border-[var(--border-default)] hover:shadow-sm transition-all duration-200"
               >
                 <div className="flex items-center justify-between mb-6">
                   <div
-                    className="flex items-center justify-center w-11 h-11 rounded-xl"
+                    className="flex items-center justify-center w-11 h-11 rounded-sm"
                     style={{ backgroundColor: `${pillar.accent}20` }}
                   >
                     <Icon

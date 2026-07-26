@@ -95,7 +95,7 @@ export function CategoryShowcase() {
       <div className="container-main">
         <div ref={headingRef}>
           <div className="flex items-center gap-2.5 mb-3">
-            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[var(--accent-primary)]/10 border border-[var(--accent-primary)]/20">
+            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-sm bg-[var(--accent-primary)]/10 border border-[var(--accent-primary)]/20">
               <Flame className="w-3.5 h-3.5 text-[var(--accent-dark)]" />
               <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--accent-dark)]">Core Features</span>
             </div>
@@ -119,16 +119,16 @@ export function CategoryShowcase() {
               <Link
                 key={feature.title}
                 href={feature.href}
-                className="group flex flex-col p-6 md:p-7 border border-[var(--border-soft)] rounded-2xl bg-[var(--bg-primary)] hover:border-[var(--border-default)] hover:shadow-sm transition-all"
+                className="group flex flex-col p-6 md:p-7 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-primary)] hover:border-[var(--border-default)] hover:shadow-sm transition-all"
               >
                 <div className="flex items-start justify-between mb-4">
                   <div
-                    className="flex items-center justify-center w-11 h-11 rounded-xl"
+                    className="flex items-center justify-center w-11 h-11 rounded-sm"
                     style={{ backgroundColor: `${feature.accent}20` }}
                   >
                     <Icon className="w-5 h-5" style={{ color: feature.accent === '#C7FF3D' ? '#6B8F00' : feature.accent.replace('FF', 'BB') }} />
                   </div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[var(--bg-subtle)] text-[var(--text-subtle)]">
+                  <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-sm bg-[var(--bg-subtle)] text-[var(--text-subtle)]">
                     {feature.stats}
                   </span>
                 </div>
@@ -142,7 +142,7 @@ export function CategoryShowcase() {
 
                 <div className="mt-4 flex flex-wrap gap-1.5">
                   {feature.highlights.map((h) => (
-                    <span key={h} className="text-[10px] font-medium px-2 py-0.5 rounded-md bg-[var(--bg-subtle)] text-[var(--text-subtle)] border border-[var(--border-soft)]">
+                    <span key={h} className="text-[10px] font-medium px-2 py-0.5 rounded-sm bg-[var(--bg-subtle)] text-[var(--text-subtle)] border border-[var(--border-soft)]">
                       {h}
                     </span>
                   ))}
@@ -158,8 +158,8 @@ export function CategoryShowcase() {
         </div>
 
         {/* Progress tracking callout */}
-        <div className="mt-8 flex items-center gap-4 p-5 rounded-xl border border-[var(--border-soft)] bg-[var(--bg-primary)]">
-          <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-[var(--accent-primary)]/10 shrink-0">
+        <div className="mt-8 flex items-center gap-4 p-5 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-primary)]">
+          <div className="flex items-center justify-center w-10 h-10 rounded-sm bg-[var(--accent-primary)]/10 shrink-0">
             <Trophy className="w-5 h-5 text-[var(--accent-dark)]" />
           </div>
           <div className="flex-1 min-w-0">

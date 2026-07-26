@@ -142,7 +142,7 @@ function ToolCard({
     <Link
       ref={cardRef}
       href={`/tools/${slug}`}
-      className={`group relative flex flex-col justify-between p-6 border border-[var(--border-soft)] rounded-2xl bg-[var(--bg-surface)] hover:border-[var(--border-default)] transition-colors ${
+      className={`group relative flex flex-col justify-between p-6 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)] hover:border-[var(--border-default)] transition-colors ${
         isLarge ? 'md:col-span-2 lg:col-span-1 lg:row-span-2' : ''
       }`}
       onMouseEnter={handleEnter}
@@ -150,7 +150,7 @@ function ToolCard({
     >
       <div>
         <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-[var(--bg-subtle)] text-[var(--text-secondary)]">
+          <div className="flex items-center justify-center w-10 h-10 rounded-sm bg-[var(--bg-subtle)] text-[var(--text-secondary)]">
             {getIcon(icon)}
           </div>
           <Badge variant={category}>{category}</Badge>

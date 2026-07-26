@@ -95,7 +95,7 @@ export function ToolDirectory() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search tools..."
-              className="w-full h-11 pl-10 pr-4 text-sm border border-[var(--border-default)] rounded-xl bg-[var(--bg-surface)] text-[var(--text-primary)] placeholder:text-[var(--text-subtle)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-primary)] focus:border-transparent transition-all"
+              className="w-full h-11 pl-10 pr-4 text-sm border border-[var(--border-default)] rounded-sm bg-[var(--bg-surface)] text-[var(--text-primary)] placeholder:text-[var(--text-subtle)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-primary)] focus:border-transparent transition-all"
             />
           </div>
 
@@ -122,9 +122,9 @@ export function ToolDirectory() {
             <Link
               key={tool.slug}
               href={`/tools/${tool.slug}`}
-              className="group flex items-center gap-4 p-4 border border-[var(--border-soft)] rounded-xl bg-[var(--bg-surface)] hover:border-[var(--border-default)] hover:bg-[var(--bg-muted)] transition-all"
+              className="group flex items-center gap-4 p-4 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)] hover:border-[var(--border-default)] hover:bg-[var(--bg-muted)] transition-all"
             >
-              <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-[var(--bg-subtle)] text-[var(--text-secondary)] shrink-0">
+              <div className="flex items-center justify-center w-9 h-9 rounded-sm bg-[var(--bg-subtle)] text-[var(--text-secondary)] shrink-0">
                 {getIcon(tool.icon)}
               </div>
               <div className="flex-1 min-w-0">
@@ -174,7 +174,7 @@ function CategoryPill({
   return (
     <button
       onClick={onClick}
-      className={`px-3.5 py-1.5 text-sm font-medium rounded-full transition-all ${
+      className={`px-3.5 py-1.5 text-sm font-medium rounded-sm transition-all ${
         isActive
           ? 'bg-[var(--accent-dark)] text-[var(--text-inverse)]'
           : 'bg-[var(--bg-subtle)] text-[var(--text-secondary)] hover:bg-[var(--border-soft)] hover:text-[var(--text-primary)]'

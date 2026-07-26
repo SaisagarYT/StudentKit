@@ -86,7 +86,7 @@ export function HeroVisual() {
       {/* Card 1: Attendance */}
       <div
         ref={setCardRef(0)}
-        className="absolute top-8 right-12 w-56 p-5 bg-[var(--bg-surface)] border border-[var(--border-soft)] rounded-2xl shadow-sm"
+        className="absolute top-8 right-12 w-56 p-5 bg-[var(--bg-surface)] border border-[var(--border-soft)] rounded-sm shadow-sm"
         style={{ transformStyle: 'preserve-3d' }}
       >
         <div className="flex items-center gap-2 mb-3">
@@ -99,9 +99,9 @@ export function HeroVisual() {
         <p className="mt-1 text-xs text-[var(--text-subtle)]">
           You can miss 3 more classes
         </p>
-        <div className="mt-3 h-1.5 bg-[var(--bg-subtle)] rounded-full overflow-hidden">
+        <div className="mt-3 h-1.5 bg-[var(--bg-subtle)] rounded-sm overflow-hidden">
           <div
-            className="h-full bg-[var(--accent-primary)] rounded-full"
+            className="h-full bg-[var(--accent-primary)] rounded-sm"
             style={{ width: '76%' }}
           />
         </div>
@@ -110,7 +110,7 @@ export function HeroVisual() {
       {/* Card 2: CGPA */}
       <div
         ref={setCardRef(1)}
-        className="absolute top-40 left-4 w-48 p-4 bg-[var(--bg-surface)] border border-[var(--border-soft)] rounded-2xl shadow-sm"
+        className="absolute top-40 left-4 w-48 p-4 bg-[var(--bg-surface)] border border-[var(--border-soft)] rounded-sm shadow-sm"
         style={{ transformStyle: 'preserve-3d' }}
       >
         <span className="text-xs font-medium text-[var(--text-subtle)]">
@@ -131,7 +131,7 @@ export function HeroVisual() {
       {/* Card 3: Salary */}
       <div
         ref={setCardRef(2)}
-        className="absolute bottom-12 right-8 w-52 p-4 bg-[var(--bg-surface)] border border-[var(--border-soft)] rounded-2xl shadow-sm"
+        className="absolute bottom-12 right-8 w-52 p-4 bg-[var(--bg-surface)] border border-[var(--border-soft)] rounded-sm shadow-sm"
         style={{ transformStyle: 'preserve-3d' }}
       >
         <span className="text-xs font-medium text-[var(--text-subtle)]">
@@ -139,7 +139,7 @@ export function HeroVisual() {
         </span>
         <div className="mt-1 text-2xl font-bold tracking-tight">₹41,667</div>
         <div className="mt-2 flex items-center gap-2">
-          <div className="h-2 flex-1 bg-[var(--accent-career)] rounded-full" />
+          <div className="h-2 flex-1 bg-[var(--accent-career)] rounded-sm" />
           <span className="text-xs text-[var(--text-subtle)]">CTC 8L</span>
         </div>
       </div>
@@ -147,7 +147,7 @@ export function HeroVisual() {
       {/* Card 4: Image */}
       <div
         ref={setCardRef(3)}
-        className="absolute bottom-32 left-12 w-44 p-4 bg-[var(--bg-surface)] border border-[var(--border-soft)] rounded-2xl shadow-sm"
+        className="absolute bottom-32 left-12 w-44 p-4 bg-[var(--bg-surface)] border border-[var(--border-soft)] rounded-sm shadow-sm"
         style={{ transformStyle: 'preserve-3d' }}
       >
         <span className="text-xs font-medium text-[var(--text-subtle)]">
@@ -163,8 +163,8 @@ export function HeroVisual() {
       </div>
 
       {/* Decorative elements */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 border border-[var(--border-soft)] rounded-full opacity-30" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 border border-[var(--border-soft)] rounded-full opacity-20" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 border border-[var(--border-soft)] rounded-sm opacity-30" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 border border-[var(--border-soft)] rounded-sm opacity-20" />
 
       {/* Floating symbols */}
       <div className="absolute top-16 left-1/2 text-lg font-bold text-[var(--accent-primary)] opacity-60">

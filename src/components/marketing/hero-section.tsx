@@ -59,55 +59,55 @@ export function HeroSection() {
               ref={headingRef}
               className="text-display font-bold tracking-tighter leading-[0.92]"
             >
-              Calculate.
-              <br />
               Learn.
               <br />
-              <span className="font-serif italic font-normal">Build</span>.
+              Build.
+              <br />
+              <span className="font-serif italic font-normal">Get Hired</span>.
             </h1>
 
             <p
               ref={subtextRef}
               className="mt-6 md:mt-8 text-body-lg text-text-secondary max-w-lg leading-relaxed"
             >
-              Free tools, interactive roadmaps, and project ideas for college
-              students, exam aspirants, and job seekers — everything you need to
-              move forward.
+              Your entire learning journey in one place — structured paths,
+              hands-on projects, and interview prep that takes you from
+              &ldquo;where do I start?&rdquo; to job-ready.
             </p>
 
             <div ref={ctaRef} className="mt-8 md:mt-10 flex flex-wrap gap-3">
               <Link
-                href="/tools"
-                className="inline-flex items-center gap-2 px-6 py-3 text-sm font-medium bg-[var(--accent-dark)] text-[var(--text-inverse)] rounded-xl hover:bg-[var(--accent-dark)]/90 transition-colors"
+                href="/start"
+                className="inline-flex items-center gap-2 px-6 py-3 text-sm font-medium bg-[var(--accent-dark)] text-[var(--text-inverse)] rounded-sm hover:bg-[var(--accent-dark)]/90 transition-colors"
               >
-                Explore all tools
+                Start your journey
                 <ArrowRight className="w-4 h-4" />
               </Link>
               <Link
-                href="/categories"
-                className="inline-flex items-center gap-2 px-6 py-3 text-sm font-medium border border-[var(--border-default)] text-[var(--text-primary)] rounded-xl hover:bg-[var(--bg-subtle)] hover:border-[var(--border-strong)] transition-colors"
+                href="/roadmaps"
+                className="inline-flex items-center gap-2 px-6 py-3 text-sm font-medium border border-[var(--border-default)] text-[var(--text-primary)] rounded-sm hover:bg-[var(--bg-subtle)] hover:border-[var(--border-strong)] transition-colors"
               >
-                Browse categories
+                Browse learning paths
               </Link>
             </div>
 
             {/* Search prompt */}
             <div ref={searchRef} className="mt-10 md:mt-12">
-              <div className="flex items-center gap-3 px-4 py-3 border border-[var(--border-soft)] rounded-xl bg-[var(--bg-surface)] max-w-md cursor-pointer hover:border-[var(--border-default)] transition-colors group">
+              <div className="flex items-center gap-3 px-4 py-3 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)] max-w-md cursor-pointer hover:border-[var(--border-default)] transition-colors group">
                 <Search className="w-4 h-4 text-[var(--text-subtle)] group-hover:text-[var(--text-secondary)] transition-colors" />
                 <span className="text-sm text-[var(--text-subtle)]">
                   What do you need help with?
                 </span>
-                <kbd className="ml-auto hidden sm:inline-flex items-center gap-0.5 px-2 py-0.5 text-xs text-[var(--text-subtle)] bg-[var(--bg-subtle)] rounded-md font-mono">
+                <kbd className="ml-auto hidden sm:inline-flex items-center gap-0.5 px-2 py-0.5 text-xs text-[var(--text-subtle)] bg-[var(--bg-subtle)] rounded-sm font-mono">
                   ⌘K
                 </kbd>
               </div>
               <div className="mt-3 flex flex-wrap gap-2">
-                {['Attendance', 'CGPA', 'Frontend Roadmap', 'Projects', 'Salary'].map(
+                {['Frontend Path', 'DSA Sheet', 'React Projects', 'Interview Prep', 'Open Source'].map(
                   (tag) => (
                     <span
                       key={tag}
-                      className="px-2.5 py-1 text-xs text-[var(--text-subtle)] bg-[var(--bg-subtle)] rounded-full"
+                      className="px-2.5 py-1 text-xs text-[var(--text-subtle)] bg-[var(--bg-subtle)] rounded-sm"
                     >
                       {tag}
                     </span>

@@ -10,8 +10,9 @@ import {
   FinalCTA,
 } from '@/components/marketing';
 import { NewsletterCapture } from '@/components/engagement/newsletter-capture';
+import { SmartHome } from '@/features/onboarding/smart-home';
 
-export default function HomePage() {
+function MarketingPage() {
   return (
     <>
       <HeroSection />
@@ -26,4 +27,8 @@ export default function HomePage() {
       <FinalCTA />
     </>
   );
+}
+
+export default function HomePage() {
+  return <SmartHome marketingContent={<MarketingPage />} />;
 }
