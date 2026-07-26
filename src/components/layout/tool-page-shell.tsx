@@ -126,7 +126,7 @@ export function ToolPageShell({
               <h2 className="text-h3 font-semibold tracking-tight mb-4">
                 Formula
               </h2>
-              <div className="p-5 bg-[var(--bg-subtle)] rounded-xl border border-[var(--border-soft)] font-mono text-sm">
+              <div className="p-5 bg-[var(--bg-subtle)] rounded-sm border border-[var(--border-soft)] font-mono text-sm">
                 {formula}
               </div>
             </section>
@@ -166,7 +166,7 @@ export function ToolPageShell({
                   <Link
                     key={tool.slug}
                     href={`/tools/${tool.slug}`}
-                    className="group p-4 border border-[var(--border-soft)] rounded-xl hover:border-[var(--border-default)] hover:bg-[var(--bg-surface)] transition-all"
+                    className="group p-4 border border-[var(--border-soft)] rounded-sm hover:border-[var(--border-default)] hover:bg-[var(--bg-surface)] transition-all"
                   >
                     <h3 className="text-sm font-medium text-[var(--text-primary)] group-hover:text-[var(--accent-dark)]">
                       {tool.title}
@@ -206,7 +206,7 @@ function FAQAccordionItem({ item }: { item: FAQItem }) {
   };
 
   return (
-    <div className="border border-[var(--border-soft)] rounded-xl overflow-hidden">
+    <div className="border border-[var(--border-soft)] rounded-sm overflow-hidden">
       <button
         onClick={toggle}
         className="w-full flex items-center justify-between p-4 text-left hover:bg-[var(--bg-subtle)] transition-colors"
