@@ -203,9 +203,9 @@ export function ProductTour() {
   if (showPrompt && !active) {
     return (
       <div className="fixed bottom-6 right-6 z-[90] animate-in slide-in-from-bottom-4 fade-in duration-300">
-        <div className="bg-[var(--bg-surface)] border border-[var(--border-soft)] rounded-2xl shadow-xl p-5 max-w-xs">
+        <div className="bg-[var(--bg-surface)] border border-[var(--border-soft)] rounded-sm shadow-xl p-5 max-w-xs">
           <div className="flex items-start gap-3">
-            <div className="w-10 h-10 rounded-xl bg-[var(--accent-primary)]/10 flex items-center justify-center shrink-0">
+            <div className="w-10 h-10 rounded-sm bg-[var(--accent-primary)]/10 flex items-center justify-center shrink-0">
               <Sparkles className="w-5 h-5 text-[var(--accent-dark)]" />
             </div>
             <div>
@@ -216,7 +216,7 @@ export function ProductTour() {
           <div className="flex items-center gap-2 mt-4">
             <button
               onClick={startTour}
-              className="flex-1 px-4 py-2 text-xs font-medium rounded-lg bg-[var(--accent-dark)] text-[var(--accent-primary)] hover:opacity-90 transition-opacity"
+              className="flex-1 px-4 py-2 text-xs font-medium rounded-sm bg-[var(--accent-dark)] text-[var(--accent-primary)] hover:opacity-90 transition-opacity"
             >
               Start Tour
             </button>
@@ -251,7 +251,7 @@ export function ProductTour() {
             : { top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }
         }
       >
-        <div className={`bg-[var(--bg-surface)] border border-[var(--border-soft)] rounded-2xl shadow-2xl p-5 relative ${isFirstOrLast ? 'text-center' : ''}`}>
+        <div className={`bg-[var(--bg-surface)] border border-[var(--border-soft)] rounded-sm shadow-2xl p-5 relative ${isFirstOrLast ? 'text-center' : ''}`}>
           {/* Arrow */}
           {tooltipPos?.arrow === 'top' && (
             <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 rotate-45 bg-[var(--bg-surface)] border-l border-t border-[var(--border-soft)]" />
@@ -260,14 +260,14 @@ export function ProductTour() {
           {/* Close */}
           <button
             onClick={endTour}
-            className="absolute top-3 right-3 p-1 rounded-md hover:bg-[var(--bg-subtle)] text-[var(--text-subtle)] transition-colors"
+            className="absolute top-3 right-3 p-1 rounded-sm hover:bg-[var(--bg-subtle)] text-[var(--text-subtle)] transition-colors"
           >
             <X className="w-4 h-4" />
           </button>
 
           {/* Icon for first/last steps */}
           {isFirstOrLast && (
-            <div className="w-12 h-12 mx-auto mb-3 rounded-xl bg-[var(--accent-primary)]/10 flex items-center justify-center">
+            <div className="w-12 h-12 mx-auto mb-3 rounded-sm bg-[var(--accent-primary)]/10 flex items-center justify-center">
               {step === 0 ? <Sparkles className="w-6 h-6 text-[var(--accent-dark)]" /> : <MapPin className="w-6 h-6 text-[var(--accent-dark)]" />}
             </div>
           )}
@@ -292,14 +292,14 @@ export function ProductTour() {
               {step > 0 && (
                 <button
                   onClick={prevStep}
-                  className="p-1.5 rounded-md hover:bg-[var(--bg-subtle)] text-[var(--text-subtle)] transition-colors"
+                  className="p-1.5 rounded-sm hover:bg-[var(--bg-subtle)] text-[var(--text-subtle)] transition-colors"
                 >
                   <ArrowLeft className="w-4 h-4" />
                 </button>
               )}
               <button
                 onClick={nextStep}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-[var(--accent-dark)] text-[var(--accent-primary)] hover:opacity-90 transition-opacity"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-xs font-medium bg-[var(--accent-dark)] text-[var(--accent-primary)] hover:opacity-90 transition-opacity"
               >
                 {step === TOUR_STEPS.length - 1 ? 'Done' : 'Next'}
                 {step < TOUR_STEPS.length - 1 && <ArrowRight className="w-3 h-3" />}
