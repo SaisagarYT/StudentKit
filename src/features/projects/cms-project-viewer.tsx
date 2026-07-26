@@ -5,7 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import { collection, query, where, getDocs, limit } from 'firebase/firestore';
 import { getFirebaseDb, isFirebaseConfigured } from '@/lib/firebase/client';
 import { trackPageView } from '@/lib/cms/analytics';
-import { ArrowLeft, Clock, Code2, Loader2, CheckCircle2, FolderOpen } from 'lucide-react';
+import { ArrowLeft, Clock, Code2, Loader2, CheckCircle2, FolderOpen, BookOpen, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import { ViewCounter } from '@/components/engagement/view-counter';
 import { BookmarkButton } from '@/components/engagement/bookmark-button';
@@ -102,7 +102,7 @@ export function CmsProjectViewer() {
         <div className="max-w-4xl">
           {/* Header */}
           <div className="flex items-start gap-4 mb-6">
-            <div className="w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center shrink-0">
+            <div className="w-12 h-12 rounded-sm bg-purple-500/10 flex items-center justify-center shrink-0">
               <FolderOpen className="w-6 h-6 text-purple-500" />
             </div>
             <div>
@@ -113,7 +113,7 @@ export function CmsProjectViewer() {
 
           {/* Meta */}
           <div className="flex flex-wrap items-center gap-4 mb-8">
-            <span className={`px-2.5 py-1 rounded-md text-xs font-medium ${DIFFICULTY_COLORS[project.difficulty] || ''}`}>
+            <span className={`px-2.5 py-1 rounded-sm text-xs font-medium ${DIFFICULTY_COLORS[project.difficulty] || ''}`}>
               {project.difficulty}
             </span>
             <span className="flex items-center gap-1.5 text-sm text-[var(--text-subtle)]">
@@ -134,9 +134,41 @@ export function CmsProjectViewer() {
               </h2>
               <div className="flex flex-wrap gap-2">
                 {project.technologies.map((tech) => (
-                  <span key={tech} className="px-3 py-1.5 rounded-lg text-xs font-medium border border-[var(--border-default)] bg-[var(--bg-elevated)] text-[var(--text-secondary)]">
+                  <span key={tech} className="px-3 py-1.5 rounded-sm text-xs font-medium border border-[var(--border-default)] bg-[var(--bg-elevated)] text-[var(--text-secondary)]">
                     {tech}
                   </span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Prerequisites — links back to related roadmaps */}
+          {project.relatedRoadmapIds?.length > 0 && (
+            <div className="mb-8">
+              <h2 className="text-sm font-semibold text-[var(--text-primary)] mb-3 flex items-center gap-2">
+                <BookOpen className="w-4 h-4" /> Learn these first
+              </h2>
+              <p className="text-xs text-[var(--text-subtle)] mb-3">
+                These learning paths cover the skills you&apos;ll need for this project.
+              </p>
+              <div className="grid gap-2 sm:grid-cols-2">
+                {project.relatedRoadmapIds.map((roadmapSlug) => (
+                  <Link
+                    key={roadmapSlug}
+                    href={`/roadmaps/view?slug=${roadmapSlug}`}
+                    className="group flex items-center gap-3 p-3.5 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] hover:border-[var(--border-default)] hover:shadow-sm transition-all"
+                  >
+                    <div className="w-8 h-8 rounded-sm bg-blue-500/10 flex items-center justify-center shrink-0">
+                      <BookOpen className="w-4 h-4 text-blue-500" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-[var(--text-primary)] group-hover:text-[var(--accent-dark)] transition-colors capitalize">
+                        {roadmapSlug.replace(/-/g, ' ')}
+                      </p>
+                      <p className="text-xs text-[var(--text-subtle)]">Learning path</p>
+                    </div>
+                    <ArrowRight className="w-4 h-4 text-[var(--text-subtle)] group-hover:translate-x-0.5 transition-transform shrink-0" />
+                  </Link>
                 ))}
               </div>
             </div>
@@ -148,7 +180,7 @@ export function CmsProjectViewer() {
               <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-4">Features</h2>
               <div className="grid gap-3 sm:grid-cols-2">
                 {project.features.map((feature, i) => (
-                  <div key={i} className="p-4 rounded-xl border border-[var(--border-soft)] bg-[var(--bg-surface)]">
+                  <div key={i} className="p-4 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)]">
                     <h3 className="text-sm font-semibold text-[var(--text-primary)]">{feature.title}</h3>
                     <p className="mt-1 text-xs text-[var(--text-secondary)]">{feature.description}</p>
                   </div>
@@ -164,7 +196,7 @@ export function CmsProjectViewer() {
               <div className="space-y-4">
                 {project.milestones.map((milestone, i) => (
                   <div key={i} className="relative pl-8 pb-4 border-l-2 border-[var(--border-soft)] last:border-transparent">
-                    <div className="absolute left-[-9px] top-0 w-4 h-4 rounded-full bg-[var(--accent-dark)] flex items-center justify-center">
+                    <div className="absolute left-[-9px] top-0 w-4 h-4 rounded-sm bg-[var(--accent-dark)] flex items-center justify-center">
                       <span className="text-[8px] font-bold text-[var(--accent-primary)]">{i + 1}</span>
                     </div>
                     <h3 className="text-sm font-semibold text-[var(--text-primary)]">{milestone.title}</h3>
@@ -189,7 +221,7 @@ export function CmsProjectViewer() {
           {project.architecture && (
             <div className="mb-8">
               <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-3">Architecture</h2>
-              <pre className="p-4 rounded-xl bg-[var(--bg-subtle)] border border-[var(--border-soft)] text-xs text-[var(--text-secondary)] overflow-x-auto whitespace-pre-wrap">
+              <pre className="p-4 rounded-sm bg-[var(--bg-subtle)] border border-[var(--border-soft)] text-xs text-[var(--text-secondary)] overflow-x-auto whitespace-pre-wrap">
                 {project.architecture}
               </pre>
             </div>
@@ -199,7 +231,7 @@ export function CmsProjectViewer() {
           {project.folderStructure && (
             <div className="mb-8">
               <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-3">Folder Structure</h2>
-              <pre className="p-4 rounded-xl bg-[var(--bg-subtle)] border border-[var(--border-soft)] text-xs text-[var(--text-secondary)] overflow-x-auto font-mono">
+              <pre className="p-4 rounded-sm bg-[var(--bg-subtle)] border border-[var(--border-soft)] text-xs text-[var(--text-secondary)] overflow-x-auto font-mono">
                 {project.folderStructure}
               </pre>
             </div>

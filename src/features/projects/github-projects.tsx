@@ -117,15 +117,15 @@ function ProjectCard({ repo, index }: { repo: GitHubRepo; index: number }) {
       href={repo.html_url}
       target="_blank"
       rel="noopener noreferrer"
-      className="group relative flex flex-col p-5 rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-surface)] hover:border-[var(--accent-primary)]/60 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 opacity-0 overflow-hidden"
+      className="group relative flex flex-col p-5 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] hover:border-[var(--border-default)] hover:shadow-sm transition-all duration-200 opacity-0 overflow-hidden"
     >
-      <div className={cn('absolute top-0 left-0 right-0 h-1 rounded-t-2xl', diffConfig.bg)} />
+      <div className={cn('absolute top-0 left-0 right-0 h-1 rounded-t-sm', diffConfig.bg)} />
 
       <div className="flex items-start gap-3 mb-3">
         <img
           src={repo.owner.avatar_url}
           alt={repo.owner.login}
-          className="w-8 h-8 rounded-full border border-[var(--border-soft)]"
+          className="w-8 h-8 rounded-sm border border-[var(--border-soft)]"
         />
         <div className="flex-1 min-w-0">
           <h3 className="text-sm font-bold text-[var(--text-primary)] truncate group-hover:text-[var(--accent-dark)] transition-colors">
@@ -147,7 +147,7 @@ function ProjectCard({ repo, index }: { repo: GitHubRepo; index: number }) {
           {repo.topics.slice(0, 4).map((topic) => (
             <span
               key={topic}
-              className="px-2 py-0.5 text-[10px] font-medium rounded-md bg-[var(--accent-primary)]/10 text-[var(--accent-dark)]"
+              className="px-2 py-0.5 text-[10px] font-medium rounded-sm bg-[var(--accent-primary)]/10 text-[var(--accent-dark)]"
             >
               {topic}
             </span>
@@ -165,7 +165,7 @@ function ProjectCard({ repo, index }: { repo: GitHubRepo; index: number }) {
           {repo.language && (
             <span className="flex items-center gap-1.5 text-[11px] text-[var(--text-secondary)]">
               <span
-                className="w-2.5 h-2.5 rounded-full"
+                className="w-2.5 h-2.5 rounded-sm"
                 style={{ backgroundColor: LANGUAGE_COLORS[repo.language] || '#8b8b8b' }}
               />
               {repo.language}
@@ -191,25 +191,25 @@ function ProjectCard({ repo, index }: { repo: GitHubRepo; index: number }) {
 
 function SkeletonCard() {
   return (
-    <div className="flex flex-col p-5 rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-surface)] animate-pulse">
+    <div className="flex flex-col p-5 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] animate-pulse">
       <div className="flex items-start gap-3 mb-3">
-        <div className="w-8 h-8 rounded-full bg-[var(--border-soft)]" />
+        <div className="w-8 h-8 rounded-sm bg-[var(--border-soft)]" />
         <div className="flex-1 space-y-2">
-          <div className="h-4 w-3/4 rounded bg-[var(--border-soft)]" />
-          <div className="h-3 w-1/3 rounded bg-[var(--border-soft)]" />
+          <div className="h-4 w-3/4 rounded-sm bg-[var(--border-soft)]" />
+          <div className="h-3 w-1/3 rounded-sm bg-[var(--border-soft)]" />
         </div>
       </div>
       <div className="space-y-2 mb-4">
-        <div className="h-3 w-full rounded bg-[var(--border-soft)]" />
-        <div className="h-3 w-2/3 rounded bg-[var(--border-soft)]" />
+        <div className="h-3 w-full rounded-sm bg-[var(--border-soft)]" />
+        <div className="h-3 w-2/3 rounded-sm bg-[var(--border-soft)]" />
       </div>
       <div className="flex gap-1.5 mb-4">
-        <div className="h-5 w-14 rounded-md bg-[var(--border-soft)]" />
-        <div className="h-5 w-16 rounded-md bg-[var(--border-soft)]" />
-        <div className="h-5 w-12 rounded-md bg-[var(--border-soft)]" />
+        <div className="h-5 w-14 rounded-sm bg-[var(--border-soft)]" />
+        <div className="h-5 w-16 rounded-sm bg-[var(--border-soft)]" />
+        <div className="h-5 w-12 rounded-sm bg-[var(--border-soft)]" />
       </div>
       <div className="pt-3 border-t border-[var(--border-soft)]">
-        <div className="h-3 w-1/2 rounded bg-[var(--border-soft)]" />
+        <div className="h-3 w-1/2 rounded-sm bg-[var(--border-soft)]" />
       </div>
     </div>
   );
@@ -370,28 +370,28 @@ export function GitHubProjects() {
 
       {/* Stats Bar */}
       <div ref={statsRef} className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
-        <div className="p-4 rounded-xl border border-[var(--border-soft)] bg-[var(--bg-surface)]">
+        <div className="p-4 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)]">
           <div className="flex items-center gap-2 mb-1">
             <Code2 className="w-4 h-4 text-[var(--accent-primary)]" />
             <span className="text-[11px] text-[var(--text-subtle)] uppercase tracking-wider">Available</span>
           </div>
           <span className="text-xl font-bold text-[var(--text-primary)]">{stats.total.toLocaleString()}</span>
         </div>
-        <div className="p-4 rounded-xl border border-[var(--border-soft)] bg-[var(--bg-surface)]">
+        <div className="p-4 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)]">
           <div className="flex items-center gap-2 mb-1">
             <Star className="w-4 h-4 text-amber-500" />
             <span className="text-[11px] text-[var(--text-subtle)] uppercase tracking-wider">Total Stars</span>
           </div>
           <span className="text-xl font-bold text-[var(--text-primary)]">{stats.stars.toLocaleString()}</span>
         </div>
-        <div className="p-4 rounded-xl border border-[var(--border-soft)] bg-[var(--bg-surface)]">
+        <div className="p-4 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)]">
           <div className="flex items-center gap-2 mb-1">
             <Flame className="w-4 h-4 text-emerald-500" />
             <span className="text-[11px] text-[var(--text-subtle)] uppercase tracking-wider">Beginner</span>
           </div>
           <span className="text-xl font-bold text-[var(--text-primary)]">{stats.beginner}</span>
         </div>
-        <div className="p-4 rounded-xl border border-[var(--border-soft)] bg-[var(--bg-surface)]">
+        <div className="p-4 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)]">
           <div className="flex items-center gap-2 mb-1">
             <Trophy className="w-4 h-4 text-orange-500" />
             <span className="text-[11px] text-[var(--text-subtle)] uppercase tracking-wider">Advanced</span>
@@ -409,7 +409,7 @@ export function GitHubProjects() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search projects (e.g. todo app, chat, e-commerce, weather, blog)..."
-            className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-[var(--border-default)] bg-[var(--bg-surface)] text-sm text-[var(--text-primary)] placeholder:text-[var(--text-subtle)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-primary)]/30 focus:border-[var(--accent-primary)] transition-all"
+            className="w-full pl-10 pr-4 py-2.5 rounded-sm border border-[var(--border-default)] bg-[var(--bg-surface)] text-sm text-[var(--text-primary)] placeholder:text-[var(--text-subtle)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-primary)]/30 focus:border-[var(--accent-primary)] transition-all"
           />
         </form>
         <div className="flex items-center gap-2">
@@ -424,7 +424,7 @@ export function GitHubProjects() {
               type="button"
               onClick={() => { setSortBy(key); fetchRepos(activeCategory ? CATEGORIES.find(c => c.id === activeCategory)?.query : undefined); }}
               className={cn(
-                'flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[11px] font-medium transition-all',
+                'flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-[11px] font-medium transition-all',
                 sortBy === key
                   ? 'bg-[var(--accent-dark)] text-[var(--accent-primary)] shadow-sm'
                   : 'text-[var(--text-secondary)] hover:bg-[var(--bg-subtle)]'
@@ -447,7 +447,7 @@ export function GitHubProjects() {
               type="button"
               onClick={() => handleDifficultyFilter(key)}
               className={cn(
-                'flex items-center gap-1.5 px-4 py-2 rounded-md text-xs font-semibold transition-all duration-200 border',
+                'flex items-center gap-1.5 px-4 py-2 rounded-sm text-xs font-semibold transition-all duration-200 border',
                 activeDifficulty === key
                   ? 'bg-[var(--accent-dark)] text-[var(--accent-primary)] border-[var(--accent-dark)] shadow-sm'
                   : 'bg-[var(--bg-surface)] text-[var(--text-secondary)] border-[var(--border-default)] hover:border-[var(--accent-primary)]/60'
@@ -472,7 +472,7 @@ export function GitHubProjects() {
               type="button"
               onClick={() => handleCategoryClick(cat)}
               className={cn(
-                'px-3 py-1.5 rounded-md text-[11px] font-medium transition-all border',
+                'px-3 py-1.5 rounded-sm text-[11px] font-medium transition-all border',
                 activeCategory === cat.id
                   ? 'bg-[var(--accent-dark)] text-[var(--accent-primary)] border-[var(--accent-dark)]'
                   : 'text-[var(--text-secondary)] border-[var(--border-soft)] hover:border-[var(--border-default)] hover:bg-[var(--bg-subtle)]'
@@ -538,7 +538,7 @@ export function GitHubProjects() {
               <button
                 type="button"
                 onClick={loadMore}
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-[var(--border-default)] bg-[var(--bg-surface)] text-sm font-medium text-[var(--text-primary)] hover:border-[var(--accent-primary)] hover:shadow-md transition-all"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-sm border border-[var(--border-default)] bg-[var(--bg-surface)] text-sm font-medium text-[var(--text-primary)] hover:border-[var(--accent-primary)] hover:shadow-sm transition-all"
               >
                 <ChevronDown className="w-4 h-4" />
                 Load More Projects
