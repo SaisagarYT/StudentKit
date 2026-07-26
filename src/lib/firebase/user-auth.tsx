@@ -103,7 +103,7 @@ export function UserAuthProvider({ children }: { children: ReactNode }) {
       if (syncTimerRef.current) clearTimeout(syncTimerRef.current);
       syncTimerRef.current = setTimeout(() => {
         if (user) {
-          pushProgressToCloud(user.uid);
+          pushProgressToCloud(user.uid, { displayName: user.displayName || '', photoURL: user.photoURL || '' });
           pendingSyncRef.current = false;
         }
       }, 5000);
@@ -111,7 +111,7 @@ export function UserAuthProvider({ children }: { children: ReactNode }) {
 
     function handleBeforeUnload() {
       if (pendingSyncRef.current && user) {
-        pushProgressToCloud(user.uid);
+        pushProgressToCloud(user.uid, { displayName: user.displayName || '', photoURL: user.photoURL || '' });
       }
     }
 
@@ -144,7 +144,7 @@ export function UserAuthProvider({ children }: { children: ReactNode }) {
   const signOut = useCallback(async () => {
     if (pendingSyncRef.current && user) {
       if (syncTimerRef.current) clearTimeout(syncTimerRef.current);
-      await pushProgressToCloud(user.uid);
+      await pushProgressToCloud(user.uid, { displayName: user.displayName || '', photoURL: user.photoURL || '' });
       pendingSyncRef.current = false;
     }
     const auth = getFirebaseAuth();

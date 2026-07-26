@@ -2,6 +2,7 @@
 
 import { doc, getDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
 import { getFirebaseDb } from './client';
+import { updateLeaderboardEntry } from './leaderboard';
 import type { StreakData } from '@/lib/user-progress';
 
 const DSA_STORAGE_KEY = 'sk-dsa-progress';
@@ -106,7 +107,7 @@ export async function syncProgressOnLogin(uid: string): Promise<void> {
   }
 }
 
-export async function pushProgressToCloud(uid: string): Promise<void> {
+export async function pushProgressToCloud(uid: string, profile?: { displayName: string; photoURL: string }): Promise<void> {
   try {
     const localData = getLocalProgress();
     const ref = doc(getFirebaseDb(), 'users', uid);
@@ -118,6 +119,23 @@ export async function pushProgressToCloud(uid: string): Promise<void> {
       bookmarks: localData.bookmarks,
       lastSyncedAt: serverTimestamp(),
     });
+
+    if (profile) {
+      const dsaSolved = Object.values(localData.dsaProgress).filter(Boolean).length;
+      const csSolved = Object.values(localData.csProgress).filter(Boolean).length;
+      let roadmapTopics = 0;
+      for (const progress of Object.values(localData.roadmapProgress)) {
+        roadmapTopics += Object.values(progress).filter(Boolean).length;
+      }
+      await updateLeaderboardEntry(uid, profile, {
+        dsaSolved,
+        csSolved,
+        streak: localData.streak.current,
+        longestStreak: localData.streak.longest,
+        totalActiveDays: localData.streak.totalActiveDays,
+        roadmapTopics,
+      });
+    }
   } catch (e) {
     console.error('[ProgressSync] Push failed:', e);
   }

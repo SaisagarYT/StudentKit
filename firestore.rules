@@ -45,6 +45,12 @@ service cloud.firestore {
       allow delete: if isAdmin();
     }
 
+    // Leaderboard: public read, authenticated users write their own entry
+    match /leaderboard/{uid} {
+      allow read: if true;
+      allow write: if request.auth != null && request.auth.uid == uid;
+    }
+
     // Users: each user can read/write their own document
     match /users/{uid} {
       allow read, write: if request.auth != null && request.auth.uid == uid;
