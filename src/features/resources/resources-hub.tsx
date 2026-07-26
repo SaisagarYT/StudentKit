@@ -61,7 +61,7 @@ export function ResourcesHub() {
       <div className="container-main">
         {/* Header */}
         <div className="rh-header max-w-3xl mb-12">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[var(--accent-primary)]/20 bg-[var(--accent-primary)]/5 mb-5">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-sm border border-[var(--accent-primary)]/20 bg-[var(--accent-primary)]/5 mb-5">
             <Sparkles className="w-3.5 h-3.5 text-[var(--accent-primary)]" />
             <span className="text-xs font-semibold text-[var(--accent-primary)] uppercase tracking-wider">Resources</span>
           </div>
@@ -84,7 +84,7 @@ export function ResourcesHub() {
               placeholder="Search resources..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-[rgba(255,255,255,0.08)] bg-[var(--bg-surface)] text-sm text-[var(--text-primary)] placeholder:text-[var(--text-subtle)] outline-none focus:border-[var(--accent-primary)] transition-colors"
+              className="w-full pl-10 pr-4 py-2.5 rounded-sm border border-[rgba(255,255,255,0.08)] bg-[var(--bg-surface)] text-sm text-[var(--text-primary)] placeholder:text-[var(--text-subtle)] outline-none focus:border-[var(--accent-primary)] transition-colors"
             />
           </div>
           <div className="flex gap-1.5 overflow-x-auto pb-1">
@@ -94,7 +94,7 @@ export function ResourcesHub() {
                 <button
                   key={cat.id}
                   onClick={() => setActiveCategory(cat.id)}
-                  className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-medium whitespace-nowrap transition-all ${
+                  className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-sm text-xs font-medium whitespace-nowrap transition-all ${
                     activeCategory === cat.id
                       ? 'bg-[var(--accent-dark)] text-[var(--accent-primary)] border border-[var(--accent-primary)]/20'
                       : 'text-[var(--text-subtle)] border border-[rgba(255,255,255,0.06)] hover:text-[var(--text-primary)] hover:border-[rgba(255,255,255,0.12)]'
@@ -135,11 +135,11 @@ export function ResourcesHub() {
               <Link
                 key={resource.id}
                 href={`/resources/view?slug=${resource.slug}`}
-                className="rh-card group flex flex-col p-5 rounded-2xl border border-[rgba(255,255,255,0.08)] bg-[var(--bg-surface)] hover:border-[rgba(255,255,255,0.15)] hover:shadow-sm transition-all duration-200"
+                className="rh-card group flex flex-col p-5 rounded-sm border border-[rgba(255,255,255,0.08)] bg-[var(--bg-surface)] hover:border-[rgba(255,255,255,0.15)] hover:shadow-sm transition-all duration-200"
               >
                 <div className="flex items-center justify-between mb-3">
                   <span
-                    className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded"
+                    className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-sm"
                     style={{ color: difficultyColors[resource.difficulty], background: `${difficultyColors[resource.difficulty]}12` }}
                   >
                     {resource.difficulty}
@@ -156,7 +156,7 @@ export function ResourcesHub() {
 
                 <div className="flex flex-wrap gap-1 mt-auto pt-3">
                   {resource.tags.slice(0, 3).map(tag => (
-                    <span key={tag} className="text-[10px] px-2 py-0.5 rounded bg-[var(--bg-subtle)] text-[var(--text-subtle)]">
+                    <span key={tag} className="text-[10px] px-2 py-0.5 rounded-sm bg-[var(--bg-subtle)] text-[var(--text-subtle)]">
                       {tag}
                     </span>
                   ))}
