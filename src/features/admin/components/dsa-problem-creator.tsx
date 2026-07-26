@@ -164,7 +164,7 @@ export function DsaProblemCreator() {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
-          <Link href="/admin/resources" className="p-2 rounded-lg hover:bg-[var(--bg-subtle)] text-[var(--text-subtle)] transition-colors">
+          <Link href="/admin/resources" className="p-2 rounded-sm hover:bg-[var(--bg-subtle)] text-[var(--text-subtle)] transition-colors">
             <ArrowLeft className="w-4 h-4" />
           </Link>
           <div>
@@ -177,13 +177,13 @@ export function DsaProblemCreator() {
 
         {/* Step indicators */}
         <div className="flex items-center gap-2">
-          <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-semibold ${step === 'problem' ? 'bg-[var(--accent-primary)]/10 text-[var(--accent-primary)]' : 'text-[var(--text-subtle)]'}`}>
-            <span className="w-4 h-4 rounded-full bg-[var(--accent-primary)] text-[var(--bg-base)] flex items-center justify-center text-[9px] font-bold">1</span>
+          <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-[10px] font-semibold ${step === 'problem' ? 'bg-[var(--accent-primary)]/10 text-[var(--accent-primary)]' : 'text-[var(--text-subtle)]'}`}>
+            <span className="w-4 h-4 rounded-sm bg-[var(--accent-primary)] text-[var(--bg-base)] flex items-center justify-center text-[9px] font-bold">1</span>
             Problem
           </div>
           <ArrowRight className="w-3 h-3 text-[var(--text-subtle)]" />
-          <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-semibold ${step === 'editorial' ? 'bg-[var(--accent-primary)]/10 text-[var(--accent-primary)]' : 'text-[var(--text-subtle)]'}`}>
-            <span className={`w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-bold ${step === 'editorial' ? 'bg-[var(--accent-primary)] text-[var(--bg-base)]' : 'bg-[var(--bg-subtle)] text-[var(--text-subtle)]'}`}>2</span>
+          <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-[10px] font-semibold ${step === 'editorial' ? 'bg-[var(--accent-primary)]/10 text-[var(--accent-primary)]' : 'text-[var(--text-subtle)]'}`}>
+            <span className={`w-4 h-4 rounded-sm flex items-center justify-center text-[9px] font-bold ${step === 'editorial' ? 'bg-[var(--accent-primary)] text-[var(--bg-base)]' : 'bg-[var(--bg-subtle)] text-[var(--text-subtle)]'}`}>2</span>
             Editorial
           </div>
         </div>
@@ -192,7 +192,7 @@ export function DsaProblemCreator() {
       {/* ─── STEP 1: Problem ─── */}
       {step === 'problem' && (
         <div className="space-y-5">
-          <section className="p-5 rounded-2xl border border-[rgba(255,255,255,0.06)] bg-[var(--bg-surface)]">
+          <section className="p-5 rounded-sm border border-[rgba(255,255,255,0.06)] bg-[var(--bg-surface)]">
             <div className="flex items-center gap-2 mb-4">
               <Zap className="w-4 h-4 text-amber-400" />
               <h2 className="text-sm font-bold text-[var(--text-primary)]">Problem Details</h2>
@@ -223,7 +223,7 @@ export function DsaProblemCreator() {
                       <button
                         key={d.value}
                         onClick={() => setDifficulty(d.value as any)}
-                        className={`flex-1 px-3 py-2.5 rounded-lg text-xs font-semibold border transition-all ${
+                        className={`flex-1 px-3 py-2.5 rounded-sm text-xs font-semibold border transition-all ${
                           difficulty === d.value
                             ? 'border-current shadow-sm'
                             : 'border-[rgba(255,255,255,0.06)] text-[var(--text-subtle)] hover:border-[rgba(255,255,255,0.12)]'
@@ -241,7 +241,7 @@ export function DsaProblemCreator() {
                   <select
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
-                    className="w-full px-3 py-2.5 rounded-lg text-xs font-medium border border-[rgba(255,255,255,0.08)] bg-[var(--bg-subtle)] text-[var(--text-primary)] outline-none"
+                    className="w-full px-3 py-2.5 rounded-sm text-xs font-medium border border-[rgba(255,255,255,0.08)] bg-[var(--bg-subtle)] text-[var(--text-primary)] outline-none"
                   >
                     {DSA_CATEGORIES.map(c => (
                       <option key={c} value={c}>{c.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</option>
@@ -283,7 +283,7 @@ export function DsaProblemCreator() {
                 </label>
                 <div className="flex flex-wrap gap-1.5 mb-2">
                   {tags.map(tag => (
-                    <span key={tag} className="inline-flex items-center gap-1 text-[10px] px-2 py-1 rounded-md bg-[var(--accent-primary)]/10 text-[var(--accent-primary)] font-medium">
+                    <span key={tag} className="inline-flex items-center gap-1 text-[10px] px-2 py-1 rounded-sm bg-[var(--accent-primary)]/10 text-[var(--accent-primary)] font-medium">
                       {tag}
                       <button onClick={() => setTags(tags.filter(t => t !== tag))} className="hover:text-red-400">
                         <X className="w-2.5 h-2.5" />
@@ -299,7 +299,7 @@ export function DsaProblemCreator() {
                     className="input-field text-xs flex-1"
                     placeholder="array, hash-map, two-pointers..."
                   />
-                  <button onClick={addTag} className="px-3 py-1.5 rounded-lg text-[10px] font-medium bg-[var(--bg-subtle)] text-[var(--text-secondary)] border border-[rgba(255,255,255,0.06)] hover:text-[var(--text-primary)] transition-colors">
+                  <button onClick={addTag} className="px-3 py-1.5 rounded-sm text-[10px] font-medium bg-[var(--bg-subtle)] text-[var(--text-secondary)] border border-[rgba(255,255,255,0.06)] hover:text-[var(--text-primary)] transition-colors">
                     Add
                   </button>
                 </div>
@@ -312,7 +312,7 @@ export function DsaProblemCreator() {
                 </label>
                 <div className="flex flex-wrap gap-1.5 mb-2">
                   {companies.map(c => (
-                    <span key={c} className="inline-flex items-center gap-1 text-[10px] px-2 py-1 rounded-md bg-blue-500/10 text-blue-400 font-medium">
+                    <span key={c} className="inline-flex items-center gap-1 text-[10px] px-2 py-1 rounded-sm bg-blue-500/10 text-blue-400 font-medium">
                       {c}
                       <button onClick={() => toggleCompany(c)} className="hover:text-red-400">
                         <X className="w-2.5 h-2.5" />
@@ -327,12 +327,12 @@ export function DsaProblemCreator() {
                   + Select companies
                 </button>
                 {showCompanyPicker && (
-                  <div className="mt-2 flex flex-wrap gap-1.5 p-3 rounded-xl bg-[var(--bg-subtle)] border border-[rgba(255,255,255,0.05)]">
+                  <div className="mt-2 flex flex-wrap gap-1.5 p-3 rounded-sm bg-[var(--bg-subtle)] border border-[rgba(255,255,255,0.05)]">
                     {COMMON_COMPANIES.map(c => (
                       <button
                         key={c}
                         onClick={() => toggleCompany(c)}
-                        className={`px-2.5 py-1 rounded-md text-[10px] font-medium border transition-all ${
+                        className={`px-2.5 py-1 rounded-sm text-[10px] font-medium border transition-all ${
                           companies.includes(c)
                             ? 'bg-blue-500/15 text-blue-400 border-blue-500/30'
                             : 'text-[var(--text-subtle)] border-[rgba(255,255,255,0.06)] hover:text-[var(--text-primary)] hover:border-[rgba(255,255,255,0.12)]'
@@ -352,7 +352,7 @@ export function DsaProblemCreator() {
             <button
               onClick={() => setStep('editorial')}
               disabled={!canProceedToEditorial}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-semibold bg-[var(--accent-primary)] text-[var(--bg-base)] hover:opacity-90 transition-opacity disabled:opacity-40"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-sm text-xs font-semibold bg-[var(--accent-primary)] text-[var(--bg-base)] hover:opacity-90 transition-opacity disabled:opacity-40"
             >
               Next: Add Editorial
               <ArrowRight className="w-3.5 h-3.5" />
@@ -365,8 +365,8 @@ export function DsaProblemCreator() {
       {step === 'editorial' && (
         <div className="space-y-5">
           {/* Summary of problem */}
-          <div className="flex items-center gap-3 p-4 rounded-xl bg-[var(--bg-subtle)] border border-[rgba(255,255,255,0.05)]">
-            <div className="w-8 h-8 rounded-lg bg-[var(--accent-primary)]/10 flex items-center justify-center">
+          <div className="flex items-center gap-3 p-4 rounded-sm bg-[var(--bg-subtle)] border border-[rgba(255,255,255,0.05)]">
+            <div className="w-8 h-8 rounded-sm bg-[var(--accent-primary)]/10 flex items-center justify-center">
               <Zap className="w-4 h-4 text-[var(--accent-primary)]" />
             </div>
             <div className="flex-1 min-w-0">
@@ -384,7 +384,7 @@ export function DsaProblemCreator() {
           </div>
 
           {/* Approaches */}
-          <section className="p-5 rounded-2xl border border-[rgba(255,255,255,0.06)] bg-[var(--bg-surface)]">
+          <section className="p-5 rounded-sm border border-[rgba(255,255,255,0.06)] bg-[var(--bg-surface)]">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
                 <Code className="w-4 h-4 text-violet-400" />
@@ -392,14 +392,14 @@ export function DsaProblemCreator() {
               </div>
               <button
                 onClick={addApproach}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-semibold text-violet-400 border border-violet-400/20 hover:bg-violet-400/5 transition-colors"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-[10px] font-semibold text-violet-400 border border-violet-400/20 hover:bg-violet-400/5 transition-colors"
               >
                 <Plus className="w-3 h-3" /> Add Approach
               </button>
             </div>
 
             {approaches.length === 0 && (
-              <div className="py-10 text-center rounded-xl border border-dashed border-[rgba(255,255,255,0.08)]">
+              <div className="py-10 text-center rounded-sm border border-dashed border-[rgba(255,255,255,0.08)]">
                 <Code className="w-7 h-7 text-[var(--text-subtle)] mx-auto mb-2 opacity-30" />
                 <p className="text-[11px] text-[var(--text-subtle)]">Add brute force → optimal approaches with code</p>
               </div>
@@ -407,10 +407,10 @@ export function DsaProblemCreator() {
 
             <div className="space-y-4">
               {approaches.map((approach, ai) => (
-                <div key={ai} className="rounded-xl border border-[rgba(255,255,255,0.06)] overflow-hidden">
+                <div key={ai} className="rounded-sm border border-[rgba(255,255,255,0.06)] overflow-hidden">
                   <div className="px-4 py-3 bg-[var(--bg-subtle)] border-b border-[rgba(255,255,255,0.04)] flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <span className="text-[9px] font-bold text-violet-400 bg-violet-400/10 px-2 py-0.5 rounded">
+                      <span className="text-[9px] font-bold text-violet-400 bg-violet-400/10 px-2 py-0.5 rounded-sm">
                         #{ai + 1}
                       </span>
                       <input
@@ -420,7 +420,7 @@ export function DsaProblemCreator() {
                         placeholder="Approach name (e.g., Brute Force)"
                       />
                     </div>
-                    <button onClick={() => removeApproach(ai)} className="p-1 rounded text-[var(--text-subtle)] hover:text-red-400 hover:bg-red-400/10 transition-colors">
+                    <button onClick={() => removeApproach(ai)} className="p-1 rounded-sm text-[var(--text-subtle)] hover:text-red-400 hover:bg-red-400/10 transition-colors">
                       <X className="w-3.5 h-3.5" />
                     </button>
                   </div>
@@ -440,7 +440,7 @@ export function DsaProblemCreator() {
                         <input
                           value={approach.timeComplexity}
                           onChange={(e) => updateApproach(ai, { timeComplexity: e.target.value })}
-                          className="flex-1 px-2.5 py-1.5 rounded-md text-[11px] font-mono text-[var(--text-primary)] bg-[var(--bg-subtle)] border border-[rgba(255,255,255,0.05)] outline-none"
+                          className="flex-1 px-2.5 py-1.5 rounded-sm text-[11px] font-mono text-[var(--text-primary)] bg-[var(--bg-subtle)] border border-[rgba(255,255,255,0.05)] outline-none"
                           placeholder="O(n)"
                         />
                       </div>
@@ -449,7 +449,7 @@ export function DsaProblemCreator() {
                         <input
                           value={approach.spaceComplexity}
                           onChange={(e) => updateApproach(ai, { spaceComplexity: e.target.value })}
-                          className="flex-1 px-2.5 py-1.5 rounded-md text-[11px] font-mono text-[var(--text-primary)] bg-[var(--bg-subtle)] border border-[rgba(255,255,255,0.05)] outline-none"
+                          className="flex-1 px-2.5 py-1.5 rounded-sm text-[11px] font-mono text-[var(--text-primary)] bg-[var(--bg-subtle)] border border-[rgba(255,255,255,0.05)] outline-none"
                           placeholder="O(1)"
                         />
                       </div>
@@ -457,7 +457,7 @@ export function DsaProblemCreator() {
 
                     <div className="space-y-2 pt-2">
                       {approach.code.map((block, ci) => (
-                        <div key={ci} className="rounded-lg border border-[rgba(255,255,255,0.05)] overflow-hidden">
+                        <div key={ci} className="rounded-sm border border-[rgba(255,255,255,0.05)] overflow-hidden">
                           <div className="flex items-center justify-between px-3 py-1.5 bg-[rgba(0,0,0,0.2)]">
                             <select
                               value={block.language}
@@ -512,7 +512,7 @@ export function DsaProblemCreator() {
           <div className="flex items-center justify-between">
             <button
               onClick={() => setStep('problem')}
-              className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-medium text-[var(--text-subtle)] hover:text-[var(--text-primary)] transition-colors"
+              className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-sm text-xs font-medium text-[var(--text-subtle)] hover:text-[var(--text-primary)] transition-colors"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               Back to Problem
@@ -520,7 +520,7 @@ export function DsaProblemCreator() {
             <button
               onClick={handleSave}
               disabled={saving || !title}
-              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-semibold bg-emerald-500 text-white hover:bg-emerald-400 transition-colors disabled:opacity-50 shadow-lg shadow-emerald-500/20"
+              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-sm text-xs font-semibold bg-emerald-500 text-white hover:bg-emerald-400 transition-colors disabled:opacity-50 shadow-lg shadow-emerald-500/20"
             >
               {saving ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
               {saving ? 'Publishing...' : 'Publish Problem & Editorial'}

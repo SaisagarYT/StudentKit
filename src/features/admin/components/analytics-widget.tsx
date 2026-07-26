@@ -13,7 +13,7 @@ export function AnalyticsWidget() {
   }, []);
 
   return (
-    <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-surface)] p-6">
+    <div className="rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] p-6">
       <div className="flex items-center justify-between mb-5">
         <div className="flex items-center gap-2">
           <TrendingUp className="w-5 h-5 text-[var(--accent-primary)]" />
@@ -35,7 +35,7 @@ export function AnalyticsWidget() {
         <div className="space-y-2.5">
           {data.map((item, i) => (
             <div key={`${item.type}:${item.slug}`} className="flex items-center gap-3">
-              <span className="w-5 h-5 rounded flex items-center justify-center text-[10px] font-bold text-[var(--text-subtle)] bg-[var(--bg-subtle)]">
+              <span className="w-5 h-5 rounded-sm flex items-center justify-center text-[10px] font-bold text-[var(--text-subtle)] bg-[var(--bg-subtle)]">
                 {i + 1}
               </span>
               <div className="flex items-center gap-2 flex-1 min-w-0">

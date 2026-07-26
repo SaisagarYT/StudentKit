@@ -105,7 +105,7 @@ export function ResourcesDashboard() {
         </div>
         <Link
           href="/admin/resources/dsa"
-          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium bg-[var(--accent-dark)] text-[var(--accent-primary)] hover:opacity-90 transition-opacity"
+          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-sm text-sm font-medium bg-[var(--accent-dark)] text-[var(--accent-primary)] hover:opacity-90 transition-opacity"
         >
           <Plus className="w-4 h-4" />
           New Problem
@@ -114,7 +114,7 @@ export function ResourcesDashboard() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-        <div className="p-4 rounded-xl border border-[rgba(255,255,255,0.06)] bg-[var(--bg-surface)]">
+        <div className="p-4 rounded-sm border border-[rgba(255,255,255,0.06)] bg-[var(--bg-surface)]">
           <div className="flex items-center justify-between mb-2">
             <FileText className="w-4 h-4 text-[var(--text-subtle)]" />
             <TrendingUp className="w-3 h-3 text-emerald-400" />
@@ -122,21 +122,21 @@ export function ResourcesDashboard() {
           <p className="text-xl font-bold text-[var(--text-primary)]">{resources.length}</p>
           <p className="text-[10px] text-[var(--text-subtle)] mt-0.5">Total Resources</p>
         </div>
-        <div className="p-4 rounded-xl border border-[rgba(255,255,255,0.06)] bg-[var(--bg-surface)]">
+        <div className="p-4 rounded-sm border border-[rgba(255,255,255,0.06)] bg-[var(--bg-surface)]">
           <div className="flex items-center justify-between mb-2">
             <Globe className="w-4 h-4 text-emerald-400" />
           </div>
           <p className="text-xl font-bold text-[var(--text-primary)]">{publishedCount}</p>
           <p className="text-[10px] text-[var(--text-subtle)] mt-0.5">Published</p>
         </div>
-        <div className="p-4 rounded-xl border border-[rgba(255,255,255,0.06)] bg-[var(--bg-surface)]">
+        <div className="p-4 rounded-sm border border-[rgba(255,255,255,0.06)] bg-[var(--bg-surface)]">
           <div className="flex items-center justify-between mb-2">
             <Pencil className="w-4 h-4 text-amber-400" />
           </div>
           <p className="text-xl font-bold text-[var(--text-primary)]">{draftCount}</p>
           <p className="text-[10px] text-[var(--text-subtle)] mt-0.5">Drafts</p>
         </div>
-        <div className="p-4 rounded-xl border border-[rgba(255,255,255,0.06)] bg-[var(--bg-surface)]">
+        <div className="p-4 rounded-sm border border-[rgba(255,255,255,0.06)] bg-[var(--bg-surface)]">
           <div className="flex items-center justify-between mb-2">
             <Code className="w-4 h-4 text-violet-400" />
           </div>
@@ -154,7 +154,7 @@ export function ResourcesDashboard() {
             placeholder="Search by title or tag..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-[rgba(255,255,255,0.08)] bg-[var(--bg-surface)] text-sm text-[var(--text-primary)] placeholder:text-[var(--text-subtle)] outline-none focus:border-[var(--accent-primary)] transition-colors"
+            className="w-full pl-10 pr-4 py-2.5 rounded-sm border border-[rgba(255,255,255,0.08)] bg-[var(--bg-surface)] text-sm text-[var(--text-primary)] placeholder:text-[var(--text-subtle)] outline-none focus:border-[var(--accent-primary)] transition-colors"
           />
         </div>
         <div className="flex items-center gap-2">
@@ -162,7 +162,7 @@ export function ResourcesDashboard() {
             <select
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value)}
-              className="appearance-none pl-3 pr-8 py-2.5 rounded-xl border border-[rgba(255,255,255,0.08)] bg-[var(--bg-surface)] text-xs text-[var(--text-primary)] outline-none cursor-pointer"
+              className="appearance-none pl-3 pr-8 py-2.5 rounded-sm border border-[rgba(255,255,255,0.08)] bg-[var(--bg-surface)] text-xs text-[var(--text-primary)] outline-none cursor-pointer"
             >
               <option value="all">All Categories</option>
               <option value="dsa">DSA</option>
@@ -177,7 +177,7 @@ export function ResourcesDashboard() {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="appearance-none pl-3 pr-8 py-2.5 rounded-xl border border-[rgba(255,255,255,0.08)] bg-[var(--bg-surface)] text-xs text-[var(--text-primary)] outline-none cursor-pointer"
+              className="appearance-none pl-3 pr-8 py-2.5 rounded-sm border border-[rgba(255,255,255,0.08)] bg-[var(--bg-surface)] text-xs text-[var(--text-primary)] outline-none cursor-pointer"
             >
               <option value="all">All Status</option>
               <option value="published">Published</option>
@@ -215,11 +215,11 @@ export function ResourcesDashboard() {
             return (
               <div
                 key={resource.id}
-                className="group relative flex items-center gap-4 p-4 rounded-xl border border-[rgba(255,255,255,0.06)] bg-[var(--bg-surface)] hover:border-[rgba(255,255,255,0.12)] transition-all"
+                className="group relative flex items-center gap-4 p-4 rounded-sm border border-[rgba(255,255,255,0.06)] bg-[var(--bg-surface)] hover:border-[rgba(255,255,255,0.12)] transition-all"
               >
                 {/* Category Icon */}
                 <div
-                  className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0"
+                  className="w-9 h-9 rounded-sm flex items-center justify-center shrink-0"
                   style={{ background: `${catColor}15` }}
                 >
                   <CatIcon className="w-4 h-4" style={{ color: catColor }} />
@@ -232,7 +232,7 @@ export function ResourcesDashboard() {
                       {resource.title}
                     </h3>
                     <span
-                      className="text-[9px] font-bold uppercase px-1.5 py-0.5 rounded shrink-0"
+                      className="text-[9px] font-bold uppercase px-1.5 py-0.5 rounded-sm shrink-0"
                       style={{ color: status.color, background: status.bg }}
                     >
                       {status.label}
@@ -260,7 +260,7 @@ export function ResourcesDashboard() {
                 <div className="flex items-center gap-1 shrink-0">
                   <Link
                     href={`/admin/resources/edit?id=${resource.id}`}
-                    className="p-2 rounded-lg text-[var(--text-subtle)] hover:text-[var(--accent-primary)] hover:bg-[var(--accent-primary)]/10 transition-colors"
+                    className="p-2 rounded-sm text-[var(--text-subtle)] hover:text-[var(--accent-primary)] hover:bg-[var(--accent-primary)]/10 transition-colors"
                     title="Edit"
                   >
                     <Pencil className="w-3.5 h-3.5" />
@@ -268,7 +268,7 @@ export function ResourcesDashboard() {
                   <Link
                     href={`/resources/view?slug=${resource.slug}`}
                     target="_blank"
-                    className="p-2 rounded-lg text-[var(--text-subtle)] hover:text-blue-400 hover:bg-blue-400/10 transition-colors"
+                    className="p-2 rounded-sm text-[var(--text-subtle)] hover:text-blue-400 hover:bg-blue-400/10 transition-colors"
                     title="Preview"
                   >
                     <ArrowUpRight className="w-3.5 h-3.5" />
@@ -278,14 +278,14 @@ export function ResourcesDashboard() {
                   <div className="relative">
                     <button
                       onClick={() => setActionMenuId(actionMenuId === resource.id ? null : resource.id)}
-                      className="p-2 rounded-lg text-[var(--text-subtle)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-subtle)] transition-colors"
+                      className="p-2 rounded-sm text-[var(--text-subtle)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-subtle)] transition-colors"
                     >
                       <MoreVertical className="w-3.5 h-3.5" />
                     </button>
                     {actionMenuId === resource.id && (
                       <>
                         <div className="fixed inset-0 z-40" onClick={() => setActionMenuId(null)} />
-                        <div className="absolute right-0 top-full mt-1 z-50 w-40 rounded-xl border border-[rgba(255,255,255,0.1)] bg-[var(--bg-surface)] shadow-xl shadow-black/30 py-1.5">
+                        <div className="absolute right-0 top-full mt-1 z-50 w-40 rounded-sm border border-[rgba(255,255,255,0.1)] bg-[var(--bg-surface)] shadow-xl shadow-black/30 py-1.5">
                           {resource.status === 'draft' ? (
                             <button
                               onClick={() => handlePublish(resource.id)}

@@ -208,7 +208,7 @@ export function RoadmapEditForm() {
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-4">
-          <button onClick={() => router.push('/admin/roadmaps')} className="p-2 rounded-lg hover:bg-[var(--bg-subtle)] text-[var(--text-subtle)] transition-colors">
+          <button onClick={() => router.push('/admin/roadmaps')} className="p-2 rounded-sm hover:bg-[var(--bg-subtle)] text-[var(--text-subtle)] transition-colors">
             <ArrowLeft className="w-5 h-5" />
           </button>
           <div>
@@ -216,17 +216,17 @@ export function RoadmapEditForm() {
             <p className="text-sm text-[var(--text-secondary)]">{form.title || 'Untitled'}</p>
           </div>
         </div>
-        <button onClick={handleSave} disabled={saving} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium bg-[var(--accent-dark)] text-[var(--accent-primary)] hover:opacity-90 disabled:opacity-50 transition-opacity">
+        <button onClick={handleSave} disabled={saving} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-sm text-sm font-medium bg-[var(--accent-dark)] text-[var(--accent-primary)] hover:opacity-90 disabled:opacity-50 transition-opacity">
           {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
           {saving ? 'Saving...' : 'Save Changes'}
         </button>
       </div>
 
-      {error && <div className="mb-6 p-3 rounded-lg bg-red-50 border border-red-200 text-sm text-red-600">{error}</div>}
-      {success && <div className="mb-6 p-3 rounded-lg bg-green-50 border border-green-200 text-sm text-green-600">{success}</div>}
+      {error && <div className="mb-6 p-3 rounded-sm bg-red-50 border border-red-200 text-sm text-red-600">{error}</div>}
+      {success && <div className="mb-6 p-3 rounded-sm bg-green-50 border border-green-200 text-sm text-green-600">{success}</div>}
 
       {/* Basic Info */}
-      <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-surface)] p-6 mb-6">
+      <div className="rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] p-6 mb-6">
         <h2 className="text-sm font-semibold text-[var(--text-primary)] mb-4">Basic Info</h2>
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
@@ -249,7 +249,7 @@ export function RoadmapEditForm() {
             <Field label="Duration"><input value={form.estimatedDuration} onChange={(e) => update({ estimatedDuration: e.target.value })} className="input-field" /></Field>
             <Field label="Accent">
               <div className="flex gap-2">
-                <input type="color" value={form.accent} onChange={(e) => update({ accent: e.target.value })} className="w-10 h-10 rounded border cursor-pointer" />
+                <input type="color" value={form.accent} onChange={(e) => update({ accent: e.target.value })} className="w-10 h-10 rounded-sm border cursor-pointer" />
                 <input value={form.accent} onChange={(e) => update({ accent: e.target.value })} className="input-field flex-1 font-mono text-sm" />
               </div>
             </Field>
@@ -271,7 +271,7 @@ export function RoadmapEditForm() {
 
       {/* Bottom save */}
       <div className="mt-6 flex justify-end">
-        <button onClick={handleSave} disabled={saving} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium bg-[var(--accent-dark)] text-[var(--accent-primary)] hover:opacity-90 disabled:opacity-50 transition-opacity">
+        <button onClick={handleSave} disabled={saving} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-sm text-sm font-medium bg-[var(--accent-dark)] text-[var(--accent-primary)] hover:opacity-90 disabled:opacity-50 transition-opacity">
           {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
           {saving ? 'Saving...' : 'Save Changes'}
         </button>
@@ -341,23 +341,23 @@ function SectionsEditor({ form, addSection, updateSection, removeSection, addTop
   }
 
   return (
-    <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-surface)] p-6">
+    <div className="rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] p-6">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-sm font-semibold text-[var(--text-primary)]">Sections ({form.sections.length})</h2>
-        <button onClick={addSection} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-[var(--accent-dark)] text-[var(--accent-primary)]">
+        <button onClick={addSection} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-xs font-medium bg-[var(--accent-dark)] text-[var(--accent-primary)]">
           <Plus className="w-3.5 h-3.5" /> Add Section
         </button>
       </div>
 
       <div className="space-y-4">
         {form.sections.map((section: Section, sIdx: number) => (
-          <div key={section.id} className="border border-[var(--border-soft)] rounded-xl p-4 space-y-3">
+          <div key={section.id} className="border border-[var(--border-soft)] rounded-sm p-4 space-y-3">
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-2">
                 <GripVertical className="w-4 h-4 text-[var(--text-subtle)]" />
                 <span className="text-xs font-semibold text-[var(--text-subtle)] uppercase">Section {sIdx + 1}</span>
               </div>
-              <button onClick={() => removeSection(sIdx)} className="p-1.5 rounded-md hover:bg-red-50 text-[var(--text-subtle)] hover:text-red-500"><Trash2 className="w-4 h-4" /></button>
+              <button onClick={() => removeSection(sIdx)} className="p-1.5 rounded-sm hover:bg-red-50 text-[var(--text-subtle)] hover:text-red-500"><Trash2 className="w-4 h-4" /></button>
             </div>
             <div className="grid grid-cols-3 gap-3">
               <input value={section.title} onChange={(e: any) => updateSection(sIdx, { title: e.target.value })} placeholder="Title" className="input-field col-span-1" />
@@ -377,7 +377,7 @@ function SectionsEditor({ form, addSection, updateSection, removeSection, addTop
                 </div>
                 <button
                   onClick={() => { setCreatingForSection(sIdx); setNewProject({ title: '', slug: '', shortDescription: '', difficulty: 'beginner', technologies: '', estimatedDuration: '' }); setCreateError(''); }}
-                  className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-[10px] font-medium text-[var(--accent-dark)] hover:bg-[var(--bg-subtle)] border border-[var(--border-soft)] transition-colors"
+                  className="inline-flex items-center gap-1 px-2 py-1 rounded-sm text-[10px] font-medium text-[var(--accent-dark)] hover:bg-[var(--bg-subtle)] border border-[var(--border-soft)] transition-colors"
                 >
                   <PlusCircle className="w-3 h-3" /> Create New
                 </button>
@@ -387,7 +387,7 @@ function SectionsEditor({ form, addSection, updateSection, removeSection, addTop
                   {section.projectIds.map((pid: string) => {
                     const proj = allProjects.find((p) => p.id === pid);
                     return (
-                      <span key={pid} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium bg-[var(--accent-primary)]/15 text-[var(--accent-dark)]">
+                      <span key={pid} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-sm text-xs font-medium bg-[var(--accent-primary)]/15 text-[var(--accent-dark)]">
                         {proj?.title || pid}
                         <button onClick={() => removeProjectFromSection(sIdx, pid)} className="hover:text-red-500 transition-colors"><X className="w-3 h-3" /></button>
                       </span>
@@ -407,7 +407,7 @@ function SectionsEditor({ form, addSection, updateSection, removeSection, addTop
               ) : null}
 
               {creatingForSection === sIdx && (
-                <div className="mt-3 p-4 rounded-lg border border-[var(--border-soft)] bg-[var(--bg-subtle)] space-y-3">
+                <div className="mt-3 p-4 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-subtle)] space-y-3">
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-semibold text-[var(--text-primary)]">Quick Create Project</span>
                     <button onClick={() => setCreatingForSection(null)} className="text-[var(--text-subtle)] hover:text-red-500"><X className="w-3.5 h-3.5" /></button>
@@ -425,7 +425,7 @@ function SectionsEditor({ form, addSection, updateSection, removeSection, addTop
                     <input value={newProject.technologies} onChange={(e) => setNewProject(p => ({ ...p, technologies: e.target.value }))} placeholder="Tech (comma-sep)" className="input-field text-xs" />
                     <input value={newProject.estimatedDuration} onChange={(e) => setNewProject(p => ({ ...p, estimatedDuration: e.target.value }))} placeholder="e.g. 1-2 weeks" className="input-field text-xs" />
                   </div>
-                  <button onClick={handleCreateProject} disabled={createSaving} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-[var(--accent-dark)] text-[var(--accent-primary)] hover:opacity-90 disabled:opacity-50 transition-opacity">
+                  <button onClick={handleCreateProject} disabled={createSaving} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-xs font-medium bg-[var(--accent-dark)] text-[var(--accent-primary)] hover:opacity-90 disabled:opacity-50 transition-opacity">
                     {createSaving ? <Loader2 className="w-3 h-3 animate-spin" /> : <Check className="w-3 h-3" />}
                     {createSaving ? 'Creating...' : 'Create & Link'}
                   </button>
@@ -436,7 +436,7 @@ function SectionsEditor({ form, addSection, updateSection, removeSection, addTop
             {/* Topics */}
             <div className="pl-4 border-l-2 border-[var(--border-soft)] space-y-3 mt-3">
               {section.topics.map((topic: Topic, tIdx: number) => (
-                <div key={topic.id} className="bg-[var(--bg-subtle)] rounded-lg p-3 space-y-2">
+                <div key={topic.id} className="bg-[var(--bg-subtle)] rounded-sm p-3 space-y-2">
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-medium text-[var(--text-subtle)]">Topic {tIdx + 1}</span>
                     <button onClick={() => removeTopic(sIdx, tIdx)} className="text-[var(--text-subtle)] hover:text-red-500"><Trash2 className="w-3.5 h-3.5" /></button>
@@ -453,7 +453,7 @@ function SectionsEditor({ form, addSection, updateSection, removeSection, addTop
                   </div>
                 </div>
               ))}
-              <button onClick={() => addTopic(sIdx)} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium text-[var(--text-secondary)] hover:bg-[var(--bg-subtle)] border border-dashed border-[var(--border-default)]">
+              <button onClick={() => addTopic(sIdx)} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-xs font-medium text-[var(--text-secondary)] hover:bg-[var(--bg-subtle)] border border-dashed border-[var(--border-default)]">
                 <Plus className="w-3 h-3" /> Add Topic
               </button>
             </div>

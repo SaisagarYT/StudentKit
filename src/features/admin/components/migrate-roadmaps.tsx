@@ -111,7 +111,7 @@ export function MigrateRoadmaps() {
   const skipCount = results.filter((r) => r.status === 'skip').length;
 
   return (
-    <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-surface)] p-6">
+    <div className="rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] p-6">
       <div className="flex items-center justify-between mb-4">
         <div>
           <h2 className="text-sm font-semibold text-[var(--text-primary)]">Migrate Hardcoded Roadmaps</h2>
@@ -122,7 +122,7 @@ export function MigrateRoadmaps() {
         <button
           onClick={handleMigrate}
           disabled={running}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium bg-[var(--accent-dark)] text-[var(--accent-primary)] hover:opacity-90 disabled:opacity-50 transition-opacity"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-sm text-sm font-medium bg-[var(--accent-dark)] text-[var(--accent-primary)] hover:opacity-90 disabled:opacity-50 transition-opacity"
         >
           {running ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
           {running ? 'Migrating...' : 'Run Migration'}

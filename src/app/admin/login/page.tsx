@@ -47,7 +47,7 @@ export default function AdminLoginPage() {
         </div>
 
         {error && (
-          <div className="mb-4 flex items-start gap-2 p-3 rounded-md bg-red-500/10 border border-red-500/20">
+          <div className="mb-4 flex items-start gap-2 p-3 rounded-sm bg-red-500/10 border border-red-500/20">
             <AlertCircle className="w-4 h-4 text-red-500 mt-0.5 shrink-0" />
             <p className="text-sm text-red-500">{error}</p>
           </div>
@@ -56,7 +56,7 @@ export default function AdminLoginPage() {
         <button
           onClick={handleGoogleSignIn}
           disabled={loading}
-          className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-md text-sm font-medium bg-[var(--accent-dark)] text-[var(--accent-primary)] hover:opacity-90 disabled:opacity-50 transition-opacity"
+          className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-sm text-sm font-medium bg-[var(--accent-dark)] text-[var(--accent-primary)] hover:opacity-90 disabled:opacity-50 transition-opacity"
         >
           {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <LogIn className="w-4 h-4" />}
           {loading ? 'Signing in...' : 'Sign in with Google'}

@@ -79,7 +79,7 @@ function DashboardContent() {
   return (
     <div className="max-w-6xl space-y-8">
       {/* Welcome Header */}
-      <div className="relative overflow-hidden rounded-2xl bg-[var(--accent-dark)] p-8">
+      <div className="relative overflow-hidden rounded-sm bg-[var(--accent-dark)] p-8">
         <div className="relative z-10">
           <p className="text-[var(--accent-primary)] text-sm font-medium mb-1">{greeting}</p>
           <h1 className="text-2xl md:text-3xl font-bold text-white">
@@ -90,8 +90,8 @@ function DashboardContent() {
           </p>
         </div>
         {/* Decorative elements */}
-        <div className="absolute top-0 right-0 w-64 h-64 bg-[var(--accent-primary)]/5 rounded-full -translate-y-1/2 translate-x-1/4" />
-        <div className="absolute bottom-0 right-20 w-32 h-32 bg-[var(--accent-primary)]/10 rounded-full translate-y-1/2" />
+        <div className="absolute top-0 right-0 w-64 h-64 bg-[var(--accent-primary)]/5 rounded-sm -translate-y-1/2 translate-x-1/4" />
+        <div className="absolute bottom-0 right-20 w-32 h-32 bg-[var(--accent-primary)]/10 rounded-sm translate-y-1/2" />
         <div className="absolute top-4 right-8 text-[var(--accent-primary)]/20">
           <Sparkles className="w-24 h-24" />
         </div>
@@ -136,7 +136,7 @@ function DashboardContent() {
       {/* Main Content Area */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Quick Actions */}
-        <div className="lg:col-span-2 rounded-xl border border-[var(--border-soft)] bg-[var(--bg-surface)] p-6">
+        <div className="lg:col-span-2 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] p-6">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-lg font-semibold text-[var(--text-primary)]">Quick Actions</h2>
             <Zap className="w-5 h-5 text-[var(--accent-primary)]" />
@@ -174,10 +174,10 @@ function DashboardContent() {
         </div>
 
         {/* Platform Status */}
-        <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-surface)] p-6">
+        <div className="rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] p-6">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-lg font-semibold text-[var(--text-primary)]">Platform Status</h2>
-            <span className="flex items-center gap-1.5 text-xs text-emerald-600 bg-emerald-50 px-2 py-1 rounded-full font-medium">
+            <span className="flex items-center gap-1.5 text-xs text-emerald-600 bg-emerald-50 px-2 py-1 rounded-sm font-medium">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
               Live
             </span>
@@ -215,9 +215,9 @@ function DashboardContent() {
               <span>Content health</span>
               <span>{totalContent > 0 ? Math.round((totalPublished / totalContent) * 100) : 0}%</span>
             </div>
-            <div className="mt-2 h-2 rounded-full bg-[var(--bg-subtle)] overflow-hidden">
+            <div className="mt-2 h-2 rounded-sm bg-[var(--bg-subtle)] overflow-hidden">
               <div
-                className="h-full rounded-full bg-gradient-to-r from-[var(--accent-primary)] to-emerald-400 transition-all duration-700 ease-out"
+                className="h-full rounded-sm bg-gradient-to-r from-[var(--accent-primary)] to-emerald-400 transition-all duration-700 ease-out"
                 style={{ width: `${totalContent > 0 ? (totalPublished / totalContent) * 100 : 0}%` }}
               />
             </div>
@@ -300,15 +300,15 @@ function StatCard({
 }) {
   const colors = STAT_COLORS[color];
   return (
-    <div className="group relative overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[var(--bg-surface)] p-5 hover:border-[var(--border-default)] hover:shadow-sm transition-all duration-200">
+    <div className="group relative overflow-hidden rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] p-5 hover:border-[var(--border-default)] hover:shadow-sm transition-all duration-200">
       <div className="flex items-start justify-between">
-        <div className={`p-2.5 rounded-lg ${colors.bg}`}>
+        <div className={`p-2.5 rounded-sm ${colors.bg}`}>
           <Icon className={`w-5 h-5 ${colors.icon}`} />
         </div>
       </div>
       <div className="mt-4">
         {loading ? (
-          <div className="h-8 w-16 bg-[var(--bg-subtle)] rounded animate-pulse" />
+          <div className="h-8 w-16 bg-[var(--bg-subtle)] rounded-sm animate-pulse" />
         ) : (
           <span className="text-3xl font-bold text-[var(--text-primary)] tracking-tight">{value}</span>
         )}
@@ -344,9 +344,9 @@ function ActionCard({
   return (
     <Link
       href={href}
-      className="group flex items-center gap-4 p-4 rounded-xl border border-[var(--border-soft)] hover:border-[var(--border-default)] hover:shadow-sm bg-[var(--bg-surface)] transition-all duration-200"
+      className="group flex items-center gap-4 p-4 rounded-sm border border-[var(--border-soft)] hover:border-[var(--border-default)] hover:shadow-sm bg-[var(--bg-surface)] transition-all duration-200"
     >
-      <div className={`p-2.5 rounded-lg bg-[var(--bg-subtle)] text-[var(--text-subtle)] transition-colors duration-200 ${ACTION_ACCENTS[accent]}`}>
+      <div className={`p-2.5 rounded-sm bg-[var(--bg-subtle)] text-[var(--text-subtle)] transition-colors duration-200 ${ACTION_ACCENTS[accent]}`}>
         <Icon className="w-5 h-5" />
       </div>
       <div className="min-w-0 flex-1">
@@ -380,7 +380,7 @@ function StatusItem({
         <span className="text-sm text-[var(--text-secondary)]">{label}</span>
       </div>
       {loading ? (
-        <div className="h-5 w-8 bg-[var(--bg-subtle)] rounded animate-pulse" />
+        <div className="h-5 w-8 bg-[var(--bg-subtle)] rounded-sm animate-pulse" />
       ) : (
         <span className="text-sm font-semibold text-[var(--text-primary)]">
           {value}{suffix}
@@ -402,7 +402,7 @@ function FooterCard({
   return (
     <Link
       href={href}
-      className="group flex items-center justify-between p-4 rounded-xl border border-[var(--border-soft)] bg-[var(--bg-surface)] hover:border-[var(--border-default)] hover:shadow-sm transition-all duration-200"
+      className="group flex items-center justify-between p-4 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] hover:border-[var(--border-default)] hover:shadow-sm transition-all duration-200"
     >
       <span className="text-sm font-medium text-[var(--text-secondary)] group-hover:text-[var(--text-primary)]">
         {label}

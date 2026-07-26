@@ -193,7 +193,7 @@ export function ProjectForm() {
     <div>
       {/* Header */}
       <div className="flex items-center gap-4 mb-8">
-        <button onClick={() => router.push('/admin/projects')} className="p-2 rounded-lg hover:bg-[var(--bg-subtle)] text-[var(--text-subtle)] transition-colors">
+        <button onClick={() => router.push('/admin/projects')} className="p-2 rounded-sm hover:bg-[var(--bg-subtle)] text-[var(--text-subtle)] transition-colors">
           <ArrowLeft className="w-5 h-5" />
         </button>
         <div>
@@ -205,19 +205,19 @@ export function ProjectForm() {
       {/* Progress Bar */}
       <div className="flex gap-1 mb-8">
         {STEPS.map((_, i) => (
-          <div key={i} className={`h-1.5 flex-1 rounded-full transition-colors ${i <= step ? 'bg-[var(--accent-dark)]' : 'bg-[var(--bg-subtle)]'}`} />
+          <div key={i} className={`h-1.5 flex-1 rounded-sm transition-colors ${i <= step ? 'bg-[var(--accent-dark)]' : 'bg-[var(--bg-subtle)]'}`} />
         ))}
       </div>
 
       {/* Error */}
       {error && (
-        <div className="mb-6 p-3 rounded-lg bg-red-50 border border-red-200 text-sm text-red-600">
+        <div className="mb-6 p-3 rounded-sm bg-red-50 border border-red-200 text-sm text-red-600">
           {error}
         </div>
       )}
 
       {/* Step Content */}
-      <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-surface)] p-6">
+      <div className="rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] p-6">
         {step === 0 && <StepBasicInfo form={form} update={update} />}
         {step === 1 && <StepTechnologies form={form} update={update} />}
         {step === 2 && (
@@ -237,15 +237,15 @@ export function ProjectForm() {
 
       {/* Navigation */}
       <div className="flex items-center justify-between mt-6">
-        <button onClick={prev} disabled={step === 0} className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium text-[var(--text-secondary)] hover:bg-[var(--bg-subtle)] disabled:opacity-40 disabled:cursor-not-allowed transition-colors">
+        <button onClick={prev} disabled={step === 0} className="inline-flex items-center gap-2 px-4 py-2.5 rounded-sm text-sm font-medium text-[var(--text-secondary)] hover:bg-[var(--bg-subtle)] disabled:opacity-40 disabled:cursor-not-allowed transition-colors">
           <ArrowLeft className="w-4 h-4" /> Previous
         </button>
         {step < STEPS.length - 1 ? (
-          <button onClick={next} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium bg-[var(--accent-dark)] text-[var(--accent-primary)] hover:opacity-90 transition-opacity">
+          <button onClick={next} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-sm text-sm font-medium bg-[var(--accent-dark)] text-[var(--accent-primary)] hover:opacity-90 transition-opacity">
             Next <ArrowRight className="w-4 h-4" />
           </button>
         ) : (
-          <button onClick={handleSubmit} disabled={saving} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium bg-[var(--accent-dark)] text-[var(--accent-primary)] hover:opacity-90 disabled:opacity-50 transition-opacity">
+          <button onClick={handleSubmit} disabled={saving} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-sm text-sm font-medium bg-[var(--accent-dark)] text-[var(--accent-primary)] hover:opacity-90 disabled:opacity-50 transition-opacity">
             {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
             {saving ? 'Creating...' : 'Create Project'}
           </button>
@@ -319,13 +319,13 @@ function StepFeatures({ form, addFeature, updateFeature, removeFeature, addMiles
       <div>
         <div className="flex items-center justify-between mb-3">
           <span className="text-sm font-semibold text-[var(--text-primary)]">Features</span>
-          <button onClick={addFeature} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-[var(--accent-dark)] text-[var(--accent-primary)]">
+          <button onClick={addFeature} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-xs font-medium bg-[var(--accent-dark)] text-[var(--accent-primary)]">
             <Plus className="w-3.5 h-3.5" /> Add Feature
           </button>
         </div>
         <div className="space-y-3">
           {form.features.map((f: Feature, i: number) => (
-            <div key={i} className="flex gap-3 items-start bg-[var(--bg-subtle)] rounded-lg p-3">
+            <div key={i} className="flex gap-3 items-start bg-[var(--bg-subtle)] rounded-sm p-3">
               <div className="flex-1 space-y-2">
                 <input value={f.title} onChange={(e) => updateFeature(i, { title: e.target.value })} placeholder="Feature title" className="input-field" />
                 <input value={f.description} onChange={(e) => updateFeature(i, { description: e.target.value })} placeholder="Feature description" className="input-field" />
@@ -341,13 +341,13 @@ function StepFeatures({ form, addFeature, updateFeature, removeFeature, addMiles
       <div>
         <div className="flex items-center justify-between mb-3">
           <span className="text-sm font-semibold text-[var(--text-primary)]">Milestones</span>
-          <button onClick={addMilestone} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-[var(--accent-dark)] text-[var(--accent-primary)]">
+          <button onClick={addMilestone} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-xs font-medium bg-[var(--accent-dark)] text-[var(--accent-primary)]">
             <Plus className="w-3.5 h-3.5" /> Add Milestone
           </button>
         </div>
         <div className="space-y-4">
           {form.milestones.map((m: Milestone, i: number) => (
-            <div key={i} className="border border-[var(--border-soft)] rounded-xl p-4 space-y-3">
+            <div key={i} className="border border-[var(--border-soft)] rounded-sm p-4 space-y-3">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-semibold text-[var(--text-subtle)]">Milestone {i + 1}</span>
                 <button onClick={() => removeMilestone(i)} className="p-1.5 text-[var(--text-subtle)] hover:text-red-500"><Trash2 className="w-4 h-4" /></button>
@@ -418,7 +418,7 @@ function StepReview({ form }: { form: any }) {
       {form.technologies.filter(Boolean).length > 0 && (
         <div className="flex flex-wrap gap-1.5">
           {form.technologies.filter(Boolean).map((t: string) => (
-            <span key={t} className="px-2 py-1 rounded-md text-xs bg-[var(--bg-subtle)] text-[var(--text-secondary)]">{t}</span>
+            <span key={t} className="px-2 py-1 rounded-sm text-xs bg-[var(--bg-subtle)] text-[var(--text-secondary)]">{t}</span>
           ))}
         </div>
       )}

@@ -23,7 +23,7 @@ export function AdminSidebar() {
       {/* Brand */}
       <div className="p-5 border-b border-[var(--border-soft)]">
         <Link href="/admin" className="flex items-center gap-2.5" onClick={() => setOpen(false)}>
-          <div className="w-8 h-8 rounded-lg bg-[var(--accent-dark)] flex items-center justify-center">
+          <div className="w-8 h-8 rounded-sm bg-[var(--accent-dark)] flex items-center justify-center">
             <span className="text-[var(--accent-primary)] text-xs font-bold">SK</span>
           </div>
           <div>
@@ -46,7 +46,7 @@ export function AdminSidebar() {
               key={item.href}
               href={item.href}
               onClick={() => setOpen(false)}
-              className={`group flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 ${
+              className={`group flex items-center justify-between px-3 py-2.5 rounded-sm text-sm font-medium transition-all duration-150 ${
                 isActive
                   ? 'bg-[var(--accent-dark)] text-[var(--accent-primary)] shadow-sm'
                   : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-subtle)]'
@@ -69,10 +69,10 @@ export function AdminSidebar() {
             <img
               src={user.photoURL}
               alt=""
-              className="w-9 h-9 rounded-full object-cover ring-2 ring-[var(--border-soft)]"
+              className="w-9 h-9 rounded-sm object-cover ring-2 ring-[var(--border-soft)]"
             />
           ) : (
-            <div className="w-9 h-9 rounded-full bg-[var(--accent-dark)] flex items-center justify-center ring-2 ring-[var(--border-soft)]">
+            <div className="w-9 h-9 rounded-sm bg-[var(--accent-dark)] flex items-center justify-center ring-2 ring-[var(--border-soft)]">
               <span className="text-[var(--accent-primary)] text-xs font-bold">
                 {(user?.displayName || user?.email || 'A')[0].toUpperCase()}
               </span>
@@ -87,7 +87,7 @@ export function AdminSidebar() {
           <button
             type="button"
             onClick={signOut}
-            className="p-2 rounded-lg text-[var(--text-subtle)] hover:text-red-500 hover:bg-red-50 transition-colors"
+            className="p-2 rounded-sm text-[var(--text-subtle)] hover:text-red-500 hover:bg-red-50 transition-colors"
             title="Sign out"
           >
             <LogOut className="w-4 h-4" />
@@ -103,12 +103,12 @@ export function AdminSidebar() {
       <div className="lg:hidden fixed top-0 left-0 right-0 h-14 bg-[var(--bg-surface)] border-b border-[var(--border-soft)] flex items-center px-4 z-50">
         <button
           onClick={() => setOpen(!open)}
-          className="p-2 -ml-2 rounded-lg hover:bg-[var(--bg-subtle)] text-[var(--text-primary)] transition-colors"
+          className="p-2 -ml-2 rounded-sm hover:bg-[var(--bg-subtle)] text-[var(--text-primary)] transition-colors"
         >
           {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
         </button>
         <div className="flex items-center gap-2 ml-3">
-          <div className="w-6 h-6 rounded bg-[var(--accent-dark)] flex items-center justify-center">
+          <div className="w-6 h-6 rounded-sm bg-[var(--accent-dark)] flex items-center justify-center">
             <span className="text-[var(--accent-primary)] text-[9px] font-bold">SK</span>
           </div>
           <span className="text-sm font-bold text-[var(--text-primary)]">Admin</span>

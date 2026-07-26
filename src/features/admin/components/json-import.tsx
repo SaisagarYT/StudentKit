@@ -203,7 +203,7 @@ export function JsonImport() {
     return (
       <button
         onClick={() => setIsOpen(true)}
-        className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium border border-[var(--border-default)] text-[var(--text-primary)] hover:bg-[var(--bg-subtle)] transition-colors"
+        className="inline-flex items-center gap-2 px-4 py-2.5 rounded-sm text-sm font-medium border border-[var(--border-default)] text-[var(--text-primary)] hover:bg-[var(--bg-subtle)] transition-colors"
       >
         <Upload className="w-4 h-4" />
         Import JSON
@@ -217,11 +217,11 @@ export function JsonImport() {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setIsOpen(false)} />
-      <div className="relative w-full max-w-2xl max-h-[85vh] overflow-y-auto bg-[var(--bg-surface)] border border-[var(--border-soft)] rounded-2xl shadow-2xl">
+      <div className="relative w-full max-w-2xl max-h-[85vh] overflow-y-auto bg-[var(--bg-surface)] border border-[var(--border-soft)] rounded-sm shadow-2xl">
         {/* Header */}
         <div className="sticky top-0 z-10 flex items-center justify-between p-5 border-b border-[var(--border-soft)] bg-[var(--bg-surface)]">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-[var(--accent-primary)]/10 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-sm bg-[var(--accent-primary)]/10 flex items-center justify-center">
               <FileJson className="w-5 h-5 text-[var(--accent-dark)]" />
             </div>
             <div>
@@ -229,7 +229,7 @@ export function JsonImport() {
               <p className="text-xs text-[var(--text-secondary)]">Upload or paste JSON to create content</p>
             </div>
           </div>
-          <button onClick={() => setIsOpen(false)} className="p-2 rounded-lg hover:bg-[var(--bg-subtle)] text-[var(--text-subtle)]">
+          <button onClick={() => setIsOpen(false)} className="p-2 rounded-sm hover:bg-[var(--bg-subtle)] text-[var(--text-subtle)]">
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -239,27 +239,27 @@ export function JsonImport() {
           <div className="flex gap-2">
             <button
               onClick={() => { setImportType('roadmap'); setJsonPreview(''); setResults([]); setParseError(''); }}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${importType === 'roadmap' ? 'bg-[var(--accent-dark)] text-[var(--accent-primary)]' : 'bg-[var(--bg-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]'}`}
+              className={`px-4 py-2 rounded-sm text-sm font-medium transition-colors ${importType === 'roadmap' ? 'bg-[var(--accent-dark)] text-[var(--accent-primary)]' : 'bg-[var(--bg-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]'}`}
             >
               Roadmap
             </button>
             <button
               onClick={() => { setImportType('project'); setJsonPreview(''); setResults([]); setParseError(''); }}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${importType === 'project' ? 'bg-[var(--accent-dark)] text-[var(--accent-primary)]' : 'bg-[var(--bg-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]'}`}
+              className={`px-4 py-2 rounded-sm text-sm font-medium transition-colors ${importType === 'project' ? 'bg-[var(--accent-dark)] text-[var(--accent-primary)]' : 'bg-[var(--bg-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]'}`}
             >
               Project
             </button>
           </div>
 
           {/* Template download */}
-          <div className="flex items-center gap-3 p-3 rounded-lg bg-[var(--bg-subtle)] border border-[var(--border-soft)]">
+          <div className="flex items-center gap-3 p-3 rounded-sm bg-[var(--bg-subtle)] border border-[var(--border-soft)]">
             <span className="text-xs text-[var(--text-secondary)] flex-1">
               Need the structure? Download or copy the template:
             </span>
-            <button onClick={downloadTemplate} className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md bg-[var(--bg-surface)] border border-[var(--border-default)] text-[var(--text-primary)] hover:bg-[var(--bg-subtle)] transition-colors">
+            <button onClick={downloadTemplate} className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-sm bg-[var(--bg-surface)] border border-[var(--border-default)] text-[var(--text-primary)] hover:bg-[var(--bg-subtle)] transition-colors">
               <Download className="w-3 h-3" /> Download
             </button>
-            <button onClick={copyTemplate} className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md bg-[var(--bg-surface)] border border-[var(--border-default)] text-[var(--text-primary)] hover:bg-[var(--bg-subtle)] transition-colors">
+            <button onClick={copyTemplate} className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-sm bg-[var(--bg-surface)] border border-[var(--border-default)] text-[var(--text-primary)] hover:bg-[var(--bg-subtle)] transition-colors">
               <Copy className="w-3 h-3" /> Copy
             </button>
           </div>
@@ -275,7 +275,7 @@ export function JsonImport() {
             />
             <button
               onClick={() => fileInputRef.current?.click()}
-              className="w-full p-8 border-2 border-dashed border-[var(--border-default)] rounded-xl text-center hover:border-[var(--accent-primary)]/40 hover:bg-[var(--accent-primary)]/5 transition-colors cursor-pointer"
+              className="w-full p-8 border-2 border-dashed border-[var(--border-default)] rounded-sm text-center hover:border-[var(--accent-primary)]/40 hover:bg-[var(--accent-primary)]/5 transition-colors cursor-pointer"
             >
               <Upload className="w-8 h-8 mx-auto mb-2 text-[var(--text-subtle)]" />
               <p className="text-sm font-medium text-[var(--text-primary)]">Click to upload JSON file</p>
@@ -288,14 +288,14 @@ export function JsonImport() {
             <label className="text-xs font-medium text-[var(--text-secondary)] mb-2 block">Or paste JSON directly:</label>
             <textarea
               placeholder='{"slug": "my-roadmap", "title": "My Roadmap", ...}'
-              className="w-full h-40 px-4 py-3 rounded-xl border border-[var(--border-default)] bg-[var(--bg-surface)] text-xs font-mono text-[var(--text-primary)] placeholder:text-[var(--text-subtle)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-primary)]/30 resize-none"
+              className="w-full h-40 px-4 py-3 rounded-sm border border-[var(--border-default)] bg-[var(--bg-surface)] text-xs font-mono text-[var(--text-primary)] placeholder:text-[var(--text-subtle)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-primary)]/30 resize-none"
               onChange={(e) => handlePaste(e.target.value)}
             />
           </div>
 
           {/* Parse error */}
           {parseError && (
-            <div className="flex items-center gap-2 p-3 rounded-lg bg-red-50 border border-red-200 text-sm text-red-600">
+            <div className="flex items-center gap-2 p-3 rounded-sm bg-red-50 border border-red-200 text-sm text-red-600">
               <AlertCircle className="w-4 h-4 shrink-0" />
               {parseError}
             </div>
@@ -303,7 +303,7 @@ export function JsonImport() {
 
           {/* Preview info */}
           {jsonPreview && !parseError && (
-            <div className="flex items-center gap-2 p-3 rounded-lg bg-green-50 border border-green-200 text-sm text-green-700">
+            <div className="flex items-center gap-2 p-3 rounded-sm bg-green-50 border border-green-200 text-sm text-green-700">
               <Check className="w-4 h-4 shrink-0" />
               JSON parsed successfully — {Array.isArray(JSON.parse(jsonPreview)) ? `${JSON.parse(jsonPreview).length} items` : '1 item'} ready to import
             </div>
@@ -317,7 +317,7 @@ export function JsonImport() {
                 {failCount > 0 && <span className="text-red-600 font-medium">{failCount} failed</span>}
               </div>
               {results.map((r, i) => (
-                <div key={i} className={`flex items-center gap-2 p-2.5 rounded-lg text-xs ${r.success ? 'bg-green-50 border border-green-100' : 'bg-red-50 border border-red-100'}`}>
+                <div key={i} className={`flex items-center gap-2 p-2.5 rounded-sm text-xs ${r.success ? 'bg-green-50 border border-green-100' : 'bg-red-50 border border-red-100'}`}>
                   {r.success ? <Check className="w-3.5 h-3.5 text-green-600 shrink-0" /> : <AlertCircle className="w-3.5 h-3.5 text-red-500 shrink-0" />}
                   <span className={`font-medium ${r.success ? 'text-green-700' : 'text-red-700'}`}>{r.title}</span>
                   {r.error && <span className="text-red-500 ml-auto truncate max-w-[200px]">{r.error}</span>}
@@ -330,7 +330,7 @@ export function JsonImport() {
           <button
             onClick={handleImport}
             disabled={!jsonPreview || !!parseError || importing}
-            className="w-full py-3 rounded-xl text-sm font-semibold bg-[var(--accent-dark)] text-[var(--accent-primary)] hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed transition-opacity flex items-center justify-center gap-2"
+            className="w-full py-3 rounded-sm text-sm font-semibold bg-[var(--accent-dark)] text-[var(--accent-primary)] hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed transition-opacity flex items-center justify-center gap-2"
           >
             {importing ? (
               <>
