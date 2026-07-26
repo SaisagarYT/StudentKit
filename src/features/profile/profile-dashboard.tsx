@@ -4,12 +4,14 @@ import { useState, useEffect, useMemo } from 'react';
 import {
   Flame, Trophy, Calendar, TrendingUp, Code, BookOpen,
   Target, Award, Zap, Star, CheckCircle2, BarChart3,
-  Crown, Shield, Rocket, LogOut, Cloud
+  Crown, Shield, Rocket, LogOut, Cloud, Share2
 } from 'lucide-react';
 import { getStreak, getProgressSummary, type StreakData, type ProgressSummary } from '@/lib/user-progress';
+import { getXpState, type XpState } from '@/lib/xp';
 import { dsaTopicsMeta } from '@/config/placement/dsa-topics';
 import { useUserAuth } from '@/lib/firebase/user-auth';
 import { pushProgressToCloud } from '@/lib/firebase/user-progress-sync';
+import { AchievementShareModal, type AchievementData } from './achievement-share-modal';
 
 const DSA_STORAGE_KEY = 'sk-dsa-progress';
 const CS_STORAGE_KEY = 'sk-cs-progress';
@@ -27,6 +29,9 @@ interface Badge {
   description: string;
   icon: React.ElementType;
   earned: boolean;
+  stat?: string;
+  statLabel?: string;
+  color?: string;
 }
 
 function AnimatedRing({ value, max, size = 100, strokeWidth = 8, label, sublabel }: {
@@ -115,15 +120,15 @@ function HeatmapGrid({ streak }: { streak: StreakData }) {
   );
 }
 
-function BadgeCard({ badge }: { badge: Badge }) {
+function BadgeCard({ badge, onShare }: { badge: Badge; onShare?: (badge: Badge) => void }) {
   const Icon = badge.icon;
   return (
-    <div className={`flex items-center gap-3 p-3 rounded-xl border transition-all ${
+    <div className={`flex items-center gap-3 p-3 rounded-sm border transition-all ${
       badge.earned
         ? 'border-[var(--border-soft)] bg-[var(--bg-surface)]'
         : 'border-transparent bg-[var(--bg-subtle)] opacity-50'
     }`}>
-      <div className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 ${
+      <div className={`w-9 h-9 rounded-sm flex items-center justify-center shrink-0 ${
         badge.earned ? 'bg-[var(--accent-primary)]' : 'bg-[var(--border-soft)]'
       }`}>
         <Icon className="w-4 h-4" style={{ color: badge.earned ? 'var(--accent-dark)' : 'var(--text-subtle)' }} />
@@ -134,7 +139,16 @@ function BadgeCard({ badge }: { badge: Badge }) {
         </p>
         <p className="text-[10px] text-[var(--text-subtle)]">{badge.description}</p>
       </div>
-      {badge.earned && (
+      {badge.earned && onShare && (
+        <button
+          onClick={() => onShare(badge)}
+          className="shrink-0 w-7 h-7 rounded-sm flex items-center justify-center text-[var(--text-subtle)] hover:bg-[var(--bg-subtle)] hover:text-[var(--accent-dark)] transition-colors"
+          title="Share achievement"
+        >
+          <Share2 className="w-3.5 h-3.5" />
+        </button>
+      )}
+      {badge.earned && !onShare && (
         <CheckCircle2 className="w-4 h-4 shrink-0 text-[var(--accent-dark)]" />
       )}
     </div>
@@ -146,9 +160,9 @@ function CategoryBar({ cat, index }: { cat: DsaCategoryStats; index: number }) {
   return (
     <div className="flex items-center gap-3">
       <span className="text-[11px] font-medium text-[var(--text-secondary)] w-28 truncate">{cat.title}</span>
-      <div className="flex-1 h-2 rounded-full bg-[var(--bg-subtle)] overflow-hidden">
+      <div className="flex-1 h-2 rounded-sm bg-[var(--bg-subtle)] overflow-hidden">
         <div
-          className="h-full rounded-full bg-[var(--accent-dark)] transition-all duration-700 ease-out"
+          className="h-full rounded-sm bg-[var(--accent-dark)] transition-all duration-700 ease-out"
           style={{ width: `${pct}%` }}
         />
       </div>
@@ -161,6 +175,7 @@ export function ProfileDashboard() {
   const { user: authUser, signOut } = useUserAuth();
   const [mounted, setMounted] = useState(false);
   const [syncing, setSyncing] = useState(false);
+  const [shareAchievement, setShareAchievement] = useState<AchievementData | null>(null);
   const [streak, setStreak] = useState<StreakData>({ current: 0, longest: 0, lastActiveDate: '', totalActiveDays: 0 });
   const [progress, setProgress] = useState<ProgressSummary>({ totalTopicsCompleted: 0, roadmapsStarted: 0, roadmapsCompleted: 0 });
   const [dsaProgress, setDsaProgress] = useState<Record<string, boolean>>({});
@@ -201,26 +216,27 @@ export function ProfileDashboard() {
   }, [dsaProgress]);
 
   const badges: Badge[] = useMemo(() => [
-    { id: 'first-solve', title: 'First Blood', description: 'Solve your first problem', icon: Zap, earned: dsaSolved >= 1 },
-    { id: 'ten-solved', title: 'Getting Serious', description: 'Solve 10 problems', icon: Code, earned: dsaSolved >= 10 },
-    { id: 'fifty-solved', title: 'Half Century', description: 'Solve 50 problems', icon: Target, earned: dsaSolved >= 50 },
-    { id: 'hundred-solved', title: 'Centurion', description: 'Solve 100 problems', icon: Crown, earned: dsaSolved >= 100 },
-    { id: 'streak-3', title: 'Consistent', description: '3-day streak', icon: Flame, earned: streak.longest >= 3 },
-    { id: 'streak-7', title: 'Week Warrior', description: '7-day streak', icon: Flame, earned: streak.longest >= 7 },
-    { id: 'streak-30', title: 'Monthly Master', description: '30-day streak', icon: Star, earned: streak.longest >= 30 },
-    { id: 'roadmap-done', title: 'Pathfinder', description: 'Complete a roadmap', icon: Rocket, earned: progress.roadmapsCompleted >= 1 },
-    { id: 'cs-10', title: 'CS Scholar', description: 'Complete 10 CS topics', icon: Shield, earned: csSolved >= 10 },
-    { id: 'all-rounder', title: 'All-Rounder', description: 'Solve in 5+ categories', icon: Award, earned: categoryStats.filter(c => c.solved > 0).length >= 5 },
+    { id: 'first-solve', title: 'First Blood', description: 'Solve your first problem', icon: Zap, earned: dsaSolved >= 1, stat: String(dsaSolved), statLabel: 'problems solved', color: '#C7FF3D' },
+    { id: 'ten-solved', title: 'Getting Serious', description: 'Solve 10 problems', icon: Code, earned: dsaSolved >= 10, stat: String(dsaSolved), statLabel: 'problems solved', color: '#C7FF3D' },
+    { id: 'fifty-solved', title: 'Half Century', description: 'Solve 50 problems', icon: Target, earned: dsaSolved >= 50, stat: String(dsaSolved), statLabel: 'problems solved', color: '#FFD700' },
+    { id: 'hundred-solved', title: 'Centurion', description: 'Solve 100 problems', icon: Crown, earned: dsaSolved >= 100, stat: String(dsaSolved), statLabel: 'problems solved', color: '#FFD700' },
+    { id: 'streak-3', title: 'Consistent', description: '3-day streak', icon: Flame, earned: streak.longest >= 3, stat: String(streak.longest), statLabel: 'day streak', color: '#FF6B35' },
+    { id: 'streak-7', title: 'Week Warrior', description: '7-day streak', icon: Flame, earned: streak.longest >= 7, stat: String(streak.longest), statLabel: 'day streak', color: '#FF6B35' },
+    { id: 'streak-30', title: 'Monthly Master', description: '30-day streak', icon: Star, earned: streak.longest >= 30, stat: String(streak.longest), statLabel: 'day streak', color: '#FF4500' },
+    { id: 'roadmap-done', title: 'Pathfinder', description: 'Complete a roadmap', icon: Rocket, earned: progress.roadmapsCompleted >= 1, stat: String(progress.roadmapsCompleted), statLabel: 'roadmap completed', color: '#10B981' },
+    { id: 'cs-10', title: 'CS Scholar', description: 'Complete 10 CS topics', icon: Shield, earned: csSolved >= 10, stat: String(csSolved), statLabel: 'CS topics done', color: '#06B6D4' },
+    { id: 'all-rounder', title: 'All-Rounder', description: 'Solve in 5+ categories', icon: Award, earned: categoryStats.filter(c => c.solved > 0).length >= 5, stat: String(categoryStats.filter(c => c.solved > 0).length), statLabel: 'categories covered', color: '#8B5CF6' },
   ], [dsaSolved, csSolved, streak, progress, categoryStats]);
 
   const earnedCount = badges.filter(b => b.earned).length;
-  const level = dsaSolved >= 100 ? 'Master' : dsaSolved >= 50 ? 'Expert' : dsaSolved >= 25 ? 'Intermediate' : dsaSolved >= 5 ? 'Beginner' : 'Newbie';
-  const xp = dsaSolved * 10 + csSolved * 5 + streak.totalActiveDays * 3 + progress.totalTopicsCompleted * 8;
+  const xpState: XpState = useMemo(() => getXpState(), [dsaSolved, csSolved, streak, progress]);
+  const level = xpState.level.title;
+  const xp = xpState.totalXp;
 
   if (!mounted) {
     return (
       <div className="py-20 flex justify-center">
-        <div className="w-6 h-6 border-2 border-[var(--accent-primary)] border-t-transparent rounded-full animate-spin" />
+        <div className="w-6 h-6 border-2 border-[var(--accent-primary)] border-t-transparent rounded-sm animate-spin" />
       </div>
     );
   }
@@ -230,13 +246,13 @@ export function ProfileDashboard() {
       <div className="container-main max-w-5xl">
 
         {/* Hero */}
-        <div className="rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-surface)] p-6 md:p-8 mb-6">
+        <div className="rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] p-6 md:p-8 mb-6">
           <div className="flex flex-col md:flex-row items-start md:items-center gap-5">
             {/* Avatar */}
             {authUser?.photoURL ? (
-              <img src={authUser.photoURL} alt="" className="w-16 h-16 rounded-2xl object-cover shrink-0" />
+              <img src={authUser.photoURL} alt="" className="w-16 h-16 rounded-sm object-cover shrink-0" />
             ) : (
-              <div className="w-16 h-16 rounded-2xl bg-[var(--accent-primary)] flex items-center justify-center shrink-0">
+              <div className="w-16 h-16 rounded-sm bg-[var(--accent-primary)] flex items-center justify-center shrink-0">
                 {authUser ? (
                   <span className="text-xl font-bold text-[var(--accent-dark)]">
                     {(authUser.displayName || authUser.email || 'U')[0].toUpperCase()}
@@ -253,7 +269,7 @@ export function ProfileDashboard() {
                 <h1 className="text-xl font-bold text-[var(--text-primary)]">
                   {authUser?.displayName || 'Your Progress'}
                 </h1>
-                <span className="px-2.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider bg-[var(--accent-primary)] text-[var(--accent-dark)]">
+                <span className="px-2 py-0.5 rounded-sm text-[9px] font-bold uppercase tracking-wider bg-[var(--accent-primary)] text-[var(--accent-dark)]">
                   {level}
                 </span>
               </div>
@@ -265,14 +281,19 @@ export function ProfileDashboard() {
               <div className="mt-3 max-w-xs">
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-[9px] font-semibold text-[var(--text-subtle)] uppercase tracking-wider">Next level</span>
-                  <span className="text-[9px] font-bold text-[var(--text-primary)]">{xp % 500}/500</span>
+                  <span className="text-[9px] font-bold text-[var(--text-primary)] tabular-nums">{xpState.xpInLevel}/{xpState.xpInLevel + xpState.xpToNextLevel}</span>
                 </div>
-                <div className="h-1.5 rounded-full bg-[var(--bg-subtle)] overflow-hidden">
+                <div className="h-1.5 rounded-sm bg-[var(--bg-subtle)] overflow-hidden">
                   <div
-                    className="h-full rounded-full bg-[var(--accent-dark)] transition-all duration-1000"
-                    style={{ width: `${(xp % 500) / 5}%` }}
+                    className="h-full rounded-sm bg-[var(--accent-dark)] transition-all duration-1000"
+                    style={{ width: `${xpState.levelProgress * 100}%` }}
                   />
                 </div>
+                {xpState.streakMultiplier > 1 && (
+                  <p className="mt-1 text-[9px] text-[var(--accent-dark)] font-medium">
+                    {xpState.streakMultiplier}x streak bonus active
+                  </p>
+                )}
               </div>
             </div>
 
@@ -299,18 +320,25 @@ export function ProfileDashboard() {
               <button
                 onClick={async () => {
                   setSyncing(true);
-                  await pushProgressToCloud(authUser.uid);
+                  await pushProgressToCloud(authUser.uid, { displayName: authUser.displayName || '', photoURL: authUser.photoURL || '' });
                   setSyncing(false);
                 }}
                 disabled={syncing}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-medium text-[var(--text-secondary)] hover:bg-[var(--bg-subtle)] border border-[var(--border-soft)] transition-colors disabled:opacity-50"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-[11px] font-medium text-[var(--text-secondary)] hover:bg-[var(--bg-subtle)] border border-[var(--border-soft)] transition-colors disabled:opacity-50"
               >
                 <Cloud className="w-3.5 h-3.5" />
                 {syncing ? 'Syncing...' : 'Sync Progress'}
               </button>
+              <a
+                href="/profile/card"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-[11px] font-medium text-[var(--text-secondary)] hover:bg-[var(--bg-subtle)] border border-[var(--border-soft)] transition-colors"
+              >
+                <Share2 className="w-3.5 h-3.5" />
+                Dev Card
+              </a>
               <button
                 onClick={signOut}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-medium text-[var(--text-subtle)] hover:text-red-500 hover:bg-red-50 transition-colors"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-[11px] font-medium text-[var(--text-subtle)] hover:text-red-500 hover:bg-red-50 transition-colors"
               >
                 <LogOut className="w-3.5 h-3.5" />
                 Sign Out
@@ -324,7 +352,7 @@ export function ProfileDashboard() {
             <div className="mt-5 pt-5 border-t border-[var(--border-soft)]">
               <a
                 href="/login"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-medium bg-[var(--accent-dark)] text-[var(--accent-primary)] hover:opacity-90 transition-opacity"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-[11px] font-medium bg-[var(--accent-dark)] text-[var(--accent-primary)] hover:opacity-90 transition-opacity"
               >
                 Sign in to sync progress across devices
               </a>
@@ -334,22 +362,22 @@ export function ProfileDashboard() {
 
         {/* Rings Row */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-          <div className="p-5 rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-surface)] flex justify-center">
+          <div className="p-5 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] flex justify-center">
             <AnimatedRing value={dsaSolved} max={Math.max(dsaSolved, 50)} label="DSA" sublabel="solved" />
           </div>
-          <div className="p-5 rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-surface)] flex justify-center">
+          <div className="p-5 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] flex justify-center">
             <AnimatedRing value={csSolved} max={Math.max(csSolved, 30)} label="CS Topics" sublabel="done" />
           </div>
-          <div className="p-5 rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-surface)] flex justify-center">
+          <div className="p-5 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] flex justify-center">
             <AnimatedRing value={progress.totalTopicsCompleted} max={Math.max(progress.totalTopicsCompleted, 20)} label="Roadmaps" sublabel="topics" />
           </div>
-          <div className="p-5 rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-surface)] flex justify-center">
+          <div className="p-5 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] flex justify-center">
             <AnimatedRing value={earnedCount} max={badges.length} label="Badges" sublabel={`of ${badges.length}`} />
           </div>
         </div>
 
         {/* Heatmap */}
-        <div className="p-5 rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-surface)] mb-6">
+        <div className="p-5 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] mb-6">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <Calendar className="w-4 h-4 text-[var(--text-secondary)]" />
@@ -383,7 +411,7 @@ export function ProfileDashboard() {
         {/* Categories + Badges */}
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
           {/* Categories */}
-          <div className="lg:col-span-3 p-5 rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-surface)]">
+          <div className="lg:col-span-3 p-5 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)]">
             <div className="flex items-center gap-2 mb-5">
               <BarChart3 className="w-4 h-4 text-[var(--text-secondary)]" />
               <h2 className="text-sm font-bold text-[var(--text-primary)]">Category Breakdown</h2>
@@ -404,26 +432,49 @@ export function ProfileDashboard() {
           </div>
 
           {/* Badges */}
-          <div className="lg:col-span-2 p-5 rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-surface)]">
+          <div className="lg:col-span-2 p-5 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)]">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
                 <Award className="w-4 h-4 text-[var(--text-secondary)]" />
                 <h2 className="text-sm font-bold text-[var(--text-primary)]">Badges</h2>
               </div>
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[var(--accent-primary)] text-[var(--accent-dark)]">
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded-sm bg-[var(--accent-primary)] text-[var(--accent-dark)] tabular-nums">
                 {earnedCount}/{badges.length}
               </span>
             </div>
 
             <div className="space-y-2 max-h-[420px] overflow-y-auto">
               {badges.sort((a, b) => (b.earned ? 1 : 0) - (a.earned ? 1 : 0)).map(badge => (
-                <BadgeCard key={badge.id} badge={badge} />
+                <BadgeCard
+                  key={badge.id}
+                  badge={badge}
+                  onShare={badge.earned ? (b) => {
+                    const Icon = b.icon;
+                    setShareAchievement({
+                      id: b.id,
+                      title: b.title,
+                      description: b.description,
+                      stat: b.stat || '',
+                      statLabel: b.statLabel || '',
+                      icon: <Icon className="w-6 h-6" style={{ color: b.color || 'var(--accent-dark)' }} />,
+                      color: b.color || '#C7FF3D',
+                    });
+                  } : undefined}
+                />
               ))}
             </div>
           </div>
         </div>
 
       </div>
+
+      {shareAchievement && (
+        <AchievementShareModal
+          achievement={shareAchievement}
+          userName={authUser?.displayName || ''}
+          onClose={() => setShareAchievement(null)}
+        />
+      )}
     </div>
   );
 }
