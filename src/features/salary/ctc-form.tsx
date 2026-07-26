@@ -35,7 +35,7 @@ export function CTCForm() {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      <div className="p-6 md:p-8 border border-[var(--border-soft)] rounded-2xl bg-[var(--bg-surface)]">
+      <div className="p-6 md:p-8 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)]">
         <div className="space-y-5">
           <div>
             <label className="block text-sm font-medium text-[var(--text-primary)] mb-1.5">
@@ -66,7 +66,7 @@ export function CTCForm() {
                   key={val}
                   type="button"
                   onClick={() => setCtc(String(val))}
-                  className="px-3 py-1.5 text-xs font-medium border border-[var(--border-soft)] rounded-lg hover:bg-[var(--bg-subtle)] hover:border-[var(--border-default)] transition-colors"
+                  className="px-3 py-1.5 text-xs font-medium border border-[var(--border-soft)] rounded-sm hover:bg-[var(--bg-subtle)] hover:border-[var(--border-default)] transition-colors"
                 >
                   {val >= 1000000 ? `${val / 1000000} Cr` : `${val / 100000} L`}
                 </button>
@@ -83,7 +83,7 @@ export function CTCForm() {
           type="button"
           onClick={handleCalculate}
           disabled={!ctc}
-          className="mt-6 w-full h-12 flex items-center justify-center text-sm font-semibold bg-[var(--accent-dark)] text-[var(--text-inverse)] rounded-xl hover:bg-[var(--accent-dark)]/90 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+          className="mt-6 w-full h-12 flex items-center justify-center text-sm font-semibold bg-[var(--accent-dark)] text-[var(--text-inverse)] rounded-sm hover:bg-[var(--accent-dark)]/90 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
         >
           Calculate In-Hand Salary
         </button>
@@ -94,7 +94,7 @@ export function CTCForm() {
         </p>
       </div>
 
-      <div ref={resultRef} className="p-6 md:p-8 border border-[var(--border-soft)] rounded-2xl bg-[var(--bg-surface)]">
+      <div ref={resultRef} className="p-6 md:p-8 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)]">
         {!result ? (
           <div className="flex items-center justify-center h-full">
             <p className="text-sm text-[var(--text-subtle)]">

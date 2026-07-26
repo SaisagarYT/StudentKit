@@ -49,7 +49,7 @@ export function CGPAForm() {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       {/* Form */}
-      <div className="p-6 md:p-8 border border-[var(--border-soft)] rounded-2xl bg-[var(--bg-surface)]">
+      <div className="p-6 md:p-8 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)]">
         <div className="space-y-3">
           {/* Header row */}
           <div className="grid grid-cols-[1fr_1fr_auto] gap-3 text-xs font-medium text-[var(--text-subtle)] uppercase tracking-wider">
@@ -92,7 +92,7 @@ export function CGPAForm() {
                 type="button"
                 onClick={() => removeSemester(sem.id)}
                 disabled={semesters.length <= 1}
-                className="flex items-center justify-center w-9 h-9 rounded-lg text-[var(--text-subtle)] hover:text-[var(--color-error)] hover:bg-[var(--color-error)]/10 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                className="flex items-center justify-center w-9 h-9 rounded-sm text-[var(--text-subtle)] hover:text-[var(--color-error)] hover:bg-[var(--color-error)]/10 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
                 aria-label="Remove semester"
               >
                 <Trash2 className="w-4 h-4" />
@@ -104,7 +104,7 @@ export function CGPAForm() {
         <button
           type="button"
           onClick={addSemester}
-          className="mt-4 flex items-center gap-2 px-4 py-2 text-sm font-medium text-[var(--text-secondary)] border border-dashed border-[var(--border-default)] rounded-xl hover:border-[var(--border-strong)] hover:text-[var(--text-primary)] transition-colors w-full justify-center"
+          className="mt-4 flex items-center gap-2 px-4 py-2 text-sm font-medium text-[var(--text-secondary)] border border-dashed border-[var(--border-default)] rounded-sm hover:border-[var(--border-strong)] hover:text-[var(--text-primary)] transition-colors w-full justify-center"
         >
           <Plus className="w-4 h-4" />
           Add Semester
@@ -113,7 +113,7 @@ export function CGPAForm() {
         <button
           type="button"
           onClick={handleCalculate}
-          className="mt-4 w-full h-12 flex items-center justify-center gap-2 text-sm font-semibold bg-[var(--accent-dark)] text-[var(--text-inverse)] rounded-xl hover:bg-[var(--accent-dark)]/90 transition-all"
+          className="mt-4 w-full h-12 flex items-center justify-center gap-2 text-sm font-semibold bg-[var(--accent-dark)] text-[var(--text-inverse)] rounded-sm hover:bg-[var(--accent-dark)]/90 transition-all"
         >
           Calculate CGPA
         </button>

@@ -29,7 +29,7 @@ export function CGPAResultDisplay({ result }: Props) {
 
   if (!result) {
     return (
-      <div className="flex items-center justify-center p-6 md:p-8 border border-[var(--border-soft)] rounded-2xl bg-[var(--bg-surface)] border-dashed">
+      <div className="flex items-center justify-center p-6 md:p-8 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)] border-dashed">
         <p className="text-sm text-[var(--text-subtle)]">
           Add your semester GPAs and credits to calculate CGPA
         </p>
@@ -42,7 +42,7 @@ export function CGPAResultDisplay({ result }: Props) {
   return (
     <div
       ref={containerRef}
-      className="p-6 md:p-8 border border-[var(--border-soft)] rounded-2xl bg-[var(--bg-surface)]"
+      className="p-6 md:p-8 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)]"
     >
       <span className="text-xs font-medium uppercase tracking-wider text-[var(--text-subtle)]">
         Cumulative GPA
@@ -57,28 +57,28 @@ export function CGPAResultDisplay({ result }: Props) {
       </div>
 
       {/* Visual bar */}
-      <div className="mt-6 h-3 bg-[var(--bg-subtle)] rounded-full overflow-hidden">
+      <div className="mt-6 h-3 bg-[var(--bg-subtle)] rounded-sm overflow-hidden">
         <div
-          className="h-full rounded-full bg-[var(--accent-college)] transition-all duration-700 ease-out"
+          className="h-full rounded-sm bg-[var(--accent-college)] transition-all duration-700 ease-out"
           style={{ width: `${(result.cgpa / 10) * 100}%` }}
         />
       </div>
 
       {/* Stats */}
       <div className="mt-6 grid grid-cols-3 gap-3">
-        <div className="p-3 bg-[var(--bg-subtle)] rounded-xl text-center">
+        <div className="p-3 bg-[var(--bg-subtle)] rounded-sm text-center">
           <span className="text-xs text-[var(--text-subtle)]">Semesters</span>
           <div className="mt-1 text-lg font-semibold">
             {result.semesterCount}
           </div>
         </div>
-        <div className="p-3 bg-[var(--bg-subtle)] rounded-xl text-center">
+        <div className="p-3 bg-[var(--bg-subtle)] rounded-sm text-center">
           <span className="text-xs text-[var(--text-subtle)]">Credits</span>
           <div className="mt-1 text-lg font-semibold">
             {result.totalCredits}
           </div>
         </div>
-        <div className="p-3 bg-[var(--bg-subtle)] rounded-xl text-center">
+        <div className="p-3 bg-[var(--bg-subtle)] rounded-sm text-center">
           <span className="text-xs text-[var(--text-subtle)]">Grade Points</span>
           <div className="mt-1 text-lg font-semibold">
             {result.totalGradePoints.toFixed(0)}
@@ -87,7 +87,7 @@ export function CGPAResultDisplay({ result }: Props) {
       </div>
 
       {/* Performance context */}
-      <div className="mt-6 p-4 rounded-xl bg-[var(--accent-college)]/10 border-l-4 border-[var(--accent-college)]">
+      <div className="mt-6 p-4 rounded-sm bg-[var(--accent-college)]/10 border-l-4 border-[var(--accent-college)]">
         <p className="text-sm text-[var(--text-primary)]">
           <span className="font-semibold">{performance.label}</span>{' '}
           {performance.description}

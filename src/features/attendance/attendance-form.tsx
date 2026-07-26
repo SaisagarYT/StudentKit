@@ -46,7 +46,7 @@ export function AttendanceForm() {
       {/* Form */}
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="p-6 md:p-8 border border-[var(--border-soft)] rounded-2xl bg-[var(--bg-surface)]"
+        className="p-6 md:p-8 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)]"
       >
         <div className="space-y-5">
           <FormField
@@ -97,7 +97,7 @@ export function AttendanceForm() {
         <button
           type="submit"
           disabled={!hasInput}
-          className="mt-6 w-full h-12 flex items-center justify-center gap-2 text-sm font-semibold bg-[var(--accent-dark)] text-[var(--text-inverse)] rounded-xl hover:bg-[var(--accent-dark)]/90 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+          className="mt-6 w-full h-12 flex items-center justify-center gap-2 text-sm font-semibold bg-[var(--accent-dark)] text-[var(--text-inverse)] rounded-sm hover:bg-[var(--accent-dark)]/90 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
         >
           Calculate Attendance
         </button>

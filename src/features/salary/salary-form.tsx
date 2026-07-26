@@ -44,7 +44,7 @@ export function SalaryForm() {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      <div className="p-6 md:p-8 border border-[var(--border-soft)] rounded-2xl bg-[var(--bg-surface)]">
+      <div className="p-6 md:p-8 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)]">
         <div className="space-y-5">
           <div>
             <label className="block text-sm font-medium text-[var(--text-primary)] mb-1.5">
@@ -71,7 +71,7 @@ export function SalaryForm() {
               <button
                 type="button"
                 onClick={() => setPeriod('annual')}
-                className={`flex-1 py-2.5 text-sm font-medium rounded-lg border transition-colors ${
+                className={`flex-1 py-2.5 text-sm font-medium rounded-sm border transition-colors ${
                   period === 'annual'
                     ? 'bg-[var(--accent-dark)] text-[var(--text-inverse)] border-[var(--accent-dark)]'
                     : 'border-[var(--border-default)] text-[var(--text-secondary)] hover:bg-[var(--bg-subtle)]'
@@ -82,7 +82,7 @@ export function SalaryForm() {
               <button
                 type="button"
                 onClick={() => setPeriod('monthly')}
-                className={`flex-1 py-2.5 text-sm font-medium rounded-lg border transition-colors ${
+                className={`flex-1 py-2.5 text-sm font-medium rounded-sm border transition-colors ${
                   period === 'monthly'
                     ? 'bg-[var(--accent-dark)] text-[var(--text-inverse)] border-[var(--accent-dark)]'
                     : 'border-[var(--border-default)] text-[var(--text-secondary)] hover:bg-[var(--bg-subtle)]'
@@ -98,13 +98,13 @@ export function SalaryForm() {
           type="button"
           onClick={handleCalculate}
           disabled={!amount}
-          className="mt-6 w-full h-12 flex items-center justify-center text-sm font-semibold bg-[var(--accent-dark)] text-[var(--text-inverse)] rounded-xl hover:bg-[var(--accent-dark)]/90 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+          className="mt-6 w-full h-12 flex items-center justify-center text-sm font-semibold bg-[var(--accent-dark)] text-[var(--text-inverse)] rounded-sm hover:bg-[var(--accent-dark)]/90 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
         >
           Calculate
         </button>
       </div>
 
-      <div ref={resultRef} className="p-6 md:p-8 border border-[var(--border-soft)] rounded-2xl bg-[var(--bg-surface)]">
+      <div ref={resultRef} className="p-6 md:p-8 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)]">
         {!result ? (
           <div className="flex items-center justify-center h-full">
             <p className="text-sm text-[var(--text-subtle)]">
@@ -143,7 +143,7 @@ function SalaryRow({
   highlight?: boolean;
 }) {
   return (
-    <div className={`flex items-center justify-between p-3 rounded-xl ${highlight ? 'bg-[var(--accent-career)]/10' : 'bg-[var(--bg-subtle)]'}`}>
+    <div className={`flex items-center justify-between p-3 rounded-sm ${highlight ? 'bg-[var(--accent-career)]/10' : 'bg-[var(--bg-subtle)]'}`}>
       <div>
         <span className={`text-sm ${highlight ? 'font-semibold text-[var(--text-primary)]' : 'text-[var(--text-secondary)]'}`}>
           {label}

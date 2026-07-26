@@ -34,7 +34,7 @@ export function CGPAToPercentageForm() {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      <div className="p-6 md:p-8 border border-[var(--border-soft)] rounded-2xl bg-[var(--bg-surface)]">
+      <div className="p-6 md:p-8 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)]">
         <div className="space-y-5">
           <div>
             <label className="block text-sm font-medium text-[var(--text-primary)] mb-1.5">
@@ -80,13 +80,13 @@ export function CGPAToPercentageForm() {
           type="button"
           onClick={handleCalculate}
           disabled={!cgpa}
-          className="mt-6 w-full h-12 flex items-center justify-center text-sm font-semibold bg-[var(--accent-dark)] text-[var(--text-inverse)] rounded-xl hover:bg-[var(--accent-dark)]/90 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+          className="mt-6 w-full h-12 flex items-center justify-center text-sm font-semibold bg-[var(--accent-dark)] text-[var(--text-inverse)] rounded-sm hover:bg-[var(--accent-dark)]/90 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
         >
           Convert to Percentage
         </button>
       </div>
 
-      <div ref={resultRef} className="p-6 md:p-8 border border-[var(--border-soft)] rounded-2xl bg-[var(--bg-surface)]">
+      <div ref={resultRef} className="p-6 md:p-8 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)]">
         {!result ? (
           <div className="flex items-center justify-center h-full">
             <p className="text-sm text-[var(--text-subtle)]">
@@ -105,7 +105,7 @@ export function CGPAToPercentageForm() {
               <span className="text-2xl font-bold text-[var(--text-subtle)]">%</span>
             </div>
 
-            <div className="mt-8 p-4 bg-[var(--bg-subtle)] rounded-xl">
+            <div className="mt-8 p-4 bg-[var(--bg-subtle)] rounded-sm">
               <span className="text-xs font-medium text-[var(--text-subtle)] uppercase tracking-wider">
                 Formula Used
               </span>

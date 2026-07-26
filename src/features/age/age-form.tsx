@@ -42,7 +42,7 @@ export function AgeForm() {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      <div className="p-6 md:p-8 border border-[var(--border-soft)] rounded-2xl bg-[var(--bg-surface)]">
+      <div className="p-6 md:p-8 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)]">
         <div className="space-y-5">
           <div>
             <label className="block text-sm font-medium text-[var(--text-primary)] mb-1.5">
@@ -81,13 +81,13 @@ export function AgeForm() {
           type="button"
           onClick={handleCalculate}
           disabled={!birthDate}
-          className="mt-6 w-full h-12 flex items-center justify-center text-sm font-semibold bg-[var(--accent-dark)] text-[var(--text-inverse)] rounded-xl hover:bg-[var(--accent-dark)]/90 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+          className="mt-6 w-full h-12 flex items-center justify-center text-sm font-semibold bg-[var(--accent-dark)] text-[var(--text-inverse)] rounded-sm hover:bg-[var(--accent-dark)]/90 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
         >
           Calculate Age
         </button>
       </div>
 
-      <div ref={resultRef} className="p-6 md:p-8 border border-[var(--border-soft)] rounded-2xl bg-[var(--bg-surface)]">
+      <div ref={resultRef} className="p-6 md:p-8 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)]">
         {!result ? (
           <div className="flex items-center justify-center h-full">
             <p className="text-sm text-[var(--text-subtle)]">
@@ -118,19 +118,19 @@ export function AgeForm() {
 
             {/* Detailed stats */}
             <div className="mt-8 grid grid-cols-2 gap-3">
-              <div className="p-3 bg-[var(--bg-subtle)] rounded-xl">
+              <div className="p-3 bg-[var(--bg-subtle)] rounded-sm">
                 <span className="text-xs text-[var(--text-subtle)]">Total Days</span>
                 <div className="mt-1 text-lg font-semibold">{result.totalDays.toLocaleString()}</div>
               </div>
-              <div className="p-3 bg-[var(--bg-subtle)] rounded-xl">
+              <div className="p-3 bg-[var(--bg-subtle)] rounded-sm">
                 <span className="text-xs text-[var(--text-subtle)]">Total Weeks</span>
                 <div className="mt-1 text-lg font-semibold">{result.totalWeeks.toLocaleString()}</div>
               </div>
-              <div className="p-3 bg-[var(--bg-subtle)] rounded-xl">
+              <div className="p-3 bg-[var(--bg-subtle)] rounded-sm">
                 <span className="text-xs text-[var(--text-subtle)]">Total Months</span>
                 <div className="mt-1 text-lg font-semibold">{result.totalMonths}</div>
               </div>
-              <div className="p-3 bg-[var(--bg-subtle)] rounded-xl">
+              <div className="p-3 bg-[var(--bg-subtle)] rounded-sm">
                 <span className="text-xs text-[var(--text-subtle)]">Next Birthday</span>
                 <div className="mt-1 text-lg font-semibold">{result.nextBirthday} days</div>
               </div>

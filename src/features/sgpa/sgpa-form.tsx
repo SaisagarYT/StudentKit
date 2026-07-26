@@ -67,7 +67,7 @@ export function SGPAForm() {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       {/* Form */}
-      <div className="p-6 md:p-8 border border-[var(--border-soft)] rounded-2xl bg-[var(--bg-surface)]">
+      <div className="p-6 md:p-8 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)]">
         <div className="space-y-3">
           <div className="grid grid-cols-[1.5fr_1fr_1fr_auto] gap-3 text-xs font-medium text-[var(--text-subtle)] uppercase tracking-wider">
             <span>Subject</span>
@@ -108,7 +108,7 @@ export function SGPAForm() {
                 type="button"
                 onClick={() => removeSubject(sub.id)}
                 disabled={subjects.length <= 1}
-                className="flex items-center justify-center w-9 h-9 rounded-lg text-[var(--text-subtle)] hover:text-[var(--color-error)] hover:bg-[var(--color-error)]/10 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                className="flex items-center justify-center w-9 h-9 rounded-sm text-[var(--text-subtle)] hover:text-[var(--color-error)] hover:bg-[var(--color-error)]/10 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
                 aria-label="Remove subject"
               >
                 <Trash2 className="w-4 h-4" />
@@ -120,7 +120,7 @@ export function SGPAForm() {
         <button
           type="button"
           onClick={addSubject}
-          className="mt-4 flex items-center gap-2 px-4 py-2 text-sm font-medium text-[var(--text-secondary)] border border-dashed border-[var(--border-default)] rounded-xl hover:border-[var(--border-strong)] hover:text-[var(--text-primary)] transition-colors w-full justify-center"
+          className="mt-4 flex items-center gap-2 px-4 py-2 text-sm font-medium text-[var(--text-secondary)] border border-dashed border-[var(--border-default)] rounded-sm hover:border-[var(--border-strong)] hover:text-[var(--text-primary)] transition-colors w-full justify-center"
         >
           <Plus className="w-4 h-4" />
           Add Subject
@@ -129,14 +129,14 @@ export function SGPAForm() {
         <button
           type="button"
           onClick={handleCalculate}
-          className="mt-4 w-full h-12 flex items-center justify-center text-sm font-semibold bg-[var(--accent-dark)] text-[var(--text-inverse)] rounded-xl hover:bg-[var(--accent-dark)]/90 transition-all"
+          className="mt-4 w-full h-12 flex items-center justify-center text-sm font-semibold bg-[var(--accent-dark)] text-[var(--text-inverse)] rounded-sm hover:bg-[var(--accent-dark)]/90 transition-all"
         >
           Calculate SGPA
         </button>
       </div>
 
       {/* Results */}
-      <div ref={resultRef} className="p-6 md:p-8 border border-[var(--border-soft)] rounded-2xl bg-[var(--bg-surface)]">
+      <div ref={resultRef} className="p-6 md:p-8 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)]">
         {!result ? (
           <div className="flex items-center justify-center h-full">
             <p className="text-sm text-[var(--text-subtle)]">
@@ -155,23 +155,23 @@ export function SGPAForm() {
               <span className="text-lg font-medium text-[var(--text-subtle)]">/ 10</span>
             </div>
 
-            <div className="mt-6 h-3 bg-[var(--bg-subtle)] rounded-full overflow-hidden">
+            <div className="mt-6 h-3 bg-[var(--bg-subtle)] rounded-sm overflow-hidden">
               <div
-                className="h-full rounded-full bg-[var(--accent-college)] transition-all duration-700 ease-out"
+                className="h-full rounded-sm bg-[var(--accent-college)] transition-all duration-700 ease-out"
                 style={{ width: `${(result.sgpa / 10) * 100}%` }}
               />
             </div>
 
             <div className="mt-6 grid grid-cols-3 gap-3">
-              <div className="p-3 bg-[var(--bg-subtle)] rounded-xl text-center">
+              <div className="p-3 bg-[var(--bg-subtle)] rounded-sm text-center">
                 <span className="text-xs text-[var(--text-subtle)]">Subjects</span>
                 <div className="mt-1 text-lg font-semibold">{result.subjectCount}</div>
               </div>
-              <div className="p-3 bg-[var(--bg-subtle)] rounded-xl text-center">
+              <div className="p-3 bg-[var(--bg-subtle)] rounded-sm text-center">
                 <span className="text-xs text-[var(--text-subtle)]">Credits</span>
                 <div className="mt-1 text-lg font-semibold">{result.totalCredits}</div>
               </div>
-              <div className="p-3 bg-[var(--bg-subtle)] rounded-xl text-center">
+              <div className="p-3 bg-[var(--bg-subtle)] rounded-sm text-center">
                 <span className="text-xs text-[var(--text-subtle)]">Total Pts</span>
                 <div className="mt-1 text-lg font-semibold">{result.totalGradePoints.toFixed(0)}</div>
               </div>

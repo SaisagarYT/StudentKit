@@ -29,7 +29,7 @@ export function AttendanceResultDisplay({ result }: Props) {
 
   if (!result) {
     return (
-      <div className="flex items-center justify-center p-6 md:p-8 border border-[var(--border-soft)] rounded-2xl bg-[var(--bg-surface)] border-dashed">
+      <div className="flex items-center justify-center p-6 md:p-8 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)] border-dashed">
         <div className="text-center">
           <p className="text-sm text-[var(--text-subtle)]">
             Enter your attendance details to see results
@@ -50,7 +50,7 @@ export function AttendanceResultDisplay({ result }: Props) {
   return (
     <div
       ref={containerRef}
-      className="p-6 md:p-8 border border-[var(--border-soft)] rounded-2xl bg-[var(--bg-surface)]"
+      className="p-6 md:p-8 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)]"
     >
       {/* Main percentage */}
       <div className="mb-6">
@@ -67,9 +67,9 @@ export function AttendanceResultDisplay({ result }: Props) {
 
       {/* Progress visualization */}
       <div className="relative mb-8">
-        <div className="h-3 bg-[var(--bg-subtle)] rounded-full overflow-hidden">
+        <div className="h-3 bg-[var(--bg-subtle)] rounded-sm overflow-hidden">
           <div
-            className="h-full rounded-full transition-all duration-700 ease-out"
+            className="h-full rounded-sm transition-all duration-700 ease-out"
             style={{
               width: `${Math.min(currentPercentage, 100)}%`,
               backgroundColor: statusColor,
@@ -95,13 +95,13 @@ export function AttendanceResultDisplay({ result }: Props) {
 
       {/* Status cards */}
       <div className="grid grid-cols-2 gap-3 mb-6">
-        <div className="p-3 bg-[var(--bg-subtle)] rounded-xl">
+        <div className="p-3 bg-[var(--bg-subtle)] rounded-sm">
           <span className="text-xs text-[var(--text-subtle)]">Attended</span>
           <div className="mt-1 text-lg font-semibold">
             {result.attendedClasses}/{result.totalClasses}
           </div>
         </div>
-        <div className="p-3 bg-[var(--bg-subtle)] rounded-xl">
+        <div className="p-3 bg-[var(--bg-subtle)] rounded-sm">
           <span className="text-xs text-[var(--text-subtle)]">Missed</span>
           <div className="mt-1 text-lg font-semibold">
             {result.totalClasses - result.attendedClasses}
@@ -111,7 +111,7 @@ export function AttendanceResultDisplay({ result }: Props) {
 
       {/* Insight */}
       <div
-        className="p-4 rounded-xl border-l-4"
+        className="p-4 rounded-sm border-l-4"
         style={{ borderLeftColor: statusColor, backgroundColor: `color-mix(in srgb, ${statusColor} 8%, transparent)` }}
       >
         {isAboveTarget ? (

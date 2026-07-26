@@ -47,7 +47,7 @@ export function MarksPercentageForm() {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      <div className="p-6 md:p-8 border border-[var(--border-soft)] rounded-2xl bg-[var(--bg-surface)]">
+      <div className="p-6 md:p-8 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)]">
         <div className="space-y-5">
           <div>
             <label className="block text-sm font-medium text-[var(--text-primary)] mb-1.5">
@@ -86,13 +86,13 @@ export function MarksPercentageForm() {
           type="button"
           onClick={handleCalculate}
           disabled={!obtained || !total}
-          className="mt-6 w-full h-12 flex items-center justify-center text-sm font-semibold bg-[var(--accent-dark)] text-[var(--text-inverse)] rounded-xl hover:bg-[var(--accent-dark)]/90 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+          className="mt-6 w-full h-12 flex items-center justify-center text-sm font-semibold bg-[var(--accent-dark)] text-[var(--text-inverse)] rounded-sm hover:bg-[var(--accent-dark)]/90 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
         >
           Calculate Percentage
         </button>
       </div>
 
-      <div ref={resultRef} className="p-6 md:p-8 border border-[var(--border-soft)] rounded-2xl bg-[var(--bg-surface)]">
+      <div ref={resultRef} className="p-6 md:p-8 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)]">
         {!result ? (
           <div className="flex items-center justify-center h-full">
             <p className="text-sm text-[var(--text-subtle)]">
@@ -111,14 +111,14 @@ export function MarksPercentageForm() {
               <span className="text-2xl font-bold text-[var(--text-subtle)]">%</span>
             </div>
 
-            <div className="mt-6 h-3 bg-[var(--bg-subtle)] rounded-full overflow-hidden">
+            <div className="mt-6 h-3 bg-[var(--bg-subtle)] rounded-sm overflow-hidden">
               <div
-                className="h-full rounded-full bg-[var(--accent-primary)] transition-all duration-700 ease-out"
+                className="h-full rounded-sm bg-[var(--accent-primary)] transition-all duration-700 ease-out"
                 style={{ width: `${Math.min(result.percentage, 100)}%` }}
               />
             </div>
 
-            <div className="mt-6 p-4 bg-[var(--bg-subtle)] rounded-xl">
+            <div className="mt-6 p-4 bg-[var(--bg-subtle)] rounded-sm">
               <span className="text-xs font-medium text-[var(--text-subtle)] uppercase tracking-wider">
                 Calculation
               </span>
