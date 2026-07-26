@@ -204,7 +204,7 @@ export function NotionEditor({ value, onChange, placeholder, minHeight = '300px'
   };
 
   return (
-    <div className="notion-editor rounded-2xl border border-[rgba(255,255,255,0.06)] overflow-hidden bg-[var(--bg-surface)]">
+    <div className="notion-editor rounded-sm border border-[rgba(255,255,255,0.06)] overflow-hidden bg-[var(--bg-surface)]">
       {/* Toolbar */}
       <div className="flex items-center gap-0.5 px-3 py-2 border-b border-[rgba(255,255,255,0.05)] bg-[var(--bg-subtle)] overflow-x-auto">
         {TOOLBAR_ITEMS.map((item, i) => {
@@ -217,14 +217,14 @@ export function NotionEditor({ value, onChange, placeholder, minHeight = '300px'
               key={i}
               onClick={() => execCommand(item.command!)}
               title={`${item.label} (${item.shortcut})`}
-              className="p-1.5 rounded-md text-[var(--text-subtle)] hover:text-[var(--text-primary)] hover:bg-[rgba(255,255,255,0.06)] transition-colors shrink-0"
+              className="p-1.5 rounded-sm text-[var(--text-subtle)] hover:text-[var(--text-primary)] hover:bg-[rgba(255,255,255,0.06)] transition-colors shrink-0"
             >
               <Icon className="w-3.5 h-3.5" />
             </button>
           );
         })}
         <div className="ml-auto flex items-center gap-1 shrink-0">
-          <span className="text-[9px] text-[var(--text-subtle)] px-2 py-0.5 rounded bg-[var(--bg-surface)] border border-[rgba(255,255,255,0.05)]">
+          <span className="text-[9px] text-[var(--text-subtle)] px-2 py-0.5 rounded-sm bg-[var(--bg-surface)] border border-[rgba(255,255,255,0.05)]">
             Type / for commands
           </span>
         </div>
@@ -245,7 +245,7 @@ export function NotionEditor({ value, onChange, placeholder, minHeight = '300px'
 
         {/* Slash Command Menu */}
         {showSlash && (
-          <div className="absolute left-5 z-50 w-64 rounded-xl border border-[rgba(255,255,255,0.1)] bg-[var(--bg-surface)] shadow-2xl shadow-black/40 py-1.5 max-h-64 overflow-y-auto"
+          <div className="absolute left-5 z-50 w-64 rounded-sm border border-[rgba(255,255,255,0.1)] bg-[var(--bg-surface)] shadow-2xl shadow-black/40 py-1.5 max-h-64 overflow-y-auto"
             style={{ top: '40px' }}
           >
             <div className="px-3 py-1.5 border-b border-[rgba(255,255,255,0.05)]">
@@ -269,7 +269,7 @@ export function NotionEditor({ value, onChange, placeholder, minHeight = '300px'
                   }}
                   className="flex items-center gap-3 w-full px-3 py-2 text-left hover:bg-[rgba(255,255,255,0.05)] transition-colors"
                 >
-                  <div className="w-7 h-7 rounded-lg bg-[var(--bg-subtle)] flex items-center justify-center shrink-0">
+                  <div className="w-7 h-7 rounded-sm bg-[var(--bg-subtle)] flex items-center justify-center shrink-0">
                     <Icon className="w-3.5 h-3.5 text-[var(--text-subtle)]" />
                   </div>
                   <div>
@@ -289,10 +289,10 @@ export function NotionEditor({ value, onChange, placeholder, minHeight = '300px'
       {/* Footer */}
       <div className="px-4 py-2 border-t border-[rgba(255,255,255,0.04)] bg-[var(--bg-subtle)] flex items-center justify-between">
         <div className="flex items-center gap-3 text-[9px] text-[var(--text-subtle)]">
-          <span><kbd className="px-1 py-0.5 rounded bg-[var(--bg-surface)] border border-[rgba(255,255,255,0.08)]">Ctrl+B</kbd> Bold</span>
-          <span><kbd className="px-1 py-0.5 rounded bg-[var(--bg-surface)] border border-[rgba(255,255,255,0.08)]">Ctrl+I</kbd> Italic</span>
-          <span><kbd className="px-1 py-0.5 rounded bg-[var(--bg-surface)] border border-[rgba(255,255,255,0.08)]">Ctrl+E</kbd> Code</span>
-          <span><kbd className="px-1 py-0.5 rounded bg-[var(--bg-surface)] border border-[rgba(255,255,255,0.08)]">/</kbd> Commands</span>
+          <span><kbd className="px-1 py-0.5 rounded-sm bg-[var(--bg-surface)] border border-[rgba(255,255,255,0.08)]">Ctrl+B</kbd> Bold</span>
+          <span><kbd className="px-1 py-0.5 rounded-sm bg-[var(--bg-surface)] border border-[rgba(255,255,255,0.08)]">Ctrl+I</kbd> Italic</span>
+          <span><kbd className="px-1 py-0.5 rounded-sm bg-[var(--bg-surface)] border border-[rgba(255,255,255,0.08)]">Ctrl+E</kbd> Code</span>
+          <span><kbd className="px-1 py-0.5 rounded-sm bg-[var(--bg-surface)] border border-[rgba(255,255,255,0.08)]">/</kbd> Commands</span>
         </div>
         <span className="text-[9px] text-[var(--text-subtle)] tabular-nums">{value.length} chars</span>
       </div>

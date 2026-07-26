@@ -18,11 +18,11 @@ const buttonVariants = cva(
         link: 'bg-transparent text-[var(--text-primary)] underline-offset-4 hover:underline p-0 h-auto',
       },
       size: {
-        sm: 'h-8 px-3 text-sm rounded-lg',
-        md: 'h-10 px-4 text-sm rounded-lg',
-        lg: 'h-12 px-6 text-base rounded-xl',
-        xl: 'h-14 px-8 text-base rounded-xl',
-        icon: 'h-10 w-10 rounded-lg',
+        sm: 'h-8 px-3 text-sm rounded-sm',
+        md: 'h-10 px-4 text-sm rounded-sm',
+        lg: 'h-12 px-6 text-base rounded-sm',
+        xl: 'h-14 px-8 text-base rounded-sm',
+        icon: 'h-10 w-10 rounded-sm',
       },
     },
     defaultVariants: {
