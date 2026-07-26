@@ -24,7 +24,7 @@ export function ViewCounter({ type, slug }: ViewCounterProps) {
   if (views === null || views === 0) return null;
 
   return (
-    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[var(--bg-subtle)] border border-[var(--border-soft)]">
+    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-sm bg-[var(--bg-subtle)] border border-[var(--border-soft)]">
       <Users className="w-3 h-3 text-[var(--text-subtle)]" />
       <span className="text-xs font-medium text-[var(--text-secondary)]">
         {formatViews(views)} {views === 1 ? 'learner' : 'learners'}

@@ -42,7 +42,7 @@ export function BookmarkButton({ type, slug, title, className, size = 'md' }: Bo
       onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggle(); }}
       className={cn(
         padding,
-        'rounded-lg transition-all duration-200',
+        'rounded-sm transition-all duration-200',
         saved
           ? 'bg-[var(--accent-primary)]/10 text-[var(--accent-dark)] hover:bg-[var(--accent-primary)]/20'
           : 'text-[var(--text-subtle)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-subtle)]',

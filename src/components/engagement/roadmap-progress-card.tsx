@@ -40,12 +40,12 @@ export function RoadmapProgressCard({ slug, totalTopics }: RoadmapProgressProps)
           {percent}%
         </span>
       </div>
-      <div className="h-1.5 rounded-full bg-[var(--border-soft)] overflow-hidden">
+      <div className="h-1.5 rounded-sm bg-[var(--border-soft)] overflow-hidden">
         <div
           className={
             percent === 100
-              ? 'h-full rounded-full bg-emerald-500 transition-all'
-              : 'h-full rounded-full bg-[var(--accent-primary)] transition-all'
+              ? 'h-full rounded-sm bg-emerald-500 transition-all'
+              : 'h-full rounded-sm bg-[var(--accent-primary)] transition-all'
           }
           style={{ width: `${percent}%` }}
         />

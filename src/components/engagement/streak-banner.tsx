@@ -18,16 +18,16 @@ export function StreakBanner() {
 
   return (
     <div className="container-main mb-8">
-      <div className="relative overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-surface)] p-5 sm:p-6">
+      <div className="relative overflow-hidden rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] p-5 sm:p-6">
         <div className="flex flex-wrap items-center gap-6 sm:gap-8">
           {/* Streak */}
           <div className="flex items-center gap-3">
             <div className="relative">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-400 to-red-500 flex items-center justify-center shadow-sm">
+              <div className="w-12 h-12 rounded-sm bg-gradient-to-br from-orange-400 to-red-500 flex items-center justify-center shadow-sm">
                 <Flame className="w-6 h-6 text-white" />
               </div>
               {streak.current >= 7 && (
-                <div className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-[var(--accent-primary)] flex items-center justify-center">
+                <div className="absolute -top-1 -right-1 w-5 h-5 rounded-sm bg-[var(--accent-primary)] flex items-center justify-center">
                   <Trophy className="w-3 h-3 text-[var(--accent-dark)]" />
                 </div>
               )}

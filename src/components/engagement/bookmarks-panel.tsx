@@ -43,12 +43,12 @@ export function BookmarksPanel({ isOpen, onClose }: { isOpen: boolean; onClose: 
             <Bookmark className="w-5 h-5 text-[var(--accent-dark)]" />
             <h2 className="text-lg font-semibold text-[var(--text-primary)]">Bookmarks</h2>
             {bookmarks.length > 0 && (
-              <span className="px-2 py-0.5 text-xs font-medium bg-[var(--bg-subtle)] text-[var(--text-secondary)] rounded-full">
+              <span className="px-2 py-0.5 text-xs font-medium bg-[var(--bg-subtle)] text-[var(--text-secondary)] rounded-sm">
                 {bookmarks.length}
               </span>
             )}
           </div>
-          <button onClick={onClose} className="p-2 rounded-lg hover:bg-[var(--bg-subtle)] text-[var(--text-subtle)]">
+          <button onClick={onClose} className="p-2 rounded-sm hover:bg-[var(--bg-subtle)] text-[var(--text-subtle)]">
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -71,9 +71,9 @@ export function BookmarksPanel({ isOpen, onClose }: { isOpen: boolean; onClose: 
                 return (
                   <div
                     key={`${item.type}-${item.slug}`}
-                    className="group flex items-center gap-3 p-3 rounded-xl border border-[var(--border-soft)] hover:border-[var(--border-default)] bg-[var(--bg-surface)] transition-colors"
+                    className="group flex items-center gap-3 p-3 rounded-sm border border-[var(--border-soft)] hover:border-[var(--border-default)] bg-[var(--bg-surface)] transition-colors"
                   >
-                    <div className="w-9 h-9 rounded-lg bg-[var(--bg-subtle)] flex items-center justify-center shrink-0">
+                    <div className="w-9 h-9 rounded-sm bg-[var(--bg-subtle)] flex items-center justify-center shrink-0">
                       <Icon className="w-4 h-4 text-[var(--text-secondary)]" />
                     </div>
                     <Link
@@ -88,7 +88,7 @@ export function BookmarksPanel({ isOpen, onClose }: { isOpen: boolean; onClose: 
                     </Link>
                     <button
                       onClick={() => handleRemove(item.type, item.slug)}
-                      className="p-1.5 rounded-md opacity-0 group-hover:opacity-100 hover:bg-red-50 text-[var(--text-subtle)] hover:text-red-500 transition-all"
+                      className="p-1.5 rounded-sm opacity-0 group-hover:opacity-100 hover:bg-red-50 text-[var(--text-subtle)] hover:text-red-500 transition-all"
                       title="Remove"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
