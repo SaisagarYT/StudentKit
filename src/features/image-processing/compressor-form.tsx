@@ -131,7 +131,7 @@ export function CompressorForm() {
           onDrop={handleDrop}
           onDragOver={(e) => e.preventDefault()}
           onClick={() => inputRef.current?.click()}
-          className="flex flex-col items-center justify-center p-12 border-2 border-dashed border-[var(--border-default)] rounded-2xl bg-[var(--bg-surface)] cursor-pointer hover:border-[var(--border-strong)] hover:bg-[var(--bg-subtle)] transition-colors"
+          className="flex flex-col items-center justify-center p-12 border-2 border-dashed border-[var(--border-default)] rounded-sm bg-[var(--bg-surface)] cursor-pointer hover:border-[var(--border-strong)] hover:bg-[var(--bg-subtle)] transition-colors"
         >
           <Upload className="w-8 h-8 text-[var(--text-subtle)] mb-4" />
           <p className="text-sm font-medium text-[var(--text-primary)]">
@@ -156,9 +156,9 @@ export function CompressorForm() {
       {/* Controls + preview */}
       {file && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="p-6 md:p-8 border border-[var(--border-soft)] rounded-2xl bg-[var(--bg-surface)]">
+          <div className="p-6 md:p-8 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)]">
             {/* Preview */}
-            <div className="relative w-full aspect-video bg-[var(--bg-subtle)] rounded-xl overflow-hidden mb-6">
+            <div className="relative w-full aspect-video bg-[var(--bg-subtle)] rounded-sm overflow-hidden mb-6">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={preview}
@@ -174,7 +174,7 @@ export function CompressorForm() {
                 <p className="text-sm font-medium text-[var(--text-primary)] truncate">{file.name}</p>
                 <p className="text-xs text-[var(--text-subtle)]">{formatFileSize(file.size)}</p>
               </div>
-              <button onClick={handleReset} className="p-2 rounded-lg hover:bg-[var(--bg-subtle)] text-[var(--text-subtle)]">
+              <button onClick={handleReset} className="p-2 rounded-sm hover:bg-[var(--bg-subtle)] text-[var(--text-subtle)]">
                 <Trash2 className="w-4 h-4" />
               </button>
             </div>
@@ -191,7 +191,7 @@ export function CompressorForm() {
                 max="100"
                 value={quality}
                 onChange={(e) => setQuality(Number(e.target.value))}
-                className="w-full h-2 bg-[var(--bg-subtle)] rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[var(--accent-dark)] [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[var(--bg-surface)] [&::-webkit-slider-thumb]:shadow-md"
+                className="w-full h-2 bg-[var(--bg-subtle)] rounded-sm appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:rounded-sm [&::-webkit-slider-thumb]:bg-[var(--accent-dark)] [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[var(--bg-surface)] [&::-webkit-slider-thumb]:shadow-md"
               />
               <div className="flex justify-between mt-1 text-xs text-[var(--text-subtle)]">
                 <span>Smaller file</span>
@@ -203,14 +203,14 @@ export function CompressorForm() {
               type="button"
               onClick={handleCompress}
               disabled={processing}
-              className="mt-6 w-full h-12 flex items-center justify-center text-sm font-semibold bg-[var(--accent-dark)] text-[var(--text-inverse)] rounded-xl hover:bg-[var(--accent-dark)]/90 disabled:opacity-60 transition-all"
+              className="mt-6 w-full h-12 flex items-center justify-center text-sm font-semibold bg-[var(--accent-dark)] text-[var(--text-inverse)] rounded-sm hover:bg-[var(--accent-dark)]/90 disabled:opacity-60 transition-all"
             >
               {processing ? 'Compressing...' : 'Compress Image'}
             </button>
           </div>
 
           {/* Result */}
-          <div ref={resultRef} className="p-6 md:p-8 border border-[var(--border-soft)] rounded-2xl bg-[var(--bg-surface)]">
+          <div ref={resultRef} className="p-6 md:p-8 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)]">
             {!result ? (
               <div className="flex items-center justify-center h-full">
                 <p className="text-sm text-[var(--text-subtle)]">
@@ -230,11 +230,11 @@ export function CompressorForm() {
                 </div>
 
                 <div className="mt-6 grid grid-cols-2 gap-3">
-                  <div className="p-3 bg-[var(--bg-subtle)] rounded-xl">
+                  <div className="p-3 bg-[var(--bg-subtle)] rounded-sm">
                     <span className="text-xs text-[var(--text-subtle)]">Original</span>
                     <div className="mt-1 text-sm font-semibold">{formatFileSize(result.originalSize)}</div>
                   </div>
-                  <div className="p-3 bg-[var(--color-success)]/10 rounded-xl">
+                  <div className="p-3 bg-[var(--color-success)]/10 rounded-sm">
                     <span className="text-xs text-[var(--text-subtle)]">Compressed</span>
                     <div className="mt-1 text-sm font-semibold text-[var(--color-success)]">
                       {formatFileSize(result.compressedSize)}
@@ -245,7 +245,7 @@ export function CompressorForm() {
                 <button
                   type="button"
                   onClick={handleDownload}
-                  className="mt-6 w-full h-12 flex items-center justify-center gap-2 text-sm font-semibold bg-[var(--accent-primary)] text-[var(--text-primary)] rounded-xl hover:bg-[var(--accent-primary-hover)] transition-colors"
+                  className="mt-6 w-full h-12 flex items-center justify-center gap-2 text-sm font-semibold bg-[var(--accent-primary)] text-[var(--text-primary)] rounded-sm hover:bg-[var(--accent-primary-hover)] transition-colors"
                 >
                   <Download className="w-4 h-4" />
                   Download Compressed Image

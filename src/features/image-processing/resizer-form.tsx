@@ -149,7 +149,7 @@ export function ResizerForm() {
         onClick={() => inputRef.current?.click()}
         onDrop={(e) => { e.preventDefault(); const f = e.dataTransfer.files[0]; if (f) handleFile(f); }}
         onDragOver={(e) => e.preventDefault()}
-        className="flex flex-col items-center justify-center p-12 border-2 border-dashed border-[var(--border-default)] rounded-2xl bg-[var(--bg-surface)] cursor-pointer hover:border-[var(--border-strong)] hover:bg-[var(--bg-subtle)] transition-colors"
+        className="flex flex-col items-center justify-center p-12 border-2 border-dashed border-[var(--border-default)] rounded-sm bg-[var(--bg-surface)] cursor-pointer hover:border-[var(--border-strong)] hover:bg-[var(--bg-subtle)] transition-colors"
       >
         <Upload className="w-8 h-8 text-[var(--text-subtle)] mb-4" />
         <p className="text-sm font-medium text-[var(--text-primary)]">Drop your image here or click to browse</p>
@@ -161,8 +161,8 @@ export function ResizerForm() {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      <div className="p-6 md:p-8 border border-[var(--border-soft)] rounded-2xl bg-[var(--bg-surface)]">
-        <div className="relative w-full aspect-video bg-[var(--bg-subtle)] rounded-xl overflow-hidden mb-6">
+      <div className="p-6 md:p-8 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)]">
+        <div className="relative w-full aspect-video bg-[var(--bg-subtle)] rounded-sm overflow-hidden mb-6">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={preview} alt="Preview" className="w-full h-full object-contain" />
         </div>
@@ -173,7 +173,7 @@ export function ResizerForm() {
             <p className="text-sm font-medium truncate">{file.name}</p>
             <p className="text-xs text-[var(--text-subtle)]">{originalWidth} × {originalHeight}px</p>
           </div>
-          <button onClick={handleReset} className="p-2 rounded-lg hover:bg-[var(--bg-subtle)] text-[var(--text-subtle)]">
+          <button onClick={handleReset} className="p-2 rounded-sm hover:bg-[var(--bg-subtle)] text-[var(--text-subtle)]">
             <Trash2 className="w-4 h-4" />
           </button>
         </div>
@@ -185,7 +185,7 @@ export function ResizerForm() {
           </div>
           <button
             onClick={() => setLockAspect(!lockAspect)}
-            className="mt-5 p-2 rounded-lg border border-[var(--border-soft)] hover:bg-[var(--bg-subtle)] transition-colors"
+            className="mt-5 p-2 rounded-sm border border-[var(--border-soft)] hover:bg-[var(--bg-subtle)] transition-colors"
             title={lockAspect ? 'Unlock aspect ratio' : 'Lock aspect ratio'}
           >
             {lockAspect ? <Lock className="w-4 h-4" /> : <Unlock className="w-4 h-4" />}
@@ -202,13 +202,13 @@ export function ResizerForm() {
           type="button"
           onClick={handleResize}
           disabled={processing || !width || !height}
-          className="mt-6 w-full h-12 flex items-center justify-center text-sm font-semibold bg-[var(--accent-dark)] text-[var(--text-inverse)] rounded-xl hover:bg-[var(--accent-dark)]/90 disabled:opacity-50 transition-all"
+          className="mt-6 w-full h-12 flex items-center justify-center text-sm font-semibold bg-[var(--accent-dark)] text-[var(--text-inverse)] rounded-sm hover:bg-[var(--accent-dark)]/90 disabled:opacity-50 transition-all"
         >
           {processing ? 'Resizing...' : 'Resize Image'}
         </button>
       </div>
 
-      <div ref={resultRef} className="p-6 md:p-8 border border-[var(--border-soft)] rounded-2xl bg-[var(--bg-surface)]">
+      <div ref={resultRef} className="p-6 md:p-8 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)]">
         {!result ? (
           <div className="flex items-center justify-center h-full">
             <p className="text-sm text-[var(--text-subtle)]">Set dimensions and resize to see results</p>
@@ -218,7 +218,7 @@ export function ResizerForm() {
             <span className="text-xs font-medium uppercase tracking-wider text-[var(--text-subtle)]">Resized</span>
             <div className="mt-3 text-2xl font-bold">{result.width} × {result.height}px</div>
 
-            <div className="mt-6 relative w-full aspect-video bg-[var(--bg-subtle)] rounded-xl overflow-hidden">
+            <div className="mt-6 relative w-full aspect-video bg-[var(--bg-subtle)] rounded-sm overflow-hidden">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={result.previewUrl} alt="Resized" className="w-full h-full object-contain" />
             </div>
@@ -226,7 +226,7 @@ export function ResizerForm() {
             <button
               type="button"
               onClick={handleDownload}
-              className="mt-6 w-full h-12 flex items-center justify-center gap-2 text-sm font-semibold bg-[var(--accent-primary)] text-[var(--text-primary)] rounded-xl hover:bg-[var(--accent-primary-hover)] transition-colors"
+              className="mt-6 w-full h-12 flex items-center justify-center gap-2 text-sm font-semibold bg-[var(--accent-primary)] text-[var(--text-primary)] rounded-sm hover:bg-[var(--accent-primary-hover)] transition-colors"
             >
               <Download className="w-4 h-4" />
               Download Resized Image

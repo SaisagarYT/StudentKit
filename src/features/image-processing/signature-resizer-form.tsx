@@ -114,7 +114,7 @@ export function SignatureResizerForm() {
         onClick={() => inputRef.current?.click()}
         onDrop={(e) => { e.preventDefault(); const f = e.dataTransfer.files[0]; if (f) handleFile(f); }}
         onDragOver={(e) => e.preventDefault()}
-        className="flex flex-col items-center justify-center p-12 border-2 border-dashed border-[var(--border-default)] rounded-2xl bg-[var(--bg-surface)] cursor-pointer hover:border-[var(--border-strong)] hover:bg-[var(--bg-subtle)] transition-colors"
+        className="flex flex-col items-center justify-center p-12 border-2 border-dashed border-[var(--border-default)] rounded-sm bg-[var(--bg-surface)] cursor-pointer hover:border-[var(--border-strong)] hover:bg-[var(--bg-subtle)] transition-colors"
       >
         <Upload className="w-8 h-8 text-[var(--text-subtle)] mb-4" />
         <p className="text-sm font-medium text-[var(--text-primary)]">Upload your signature image</p>
@@ -126,8 +126,8 @@ export function SignatureResizerForm() {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      <div className="p-6 md:p-8 border border-[var(--border-soft)] rounded-2xl bg-[var(--bg-surface)]">
-        <div className="relative w-full h-32 bg-[var(--bg-subtle)] rounded-xl overflow-hidden mb-6 flex items-center justify-center">
+      <div className="p-6 md:p-8 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)]">
+        <div className="relative w-full h-32 bg-[var(--bg-subtle)] rounded-sm overflow-hidden mb-6 flex items-center justify-center">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={preview} alt="Signature preview" className="max-w-full max-h-full object-contain" />
         </div>
@@ -135,7 +135,7 @@ export function SignatureResizerForm() {
         <div className="flex items-center gap-3 mb-6">
           <ImageIcon className="w-4 h-4 text-[var(--text-subtle)]" />
           <p className="text-sm font-medium truncate flex-1">{file.name}</p>
-          <button onClick={handleReset} className="p-2 rounded-lg hover:bg-[var(--bg-subtle)] text-[var(--text-subtle)]">
+          <button onClick={handleReset} className="p-2 rounded-sm hover:bg-[var(--bg-subtle)] text-[var(--text-subtle)]">
             <Trash2 className="w-4 h-4" />
           </button>
         </div>
@@ -148,7 +148,7 @@ export function SignatureResizerForm() {
               <button
                 key={i}
                 onClick={() => handlePreset(i)}
-                className={`px-3 py-1.5 text-xs font-medium rounded-lg border transition-colors ${
+                className={`px-3 py-1.5 text-xs font-medium rounded-sm border transition-colors ${
                   activePreset === i
                     ? 'bg-[var(--accent-dark)] text-[var(--text-inverse)] border-[var(--accent-dark)]'
                     : 'border-[var(--border-soft)] text-[var(--text-secondary)] hover:bg-[var(--bg-subtle)]'
@@ -178,13 +178,13 @@ export function SignatureResizerForm() {
           type="button"
           onClick={handleResize}
           disabled={processing}
-          className="w-full h-12 flex items-center justify-center text-sm font-semibold bg-[var(--accent-dark)] text-[var(--text-inverse)] rounded-xl hover:bg-[var(--accent-dark)]/90 disabled:opacity-50 transition-all"
+          className="w-full h-12 flex items-center justify-center text-sm font-semibold bg-[var(--accent-dark)] text-[var(--text-inverse)] rounded-sm hover:bg-[var(--accent-dark)]/90 disabled:opacity-50 transition-all"
         >
           {processing ? 'Resizing...' : 'Resize Signature'}
         </button>
       </div>
 
-      <div ref={resultRef} className="p-6 md:p-8 border border-[var(--border-soft)] rounded-2xl bg-[var(--bg-surface)]">
+      <div ref={resultRef} className="p-6 md:p-8 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)]">
         {!result ? (
           <div className="flex items-center justify-center h-full">
             <p className="text-sm text-[var(--text-subtle)]">Select a preset or enter dimensions to resize</p>
@@ -194,7 +194,7 @@ export function SignatureResizerForm() {
             <span className="text-xs font-medium uppercase tracking-wider text-[var(--text-subtle)]">Resized Signature</span>
             <div className="mt-3 text-lg font-semibold">{result.width} × {result.height}px</div>
 
-            <div className="mt-6 p-4 bg-[var(--bg-subtle)] rounded-xl flex items-center justify-center">
+            <div className="mt-6 p-4 bg-[var(--bg-subtle)] rounded-sm flex items-center justify-center">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={result.previewUrl} alt="Resized signature" className="max-w-full border border-[var(--border-soft)]" />
             </div>
@@ -202,7 +202,7 @@ export function SignatureResizerForm() {
             <button
               type="button"
               onClick={handleDownload}
-              className="mt-6 w-full h-12 flex items-center justify-center gap-2 text-sm font-semibold bg-[var(--accent-primary)] text-[var(--text-primary)] rounded-xl hover:bg-[var(--accent-primary-hover)] transition-colors"
+              className="mt-6 w-full h-12 flex items-center justify-center gap-2 text-sm font-semibold bg-[var(--accent-primary)] text-[var(--text-primary)] rounded-sm hover:bg-[var(--accent-primary-hover)] transition-colors"
             >
               <Download className="w-4 h-4" />
               Download Signature
