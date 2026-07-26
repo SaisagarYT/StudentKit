@@ -1,14 +1,16 @@
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from 'react';
-import { Search, ExternalLink, Check, Filter, ChevronDown, RotateCcw, Trophy, Cloud } from 'lucide-react';
+import { Search, ExternalLink, Check, Filter, ChevronDown, RotateCcw, Trophy, Cloud, Lightbulb } from 'lucide-react';
 import * as Icons from 'lucide-react';
 import Link from 'next/link';
 import { useUserAuth } from '@/lib/firebase/user-auth';
 import { emitProgressChanged } from '@/lib/firebase/user-progress-sync';
+import { logXpEvent } from '@/lib/xp';
 import { dsaTopicsMeta, type DsaTopicMeta } from '@/config/placement/dsa-topics';
 import { dsaProblemRepository, resourceRepository } from '@/lib/cms/repository';
-import type { DsaProblemListItem, ResourceListItem } from '@/lib/cms/types';
+import { ProblemHints } from './problem-hints';
+import type { DsaProblemListItem } from '@/lib/cms/types';
 
 const STORAGE_KEY = 'sk-dsa-progress';
 const DIFFICULTY_COLORS = {
@@ -54,6 +56,7 @@ export function DsaSheet() {
   const [search, setSearch] = useState('');
   const [difficultyFilter, setDifficultyFilter] = useState<string>('all');
   const [expandedTopic, setExpandedTopic] = useState<string | null>(null);
+  const [expandedHints, setExpandedHints] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
   const [problems, setProblems] = useState<DsaProblemListItem[]>([]);
   const [publishedSlugs, setPublishedSlugs] = useState<Set<string>>(new Set());
@@ -99,6 +102,9 @@ export function DsaSheet() {
     setProgress(prev => {
       const next = { ...prev, [slug]: !prev[slug] };
       saveProgress(next);
+      if (next[slug]) {
+        logXpEvent('DSA_PROBLEM', 'Problem solved');
+      }
       return next;
     });
   }, []);
@@ -303,7 +309,7 @@ export function DsaSheet() {
 
         .dsa-problem {
           display: grid;
-          grid-template-columns: 32px 1fr auto auto auto auto;
+          grid-template-columns: 32px 1fr auto auto auto auto auto;
           align-items: center;
           gap: 10px;
           padding: 12px 20px;
@@ -428,6 +434,23 @@ export function DsaSheet() {
         .dsa-sol-article { color: #3b82f6; }
         .dsa-sol-article:hover { background: rgba(59, 130, 246, 0.1); }
 
+        .dsa-hint-btn {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 26px;
+          height: 26px;
+          border-radius: 6px;
+          color: var(--text-subtle);
+          transition: all 0.15s;
+          cursor: pointer;
+          border: none;
+          background: none;
+        }
+
+        .dsa-hint-btn:hover { background: rgba(234, 179, 8, 0.1); color: #eab308; }
+        .dsa-hint-btn.active { background: rgba(234, 179, 8, 0.15); color: #eab308; }
+
         @media (max-width: 768px) {
           .dsa-problem {
             grid-template-columns: 28px 1fr auto auto;
@@ -465,14 +488,14 @@ export function DsaSheet() {
               </div>
               <div className="flex items-center gap-3">
                 <span className="text-xs font-bold text-[var(--accent-primary)]">{mounted ? overallPercent : 0}%</span>
-                <button onClick={resetProgress} className="p-1.5 rounded-md hover:bg-[var(--bg-subtle)] text-[var(--text-subtle)] hover:text-[var(--text-primary)] transition-colors" title="Reset progress">
+                <button onClick={resetProgress} className="p-1.5 rounded-sm hover:bg-[var(--bg-subtle)] text-[var(--text-subtle)] hover:text-[var(--text-primary)] transition-colors" title="Reset progress">
                   <RotateCcw className="w-3.5 h-3.5" />
                 </button>
               </div>
             </div>
-            <div className="h-2 rounded-full bg-[var(--border-soft)] overflow-hidden">
+            <div className="h-2 rounded-sm bg-[var(--border-soft)] overflow-hidden">
               <div
-                className="h-full rounded-full transition-all duration-500"
+                className="h-full rounded-sm transition-all duration-500"
                 style={{
                   width: mounted ? `${overallPercent}%` : '0%',
                   background: overallPercent === 100 ? '#22c55e' : 'var(--accent-primary)',
@@ -485,7 +508,7 @@ export function DsaSheet() {
           {!authUser && mounted && completedCount >= 3 && (
             <Link
               href="/login"
-              className="flex items-center gap-2.5 px-4 py-3 mb-4 rounded-xl border border-[var(--border-soft)] bg-[var(--bg-surface)] hover:border-[var(--accent-primary)] transition-colors group"
+              className="flex items-center gap-2.5 px-4 py-3 mb-4 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] hover:border-[var(--accent-primary)] transition-colors group"
             >
               <Cloud className="w-4 h-4 text-[var(--accent-primary)] shrink-0" />
               <span className="text-xs text-[var(--text-secondary)] group-hover:text-[var(--text-primary)] transition-colors">
@@ -562,60 +585,73 @@ export function DsaSheet() {
                     {topic.problems.map(problem => {
                       const isDone = !!progress[problem.slug];
                       const colors = DIFFICULTY_COLORS[problem.difficulty];
+                      const hintsOpen = expandedHints === problem.slug;
                       return (
-                        <div key={problem.id} className="dsa-problem">
-                          <button
-                            className={`dsa-problem-check ${isDone ? 'done' : ''}`}
-                            onClick={() => toggleProblem(problem.slug)}
-                          >
-                            {isDone && <Check className="w-3 h-3 text-white" strokeWidth={3} />}
-                          </button>
-                          <span className={`dsa-problem-title ${isDone ? 'done' : ''}`}>
-                            {problem.title}
-                          </span>
-                          <span
-                            className="dsa-problem-diff"
-                            style={{ background: colors.bg, color: colors.text }}
-                          >
-                            {problem.difficulty}
-                          </span>
-                          <span className="dsa-problem-companies" title={problem.companies.join(', ')}>
-                            {problem.companies.slice(0, 3).join(', ')}
-                          </span>
-                          <div className="dsa-problem-solutions">
-                            {problem.videoSolution && (
+                        <div key={problem.id}>
+                          <div className="dsa-problem">
+                            <button
+                              className={`dsa-problem-check ${isDone ? 'done' : ''}`}
+                              onClick={() => toggleProblem(problem.slug)}
+                            >
+                              {isDone && <Check className="w-3 h-3 text-white" strokeWidth={3} />}
+                            </button>
+                            <span className={`dsa-problem-title ${isDone ? 'done' : ''}`}>
+                              {problem.title}
+                            </span>
+                            <span
+                              className="dsa-problem-diff"
+                              style={{ background: colors.bg, color: colors.text }}
+                            >
+                              {problem.difficulty}
+                            </span>
+                            <span className="dsa-problem-companies" title={problem.companies.join(', ')}>
+                              {problem.companies.slice(0, 3).join(', ')}
+                            </span>
+                            <button
+                              className={`dsa-hint-btn ${hintsOpen ? 'active' : ''}`}
+                              onClick={() => setExpandedHints(hintsOpen ? null : problem.slug)}
+                              title="Hints & Approach"
+                            >
+                              <Lightbulb className="w-3.5 h-3.5" />
+                            </button>
+                            <div className="dsa-problem-solutions">
+                              {problem.videoSolution && (
+                                <a
+                                  href={problem.videoSolution}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="dsa-sol-btn dsa-sol-video"
+                                  title="Video Solution"
+                                  onClick={(e) => e.stopPropagation()}
+                                >
+                                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                                </a>
+                              )}
+                              {problem.editorial && publishedSlugs.has(problem.editorial) && (
+                                <Link
+                                  href={`/resources/view?slug=${problem.editorial}`}
+                                  className="dsa-sol-btn dsa-sol-article"
+                                  title="StudentKit Editorial"
+                                  onClick={(e) => e.stopPropagation()}
+                                >
+                                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                                </Link>
+                              )}
+                            </div>
+                            {problem.link && (
                               <a
-                                href={problem.videoSolution}
+                                href={problem.link}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="dsa-sol-btn dsa-sol-video"
-                                title="Video Solution"
+                                className="dsa-problem-link"
                                 onClick={(e) => e.stopPropagation()}
                               >
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                                <ExternalLink className="w-3.5 h-3.5" />
                               </a>
                             )}
-                            {problem.editorial && publishedSlugs.has(problem.editorial) && (
-                              <Link
-                                href={`/resources/view?slug=${problem.editorial}`}
-                                className="dsa-sol-btn dsa-sol-article"
-                                title="StudentKit Editorial"
-                                onClick={(e) => e.stopPropagation()}
-                              >
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-                              </Link>
-                            )}
                           </div>
-                          {problem.link && (
-                            <a
-                              href={problem.link}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="dsa-problem-link"
-                              onClick={(e) => e.stopPropagation()}
-                            >
-                              <ExternalLink className="w-3.5 h-3.5" />
-                            </a>
+                          {hintsOpen && (
+                            <ProblemHints problem={problem} categoryPattern={topic.pattern} />
                           )}
                         </div>
                       );

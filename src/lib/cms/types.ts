@@ -248,6 +248,10 @@ export interface DsaProblemDoc {
   tags: string[];
   companies: string[];
   editorial: string;
+  hints?: string[];
+  approach?: string;
+  timeComplexity?: string;
+  spaceComplexity?: string;
   order: number;
   status: ContentStatus;
   createdAt: Date;
@@ -266,6 +270,10 @@ export interface DsaProblemListItem {
   tags: string[];
   companies: string[];
   editorial: string;
+  hints?: string[];
+  approach?: string;
+  timeComplexity?: string;
+  spaceComplexity?: string;
   order: number;
   status: ContentStatus;
 }
