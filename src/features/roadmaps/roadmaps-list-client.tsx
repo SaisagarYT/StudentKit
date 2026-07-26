@@ -133,10 +133,10 @@ export function RoadmapsListClient() {
               <Link
                 key={roadmap.slug}
                 href={`/roadmaps/view?slug=${roadmap.slug}`}
-                className="group relative p-5 rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-surface)] hover:border-[var(--accent-primary)]/40 hover:shadow-md transition-all duration-200"
+                className="group relative p-5 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] hover:border-[var(--accent-primary)]/40 hover:shadow-sm transition-all duration-200"
               >
                 <div
-                  className="flex items-center justify-center w-10 h-10 rounded-xl mb-4"
+                  className="flex items-center justify-center w-10 h-10 rounded-sm mb-4"
                   style={{ backgroundColor: `${roadmap.accent}20` }}
                 >
                   <Icon
@@ -185,7 +185,7 @@ export function RoadmapsListClient() {
           </p>
           <Link
             href="/tools"
-            className="inline-flex items-center gap-2 mt-6 px-6 py-3 text-sm font-medium bg-[var(--accent-dark)] text-[var(--text-inverse)] rounded-xl hover:bg-[var(--accent-dark)]/90 transition-colors"
+            className="inline-flex items-center gap-2 mt-6 px-6 py-3 text-sm font-medium bg-[var(--accent-dark)] text-[var(--text-inverse)] rounded-sm hover:bg-[var(--accent-dark)]/90 transition-colors"
           >
             Explore tools
             <ArrowRight className="w-4 h-4" />

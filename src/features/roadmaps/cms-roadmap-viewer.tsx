@@ -207,20 +207,20 @@ export function CmsRoadmapViewer() {
                 <Link
                   key={proj.id}
                   href={`/projects/view?slug=${proj.slug}`}
-                  className="group p-5 rounded-xl border border-[var(--border-soft)] bg-[var(--bg-surface)] hover:border-purple-300 hover:shadow-sm transition-all"
+                  className="group p-5 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] hover:border-purple-300 hover:shadow-sm transition-all"
                 >
                   <h3 className="text-sm font-semibold text-[var(--text-primary)] group-hover:text-purple-600 transition-colors">
                     {proj.title}
                   </h3>
                   <div className="flex items-center gap-2 mt-2">
-                    <span className="px-2 py-0.5 rounded text-[10px] font-medium bg-purple-500/10 text-purple-500">
+                    <span className="px-2 py-0.5 rounded-sm text-[10px] font-medium bg-purple-500/10 text-purple-500">
                       {proj.difficulty}
                     </span>
                   </div>
                   {proj.technologies.length > 0 && (
                     <div className="flex flex-wrap gap-1 mt-3">
                       {proj.technologies.slice(0, 3).map((tech) => (
-                        <span key={tech} className="px-1.5 py-0.5 rounded text-[10px] bg-[var(--bg-subtle)] text-[var(--text-subtle)]">
+                        <span key={tech} className="px-1.5 py-0.5 rounded-sm text-[10px] bg-[var(--bg-subtle)] text-[var(--text-subtle)]">
                           {tech}
                         </span>
                       ))}
@@ -245,13 +245,13 @@ export function CmsRoadmapViewer() {
                 <Link
                   key={res.id}
                   href={`/resources/view?slug=${res.slug}`}
-                  className="group p-5 rounded-xl border border-[var(--border-soft)] bg-[var(--bg-surface)] hover:border-blue-300 hover:shadow-sm transition-all"
+                  className="group p-5 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] hover:border-blue-300 hover:shadow-sm transition-all"
                 >
                   <h3 className="text-sm font-semibold text-[var(--text-primary)] group-hover:text-blue-500 transition-colors">
                     {res.title}
                   </h3>
                   <div className="flex items-center gap-2 mt-2">
-                    <span className="px-2 py-0.5 rounded text-[10px] font-medium bg-blue-500/10 text-blue-500 capitalize">
+                    <span className="px-2 py-0.5 rounded-sm text-[10px] font-medium bg-blue-500/10 text-blue-500 capitalize">
                       {res.category.replace('-', ' ')}
                     </span>
                     <span className="text-[10px] text-[var(--text-subtle)]">{res.readTime} min</span>
@@ -259,7 +259,7 @@ export function CmsRoadmapViewer() {
                   {res.tags.length > 0 && (
                     <div className="flex flex-wrap gap-1 mt-3">
                       {res.tags.slice(0, 3).map((tag) => (
-                        <span key={tag} className="px-1.5 py-0.5 rounded text-[10px] bg-[var(--bg-subtle)] text-[var(--text-subtle)]">
+                        <span key={tag} className="px-1.5 py-0.5 rounded-sm text-[10px] bg-[var(--bg-subtle)] text-[var(--text-subtle)]">
                           {tag}
                         </span>
                       ))}

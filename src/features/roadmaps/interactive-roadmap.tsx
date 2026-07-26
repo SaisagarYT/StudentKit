@@ -24,6 +24,7 @@ import {
 import type { Roadmap, RoadmapStage, RoadmapTopic } from '@/types/roadmap';
 import { cn } from '@/lib/utils';
 import { trackRoadmapProgress } from '@/lib/analytics';
+import { logXpEvent } from '@/lib/xp';
 import { ShareProgress } from '@/components/engagement/share-progress';
 import { emitProgressChanged } from '@/lib/firebase/user-progress-sync';
 
@@ -89,7 +90,7 @@ function PrerequisitesAndTools() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12">
       {/* Prerequisites */}
-      <div className="rounded-2xl border border-[var(--border-default)] bg-[var(--bg-surface)] shadow-sm p-5">
+      <div className="rounded-sm border border-[var(--border-default)] bg-[var(--bg-surface)] shadow-sm p-5">
         <h3 className="text-sm font-bold text-[var(--text-primary)] mb-3">Prerequisites</h3>
         <ul className="space-y-2 mb-4">
           {PREREQUISITES.map((item, idx) => (
@@ -109,7 +110,7 @@ function PrerequisitesAndTools() {
       </div>
 
       {/* Recommended Tools */}
-      <div className="rounded-2xl border border-[var(--border-default)] bg-[var(--bg-surface)] shadow-sm p-5">
+      <div className="rounded-sm border border-[var(--border-default)] bg-[var(--bg-surface)] shadow-sm p-5">
         <h3 className="text-sm font-bold text-[var(--text-primary)] mb-3">Recommended Tools</h3>
         <div className="flex flex-wrap gap-2">
           {TOOLS.map((tool, idx) => {
@@ -117,7 +118,7 @@ function PrerequisitesAndTools() {
             return (
               <span
                 key={idx}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[12px] font-medium border border-[var(--border-default)] bg-[var(--accent-primary)]/[0.06] text-[var(--text-secondary)]"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-[12px] font-medium border border-[var(--border-default)] bg-[var(--accent-primary)]/[0.06] text-[var(--text-secondary)]"
               >
                 <Icon className="w-3.5 h-3.5 text-[var(--accent-primary)]" />
                 {tool.label}
@@ -137,11 +138,15 @@ function TopicBranchNode({
   globalIndex,
   isCompleted,
   onToggle,
+  nextTopic,
+  isLastInRoadmap,
 }: {
   topic: RoadmapTopic;
   globalIndex: number;
   isCompleted: boolean;
   onToggle: () => void;
+  nextTopic?: RoadmapTopic | null;
+  isLastInRoadmap?: boolean;
 }) {
   const [expanded, setExpanded] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -159,10 +164,10 @@ function TopicBranchNode({
   return (
     <div
       className={cn(
-        'rounded-xl border transition-all duration-200 overflow-hidden w-full',
+        'rounded-sm border transition-all duration-200 overflow-hidden w-full',
         isCompleted
           ? 'border-emerald-500/40 bg-emerald-500/[0.06] shadow-sm'
-          : 'border-[var(--border-default)] bg-[var(--bg-surface)] shadow-sm hover:border-[var(--accent-primary)]/60 hover:shadow-md'
+          : 'border-[var(--border-default)] bg-[var(--bg-surface)] shadow-sm hover:border-[var(--accent-primary)]/60 hover:shadow-sm'
       )}
     >
       {/* Topic header */}
@@ -263,15 +268,15 @@ function TopicBranchNode({
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={(e) => e.stopPropagation()}
-                      className="flex items-center gap-2 px-2.5 py-2 rounded-lg border border-[var(--border-default)] hover:border-[var(--accent-primary)]/50 bg-[var(--bg-subtle)] hover:bg-[var(--accent-primary)]/[0.06] transition-all group/link"
+                      className="flex items-center gap-2 px-2.5 py-2 rounded-sm border border-[var(--border-default)] hover:border-[var(--accent-primary)]/50 bg-[var(--bg-subtle)] hover:bg-[var(--accent-primary)]/[0.06] transition-all group/link"
                     >
-                      <span className={cn('flex items-center justify-center w-6 h-6 rounded-md shrink-0', style.bg)}>
+                      <span className={cn('flex items-center justify-center w-6 h-6 rounded-sm shrink-0', style.bg)}>
                         <Icon className={cn('w-3 h-3', style.text)} />
                       </span>
                       <span className="flex-1 text-[11px] font-medium text-[var(--text-primary)] truncate group-hover/link:text-[var(--accent-dark)]">
                         {resource.title}
                       </span>
-                      <span className={cn('text-[9px] font-bold uppercase px-1.5 py-0.5 rounded', style.bg, style.text)}>
+                      <span className={cn('text-[9px] font-bold uppercase px-1.5 py-0.5 rounded-sm', style.bg, style.text)}>
                         {style.label}
                       </span>
                       <ExternalLink className="w-3 h-3 text-[var(--text-subtle)] shrink-0 opacity-0 group-hover/link:opacity-100 transition-opacity" />
@@ -284,7 +289,7 @@ function TopicBranchNode({
 
           {/* Practice Project */}
           {topic.project && (
-            <div className="p-3 rounded-lg border border-dashed border-[var(--accent-primary)]/50 bg-[var(--accent-primary)]/[0.08]">
+            <div className="p-3 rounded-sm border border-dashed border-[var(--accent-primary)]/50 bg-[var(--accent-primary)]/[0.08]">
               <div className="flex items-center gap-1.5 mb-1.5">
                 <Hammer className="w-3 h-3 text-[var(--accent-primary)]" />
                 <span className="text-[11px] font-semibold uppercase tracking-wider text-[var(--accent-dark)]">
@@ -299,6 +304,70 @@ function TopicBranchNode({
               </p>
             </div>
           )}
+
+          {/* Next Step Recommendations */}
+          <div className="p-3 rounded-sm bg-[var(--bg-subtle)] border border-[var(--border-soft)]">
+            <h5 className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-[var(--text-subtle)] mb-2.5">
+              <ArrowRight className="w-3 h-3" />
+              What&apos;s next
+            </h5>
+            <div className="space-y-1.5">
+              {nextTopic && (
+                <div className="flex items-center gap-2.5 px-2.5 py-2 rounded-sm bg-[var(--bg-surface)] border border-[var(--border-soft)]">
+                  <div className="w-5 h-5 rounded-sm bg-[var(--accent-dark)]/10 flex items-center justify-center shrink-0">
+                    <BookOpen className="w-3 h-3 text-[var(--accent-dark)]" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-[11px] font-semibold text-[var(--text-primary)] truncate">
+                      Next: {nextTopic.title}
+                    </p>
+                    <p className="text-[10px] text-[var(--text-subtle)]">{nextTopic.timeEstimate}</p>
+                  </div>
+                </div>
+              )}
+              <a
+                href="/projects"
+                onClick={(e) => e.stopPropagation()}
+                className="flex items-center gap-2.5 px-2.5 py-2 rounded-sm bg-[var(--bg-surface)] border border-[var(--border-soft)] hover:border-[var(--border-default)] transition-colors group/next"
+              >
+                <div className="w-5 h-5 rounded-sm bg-violet-500/10 flex items-center justify-center shrink-0">
+                  <Hammer className="w-3 h-3 text-violet-500" />
+                </div>
+                <p className="flex-1 text-[11px] font-medium text-[var(--text-secondary)] group-hover/next:text-[var(--text-primary)] transition-colors">
+                  Build a guided project
+                </p>
+                <ArrowRight className="w-3 h-3 text-[var(--text-subtle)] opacity-0 group-hover/next:opacity-100 transition-opacity" />
+              </a>
+              <a
+                href="/placement/dsa"
+                onClick={(e) => e.stopPropagation()}
+                className="flex items-center gap-2.5 px-2.5 py-2 rounded-sm bg-[var(--bg-surface)] border border-[var(--border-soft)] hover:border-[var(--border-default)] transition-colors group/next"
+              >
+                <div className="w-5 h-5 rounded-sm bg-emerald-500/10 flex items-center justify-center shrink-0">
+                  <Terminal className="w-3 h-3 text-emerald-500" />
+                </div>
+                <p className="flex-1 text-[11px] font-medium text-[var(--text-secondary)] group-hover/next:text-[var(--text-primary)] transition-colors">
+                  Practice DSA problems
+                </p>
+                <ArrowRight className="w-3 h-3 text-[var(--text-subtle)] opacity-0 group-hover/next:opacity-100 transition-opacity" />
+              </a>
+              {isLastInRoadmap && (
+                <a
+                  href="/placement/interview"
+                  onClick={(e) => e.stopPropagation()}
+                  className="flex items-center gap-2.5 px-2.5 py-2 rounded-sm bg-[var(--bg-surface)] border border-[var(--border-soft)] hover:border-[var(--border-default)] transition-colors group/next"
+                >
+                  <div className="w-5 h-5 rounded-sm bg-amber-500/10 flex items-center justify-center shrink-0">
+                    <Trophy className="w-3 h-3 text-amber-500" />
+                  </div>
+                  <p className="flex-1 text-[11px] font-medium text-[var(--text-secondary)] group-hover/next:text-[var(--text-primary)] transition-colors">
+                    Start interview preparation
+                  </p>
+                  <ArrowRight className="w-3 h-3 text-[var(--text-subtle)] opacity-0 group-hover/next:opacity-100 transition-opacity" />
+                </a>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -345,10 +414,10 @@ function ProjectMilestone({
   return (
     <div ref={nodeRef} className="relative flex justify-center my-8 opacity-0">
       {/* Connector dot on spine */}
-      <div className="hidden lg:block absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-[var(--accent-primary)] border-4 border-[var(--bg-surface)] z-10" />
-      <div className="hidden md:block lg:hidden absolute left-8 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-[var(--accent-primary)] border-4 border-[var(--bg-surface)] z-10" />
+      <div className="hidden lg:block absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 rounded-sm bg-[var(--accent-primary)] border-4 border-[var(--bg-surface)] z-10" />
+      <div className="hidden md:block lg:hidden absolute left-8 top-1/2 -translate-y-1/2 w-4 h-4 rounded-sm bg-[var(--accent-primary)] border-4 border-[var(--bg-surface)] z-10" />
 
-      <div className="w-full max-w-md mx-auto lg:mx-0 p-4 rounded-xl border-2 border-dashed border-[var(--accent-primary)]/60 bg-[var(--accent-primary)]/[0.08] shadow-md">
+      <div className="w-full max-w-md mx-auto lg:mx-0 p-4 rounded-sm border-2 border-dashed border-[var(--accent-primary)]/60 bg-[var(--accent-primary)]/[0.08] shadow-md">
         <div className="flex items-center gap-2 mb-2">
           <span className="text-lg">{'🛠️'}</span>
           <span className="text-[11px] font-bold uppercase tracking-wider text-[var(--accent-dark)]">
@@ -372,11 +441,15 @@ function StageNode({
   index,
   completedCount,
   totalCount,
+  roadmapTitle,
+  stageProject,
 }: {
   stage: RoadmapStage;
   index: number;
   completedCount: number;
   totalCount: number;
+  roadmapTitle: string;
+  stageProject?: { title: string; description: string } | null;
 }) {
   const isComplete = completedCount === totalCount && totalCount > 0;
   const numberSymbol = STAGE_NUMBERS[index] || `${index + 1}`;
@@ -386,14 +459,19 @@ function StageNode({
       {/* The stage card */}
       <div
         className={cn(
-          'relative min-w-[200px] max-w-[280px] w-full p-4 rounded-2xl border-l-4 border border-[var(--border-default)] bg-[var(--bg-surface)] shadow-md',
+          'relative min-w-[220px] max-w-[320px] w-full p-4 rounded-sm border-l-4 border border-[var(--border-default)] bg-[var(--bg-surface)] shadow-md',
           isComplete ? 'border-l-emerald-500' : 'border-l-[var(--accent-primary)]'
         )}
       >
+        {/* Breadcrumb */}
+        <p className="text-[10px] text-[var(--text-subtle)] mb-2 truncate">
+          {roadmapTitle} → Stage {index + 1}
+        </p>
+
         <div className="flex items-center gap-3">
           <div
             className={cn(
-              'flex items-center justify-center w-9 h-9 rounded-xl text-base font-bold shrink-0',
+              'flex items-center justify-center w-9 h-9 rounded-sm text-base font-bold shrink-0',
               isComplete
                 ? 'bg-emerald-500/15 text-emerald-600'
                 : 'bg-[var(--accent-primary)]/15 text-[var(--accent-dark)]'
@@ -416,12 +494,13 @@ function StageNode({
             </div>
           </div>
         </div>
+
         {/* Mini progress */}
         <div className="mt-3 flex items-center gap-2">
-          <div className="flex-1 h-1.5 rounded-full bg-[var(--border-soft)] overflow-hidden">
+          <div className="flex-1 h-1.5 rounded-sm bg-[var(--border-soft)] overflow-hidden">
             <div
               className={cn(
-                'h-full rounded-full transition-all duration-500',
+                'h-full rounded-sm transition-all duration-500',
                 isComplete ? 'bg-emerald-500' : 'bg-[var(--accent-primary)]'
               )}
               style={{ width: `${totalCount > 0 ? (completedCount / totalCount) * 100 : 0}%` }}
@@ -434,6 +513,19 @@ function StageNode({
             {completedCount}/{totalCount}
           </span>
         </div>
+
+        {/* What you'll build */}
+        {stageProject && !isComplete && (
+          <div className="mt-3 pt-3 border-t border-[var(--border-soft)]">
+            <p className="text-[10px] font-semibold uppercase tracking-wider text-[var(--text-subtle)] flex items-center gap-1 mb-1">
+              <Hammer className="w-3 h-3" />
+              You&apos;ll build
+            </p>
+            <p className="text-[11px] font-medium text-[var(--text-primary)] leading-snug truncate">
+              {stageProject.title}
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -448,6 +540,9 @@ function TreeBranchSection({
   progress,
   onToggleTopic,
   activeVariant,
+  allVisibleTopics,
+  totalStages,
+  roadmapTitle,
 }: {
   stage: RoadmapStage;
   stageIndex: number;
@@ -455,6 +550,9 @@ function TreeBranchSection({
   progress: Record<string, boolean>;
   onToggleTopic: (topicId: string) => void;
   activeVariant: string;
+  allVisibleTopics: RoadmapTopic[];
+  totalStages: number;
+  roadmapTitle: string;
 }) {
   const sectionRef = useRef<HTMLDivElement>(null);
   const branchSide = stageIndex % 2 === 0 ? 'right' : 'left';
@@ -503,6 +601,8 @@ function TreeBranchSection({
         index={stageIndex}
         completedCount={completedCount}
         totalCount={visibleTopics.length}
+        roadmapTitle={roadmapTitle}
+        stageProject={visibleTopics[visibleTopics.length - 1]?.project || null}
       />
 
       {/* Topic branches - Desktop: alternate left/right, Tablet: all right, Mobile: stacked */}
@@ -524,40 +624,48 @@ function TreeBranchSection({
 
         {/* Topics container */}
         <div className="space-y-3 lg:px-6">
-          {visibleTopics.map((topic, topicIdx) => (
-            <div key={topic.id} className="tree-node opacity-0 relative">
-              {/* Horizontal branch connector - Desktop */}
-              <div
-                className={cn(
-                  'hidden lg:block absolute top-5 w-6 h-[2px] bg-[var(--border-default)]',
-                  branchSide === 'right' ? '-left-6' : '-right-6'
-                )}
-              />
-              {/* Connector dot */}
-              <div
-                className={cn(
-                  'hidden lg:block absolute top-5 w-2.5 h-2.5 rounded-full -translate-y-1/2 border-2 border-[var(--bg-surface)]',
-                  progress[topic.id] ? 'bg-emerald-500' : 'bg-[var(--border-default)]',
-                  branchSide === 'right' ? '-left-8' : '-right-8'
-                )}
-              />
-              {/* Tablet connector */}
-              <div className="hidden md:block lg:hidden absolute top-5 -left-8 w-8 h-[2px] bg-[var(--border-default)]" />
-              <div
-                className={cn(
-                  'hidden md:block lg:hidden absolute top-5 -left-10 w-2.5 h-2.5 rounded-full -translate-y-1/2 border-2 border-[var(--bg-surface)]',
-                  progress[topic.id] ? 'bg-emerald-500' : 'bg-[var(--border-default)]'
-                )}
-              />
+          {visibleTopics.map((topic, topicIdx) => {
+            const globalIdx = globalTopicOffset + topicIdx;
+            const nextTopicInAll = allVisibleTopics[globalIdx + 1] || null;
+            const isLast = globalIdx === allVisibleTopics.length - 1 && stageIndex === totalStages - 1;
 
-              <TopicBranchNode
-                topic={topic}
-                globalIndex={globalTopicOffset + topicIdx + 1}
-                isCompleted={!!progress[topic.id]}
-                onToggle={() => onToggleTopic(topic.id)}
-              />
-            </div>
-          ))}
+            return (
+              <div key={topic.id} className="tree-node opacity-0 relative">
+                {/* Horizontal branch connector - Desktop */}
+                <div
+                  className={cn(
+                    'hidden lg:block absolute top-5 w-6 h-[2px] bg-[var(--border-default)]',
+                    branchSide === 'right' ? '-left-6' : '-right-6'
+                  )}
+                />
+                {/* Connector dot */}
+                <div
+                  className={cn(
+                    'hidden lg:block absolute top-5 w-2.5 h-2.5 rounded-sm -translate-y-1/2 border-2 border-[var(--bg-surface)]',
+                    progress[topic.id] ? 'bg-emerald-500' : 'bg-[var(--border-default)]',
+                    branchSide === 'right' ? '-left-8' : '-right-8'
+                  )}
+                />
+                {/* Tablet connector */}
+                <div className="hidden md:block lg:hidden absolute top-5 -left-8 w-8 h-[2px] bg-[var(--border-default)]" />
+                <div
+                  className={cn(
+                    'hidden md:block lg:hidden absolute top-5 -left-10 w-2.5 h-2.5 rounded-sm -translate-y-1/2 border-2 border-[var(--bg-surface)]',
+                    progress[topic.id] ? 'bg-emerald-500' : 'bg-[var(--border-default)]'
+                  )}
+                />
+
+                <TopicBranchNode
+                  topic={topic}
+                  globalIndex={globalTopicOffset + topicIdx + 1}
+                  isCompleted={!!progress[topic.id]}
+                  onToggle={() => onToggleTopic(topic.id)}
+                  nextTopic={nextTopicInAll}
+                  isLastInRoadmap={isLast}
+                />
+              </div>
+            );
+          })}
         </div>
 
         {/* Desktop: empty column for the side without branches */}
@@ -594,7 +702,7 @@ function StackTabs({
             type="button"
             onClick={() => onSelect(v.id)}
             className={cn(
-              'px-4 py-2 rounded-md text-sm font-semibold transition-all duration-200 border',
+              'px-4 py-2 rounded-sm text-sm font-semibold transition-all duration-200 border',
               activeVariant === v.id
                 ? 'bg-[var(--accent-dark)] text-[var(--accent-primary)] border-[var(--accent-dark)] shadow-sm'
                 : 'bg-[var(--bg-surface)] text-[var(--text-secondary)] border-[var(--border-default)] hover:border-[var(--accent-primary)]/60 hover:text-[var(--text-primary)]'
@@ -641,6 +749,7 @@ export function InteractiveRoadmap({ roadmap }: { roadmap: Roadmap }) {
         saveProgress(roadmap.slug, next);
         if (next[topicId]) {
           trackRoadmapProgress(roadmap.slug, topicId);
+          logXpEvent('ROADMAP_TOPIC', 'Topic completed');
         }
         return next;
       });
@@ -693,10 +802,10 @@ export function InteractiveRoadmap({ roadmap }: { roadmap: Roadmap }) {
 
       {/* Sticky Progress Bar */}
       <div className="sticky top-16 md:top-[72px] z-30 -mx-4 px-4 md:-mx-0 md:px-0 mb-12">
-        <div className="bg-[var(--bg-surface)]/95 backdrop-blur-lg border border-[var(--border-default)] rounded-2xl p-4 shadow-md">
+        <div className="bg-[var(--bg-surface)]/95 backdrop-blur-lg border border-[var(--border-default)] rounded-sm p-4 shadow-md">
           <div className="flex items-center justify-between mb-2.5">
             <div className="flex items-center gap-2.5">
-              <div className="flex items-center justify-center w-8 h-8 rounded-xl bg-[var(--accent-primary)]/15">
+              <div className="flex items-center justify-center w-8 h-8 rounded-sm bg-[var(--accent-primary)]/15">
                 <Trophy className="w-4 h-4 text-[var(--accent-dark)]" />
               </div>
               <div>
@@ -720,11 +829,11 @@ export function InteractiveRoadmap({ roadmap }: { roadmap: Roadmap }) {
               </span>
             </div>
           </div>
-          <div className="relative h-2 rounded-full bg-[var(--border-soft)] overflow-hidden">
+          <div className="relative h-2 rounded-sm bg-[var(--border-soft)] overflow-hidden">
             <div
               ref={progressBarRef}
               className={cn(
-                'absolute inset-y-0 left-0 rounded-full transition-colors',
+                'absolute inset-y-0 left-0 rounded-sm transition-colors',
                 completedTopics === totalTopics && totalTopics > 0
                   ? 'bg-emerald-500'
                   : 'bg-[var(--accent-primary)]'
@@ -739,17 +848,17 @@ export function InteractiveRoadmap({ roadmap }: { roadmap: Roadmap }) {
       <div ref={treeRef} className="relative">
         {/* Central spine - Desktop */}
         <div
-          className="hidden lg:block absolute left-1/2 top-0 bottom-0 w-[3px] -translate-x-1/2 bg-[var(--border-default)] rounded-full"
+          className="hidden lg:block absolute left-1/2 top-0 bottom-0 w-[3px] -translate-x-1/2 bg-[var(--border-default)] rounded-sm"
           aria-hidden="true"
         />
         {/* Central spine - Tablet (left aligned) */}
         <div
-          className="hidden md:block lg:hidden absolute left-8 top-0 bottom-0 w-[3px] bg-[var(--border-default)] rounded-full"
+          className="hidden md:block lg:hidden absolute left-8 top-0 bottom-0 w-[3px] bg-[var(--border-default)] rounded-sm"
           aria-hidden="true"
         />
         {/* Mobile: left timeline line */}
         <div
-          className="block md:hidden absolute left-3 top-0 bottom-0 w-[3px] bg-[var(--border-default)] rounded-full"
+          className="block md:hidden absolute left-3 top-0 bottom-0 w-[3px] bg-[var(--border-default)] rounded-sm"
           aria-hidden="true"
         />
 
@@ -764,6 +873,9 @@ export function InteractiveRoadmap({ roadmap }: { roadmap: Roadmap }) {
               progress={progress}
               onToggleTopic={toggleTopic}
               activeVariant={activeVariant}
+              allVisibleTopics={allTopics}
+              totalStages={roadmap.stages.length}
+              roadmapTitle={roadmap.title}
             />
 
             {/* Project Milestone between stages */}
@@ -790,7 +902,7 @@ export function InteractiveRoadmap({ roadmap }: { roadmap: Roadmap }) {
       {/* Completion celebration */}
       {completedTopics === totalTopics && totalTopics > 0 && (
         <div className="mt-12 p-8 rounded-3xl border border-emerald-500/30 bg-emerald-500/[0.04] text-center">
-          <div className="flex items-center justify-center w-16 h-16 mx-auto rounded-2xl bg-emerald-500/10 mb-4">
+          <div className="flex items-center justify-center w-16 h-16 mx-auto rounded-sm bg-emerald-500/10 mb-4">
             <Trophy className="w-8 h-8 text-emerald-500" />
           </div>
           <h3 className="text-xl font-bold text-[var(--text-primary)]">
