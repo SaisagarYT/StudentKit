@@ -266,7 +266,7 @@ export function ColorPaletteForm() {
   return (
     <div className="space-y-8">
       {/* Top Controls */}
-      <div className="p-6 md:p-8 border border-[var(--border-soft)] rounded-2xl bg-[var(--bg-surface)]">
+      <div className="p-6 md:p-8 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)]">
         <div className="grid grid-cols-1 md:grid-cols-[1fr_1fr] gap-8">
           {/* Color Picker Section */}
           <div className="space-y-5">
@@ -281,11 +281,11 @@ export function ColorPaletteForm() {
                   type="color"
                   value={baseColor}
                   onChange={handleColorPickerChange}
-                  className="w-20 h-20 rounded-2xl cursor-pointer border-2 border-[var(--border-soft)] appearance-none bg-transparent [&::-webkit-color-swatch-wrapper]:p-1 [&::-webkit-color-swatch]:rounded-xl [&::-webkit-color-swatch]:border-none [&::-moz-color-swatch]:rounded-xl [&::-moz-color-swatch]:border-none"
+                  className="w-20 h-20 rounded-sm cursor-pointer border-2 border-[var(--border-soft)] appearance-none bg-transparent [&::-webkit-color-swatch-wrapper]:p-1 [&::-webkit-color-swatch]:rounded-sm [&::-webkit-color-swatch]:border-none [&::-moz-color-swatch]:rounded-sm [&::-moz-color-swatch]:border-none"
                 />
               </div>
               <div
-                className="w-20 h-20 rounded-2xl border border-[var(--border-soft)] shadow-sm"
+                className="w-20 h-20 rounded-sm border border-[var(--border-soft)] shadow-sm"
                 style={{ backgroundColor: baseColor }}
               />
             </div>
@@ -316,7 +316,7 @@ export function ColorPaletteForm() {
                 max={360}
                 value={hsl.h}
                 onChange={handleHueSliderChange}
-                className="w-full h-3 rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[var(--border-strong)] [&::-webkit-slider-thumb]:shadow-md [&::-moz-range-thumb]:w-5 [&::-moz-range-thumb]:h-5 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-white [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[var(--border-strong)] [&::-moz-range-thumb]:shadow-md"
+                className="w-full h-3 rounded-sm appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:rounded-sm [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[var(--border-strong)] [&::-webkit-slider-thumb]:shadow-md [&::-moz-range-thumb]:w-5 [&::-moz-range-thumb]:h-5 [&::-moz-range-thumb]:rounded-sm [&::-moz-range-thumb]:bg-white [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[var(--border-strong)] [&::-moz-range-thumb]:shadow-md"
                 style={{
                   background:
                     'linear-gradient(to right, hsl(0,100%,50%), hsl(60,100%,50%), hsl(120,100%,50%), hsl(180,100%,50%), hsl(240,100%,50%), hsl(300,100%,50%), hsl(360,100%,50%))',
@@ -336,7 +336,7 @@ export function ColorPaletteForm() {
                   key={mode.value}
                   type="button"
                   onClick={() => setHarmonyMode(mode.value)}
-                  className={`px-3 py-2.5 text-sm font-medium rounded-xl border transition-all text-left ${
+                  className={`px-3 py-2.5 text-sm font-medium rounded-sm border transition-all text-left ${
                     harmonyMode === mode.value
                       ? 'border-[var(--accent-dark)] bg-[var(--accent-dark)] text-[var(--text-inverse)]'
                       : 'border-[var(--border-soft)] text-[var(--text-secondary)] hover:border-[var(--border-default)] hover:bg-[var(--bg-subtle)]'
@@ -352,7 +352,7 @@ export function ColorPaletteForm() {
       </div>
 
       {/* Generated Palette Swatches */}
-      <div className="p-6 md:p-8 border border-[var(--border-soft)] rounded-2xl bg-[var(--bg-surface)]">
+      <div className="p-6 md:p-8 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)]">
         <div className="flex items-center justify-between mb-5">
           <h2 className="text-xs font-medium text-[var(--text-subtle)] uppercase tracking-wider">
             Generated Palette
@@ -368,7 +368,7 @@ export function ColorPaletteForm() {
               key={index}
               type="button"
               onClick={() => copyToClipboard(color.hex, index)}
-              className="group relative flex-1 min-w-[80px] h-24 md:h-28 rounded-xl border border-[var(--border-soft)] shadow-sm transition-all hover:scale-105 hover:shadow-md cursor-pointer"
+              className="group relative flex-1 min-w-[80px] h-24 md:h-28 rounded-sm border border-[var(--border-soft)] shadow-sm transition-all hover:scale-105 hover:shadow-sm cursor-pointer"
               style={{ backgroundColor: color.hex }}
               title={`Copy ${color.hex}`}
             >
@@ -384,7 +384,7 @@ export function ColorPaletteForm() {
       </div>
 
       {/* Color Values Table */}
-      <div className="p-6 md:p-8 border border-[var(--border-soft)] rounded-2xl bg-[var(--bg-surface)]">
+      <div className="p-6 md:p-8 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)]">
         <h2 className="text-xs font-medium text-[var(--text-subtle)] uppercase tracking-wider mb-5">
           Color Values
         </h2>
@@ -426,7 +426,7 @@ export function ColorPaletteForm() {
         <button
           type="button"
           onClick={() => copyExport('css')}
-          className="flex-1 h-12 flex items-center justify-center gap-2 text-sm font-semibold bg-[var(--accent-dark)] text-[var(--text-inverse)] rounded-xl hover:bg-[var(--accent-dark)]/90 transition-all"
+          className="flex-1 h-12 flex items-center justify-center gap-2 text-sm font-semibold bg-[var(--accent-dark)] text-[var(--text-inverse)] rounded-sm hover:bg-[var(--accent-dark)]/90 transition-all"
         >
           {copiedExport === 'css' ? (
             <>
@@ -443,7 +443,7 @@ export function ColorPaletteForm() {
         <button
           type="button"
           onClick={() => copyExport('tailwind')}
-          className="flex-1 h-12 flex items-center justify-center gap-2 text-sm font-semibold border border-[var(--border-default)] text-[var(--text-primary)] rounded-xl hover:bg-[var(--bg-subtle)] transition-all"
+          className="flex-1 h-12 flex items-center justify-center gap-2 text-sm font-semibold border border-[var(--border-default)] text-[var(--text-primary)] rounded-sm hover:bg-[var(--bg-subtle)] transition-all"
         >
           {copiedExport === 'tailwind' ? (
             <>
@@ -490,7 +490,7 @@ function ColorRow({ color, index }: { color: PaletteColor; index: number }) {
       <td className="py-3 pr-3">
         <div className="flex items-center gap-2">
           <div
-            className="w-6 h-6 rounded-full border border-[var(--border-soft)] shrink-0"
+            className="w-6 h-6 rounded-sm border border-[var(--border-soft)] shrink-0"
             style={{ backgroundColor: color.hex }}
           />
           <span className="text-xs text-[var(--text-subtle)]">#{index + 1}</span>
@@ -509,7 +509,7 @@ function ColorRow({ color, index }: { color: PaletteColor; index: number }) {
         <button
           type="button"
           onClick={handleCopy}
-          className="p-1.5 rounded-lg hover:bg-[var(--bg-subtle)] transition-colors"
+          className="p-1.5 rounded-sm hover:bg-[var(--bg-subtle)] transition-colors"
           title="Copy all values"
         >
           {copied ? (

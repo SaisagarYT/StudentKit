@@ -180,7 +180,7 @@ export function RegexTesterForm() {
   return (
     <div className="space-y-6">
       {/* Regex Input Section */}
-      <div className="p-6 md:p-8 border border-[var(--border-soft)] rounded-2xl bg-[var(--bg-surface)]">
+      <div className="p-6 md:p-8 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)]">
         <label className="block text-xs font-medium text-[var(--text-subtle)] uppercase tracking-wider mb-3">
           Regular Expression
         </label>
@@ -219,7 +219,7 @@ export function RegexTesterForm() {
       </div>
 
       {/* Test String Section */}
-      <div className="p-6 md:p-8 border border-[var(--border-soft)] rounded-2xl bg-[var(--bg-surface)]">
+      <div className="p-6 md:p-8 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)]">
         <div className="flex items-center justify-between mb-3">
           <label className="block text-xs font-medium text-[var(--text-subtle)] uppercase tracking-wider">
             Test String
@@ -246,7 +246,7 @@ export function RegexTesterForm() {
             <label className="block text-xs font-medium text-[var(--text-subtle)] uppercase tracking-wider mb-2">
               Match Highlights
             </label>
-            <div className="p-4 rounded-xl border border-[var(--border-soft)] bg-[var(--bg-subtle)] font-mono text-sm whitespace-pre-wrap break-all leading-relaxed">
+            <div className="p-4 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-subtle)] font-mono text-sm whitespace-pre-wrap break-all leading-relaxed">
               {highlightedParts.map((part, i) => (
                 <Fragment key={i}>
                   {part.isMatch ? (
@@ -264,7 +264,7 @@ export function RegexTesterForm() {
       </div>
 
       {/* Results Panel */}
-      <div className="p-6 md:p-8 border border-[var(--border-soft)] rounded-2xl bg-[var(--bg-surface)]">
+      <div className="p-6 md:p-8 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)]">
         <label className="block text-xs font-medium text-[var(--text-subtle)] uppercase tracking-wider mb-4">
           Match Results
         </label>
@@ -282,7 +282,7 @@ export function RegexTesterForm() {
             {matches.map((m) => (
               <div
                 key={m.index}
-                className="p-3 rounded-xl border border-[var(--border-soft)] bg-[var(--bg-subtle)]"
+                className="p-3 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-subtle)]"
               >
                 <div className="flex items-start justify-between gap-4">
                   <div className="min-w-0 flex-1">
@@ -309,7 +309,7 @@ export function RegexTesterForm() {
                       {m.groups.map((g, gi) => (
                         <span
                           key={gi}
-                          className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-[var(--bg-surface)] border border-[var(--border-soft)] text-xs font-mono"
+                          className="inline-flex items-center gap-1 px-2 py-0.5 rounded-sm bg-[var(--bg-surface)] border border-[var(--border-soft)] text-xs font-mono"
                         >
                           <span className="text-[var(--text-subtle)]">${gi + 1}:</span>
                           <span className="text-[var(--text-primary)]">{g || <em className="text-[var(--text-subtle)]">undefined</em>}</span>
@@ -325,7 +325,7 @@ export function RegexTesterForm() {
       </div>
 
       {/* Replace Mode */}
-      <div className="p-6 md:p-8 border border-[var(--border-soft)] rounded-2xl bg-[var(--bg-surface)]">
+      <div className="p-6 md:p-8 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)]">
         <div className="flex items-center justify-between mb-4">
           <label className="block text-xs font-medium text-[var(--text-subtle)] uppercase tracking-wider">
             Replace Mode
@@ -333,7 +333,7 @@ export function RegexTesterForm() {
           <button
             type="button"
             onClick={() => setReplaceMode(!replaceMode)}
-            className={`flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-lg border transition-all ${
+            className={`flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-sm border transition-all ${
               replaceMode
                 ? 'border-[var(--accent-dark)] bg-[var(--accent-dark)] text-[var(--text-inverse)]'
                 : 'border-[var(--border-soft)] text-[var(--text-secondary)] hover:border-[var(--border-default)] hover:bg-[var(--bg-subtle)]'
@@ -368,7 +368,7 @@ export function RegexTesterForm() {
                 <button
                   type="button"
                   onClick={copyReplacedOutput}
-                  className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-lg border border-[var(--border-soft)] text-[var(--text-secondary)] hover:bg-[var(--bg-subtle)] transition-colors"
+                  className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-sm border border-[var(--border-soft)] text-[var(--text-secondary)] hover:bg-[var(--bg-subtle)] transition-colors"
                 >
                   {copiedResult ? (
                     <>
@@ -395,7 +395,7 @@ export function RegexTesterForm() {
       </div>
 
       {/* Common Patterns Library */}
-      <div className="border border-[var(--border-soft)] rounded-2xl bg-[var(--bg-surface)] overflow-hidden">
+      <div className="border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)] overflow-hidden">
         <button
           type="button"
           onClick={() => setShowPresets(!showPresets)}
@@ -418,7 +418,7 @@ export function RegexTesterForm() {
                 key={preset.label}
                 type="button"
                 onClick={() => handlePresetClick(preset)}
-                className="text-left p-3 rounded-xl border border-[var(--border-soft)] hover:border-[var(--border-default)] hover:bg-[var(--bg-subtle)] transition-all"
+                className="text-left p-3 rounded-sm border border-[var(--border-soft)] hover:border-[var(--border-default)] hover:bg-[var(--bg-subtle)] transition-all"
               >
                 <span className="block text-sm font-medium text-[var(--text-primary)] mb-1">
                   {preset.label}
@@ -454,7 +454,7 @@ function FlagCheckbox({
         type="checkbox"
         checked={checked}
         onChange={(e) => onChange(e.target.checked)}
-        className="w-4 h-4 rounded border-[var(--border-default)] text-[var(--accent-dark)] focus:ring-[var(--accent-primary)] cursor-pointer"
+        className="w-4 h-4 rounded-sm border-[var(--border-default)] text-[var(--accent-dark)] focus:ring-[var(--accent-primary)] cursor-pointer"
       />
       <span className="text-sm font-mono font-medium text-[var(--text-primary)]">{label}</span>
       <span className="text-xs text-[var(--text-subtle)]">({description})</span>

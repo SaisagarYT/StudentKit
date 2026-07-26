@@ -105,7 +105,7 @@ export function UuidGeneratorForm() {
   return (
     <div className="space-y-6">
       {/* Format options */}
-      <div className="p-6 border border-[var(--border-soft)] rounded-2xl bg-[var(--bg-surface)]">
+      <div className="p-6 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)]">
         <label className="block text-xs font-medium text-[var(--text-subtle)] uppercase tracking-wider mb-4">
           Format Options
         </label>
@@ -115,7 +115,7 @@ export function UuidGeneratorForm() {
               type="checkbox"
               checked={uppercase}
               onChange={(e) => setUppercase(e.target.checked)}
-              className="w-4 h-4 rounded border-[var(--border-default)] accent-[var(--accent-dark)]"
+              className="w-4 h-4 rounded-sm border-[var(--border-default)] accent-[var(--accent-dark)]"
             />
             <span className="text-sm text-[var(--text-primary)]">Uppercase</span>
           </label>
@@ -124,7 +124,7 @@ export function UuidGeneratorForm() {
               type="checkbox"
               checked={hyphens}
               onChange={(e) => setHyphens(e.target.checked)}
-              className="w-4 h-4 rounded border-[var(--border-default)] accent-[var(--accent-dark)]"
+              className="w-4 h-4 rounded-sm border-[var(--border-default)] accent-[var(--accent-dark)]"
             />
             <span className="text-sm text-[var(--text-primary)]">Hyphens</span>
           </label>
@@ -132,12 +132,12 @@ export function UuidGeneratorForm() {
       </div>
 
       {/* Single UUID */}
-      <div className="p-6 md:p-8 border border-[var(--border-soft)] rounded-2xl bg-[var(--bg-surface)]">
+      <div className="p-6 md:p-8 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)]">
         <label className="block text-xs font-medium text-[var(--text-subtle)] uppercase tracking-wider mb-4">
           Single UUID
         </label>
 
-        <div className="p-4 bg-[var(--bg-base)] border border-[var(--border-soft)] rounded-xl mb-4">
+        <div className="p-4 bg-[var(--bg-base)] border border-[var(--border-soft)] rounded-sm mb-4">
           <p className="font-mono text-lg md:text-xl text-[var(--text-primary)] text-center break-all select-all">
             {formattedSingle}
           </p>
@@ -147,7 +147,7 @@ export function UuidGeneratorForm() {
           <button
             type="button"
             onClick={handleGenerateSingle}
-            className="h-10 px-5 flex items-center gap-2 text-sm font-semibold bg-[var(--accent-dark)] text-[var(--text-inverse)] rounded-xl hover:bg-[var(--accent-dark)]/90 transition-all"
+            className="h-10 px-5 flex items-center gap-2 text-sm font-semibold bg-[var(--accent-dark)] text-[var(--text-inverse)] rounded-sm hover:bg-[var(--accent-dark)]/90 transition-all"
           >
             <RefreshCw className="w-4 h-4" />
             Generate
@@ -155,7 +155,7 @@ export function UuidGeneratorForm() {
           <button
             type="button"
             onClick={copySingle}
-            className="h-10 px-5 flex items-center gap-2 text-sm font-semibold border border-[var(--border-default)] text-[var(--text-primary)] rounded-xl hover:bg-[var(--bg-subtle)] transition-all"
+            className="h-10 px-5 flex items-center gap-2 text-sm font-semibold border border-[var(--border-default)] text-[var(--text-primary)] rounded-sm hover:bg-[var(--bg-subtle)] transition-all"
           >
             {copiedSingle ? (
               <>
@@ -173,7 +173,7 @@ export function UuidGeneratorForm() {
       </div>
 
       {/* Bulk generation */}
-      <div className="p-6 md:p-8 border border-[var(--border-soft)] rounded-2xl bg-[var(--bg-surface)]">
+      <div className="p-6 md:p-8 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)]">
         <label className="block text-xs font-medium text-[var(--text-subtle)] uppercase tracking-wider mb-4">
           Bulk Generate
         </label>
@@ -195,7 +195,7 @@ export function UuidGeneratorForm() {
           <button
             type="button"
             onClick={handleGenerateBulk}
-            className="h-10 px-5 text-sm font-semibold bg-[var(--accent-dark)] text-[var(--text-inverse)] rounded-xl hover:bg-[var(--accent-dark)]/90 transition-all"
+            className="h-10 px-5 text-sm font-semibold bg-[var(--accent-dark)] text-[var(--text-inverse)] rounded-sm hover:bg-[var(--accent-dark)]/90 transition-all"
           >
             Generate Bulk
           </button>
@@ -210,7 +210,7 @@ export function UuidGeneratorForm() {
               <button
                 type="button"
                 onClick={copyBulk}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border border-[var(--border-soft)] text-[var(--text-secondary)] hover:bg-[var(--bg-subtle)] transition-colors"
+                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-sm border border-[var(--border-soft)] text-[var(--text-secondary)] hover:bg-[var(--bg-subtle)] transition-colors"
               >
                 {copiedBulk ? (
                   <>
@@ -229,7 +229,7 @@ export function UuidGeneratorForm() {
               readOnly
               value={bulkOutput}
               rows={Math.min(12, bulkOutput.split('\n').length + 1)}
-              className="w-full px-4 py-3 font-mono text-sm bg-[var(--bg-base)] border border-[var(--border-soft)] rounded-xl text-[var(--text-primary)] resize-y focus:outline-none"
+              className="w-full px-4 py-3 font-mono text-sm bg-[var(--bg-base)] border border-[var(--border-soft)] rounded-sm text-[var(--text-primary)] resize-y focus:outline-none"
             />
           </>
         )}

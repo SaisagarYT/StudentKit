@@ -232,7 +232,7 @@ export function JsonFormatterForm() {
         <button
           type="button"
           onClick={handleFormat}
-          className="flex items-center gap-2 px-4 py-2.5 text-sm font-semibold bg-[var(--accent-dark)] text-[var(--text-inverse)] rounded-xl hover:bg-[var(--accent-dark)]/90 transition-all"
+          className="flex items-center gap-2 px-4 py-2.5 text-sm font-semibold bg-[var(--accent-dark)] text-[var(--text-inverse)] rounded-sm hover:bg-[var(--accent-dark)]/90 transition-all"
         >
           <Sparkles className="w-4 h-4" />
           Format / Beautify
@@ -240,7 +240,7 @@ export function JsonFormatterForm() {
         <button
           type="button"
           onClick={handleMinify}
-          className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium border border-[var(--border-default)] rounded-xl hover:border-[var(--border-strong)] hover:bg-[var(--bg-subtle)] transition-colors"
+          className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium border border-[var(--border-default)] rounded-sm hover:border-[var(--border-strong)] hover:bg-[var(--bg-subtle)] transition-colors"
         >
           <Minimize2 className="w-4 h-4" />
           Minify
@@ -248,7 +248,7 @@ export function JsonFormatterForm() {
         <button
           type="button"
           onClick={handleValidate}
-          className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium border border-[var(--border-default)] rounded-xl hover:border-[var(--border-strong)] hover:bg-[var(--bg-subtle)] transition-colors"
+          className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium border border-[var(--border-default)] rounded-sm hover:border-[var(--border-strong)] hover:bg-[var(--bg-subtle)] transition-colors"
         >
           <CheckCircle2 className="w-4 h-4" />
           Validate
@@ -258,7 +258,7 @@ export function JsonFormatterForm() {
       {/* Validation Feedback */}
       {validation.status !== 'idle' && (
         <div
-          className={`flex items-start gap-2 px-4 py-3 rounded-xl text-sm ${
+          className={`flex items-start gap-2 px-4 py-3 rounded-sm text-sm ${
             validation.status === 'valid'
               ? 'bg-[var(--color-success)]/10 text-[var(--color-success)]'
               : 'bg-[var(--color-error)]/10 text-[var(--color-error)]'
@@ -283,7 +283,7 @@ export function JsonFormatterForm() {
       {/* Two-column layout */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Input Area */}
-        <div className="flex flex-col border border-[var(--border-soft)] rounded-2xl bg-[var(--bg-surface)] overflow-hidden">
+        <div className="flex flex-col border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)] overflow-hidden">
           <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--border-soft)]">
             <span className="text-xs font-medium uppercase tracking-wider text-[var(--text-subtle)]">
               Input
@@ -292,7 +292,7 @@ export function JsonFormatterForm() {
               <button
                 type="button"
                 onClick={handlePaste}
-                className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-[var(--text-secondary)] border border-[var(--border-soft)] rounded-lg hover:border-[var(--border-default)] hover:bg-[var(--bg-subtle)] transition-colors"
+                className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-[var(--text-secondary)] border border-[var(--border-soft)] rounded-sm hover:border-[var(--border-default)] hover:bg-[var(--bg-subtle)] transition-colors"
                 title="Paste from clipboard"
               >
                 <ClipboardPaste className="w-3.5 h-3.5" />
@@ -301,7 +301,7 @@ export function JsonFormatterForm() {
               <button
                 type="button"
                 onClick={handleLoadSample}
-                className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-[var(--text-secondary)] border border-[var(--border-soft)] rounded-lg hover:border-[var(--border-default)] hover:bg-[var(--bg-subtle)] transition-colors"
+                className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-[var(--text-secondary)] border border-[var(--border-soft)] rounded-sm hover:border-[var(--border-default)] hover:bg-[var(--bg-subtle)] transition-colors"
                 title="Load sample JSON"
               >
                 <FileJson className="w-3.5 h-3.5" />
@@ -310,7 +310,7 @@ export function JsonFormatterForm() {
               <button
                 type="button"
                 onClick={handleClear}
-                className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-[var(--text-secondary)] border border-[var(--border-soft)] rounded-lg hover:border-[var(--border-default)] hover:text-[var(--color-error)] hover:bg-[var(--color-error)]/5 transition-colors"
+                className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-[var(--text-secondary)] border border-[var(--border-soft)] rounded-sm hover:border-[var(--border-default)] hover:text-[var(--color-error)] hover:bg-[var(--color-error)]/5 transition-colors"
                 title="Clear input"
               >
                 <Trash2 className="w-3.5 h-3.5" />
@@ -331,7 +331,7 @@ export function JsonFormatterForm() {
         </div>
 
         {/* Output Area */}
-        <div className="flex flex-col border border-[var(--border-soft)] rounded-2xl bg-[var(--bg-dark)] overflow-hidden">
+        <div className="flex flex-col border border-[var(--border-soft)] rounded-sm bg-[var(--bg-dark)] overflow-hidden">
           <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--border-soft)]/20">
             <span className="text-xs font-medium uppercase tracking-wider text-[var(--text-inverse)]/60">
               Output
@@ -346,7 +346,7 @@ export function JsonFormatterForm() {
                 type="button"
                 onClick={handleCopyOutput}
                 disabled={!output}
-                className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-[var(--text-inverse)]/80 border border-[var(--text-inverse)]/20 rounded-lg hover:border-[var(--text-inverse)]/40 hover:bg-[var(--text-inverse)]/10 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-[var(--text-inverse)]/80 border border-[var(--text-inverse)]/20 rounded-sm hover:border-[var(--text-inverse)]/40 hover:bg-[var(--text-inverse)]/10 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
                 title="Copy output"
               >
                 {copiedOutput ? (
@@ -375,7 +375,7 @@ export function JsonFormatterForm() {
 
       {/* Stats Bar */}
       {jsonStats && (
-        <div className="flex flex-wrap items-center gap-4 px-4 py-3 border border-[var(--border-soft)] rounded-xl bg-[var(--bg-subtle)]">
+        <div className="flex flex-wrap items-center gap-4 px-4 py-3 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-subtle)]">
           <div className="flex items-center gap-2">
             <span className="text-xs text-[var(--text-subtle)]">Keys:</span>
             <span className="text-sm font-semibold text-[var(--text-primary)]">

@@ -130,13 +130,13 @@ export function Base64Form() {
   return (
     <div className="space-y-6">
       {/* Auto-mode toggle */}
-      <div className="p-6 border border-[var(--border-soft)] rounded-2xl bg-[var(--bg-surface)]">
+      <div className="p-6 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)]">
         <label className="flex items-center gap-3 cursor-pointer">
           <input
             type="checkbox"
             checked={autoMode}
             onChange={(e) => setAutoMode(e.target.checked)}
-            className="w-4 h-4 rounded border-[var(--border-default)] accent-[var(--accent-dark)]"
+            className="w-4 h-4 rounded-sm border-[var(--border-default)] accent-[var(--accent-dark)]"
           />
           <span className="text-sm font-medium text-[var(--text-primary)]">
             Auto-convert mode
@@ -148,7 +148,7 @@ export function Base64Form() {
       </div>
 
       {/* Text input */}
-      <div className="p-6 border border-[var(--border-soft)] rounded-2xl bg-[var(--bg-surface)]">
+      <div className="p-6 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)]">
         <div className="flex items-center justify-between mb-3">
           <label className="text-xs font-medium text-[var(--text-subtle)] uppercase tracking-wider">
             Text
@@ -157,7 +157,7 @@ export function Base64Form() {
             type="button"
             onClick={() => copyToClipboard(textInput, 'text')}
             disabled={!textInput}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border border-[var(--border-soft)] text-[var(--text-secondary)] hover:bg-[var(--bg-subtle)] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-sm border border-[var(--border-soft)] text-[var(--text-secondary)] hover:bg-[var(--bg-subtle)] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
           >
             {copiedField === 'text' ? (
               <>
@@ -177,7 +177,7 @@ export function Base64Form() {
           onChange={handleTextChange}
           placeholder="Enter text to encode..."
           rows={5}
-          className="w-full px-4 py-3 font-mono text-sm bg-[var(--bg-base)] border border-[var(--border-soft)] rounded-xl text-[var(--text-primary)] placeholder:text-[var(--text-subtle)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-dark)]/30 focus:border-[var(--accent-dark)] resize-y"
+          className="w-full px-4 py-3 font-mono text-sm bg-[var(--bg-base)] border border-[var(--border-soft)] rounded-sm text-[var(--text-primary)] placeholder:text-[var(--text-subtle)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-dark)]/30 focus:border-[var(--accent-dark)] resize-y"
         />
       </div>
 
@@ -187,7 +187,7 @@ export function Base64Form() {
           type="button"
           onClick={handleEncode}
           disabled={!textInput}
-          className="h-10 px-5 text-sm font-semibold bg-[var(--accent-dark)] text-[var(--text-inverse)] rounded-xl hover:bg-[var(--accent-dark)]/90 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+          className="h-10 px-5 text-sm font-semibold bg-[var(--accent-dark)] text-[var(--text-inverse)] rounded-sm hover:bg-[var(--accent-dark)]/90 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
         >
           Encode &darr;
         </button>
@@ -195,14 +195,14 @@ export function Base64Form() {
           type="button"
           onClick={handleDecode}
           disabled={!base64Input}
-          className="h-10 px-5 text-sm font-semibold border border-[var(--border-default)] text-[var(--text-primary)] rounded-xl hover:bg-[var(--bg-subtle)] transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+          className="h-10 px-5 text-sm font-semibold border border-[var(--border-default)] text-[var(--text-primary)] rounded-sm hover:bg-[var(--bg-subtle)] transition-all disabled:opacity-40 disabled:cursor-not-allowed"
         >
           &uarr; Decode
         </button>
         <button
           type="button"
           onClick={handleFileEncode}
-          className="h-10 px-5 flex items-center gap-2 text-sm font-semibold border border-[var(--border-default)] text-[var(--text-primary)] rounded-xl hover:bg-[var(--bg-subtle)] transition-all"
+          className="h-10 px-5 flex items-center gap-2 text-sm font-semibold border border-[var(--border-default)] text-[var(--text-primary)] rounded-sm hover:bg-[var(--bg-subtle)] transition-all"
         >
           <Upload className="w-4 h-4" />
           Encode file
@@ -216,7 +216,7 @@ export function Base64Form() {
       </div>
 
       {/* Base64 output */}
-      <div className="p-6 border border-[var(--border-soft)] rounded-2xl bg-[var(--bg-surface)]">
+      <div className="p-6 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)]">
         <div className="flex items-center justify-between mb-3">
           <label className="text-xs font-medium text-[var(--text-subtle)] uppercase tracking-wider">
             Base64
@@ -225,7 +225,7 @@ export function Base64Form() {
             type="button"
             onClick={() => copyToClipboard(base64Input, 'base64')}
             disabled={!base64Input}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border border-[var(--border-soft)] text-[var(--text-secondary)] hover:bg-[var(--bg-subtle)] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-sm border border-[var(--border-soft)] text-[var(--text-secondary)] hover:bg-[var(--bg-subtle)] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
           >
             {copiedField === 'base64' ? (
               <>
@@ -245,13 +245,13 @@ export function Base64Form() {
           onChange={handleBase64Change}
           placeholder="Base64 encoded output will appear here..."
           rows={5}
-          className="w-full px-4 py-3 font-mono text-sm bg-[var(--bg-base)] border border-[var(--border-soft)] rounded-xl text-[var(--text-primary)] placeholder:text-[var(--text-subtle)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-dark)]/30 focus:border-[var(--accent-dark)] resize-y"
+          className="w-full px-4 py-3 font-mono text-sm bg-[var(--bg-base)] border border-[var(--border-soft)] rounded-sm text-[var(--text-primary)] placeholder:text-[var(--text-subtle)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-dark)]/30 focus:border-[var(--accent-dark)] resize-y"
         />
       </div>
 
       {/* Error display */}
       {error && (
-        <div className="p-4 border border-red-200 bg-red-50 dark:border-red-800/50 dark:bg-red-900/20 rounded-xl">
+        <div className="p-4 border border-red-200 bg-red-50 dark:border-red-800/50 dark:bg-red-900/20 rounded-sm">
           <p className="text-sm text-red-700 dark:text-red-400">{error}</p>
         </div>
       )}

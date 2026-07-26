@@ -141,7 +141,7 @@ export function LoremIpsumForm() {
   return (
     <div className="space-y-6">
       {/* Controls */}
-      <div className="p-6 md:p-8 border border-[var(--border-soft)] rounded-2xl bg-[var(--bg-surface)]">
+      <div className="p-6 md:p-8 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)]">
         <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-6">
           {/* Mode and amount */}
           <div className="space-y-5">
@@ -156,7 +156,7 @@ export function LoremIpsumForm() {
                     key={m}
                     type="button"
                     onClick={() => setMode(m)}
-                    className={`px-4 py-2 text-sm font-medium rounded-xl border transition-all capitalize ${
+                    className={`px-4 py-2 text-sm font-medium rounded-sm border transition-all capitalize ${
                       mode === m
                         ? 'border-[var(--accent-dark)] bg-[var(--accent-dark)] text-[var(--text-inverse)]'
                         : 'border-[var(--border-soft)] text-[var(--text-secondary)] hover:border-[var(--border-default)] hover:bg-[var(--bg-subtle)]'
@@ -189,7 +189,7 @@ export function LoremIpsumForm() {
                 type="checkbox"
                 checked={startClassic}
                 onChange={(e) => setStartClassic(e.target.checked)}
-                className="w-4 h-4 rounded border-[var(--border-default)] accent-[var(--accent-dark)]"
+                className="w-4 h-4 rounded-sm border-[var(--border-default)] accent-[var(--accent-dark)]"
               />
               <span className="text-sm text-[var(--text-primary)]">
                 Start with &ldquo;Lorem ipsum dolor sit amet...&rdquo;
@@ -202,7 +202,7 @@ export function LoremIpsumForm() {
             <button
               type="button"
               onClick={handleGenerate}
-              className="h-12 px-8 text-sm font-semibold bg-[var(--accent-dark)] text-[var(--text-inverse)] rounded-xl hover:bg-[var(--accent-dark)]/90 transition-all"
+              className="h-12 px-8 text-sm font-semibold bg-[var(--accent-dark)] text-[var(--text-inverse)] rounded-sm hover:bg-[var(--accent-dark)]/90 transition-all"
             >
               Generate
             </button>
@@ -212,7 +212,7 @@ export function LoremIpsumForm() {
 
       {/* Output */}
       {output && (
-        <div className="p-6 md:p-8 border border-[var(--border-soft)] rounded-2xl bg-[var(--bg-surface)]">
+        <div className="p-6 md:p-8 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)]">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-4">
               <label className="text-xs font-medium text-[var(--text-subtle)] uppercase tracking-wider">
@@ -225,7 +225,7 @@ export function LoremIpsumForm() {
             <button
               type="button"
               onClick={copyToClipboard}
-              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border border-[var(--border-soft)] text-[var(--text-secondary)] hover:bg-[var(--bg-subtle)] transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-sm border border-[var(--border-soft)] text-[var(--text-secondary)] hover:bg-[var(--bg-subtle)] transition-colors"
             >
               {copied ? (
                 <>
@@ -244,7 +244,7 @@ export function LoremIpsumForm() {
             readOnly
             value={output}
             rows={10}
-            className="w-full px-4 py-3 font-mono text-sm bg-[var(--bg-base)] border border-[var(--border-soft)] rounded-xl text-[var(--text-primary)] resize-y focus:outline-none"
+            className="w-full px-4 py-3 font-mono text-sm bg-[var(--bg-base)] border border-[var(--border-soft)] rounded-sm text-[var(--text-primary)] resize-y focus:outline-none"
           />
         </div>
       )}

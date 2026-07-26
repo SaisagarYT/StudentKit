@@ -553,7 +553,7 @@ export function ProjectStructureForm() {
               key={preset.id}
               type="button"
               onClick={() => setSelectedPreset(preset.id)}
-              className={`group relative p-4 text-left border rounded-xl transition-all ${
+              className={`group relative p-4 text-left border rounded-sm transition-all ${
                 selectedPreset === preset.id
                   ? 'border-[var(--accent-dark)] bg-[var(--accent-dark)]/5 ring-1 ring-[var(--accent-dark)]/20'
                   : 'border-[var(--border-soft)] bg-[var(--bg-surface)] hover:border-[var(--border-default)] hover:bg-[var(--bg-subtle)]'
@@ -579,7 +579,7 @@ export function ProjectStructureForm() {
       </div>
 
       {/* Output area */}
-      <div className="border border-[var(--border-soft)] rounded-2xl overflow-hidden bg-[var(--bg-surface)]">
+      <div className="border border-[var(--border-soft)] rounded-sm overflow-hidden bg-[var(--bg-surface)]">
         {/* Header with copy buttons */}
         <div className="flex items-center justify-between px-5 py-3 border-b border-[var(--border-soft)] bg-[var(--bg-subtle)]">
           <div className="flex items-center gap-2 text-sm font-medium text-[var(--text-primary)]">
@@ -590,7 +590,7 @@ export function ProjectStructureForm() {
             <button
               type="button"
               onClick={() => copyToClipboard(currentPreset.tree, 'tree')}
-              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border border-[var(--border-soft)] bg-[var(--bg-surface)] text-[var(--text-secondary)] hover:bg-[var(--bg-subtle)] hover:border-[var(--border-default)] transition-all"
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] text-[var(--text-secondary)] hover:bg-[var(--bg-subtle)] hover:border-[var(--border-default)] transition-all"
             >
               {copiedTree ? (
                 <>
@@ -607,7 +607,7 @@ export function ProjectStructureForm() {
             <button
               type="button"
               onClick={() => copyToClipboard(mkdirCommands, 'mkdir')}
-              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border border-[var(--border-soft)] bg-[var(--bg-surface)] text-[var(--text-secondary)] hover:bg-[var(--bg-subtle)] hover:border-[var(--border-default)] transition-all"
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] text-[var(--text-secondary)] hover:bg-[var(--bg-subtle)] hover:border-[var(--border-default)] transition-all"
             >
               {copiedMkdir ? (
                 <>
@@ -633,7 +633,7 @@ export function ProjectStructureForm() {
       </div>
 
       {/* Folder explanations */}
-      <div className="border border-[var(--border-soft)] rounded-2xl p-5 md:p-6 bg-[var(--bg-surface)]">
+      <div className="border border-[var(--border-soft)] rounded-sm p-5 md:p-6 bg-[var(--bg-surface)]">
         <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4 uppercase tracking-wider">
           Folder purposes
         </h3>

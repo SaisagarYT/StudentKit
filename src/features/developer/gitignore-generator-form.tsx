@@ -232,20 +232,20 @@ export function GitignoreGeneratorForm() {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       {/* Selection Panel */}
-      <div className="p-6 md:p-8 border border-[var(--border-soft)] rounded-2xl bg-[var(--bg-surface)]">
+      <div className="p-6 md:p-8 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)]">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-2">
             <span className="text-sm font-medium text-[var(--text-secondary)]">
               Selected:
             </span>
-            <span className="inline-flex items-center justify-center min-w-[1.5rem] h-6 px-1.5 rounded-full bg-[var(--accent-primary)]/10 text-xs font-semibold text-[var(--accent-primary)]">
+            <span className="inline-flex items-center justify-center min-w-[1.5rem] h-6 px-1.5 rounded-sm bg-[var(--accent-primary)]/10 text-xs font-semibold text-[var(--accent-primary)]">
               {selected.size}
             </span>
           </div>
           <button
             type="button"
             onClick={selectCommon}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[var(--accent-primary)] border border-[var(--accent-primary)]/30 rounded-lg hover:bg-[var(--accent-primary)]/5 transition-colors"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[var(--accent-primary)] border border-[var(--accent-primary)]/30 rounded-sm hover:bg-[var(--accent-primary)]/5 transition-colors"
           >
             <Sparkles className="w-3.5 h-3.5" />
             Select Common
@@ -265,7 +265,7 @@ export function GitignoreGeneratorForm() {
                     key={preset.id}
                     type="button"
                     onClick={() => toggle(preset.id)}
-                    className={`px-3 py-1.5 text-sm font-medium rounded-lg border transition-all ${
+                    className={`px-3 py-1.5 text-sm font-medium rounded-sm border transition-all ${
                       isSelected
                         ? 'bg-[var(--accent-primary)] text-white border-[var(--accent-primary)] shadow-sm'
                         : 'bg-[var(--bg-subtle)] text-[var(--text-secondary)] border-[var(--border-soft)] hover:border-[var(--border-default)] hover:text-[var(--text-primary)]'
@@ -281,7 +281,7 @@ export function GitignoreGeneratorForm() {
       </div>
 
       {/* Output Panel */}
-      <div className="p-6 md:p-8 border border-[var(--border-soft)] rounded-2xl bg-[var(--bg-surface)] flex flex-col">
+      <div className="p-6 md:p-8 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)] flex flex-col">
         {selected.size === 0 ? (
           <div className="flex items-center justify-center h-full min-h-[240px]">
             <p className="text-sm text-[var(--text-subtle)] text-center">
@@ -298,7 +298,7 @@ export function GitignoreGeneratorForm() {
                 <button
                   type="button"
                   onClick={handleCopy}
-                  className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[var(--text-secondary)] border border-[var(--border-soft)] rounded-lg hover:border-[var(--border-default)] hover:text-[var(--text-primary)] transition-colors"
+                  className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[var(--text-secondary)] border border-[var(--border-soft)] rounded-sm hover:border-[var(--border-default)] hover:text-[var(--text-primary)] transition-colors"
                 >
                   {copied ? (
                     <>
@@ -315,7 +315,7 @@ export function GitignoreGeneratorForm() {
                 <button
                   type="button"
                   onClick={handleDownload}
-                  className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[var(--text-secondary)] border border-[var(--border-soft)] rounded-lg hover:border-[var(--border-default)] hover:text-[var(--text-primary)] transition-colors"
+                  className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[var(--text-secondary)] border border-[var(--border-soft)] rounded-sm hover:border-[var(--border-default)] hover:text-[var(--text-primary)] transition-colors"
                 >
                   <Download className="w-3.5 h-3.5" />
                   Download
@@ -323,7 +323,7 @@ export function GitignoreGeneratorForm() {
               </div>
             </div>
 
-            <div className="flex-1 overflow-auto rounded-xl bg-[#1e1e2e] p-4 border border-[var(--border-soft)]">
+            <div className="flex-1 overflow-auto rounded-sm bg-[#1e1e2e] p-4 border border-[var(--border-soft)]">
               <pre className="text-sm font-mono text-[#cdd6f4] leading-relaxed whitespace-pre-wrap break-words">
                 {generatedContent}
               </pre>

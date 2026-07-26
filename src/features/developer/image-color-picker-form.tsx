@@ -205,7 +205,7 @@ function CopyButton({ value }: { value: string }) {
   return (
     <button
       onClick={handleCopy}
-      className="p-1.5 rounded-md hover:bg-[var(--bg-subtle)] text-[var(--text-subtle)] hover:text-[var(--text-primary)] transition-colors"
+      className="p-1.5 rounded-sm hover:bg-[var(--bg-subtle)] text-[var(--text-subtle)] hover:text-[var(--text-primary)] transition-colors"
       title="Copy to clipboard"
     >
       {copied ? (
@@ -390,7 +390,7 @@ export function ImageColorPickerForm() {
             e.stopPropagation();
           }}
           onClick={() => inputRef.current?.click()}
-          className="flex flex-col items-center justify-center p-12 border-2 border-dashed border-[var(--border-default)] rounded-2xl bg-[var(--bg-surface)] cursor-pointer hover:border-[var(--border-strong)] hover:bg-[var(--bg-subtle)] transition-colors"
+          className="flex flex-col items-center justify-center p-12 border-2 border-dashed border-[var(--border-default)] rounded-sm bg-[var(--bg-surface)] cursor-pointer hover:border-[var(--border-strong)] hover:bg-[var(--bg-subtle)] transition-colors"
         >
           <Upload className="w-8 h-8 text-[var(--text-subtle)] mb-4" />
           <p className="text-sm font-medium text-[var(--text-primary)]">
@@ -418,7 +418,7 @@ export function ImageColorPickerForm() {
           {/* Image area + color output */}
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6">
             {/* Canvas section */}
-            <div className="p-4 md:p-6 border border-[var(--border-soft)] rounded-2xl bg-[var(--bg-surface)]">
+            <div className="p-4 md:p-6 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)]">
               {/* File info bar */}
               <div className="flex items-center gap-3 mb-4">
                 <Pipette className="w-4 h-4 text-[var(--text-subtle)]" />
@@ -436,7 +436,7 @@ export function ImageColorPickerForm() {
                 {hoverColor && (
                   <div className="flex items-center gap-2">
                     <div
-                      className="w-6 h-6 rounded border border-[var(--border-soft)]"
+                      className="w-6 h-6 rounded-sm border border-[var(--border-soft)]"
                       style={{ backgroundColor: hoverColor.hex }}
                     />
                     <span className="text-xs font-mono text-[var(--text-secondary)]">
@@ -446,7 +446,7 @@ export function ImageColorPickerForm() {
                 )}
                 <button
                   onClick={handleReset}
-                  className="p-2 rounded-lg hover:bg-[var(--bg-subtle)] text-[var(--text-subtle)]"
+                  className="p-2 rounded-sm hover:bg-[var(--bg-subtle)] text-[var(--text-subtle)]"
                   title="Remove image"
                 >
                   <Trash2 className="w-4 h-4" />
@@ -454,7 +454,7 @@ export function ImageColorPickerForm() {
               </div>
 
               {/* Canvas */}
-              <div className="relative flex justify-center bg-[var(--bg-subtle)] rounded-xl overflow-hidden">
+              <div className="relative flex justify-center bg-[var(--bg-subtle)] rounded-sm overflow-hidden">
                 <canvas
                   ref={canvasRef}
                   onMouseMove={handleCanvasMove}
@@ -473,7 +473,7 @@ export function ImageColorPickerForm() {
             {/* Color output panel */}
             <div className="space-y-4">
               {/* Selected color display */}
-              <div className="p-4 md:p-5 border border-[var(--border-soft)] rounded-2xl bg-[var(--bg-surface)]">
+              <div className="p-4 md:p-5 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)]">
                 <h3 className="text-sm font-medium text-[var(--text-primary)] mb-3">
                   Selected Color
                 </h3>
@@ -482,7 +482,7 @@ export function ImageColorPickerForm() {
                   <div className="space-y-4">
                     {/* Large swatch */}
                     <div
-                      className="w-full h-20 rounded-xl border border-[var(--border-soft)]"
+                      className="w-full h-20 rounded-sm border border-[var(--border-soft)]"
                       style={{ backgroundColor: displayColor.hex }}
                     />
 
@@ -495,7 +495,7 @@ export function ImageColorPickerForm() {
                     </div>
                   </div>
                 ) : (
-                  <div className="flex items-center justify-center h-20 rounded-xl border border-dashed border-[var(--border-default)] bg-[var(--bg-subtle)]">
+                  <div className="flex items-center justify-center h-20 rounded-sm border border-dashed border-[var(--border-default)] bg-[var(--bg-subtle)]">
                     <p className="text-xs text-[var(--text-subtle)]">
                       Hover or click to pick a color
                     </p>
@@ -505,7 +505,7 @@ export function ImageColorPickerForm() {
 
               {/* History */}
               {history.length > 0 && (
-                <div className="p-4 md:p-5 border border-[var(--border-soft)] rounded-2xl bg-[var(--bg-surface)]">
+                <div className="p-4 md:p-5 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)]">
                   <div className="flex items-center justify-between mb-3">
                     <h3 className="text-sm font-medium text-[var(--text-primary)]">
                       Picked Colors
@@ -522,7 +522,7 @@ export function ImageColorPickerForm() {
                       <button
                         key={`${color.hex}-${i}`}
                         onClick={() => handleSelectFromHistory(color)}
-                        className={`w-8 h-8 rounded-lg border transition-all ${
+                        className={`w-8 h-8 rounded-sm border transition-all ${
                           selectedColor?.hex === color.hex
                             ? 'border-[var(--accent-primary)] ring-2 ring-[var(--accent-primary)]/30 scale-110'
                             : 'border-[var(--border-soft)] hover:scale-110'
@@ -539,7 +539,7 @@ export function ImageColorPickerForm() {
 
           {/* Dominant colors */}
           {dominantColors.length > 0 && (
-            <div className="p-4 md:p-6 border border-[var(--border-soft)] rounded-2xl bg-[var(--bg-surface)]">
+            <div className="p-4 md:p-6 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)]">
               <h3 className="text-sm font-medium text-[var(--text-primary)] mb-4">
                 Dominant Colors
               </h3>
@@ -551,7 +551,7 @@ export function ImageColorPickerForm() {
                     className="group flex flex-col items-center gap-1.5"
                   >
                     <div
-                      className={`w-12 h-12 md:w-14 md:h-14 rounded-xl border transition-all ${
+                      className={`w-12 h-12 md:w-14 md:h-14 rounded-sm border transition-all ${
                         selectedColor?.hex === color.hex
                           ? 'border-[var(--accent-primary)] ring-2 ring-[var(--accent-primary)]/30 scale-105'
                           : 'border-[var(--border-soft)] group-hover:scale-105 group-hover:border-[var(--border-default)]'
@@ -576,7 +576,7 @@ export function ImageColorPickerForm() {
 
 function ColorRow({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--bg-subtle)]">
+    <div className="flex items-center gap-2 px-3 py-2 rounded-sm bg-[var(--bg-subtle)]">
       <span className="text-[10px] font-semibold uppercase tracking-wider text-[var(--text-subtle)] w-10 shrink-0">
         {label}
       </span>

@@ -288,7 +288,7 @@ export function ReadmeGeneratorForm() {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       {/* Form Panel */}
-      <div className="p-6 md:p-8 border border-[var(--border-soft)] rounded-2xl bg-[var(--bg-surface)]">
+      <div className="p-6 md:p-8 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)]">
         <div className="space-y-5">
           {/* Project Name */}
           <div>
@@ -407,7 +407,7 @@ export function ReadmeGeneratorForm() {
               id="contributing"
               checked={form.includeContributing}
               onChange={(e) => updateField('includeContributing', e.target.checked)}
-              className="w-4 h-4 rounded border-[var(--border-default)] text-[var(--accent-dark)] focus:ring-[var(--accent-dark)]"
+              className="w-4 h-4 rounded-sm border-[var(--border-default)] text-[var(--accent-dark)] focus:ring-[var(--accent-dark)]"
             />
             <label
               htmlFor="contributing"
@@ -470,7 +470,7 @@ export function ReadmeGeneratorForm() {
             type="button"
             onClick={handleCopy}
             disabled={!form.projectName.trim()}
-            className="flex-1 h-12 flex items-center justify-center gap-2 text-sm font-semibold bg-[var(--accent-dark)] text-[var(--text-inverse)] rounded-xl hover:bg-[var(--accent-dark)]/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex-1 h-12 flex items-center justify-center gap-2 text-sm font-semibold bg-[var(--accent-dark)] text-[var(--text-inverse)] rounded-sm hover:bg-[var(--accent-dark)]/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {copied ? (
               <>
@@ -488,7 +488,7 @@ export function ReadmeGeneratorForm() {
             type="button"
             onClick={handleDownload}
             disabled={!form.projectName.trim()}
-            className="flex-1 h-12 flex items-center justify-center gap-2 text-sm font-semibold border border-[var(--border-default)] text-[var(--text-primary)] rounded-xl hover:bg-[var(--bg-subtle)] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex-1 h-12 flex items-center justify-center gap-2 text-sm font-semibold border border-[var(--border-default)] text-[var(--text-primary)] rounded-sm hover:bg-[var(--bg-subtle)] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Download className="w-4 h-4" />
             Download README.md
@@ -497,7 +497,7 @@ export function ReadmeGeneratorForm() {
       </div>
 
       {/* Preview Panel */}
-      <div className="p-6 md:p-8 border border-[var(--border-soft)] rounded-2xl bg-[var(--bg-surface)]">
+      <div className="p-6 md:p-8 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)]">
         <div className="flex items-center justify-between mb-4">
           <span className="text-xs font-medium uppercase tracking-wider text-[var(--text-subtle)]">
             Live Preview
