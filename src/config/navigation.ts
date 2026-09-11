@@ -21,7 +21,8 @@ export const mainNavItems: NavGroup[] = [
     href: '/roadmaps',
     children: [
       { label: 'Learning Paths', href: '/roadmaps', description: 'Step-by-step roadmaps for every career goal', icon: 'Route' },
-      { label: 'Resources', href: '/resources', description: 'Curated tutorials and guides', icon: 'BookOpen' },
+      { label: 'Guides & Masterclasses', href: '/guides', description: 'Build-from-scratch architectural breakdowns', icon: 'BookOpen' },
+      { label: 'Resources', href: '/resources', description: 'Curated tutorials and docs', icon: 'Library' },
       { label: 'Challenges', href: '/challenges', description: 'Weekly coding sprints', icon: 'Zap' },
     ],
   },
@@ -44,6 +45,8 @@ export const mainNavItems: NavGroup[] = [
       { label: 'DSA Sheet', href: '/placement/dsa', description: '250+ problems organized by pattern', icon: 'Binary' },
       { label: 'CS Fundamentals', href: '/placement/cs-fundamentals', description: 'OS, DBMS, Networks & more', icon: 'Cpu' },
       { label: 'Interview Prep', href: '/placement/interview', description: 'Company-wise questions & tips', icon: 'MessageSquare' },
+      { label: 'ATS Resume Roaster', href: '/placement/resume-roaster', description: 'Score & roast project bullets with STAR rewrites', icon: 'Sparkles' },
+      { label: 'Resume Builder', href: '/resume-builder', description: 'ATS-friendly, print-to-PDF resume maker', icon: 'FileText' },
     ],
   },
 ];
@@ -58,6 +61,7 @@ export const footerNavSections = [
     title: 'Learn',
     links: [
       { label: 'Learning Paths', href: '/roadmaps' },
+      { label: 'Guides & Masterclasses', href: '/guides' },
       { label: 'Resources', href: '/resources' },
       { label: 'Challenges', href: '/challenges' },
     ],
@@ -75,6 +79,8 @@ export const footerNavSections = [
       { label: 'DSA Sheet', href: '/placement/dsa' },
       { label: 'CS Fundamentals', href: '/placement/cs-fundamentals' },
       { label: 'Interview Prep', href: '/placement/interview' },
+      { label: 'ATS Resume Roaster', href: '/placement/resume-roaster' },
+      { label: 'Resume Builder', href: '/resume-builder' },
       { label: 'Leaderboard', href: '/leaderboard' },
     ],
   },

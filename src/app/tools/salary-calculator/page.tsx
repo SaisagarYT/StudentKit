@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import { ToolPageShell } from '@/components/layout/tool-page-shell';
 import { ToolStructuredData } from '@/components/seo/tool-structured-data';
-import { SalaryForm } from '@/features/salary/salary-form';
+import { CTCForm } from '@/features/salary/ctc-form';
 import { generateToolMetadata } from '@/lib/seo';
 import { getToolBySlug } from '@/config/tools';
 
@@ -59,7 +59,7 @@ export default function SalaryCalculatorPage() {
         { slug: 'cgpa-to-percentage', title: 'CGPA to Percentage', description: 'Convert CGPA to percentage' },
       ]}
     >
-      <SalaryForm />
+      <CTCForm />
     </ToolPageShell>
     </>
   );

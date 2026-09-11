@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Mail, Lock, User, Loader2, ArrowLeft } from 'lucide-react';
 import { useUserAuth } from '@/lib/firebase/user-auth';
@@ -9,6 +9,10 @@ import { syncProgressOnLogin } from '@/lib/firebase/user-progress-sync';
 
 export function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const rawRedirect = searchParams.get('redirect');
+  const targetDestination = rawRedirect && rawRedirect.startsWith('/') && !rawRedirect.startsWith('//') ? rawRedirect : '/profile';
+
   const { user, signInWithGoogle, signInWithEmail, signUpWithEmail } = useUserAuth();
   const [mode, setMode] = useState<'login' | 'signup'>('login');
   const [email, setEmail] = useState('');
@@ -19,9 +23,9 @@ export function LoginForm() {
 
   useEffect(() => {
     if (user) {
-      router.push('/profile');
+      router.push(targetDestination);
     }
-  }, [user, router]);
+  }, [user, router, targetDestination]);
 
   if (user) {
     return null;
@@ -38,7 +42,7 @@ export function LoginForm() {
         if (auth.currentUser) {
           await syncProgressOnLogin(auth.currentUser.uid);
         }
-        router.push('/profile');
+        router.push(targetDestination);
       }, 500);
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : 'Google sign-in failed');
@@ -65,7 +69,7 @@ export function LoginForm() {
         if (auth.currentUser) {
           await syncProgressOnLogin(auth.currentUser.uid);
         }
-        router.push('/profile');
+        router.push(targetDestination);
       }, 500);
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : 'Authentication failed';

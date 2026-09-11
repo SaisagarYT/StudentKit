@@ -44,7 +44,7 @@ export default function JsonFormatterPage() {
         { slug: 'regex-tester', title: 'Regex Tester', description: 'Test & debug regular expressions' },
         { slug: 'base64-encoder', title: 'Base64 Encoder', description: 'Encode & decode Base64 strings' },
         { slug: 'uuid-generator', title: 'UUID Generator', description: 'Generate unique identifiers (UUID v4)' },
-        { slug: 'lorem-ipsum-generator', title: 'Lorem Ipsum Generator', description: 'Generate placeholder text' },
+        { slug: 'readme-generator', title: 'README Generator', description: 'Generate professional project READMEs' },
       ]}
     >
       <JsonFormatterForm />

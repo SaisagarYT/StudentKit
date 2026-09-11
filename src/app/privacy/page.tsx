@@ -64,22 +64,57 @@ export default function PrivacyPage() {
 
           <section>
             <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-3">
-              Cookies
+              Cookies & Advertising Technologies
             </h2>
-            <p>
-              We use essential cookies only for basic site functionality. We do not
-              use tracking cookies or share data with advertisers.
+            <p className="mb-3">
+              We use cookies and similar technologies to ensure core website functionality, analyze traffic, and display relevant advertisements through Google AdSense.
             </p>
+            <p className="mb-3">
+              <strong>Google AdSense & Third-Party Vendors:</strong> Third-party vendors, including Google, use cookies to serve ads based on a user&apos;s prior visits to our website or other websites on the Internet.
+            </p>
+            <ul className="list-disc list-inside space-y-2 text-sm mb-3">
+              <li>
+                Google&apos;s use of advertising cookies enables it and its partners to serve ads to our users based on their visit to StudentKit and/or other sites on the Internet.
+              </li>
+              <li>
+                Users may opt out of personalized advertising by visiting{' '}
+                <a
+                  href="https://www.google.com/settings/ads"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[var(--accent-dark)] underline underline-offset-4"
+                >
+                  Google Ads Settings
+                </a>. Alternatively, you can opt out of a third-party vendor&apos;s use of cookies for personalized advertising by visiting{' '}
+                <a
+                  href="https://www.aboutads.info/choices/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[var(--accent-dark)] underline underline-offset-4"
+                >
+                  aboutads.info
+                </a>.
+              </li>
+              <li>
+                To learn more about how Google collects and processes data when you use sites that partner with Google, please visit{' '}
+                <a
+                  href="https://policies.google.com/technologies/partner-sites"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[var(--accent-dark)] underline underline-offset-4"
+                >
+                  How Google uses information from sites or apps that use our services
+                </a>.
+              </li>
+            </ul>
           </section>
 
           <section>
             <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-3">
-              Third-party services
+              Analytics & Measurement
             </h2>
             <p>
-              We may use privacy-respecting analytics services. We do not sell,
-              rent, or share your personal data with third parties for marketing
-              purposes.
+              We use Google Analytics to understand website traffic, user engagement, and performance trends. These analytics services collect aggregated, pseudonymous metrics (such as page views, device types, and session duration) to help us improve user experience.
             </p>
           </section>
 

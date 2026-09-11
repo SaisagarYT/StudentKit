@@ -7,6 +7,7 @@ import * as Icons from 'lucide-react';
 import { tools } from '@/config/tools';
 import { categories } from '@/config/categories';
 import { roadmaps } from '@/config/roadmaps';
+import { staticProjects } from '@/config/projects';
 import { mainNavItems, secondaryNavItems } from '@/config/navigation';
 import { cn } from '@/lib/utils';
 import { trackSearch } from '@/lib/analytics';
@@ -22,7 +23,7 @@ interface SearchItem {
   description: string;
   href: string;
   icon: string;
-  type: 'tool' | 'category' | 'page' | 'roadmap';
+  type: 'tool' | 'category' | 'page' | 'roadmap' | 'project';
   keywords: string[];
 }
 
@@ -40,10 +41,19 @@ const searchItems: SearchItem[] = [
     id: `roadmap-${r.slug}`,
     title: `${r.title} Roadmap`,
     description: r.description.slice(0, 80),
-    href: `/roadmaps/view?slug=${r.slug}`,
+    href: `/roadmaps/${r.slug}`,
     icon: 'Map',
     type: 'roadmap' as const,
     keywords: [r.slug, r.title.toLowerCase(), 'roadmap', 'career', 'path'],
+  })),
+  ...staticProjects.map((p) => ({
+    id: `project-${p.slug}`,
+    title: p.title,
+    description: p.shortDescription.slice(0, 80),
+    href: `/projects/${p.slug}`,
+    icon: 'FolderKanban',
+    type: 'project' as const,
+    keywords: [p.slug, p.title.toLowerCase(), 'project', 'build', ...p.technologies.map((t) => t.toLowerCase())],
   })),
   ...categories.map((c) => ({
     id: `cat-${c.slug}`,

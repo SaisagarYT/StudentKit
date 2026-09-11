@@ -44,7 +44,7 @@ export default function Base64EncoderPage() {
         { slug: 'json-formatter', title: 'JSON Formatter', description: 'Format, validate & minify JSON' },
         { slug: 'regex-tester', title: 'Regex Tester', description: 'Test & debug regular expressions' },
         { slug: 'uuid-generator', title: 'UUID Generator', description: 'Generate unique identifiers (UUID v4)' },
-        { slug: 'lorem-ipsum-generator', title: 'Lorem Ipsum Generator', description: 'Generate placeholder text' },
+        { slug: 'readme-generator', title: 'README Generator', description: 'Generate professional project READMEs' },
       ]}
     >
       <Base64Form />

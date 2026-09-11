@@ -244,6 +244,7 @@ Calculation functions are pure (no side effects, no React dependencies) and inde
 ### Typography
 
 - **Primary:** Geist (sans-serif)
+- **Primary:** Roboto Condensed (sans-serif)
 - **Accent:** Instrument Serif (editorial headings only)
 - **Scale:** Fluid `clamp()` from 0.75rem to 8rem
 

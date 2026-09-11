@@ -228,7 +228,7 @@ export function RoadmapDetailClient({ slug }: { slug: string }) {
                   return (
                     <Link
                       key={related.slug}
-                      href={`/roadmaps/view?slug=${related.slug}`}
+                      href={`/roadmaps/${related.slug}`}
                       className="group flex items-start gap-3 p-4 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] hover:border-[var(--border-default)] hover:shadow-sm transition-all"
                     >
                       <div className="flex-1 min-w-0">

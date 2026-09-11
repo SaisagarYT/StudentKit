@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import { ToolPageShell } from '@/components/layout/tool-page-shell';
 import { ToolStructuredData } from '@/components/seo/tool-structured-data';
-import { SGPAForm } from '@/features/sgpa/sgpa-form';
+import { UnifiedAcademicCalculator } from '@/features/academic/unified-academic-calculator';
 import { generateToolMetadata } from '@/lib/seo';
 import { getToolBySlug } from '@/config/tools';
 
@@ -61,7 +61,7 @@ export default function SGPACalculatorPage() {
         { slug: 'attendance-calculator', title: 'Attendance Calculator', description: 'Track & manage your attendance' },
       ]}
     >
-      <SGPAForm />
+      <UnifiedAcademicCalculator initialTab="sgpa" />
     </ToolPageShell>
     </>
   );

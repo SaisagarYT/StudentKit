@@ -13,8 +13,8 @@ const TYPE_ICONS = {
 
 const TYPE_HREFS = {
   tool: (slug: string) => `/tools/${slug}`,
-  roadmap: (slug: string) => `/roadmaps/view?slug=${slug}`,
-  project: (slug: string) => `/projects/view?slug=${slug}`,
+  roadmap: (slug: string) => `/roadmaps/${slug}`,
+  project: (slug: string) => `/projects/${slug}`,
 };
 
 export function BookmarksPanel({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {

@@ -8,6 +8,7 @@ import { useUserAuth } from '@/lib/firebase/user-auth';
 import { emitProgressChanged } from '@/lib/firebase/user-progress-sync';
 import { logXpEvent } from '@/lib/xp';
 import { dsaTopicsMeta, type DsaTopicMeta } from '@/config/placement/dsa-topics';
+import { defaultDsaProblems } from '@/config/placement/dsa-default-problems';
 import { dsaProblemRepository, resourceRepository } from '@/lib/cms/repository';
 import { ProblemHints } from './problem-hints';
 import type { DsaProblemListItem } from '@/lib/cms/types';
@@ -58,9 +59,9 @@ export function DsaSheet() {
   const [expandedTopic, setExpandedTopic] = useState<string | null>(null);
   const [expandedHints, setExpandedHints] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
-  const [problems, setProblems] = useState<DsaProblemListItem[]>([]);
+  const [problems, setProblems] = useState<DsaProblemListItem[]>(defaultDsaProblems);
   const [publishedSlugs, setPublishedSlugs] = useState<Set<string>>(new Set());
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setProgress(loadProgress());
@@ -72,10 +73,10 @@ export function DsaSheet() {
       dsaProblemRepository.listPublished(),
       resourceRepository.listPublished('dsa'),
     ]).then(([probs, resources]) => {
-      // If dsa-problems collection has data, use it
+      // If dsa-problems collection has data, use it; otherwise retain defaultDsaProblems
       if (probs.length > 0) {
         setProblems(probs);
-      } else {
+      } else if (resources.length > 0) {
         // Fallback: derive problem entries from published resources
         const derived: DsaProblemListItem[] = resources.map((r, i) => ({
           id: r.id,
@@ -92,10 +93,15 @@ export function DsaSheet() {
           status: 'published' as const,
         }));
         setProblems(derived);
+      } else {
+        setProblems(defaultDsaProblems);
       }
       setPublishedSlugs(new Set(resources.map(r => r.slug)));
       setLoading(false);
-    }).catch(() => setLoading(false));
+    }).catch(() => {
+      setProblems(defaultDsaProblems);
+      setLoading(false);
+    });
   }, []);
 
   const toggleProblem = useCallback((slug: string) => {

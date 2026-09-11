@@ -11,6 +11,9 @@ export const XP_VALUES = {
   ACTIVE_DAY: 5,
   CHALLENGE_COMPLETE: 25,
   PROJECT_MILESTONE: 20,
+  DAILY_FLASHCARD: 15,
+  CHEATSHEET_PRINT: 10,
+  RESUME_ROASTER: 15,
 } as const;
 
 // ─── Streak Multiplier ───────────────────────────────────────────────────────

@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useEffect } from 'react';
+import Link from 'next/link';
 import gsap from 'gsap';
 import { type AttendanceResult } from './attendance.types';
 
@@ -135,6 +136,26 @@ export function AttendanceResultDisplay({ result }: Props) {
             {targetPercentage}%.
           </p>
         )}
+      </div>
+
+      {/* Contextual Career Funnel */}
+      <div className="mt-6 pt-4 border-t border-[var(--border-soft)]">
+        <div className="flex items-center justify-between p-3 rounded-sm bg-[var(--accent-primary)]/10 border border-[var(--accent-primary)]/30">
+          <div className="flex-1 min-w-0 pr-3">
+            <p className="text-xs font-semibold text-[var(--text-primary)]">
+              Got your attendance sorted?
+            </p>
+            <p className="text-[11px] text-[var(--text-secondary)] truncate">
+              Don&apos;t waste free hours — start your developer journey with interactive roadmaps.
+            </p>
+          </div>
+          <Link
+            href="/roadmaps/full-stack-developer"
+            className="shrink-0 px-3 py-1.5 rounded-sm bg-[var(--accent-dark)] text-[var(--accent-primary)] text-xs font-semibold hover:opacity-90 transition-opacity"
+          >
+            Start Learning →
+          </Link>
+        </div>
       </div>
     </div>
   );

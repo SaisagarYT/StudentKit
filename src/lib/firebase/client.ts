@@ -15,6 +15,19 @@ export const isFirebaseConfigured = Boolean(
   firebaseConfig.apiKey && firebaseConfig.projectId
 );
 
+// Prevent Next.js development overlay/console from logging benign AbortErrors
+// when components unmount or pages navigate while Firestore webchannels are active.
+if (typeof window !== 'undefined') {
+  window.addEventListener('unhandledrejection', (event) => {
+    if (
+      event.reason?.name === 'AbortError' ||
+      event.reason?.message?.includes('aborted')
+    ) {
+      event.preventDefault();
+    }
+  });
+}
+
 let _app: FirebaseApp | null = null;
 let _auth: Auth | null = null;
 let _db: Firestore | null = null;

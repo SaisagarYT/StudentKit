@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import { ToolPageShell } from '@/components/layout/tool-page-shell';
 import { ToolStructuredData } from '@/components/seo/tool-structured-data';
-import { CompressorForm } from '@/features/image-processing/compressor-form';
+import { UnifiedImageStudio } from '@/features/documents/unified-image-studio';
 import { generateToolMetadata } from '@/lib/seo';
 import { getToolBySlug } from '@/config/tools';
 
@@ -57,7 +57,7 @@ export default function ImageCompressorPage() {
         { slug: 'signature-resizer', title: 'Signature Resizer', description: 'Resize signatures for forms & documents' },
       ]}
     >
-      <CompressorForm />
+      <UnifiedImageStudio initialTab="compress" />
     </ToolPageShell>
     </>
   );

@@ -11,11 +11,13 @@ import {
   Loader2,
   Plus,
   Trash2,
-  GripVertical,
   Save,
   FolderOpen,
   X,
   PlusCircle,
+  ChevronUp,
+  ChevronDown,
+  RefreshCw,
 } from 'lucide-react';
 
 type Section = {
@@ -38,6 +40,15 @@ type Topic = {
   resources: { title: string; url: string; type: string }[];
   project: { title: string; description: string };
 };
+
+function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, '')
+    .replace(/[\s_-]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
 
 export function RoadmapEditForm() {
   const router = useRouter();
@@ -132,7 +143,19 @@ export function RoadmapEditForm() {
   }
 
   function removeSection(idx: number) {
-    update({ sections: form.sections.filter((_, i) => i !== idx) });
+    const sections = form.sections.filter((_, i) => i !== idx).map((s, i) => ({ ...s, order: i }));
+    update({ sections });
+  }
+
+  function moveSection(idx: number, direction: 'up' | 'down') {
+    const targetIdx = direction === 'up' ? idx - 1 : idx + 1;
+    if (targetIdx < 0 || targetIdx >= form.sections.length) return;
+    const sections = [...form.sections];
+    const temp = sections[idx];
+    sections[idx] = sections[targetIdx];
+    sections[targetIdx] = temp;
+    sections.forEach((s, i) => { s.order = i; });
+    update({ sections });
   }
 
   function addTopic(sectionIdx: number) {
@@ -150,6 +173,18 @@ export function RoadmapEditForm() {
   function removeTopic(sectionIdx: number, topicIdx: number) {
     const sections = [...form.sections];
     sections[sectionIdx].topics = sections[sectionIdx].topics.filter((_, i) => i !== topicIdx);
+    update({ sections });
+  }
+
+  function moveTopic(sectionIdx: number, topicIdx: number, direction: 'up' | 'down') {
+    const sections = [...form.sections];
+    const topics = [...sections[sectionIdx].topics];
+    const targetIdx = direction === 'up' ? topicIdx - 1 : topicIdx + 1;
+    if (targetIdx < 0 || targetIdx >= topics.length) return;
+    const temp = topics[topicIdx];
+    topics[topicIdx] = topics[targetIdx];
+    topics[targetIdx] = temp;
+    sections[sectionIdx] = { ...sections[sectionIdx], topics };
     update({ sections });
   }
 
@@ -231,7 +266,20 @@ export function RoadmapEditForm() {
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <Field label="Title"><input value={form.title} onChange={(e) => update({ title: e.target.value })} className="input-field" /></Field>
-            <Field label="Slug"><input value={form.slug} onChange={(e) => update({ slug: e.target.value })} className="input-field font-mono text-sm" /></Field>
+            <Field label="Slug">
+              <div className="flex items-center gap-2">
+                <input value={form.slug} onChange={(e) => update({ slug: e.target.value })} className="input-field font-mono text-sm flex-1" />
+                <button
+                  type="button"
+                  onClick={() => update({ slug: slugify(form.title) })}
+                  title="Auto-generate slug from title"
+                  className="px-2.5 py-2 rounded-sm border border-[var(--border-default)] hover:bg-[var(--bg-subtle)] text-[var(--text-subtle)] hover:text-[var(--text-primary)] transition-colors text-xs flex items-center gap-1 shrink-0"
+                >
+                  <RefreshCw className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">From Title</span>
+                </button>
+              </div>
+            </Field>
           </div>
           <Field label="Short Description"><textarea value={form.shortDescription} onChange={(e) => update({ shortDescription: e.target.value })} rows={2} className="input-field resize-none" /></Field>
           <Field label="Description"><textarea value={form.description} onChange={(e) => update({ description: e.target.value })} rows={4} className="input-field resize-y" /></Field>
@@ -264,9 +312,11 @@ export function RoadmapEditForm() {
         addSection={addSection}
         updateSection={updateSection}
         removeSection={removeSection}
+        moveSection={moveSection}
         addTopic={addTopic}
         updateTopic={updateTopic}
         removeTopic={removeTopic}
+        moveTopic={moveTopic}
       />
 
       {/* Bottom save */}
@@ -280,7 +330,7 @@ export function RoadmapEditForm() {
   );
 }
 
-function SectionsEditor({ form, addSection, updateSection, removeSection, addTopic, updateTopic, removeTopic }: any) {
+function SectionsEditor({ form, addSection, updateSection, removeSection, moveSection, addTopic, updateTopic, removeTopic, moveTopic }: any) {
   const { user } = useAuth();
   const [allProjects, setAllProjects] = useState<ProjectListItem[]>([]);
   const [projectsLoaded, setProjectsLoaded] = useState(false);
@@ -354,7 +404,26 @@ function SectionsEditor({ form, addSection, updateSection, removeSection, addTop
           <div key={section.id} className="border border-[var(--border-soft)] rounded-sm p-4 space-y-3">
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-2">
-                <GripVertical className="w-4 h-4 text-[var(--text-subtle)]" />
+                <div className="flex items-center gap-0.5">
+                  <button
+                    type="button"
+                    onClick={() => moveSection(sIdx, 'up')}
+                    disabled={sIdx === 0}
+                    className="p-1 rounded-sm hover:bg-[var(--bg-subtle)] disabled:opacity-25 disabled:pointer-events-none text-[var(--text-subtle)] hover:text-[var(--text-primary)] transition-colors"
+                    title="Move section up"
+                  >
+                    <ChevronUp className="w-4 h-4" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => moveSection(sIdx, 'down')}
+                    disabled={sIdx === form.sections.length - 1}
+                    className="p-1 rounded-sm hover:bg-[var(--bg-subtle)] disabled:opacity-25 disabled:pointer-events-none text-[var(--text-subtle)] hover:text-[var(--text-primary)] transition-colors"
+                    title="Move section down"
+                  >
+                    <ChevronDown className="w-4 h-4" />
+                  </button>
+                </div>
                 <span className="text-xs font-semibold text-[var(--text-subtle)] uppercase">Section {sIdx + 1}</span>
               </div>
               <button onClick={() => removeSection(sIdx)} className="p-1.5 rounded-sm hover:bg-red-50 text-[var(--text-subtle)] hover:text-red-500"><Trash2 className="w-4 h-4" /></button>
@@ -438,8 +507,32 @@ function SectionsEditor({ form, addSection, updateSection, removeSection, addTop
               {section.topics.map((topic: Topic, tIdx: number) => (
                 <div key={topic.id} className="bg-[var(--bg-subtle)] rounded-sm p-3 space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-medium text-[var(--text-subtle)]">Topic {tIdx + 1}</span>
-                    <button onClick={() => removeTopic(sIdx, tIdx)} className="text-[var(--text-subtle)] hover:text-red-500"><Trash2 className="w-3.5 h-3.5" /></button>
+                    <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-0.5">
+                        <button
+                          type="button"
+                          onClick={() => moveTopic(sIdx, tIdx, 'up')}
+                          disabled={tIdx === 0}
+                          className="p-1 rounded-sm hover:bg-[var(--bg-surface)] disabled:opacity-25 disabled:pointer-events-none text-[var(--text-subtle)] hover:text-[var(--text-primary)] transition-colors"
+                          title="Move topic up"
+                        >
+                          <ChevronUp className="w-3.5 h-3.5" />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => moveTopic(sIdx, tIdx, 'down')}
+                          disabled={tIdx === section.topics.length - 1}
+                          className="p-1 rounded-sm hover:bg-[var(--bg-surface)] disabled:opacity-25 disabled:pointer-events-none text-[var(--text-subtle)] hover:text-[var(--text-primary)] transition-colors"
+                          title="Move topic down"
+                        >
+                          <ChevronDown className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                      <span className="text-xs font-medium text-[var(--text-subtle)]">Topic {tIdx + 1}</span>
+                    </div>
+                    <button onClick={() => removeTopic(sIdx, tIdx)} className="text-[var(--text-subtle)] hover:text-red-500 transition-colors">
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
                   </div>
                   <div className="grid grid-cols-2 gap-2">
                     <input value={topic.title} onChange={(e: any) => updateTopic(sIdx, tIdx, { title: e.target.value })} placeholder="Title" className="input-field" />

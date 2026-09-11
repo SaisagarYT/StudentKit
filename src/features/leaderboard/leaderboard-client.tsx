@@ -1,12 +1,19 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { Trophy, Flame, Code, Brain, TrendingUp, Crown, Medal, Award } from 'lucide-react';
-import { subscribeToLeaderboard, type LeaderboardEntry } from '@/lib/firebase/leaderboard';
+import { useState, useEffect, useMemo } from 'react';
+import { Trophy, Flame, Code, Brain, TrendingUp, Crown, Medal, Award, GraduationCap, Users, School } from 'lucide-react';
+import {
+  subscribeToLeaderboard,
+  type LeaderboardEntry,
+  DEFAULT_LEADERBOARD_ENTRIES,
+  getCampusRankings,
+  type CampusLeaderboardEntry,
+} from '@/lib/firebase/leaderboard';
 import { useUserAuth } from '@/lib/firebase/user-auth';
 import { isFirebaseConfigured } from '@/lib/firebase/client';
 
 type SortField = 'xp' | 'dsaSolved' | 'streak';
+type LeaderboardTab = 'individuals' | 'campus';
 
 const SORT_OPTIONS: { key: SortField; label: string; icon: React.ElementType }[] = [
   { key: 'xp', label: 'XP', icon: TrendingUp },
@@ -51,10 +58,17 @@ function LeaderboardRow({ entry, rank, isCurrentUser }: { entry: LeaderboardEntr
       </div>
 
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-semibold text-[var(--text-primary)] truncate">
-          {entry.displayName}
-          {isCurrentUser && <span className="ml-2 text-[10px] font-medium text-[var(--accent-dark)]">YOU</span>}
-        </p>
+        <div className="flex items-center gap-2 flex-wrap">
+          <p className="text-sm font-semibold text-[var(--text-primary)] truncate">
+            {entry.displayName}
+            {isCurrentUser && <span className="ml-2 text-[10px] font-medium text-[var(--accent-dark)]">YOU</span>}
+          </p>
+          {entry.college && (
+            <span className="text-[10px] font-medium px-1.5 py-0.5 rounded bg-[var(--bg-subtle)] text-[var(--text-secondary)] border border-[var(--border-soft)]">
+              {entry.college}
+            </span>
+          )}
+        </div>
         <div className="flex items-center gap-3 mt-0.5">
           <span className="text-[11px] text-[var(--text-subtle)] flex items-center gap-1">
             <Code className="w-3 h-3" />{entry.dsaSolved} solved
@@ -75,10 +89,54 @@ function LeaderboardRow({ entry, rank, isCurrentUser }: { entry: LeaderboardEntr
   );
 }
 
+function CampusLeaderboardRow({ campus, rank }: { campus: CampusLeaderboardEntry; rank: number }) {
+  return (
+    <div
+      className={`flex items-center gap-4 p-4 rounded-sm transition-all hover:bg-[var(--bg-subtle)] ${
+        rank <= 3 ? 'border border-[var(--border-soft)]' : ''
+      }`}
+    >
+      <div className="w-8 flex justify-center shrink-0">
+        <RankBadge rank={rank} />
+      </div>
+
+      <div className="w-10 h-10 rounded-sm bg-[var(--bg-subtle)] border border-[var(--border-soft)] flex items-center justify-center shrink-0 text-[var(--accent-primary)]">
+        <School className="w-5 h-5" />
+      </div>
+
+      <div className="flex-1 min-w-0">
+        <h4 className="text-sm font-bold text-[var(--text-primary)] truncate">
+          {campus.college}
+        </h4>
+        <div className="flex items-center gap-3 mt-1 text-[11px] text-[var(--text-subtle)]">
+          <span className="flex items-center gap-1">
+            <Users className="w-3 h-3" />
+            {campus.activeCoders} active {campus.activeCoders === 1 ? 'coder' : 'coders'}
+          </span>
+          <span className="flex items-center gap-1">
+            <Code className="w-3 h-3" />
+            {campus.totalSolved} solved
+          </span>
+          <span className="hidden sm:inline">
+            Top: <strong className="text-[var(--text-primary)]">{campus.topPerformer}</strong>
+          </span>
+        </div>
+      </div>
+
+      <div className="text-right shrink-0">
+        <p className="text-lg font-bold text-[var(--text-primary)]">
+          {campus.totalXp.toLocaleString()}
+        </p>
+        <p className="text-[10px] text-[var(--text-subtle)] uppercase font-medium">CAMPUS XP</p>
+      </div>
+    </div>
+  );
+}
+
 function SkeletonRows() {
   return (
     <div className="space-y-3">
-      {Array.from({ length: 10 }, (_, i) => (
+      {Array.from({ length: 8 }, (_, i) => (
         <div key={i} className="flex items-center gap-4 p-4 animate-pulse">
           <div className="w-8 h-5 rounded-sm bg-[var(--bg-subtle)]" />
           <div className="w-10 h-10 rounded-full bg-[var(--bg-subtle)]" />
@@ -96,19 +154,25 @@ function SkeletonRows() {
 export function LeaderboardClient() {
   const { user } = useUserAuth();
   const [entries, setEntries] = useState<LeaderboardEntry[]>([]);
+  const [activeTab, setActiveTab] = useState<LeaderboardTab>('individuals');
   const [sortBy, setSortBy] = useState<SortField>('xp');
   const [loading, setLoading] = useState(true);
   const [liveIndicator, setLiveIndicator] = useState(false);
 
   useEffect(() => {
     if (!isFirebaseConfigured) {
+      setEntries(DEFAULT_LEADERBOARD_ENTRIES);
       setLoading(false);
       return;
     }
 
     setLoading(true);
     const unsubscribe = subscribeToLeaderboard(50, sortBy, (data) => {
-      setEntries(data);
+      if (data && data.length > 0) {
+        setEntries(data);
+      } else {
+        setEntries(DEFAULT_LEADERBOARD_ENTRIES);
+      }
       setLoading(false);
       setLiveIndicator(true);
       setTimeout(() => setLiveIndicator(false), 1500);
@@ -116,6 +180,8 @@ export function LeaderboardClient() {
 
     return () => unsubscribe();
   }, [sortBy]);
+
+  const campusRankings = useMemo(() => getCampusRankings(entries), [entries]);
 
   return (
     <div className="py-8 md:py-12">
@@ -126,50 +192,80 @@ export function LeaderboardClient() {
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-sm bg-[var(--bg-subtle)] border border-[var(--border-soft)] mb-4">
             <Trophy className="w-3.5 h-3.5 text-[var(--accent-dark)]" />
             <span className="text-[11px] font-semibold text-[var(--text-secondary)] uppercase tracking-wider">
-              Leaderboard
+              Leaderboard & Campus Wars
             </span>
             <span className={`w-2 h-2 rounded-full transition-all duration-300 ${liveIndicator ? 'bg-green-500 scale-125' : 'bg-green-500/50'}`} />
             <span className="text-[10px] text-[var(--text-subtle)]">Live</span>
           </div>
           <h1 className="text-2xl md:text-3xl font-bold text-[var(--text-primary)] mb-2">
-            Top Learners
+            Top Learners & Campus Rankings
           </h1>
           <p className="text-sm text-[var(--text-secondary)] max-w-md mx-auto">
-            Realtime rankings based on problems solved, streaks, and learning activity. Sign in and solve problems to climb the board.
+            Realtime rankings based on problems solved, streaks, and learning activity. Represent your college and climb the board.
           </p>
-        </div>
 
-        {/* Sort Tabs */}
-        <div className="flex items-center justify-center gap-2 mb-6">
-          {SORT_OPTIONS.map(({ key, label, icon: Icon }) => (
+          {/* Mode Switcher */}
+          <div className="mt-6 inline-flex p-1 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] gap-1">
             <button
-              key={key}
-              onClick={() => setSortBy(key)}
-              className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-sm text-xs font-semibold transition-all ${
-                sortBy === key
-                  ? 'bg-[var(--accent-dark)] text-[var(--accent-primary)]'
-                  : 'text-[var(--text-secondary)] hover:bg-[var(--bg-subtle)] border border-[var(--border-soft)]'
+              onClick={() => setActiveTab('individuals')}
+              className={`inline-flex items-center gap-1.5 px-4 py-1.5 rounded-sm text-xs font-semibold transition-all ${
+                activeTab === 'individuals'
+                  ? 'bg-[var(--accent-dark)] text-[var(--text-inverse)]'
+                  : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
               }`}
             >
-              <Icon className="w-3.5 h-3.5" />
-              {label}
+              <Trophy className="w-3.5 h-3.5" />
+              Individual Coders
             </button>
-          ))}
+            <button
+              onClick={() => setActiveTab('campus')}
+              className={`inline-flex items-center gap-1.5 px-4 py-1.5 rounded-sm text-xs font-semibold transition-all ${
+                activeTab === 'campus'
+                  ? 'bg-[var(--accent-dark)] text-[var(--text-inverse)]'
+                  : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
+              }`}
+            >
+              <GraduationCap className="w-3.5 h-3.5" />
+              College / Campus War
+            </button>
+          </div>
         </div>
+
+        {/* Sort Tabs for Individual View */}
+        {activeTab === 'individuals' && (
+          <div className="flex items-center justify-center gap-2 mb-6">
+            {SORT_OPTIONS.map(({ key, label, icon: Icon }) => (
+              <button
+                key={key}
+                onClick={() => setSortBy(key)}
+                className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-sm text-xs font-semibold transition-all ${
+                  sortBy === key
+                    ? 'bg-[var(--accent-dark)] text-[var(--accent-primary)]'
+                    : 'text-[var(--text-secondary)] hover:bg-[var(--bg-subtle)] border border-[var(--border-soft)]'
+                }`}
+              >
+                <Icon className="w-3.5 h-3.5" />
+                {label}
+              </button>
+            ))}
+          </div>
+        )}
 
         {/* Leaderboard List */}
         <div className="rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] p-4 md:p-6">
           {loading ? (
             <SkeletonRows />
           ) : entries.length === 0 ? (
-            <div className="py-16 text-center">
-              <Trophy className="w-10 h-10 mx-auto text-[var(--text-subtle)] opacity-30 mb-3" />
-              <p className="text-sm text-[var(--text-subtle)] mb-1">No entries yet</p>
-              <p className="text-xs text-[var(--text-subtle)]">
-                Sign in and start solving problems to appear on the leaderboard
+            <div className="py-12 text-center">
+              <Trophy className="w-10 h-10 mx-auto text-[var(--text-subtle)] mb-3 opacity-40" />
+              <h3 className="text-base font-semibold text-[var(--text-primary)]">
+                {activeTab === 'individuals' ? 'No learners on the leaderboard yet' : 'No campus rankings yet'}
+              </h3>
+              <p className="mt-1.5 text-xs text-[var(--text-secondary)] max-w-sm mx-auto">
+                Start solving DSA problems or complete roadmap topics to claim the #1 spot!
               </p>
             </div>
-          ) : (
+          ) : activeTab === 'individuals' ? (
             <div className="space-y-2">
               {entries.map((entry, i) => (
                 <LeaderboardRow
@@ -177,6 +273,16 @@ export function LeaderboardClient() {
                   entry={entry}
                   rank={i + 1}
                   isCurrentUser={entry.uid === user?.uid}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="space-y-2">
+              {campusRankings.map((campus, i) => (
+                <CampusLeaderboardRow
+                  key={campus.college}
+                  campus={campus}
+                  rank={i + 1}
                 />
               ))}
             </div>

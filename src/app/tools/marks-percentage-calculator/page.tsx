@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import { ToolPageShell } from '@/components/layout/tool-page-shell';
 import { ToolStructuredData } from '@/components/seo/tool-structured-data';
-import { MarksPercentageForm } from '@/features/percentage/marks-percentage-form';
+import { UnifiedAcademicCalculator } from '@/features/academic/unified-academic-calculator';
 import { generateToolMetadata } from '@/lib/seo';
 import { getToolBySlug } from '@/config/tools';
 
@@ -55,7 +55,7 @@ export default function MarksPercentageCalculatorPage() {
         { slug: 'attendance-calculator', title: 'Attendance Calculator', description: 'Track & manage your attendance' },
       ]}
     >
-      <MarksPercentageForm />
+      <UnifiedAcademicCalculator initialTab="marks" />
     </ToolPageShell>
     </>
   );

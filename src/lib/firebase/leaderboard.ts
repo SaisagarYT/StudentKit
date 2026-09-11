@@ -17,6 +17,7 @@ export interface LeaderboardEntry {
   uid: string;
   displayName: string;
   photoURL: string;
+  college?: string;
   dsaSolved: number;
   csSolved: number;
   streak: number;
@@ -25,6 +26,43 @@ export interface LeaderboardEntry {
   roadmapTopics: number;
   xp: number;
   updatedAt: any;
+}
+
+export interface CampusLeaderboardEntry {
+  college: string;
+  activeCoders: number;
+  totalSolved: number;
+  totalXp: number;
+  topPerformer: string;
+}
+
+export const DEFAULT_LEADERBOARD_ENTRIES: LeaderboardEntry[] = [];
+
+export function getCampusRankings(entries: LeaderboardEntry[]): CampusLeaderboardEntry[] {
+  const map = new Map<string, { coders: number; solved: number; xp: number; topName: string; topXp: number }>();
+
+  for (const entry of entries) {
+    const col = entry.college || 'Independent Learners';
+    const current = map.get(col) || { coders: 0, solved: 0, xp: 0, topName: entry.displayName, topXp: 0 };
+    current.coders += 1;
+    current.solved += entry.dsaSolved;
+    current.xp += entry.xp;
+    if (entry.xp > current.topXp) {
+      current.topXp = entry.xp;
+      current.topName = entry.displayName;
+    }
+    map.set(col, current);
+  }
+
+  return Array.from(map.entries())
+    .map(([college, stats]) => ({
+      college,
+      activeCoders: stats.coders,
+      totalSolved: stats.solved,
+      totalXp: stats.xp,
+      topPerformer: stats.topName,
+    }))
+    .sort((a, b) => b.totalXp - a.totalXp);
 }
 
 export function calculateXP(entry: Pick<LeaderboardEntry, 'dsaSolved' | 'csSolved' | 'totalActiveDays' | 'roadmapTopics'>): number {

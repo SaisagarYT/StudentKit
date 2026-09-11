@@ -18,7 +18,15 @@ export function ViewCounter({ type, slug }: ViewCounterProps) {
   const [views, setViews] = useState<number | null>(null);
 
   useEffect(() => {
-    getContentViews(type, slug).then(setViews);
+    let active = true;
+    getContentViews(type, slug)
+      .then((v) => {
+        if (active) setViews(v);
+      })
+      .catch(() => {});
+    return () => {
+      active = false;
+    };
   }, [type, slug]);
 
   if (views === null || views === 0) return null;

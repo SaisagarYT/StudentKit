@@ -32,6 +32,8 @@ const DIFFICULTY_CONFIG: Record<string, { label: string; color: string; bg: stri
 
 type DifficultyFilter = 'all' | 'beginner' | 'intermediate' | 'advanced' | 'expert';
 
+import { staticProjects } from '@/config/projects';
+
 export function PublicProjectsList() {
   const [projects, setProjects] = useState<PublicProject[]>([]);
   const [loading, setLoading] = useState(true);
@@ -47,29 +49,46 @@ export function PublicProjectsList() {
           orderBy('order', 'asc')
         );
         const snap = await getDocs(q);
-        setProjects(
-          snap.docs.map((d) => {
-            const data = d.data();
-            return {
-              id: d.id,
-              slug: data.slug,
-              title: data.title,
-              shortDescription: data.shortDescription ?? '',
-              category: data.category ?? '',
-              difficulty: data.difficulty ?? 'beginner',
-              estimatedDuration: data.estimatedDuration ?? '',
-              technologies: data.technologies ?? [],
-              featured: data.featured ?? false,
-            };
-          })
-        );
+        if (!snap.empty) {
+          setProjects(
+            snap.docs.map((d) => {
+              const data = d.data();
+              return {
+                id: d.id,
+                slug: data.slug,
+                title: data.title,
+                shortDescription: data.shortDescription ?? '',
+                category: data.category ?? '',
+                difficulty: data.difficulty ?? 'beginner',
+                estimatedDuration: data.estimatedDuration ?? '',
+                technologies: data.technologies ?? [],
+                featured: data.featured ?? false,
+              };
+            })
+          );
+          return;
+        }
       } catch {
-        // Firestore not configured yet
-      } finally {
-        setLoading(false);
+        // Firestore not configured or offline — fall through to static fallback
       }
+
+      // Fallback to staticProjects
+      setProjects(
+        staticProjects.map((p) => ({
+          id: p.id,
+          slug: p.slug,
+          title: p.title,
+          shortDescription: p.shortDescription,
+          category: p.category,
+          difficulty: p.difficulty,
+          estimatedDuration: p.estimatedDuration,
+          technologies: p.technologies,
+          featured: p.featured,
+        }))
+      );
+      setLoading(false);
     }
-    load();
+    load().finally(() => setLoading(false));
   }, []);
 
   const filtered = useMemo(() => {
@@ -268,7 +287,7 @@ function ProjectCard({ project, featured }: { project: PublicProject; featured?:
 
   return (
     <Link
-      href={`/projects/view?slug=${project.slug}`}
+      href={`/projects/${project.slug}`}
       className={cn(
         'group relative flex flex-col p-6 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] hover:border-[var(--border-default)] hover:shadow-sm transition-all',
         featured && 'md:p-7'

@@ -22,7 +22,6 @@ const tools = [
   'regex-tester',
   'json-formatter',
   'base64-encoder',
-  'lorem-ipsum-generator',
   'uuid-generator',
 ];
 
@@ -40,7 +39,20 @@ const roadmapSlugs = [
   'object-oriented-programming',
 ];
 
-const projectSlugs = [];
+const projectSlugs = [
+  'collaborative-kanban-board',
+  'distributed-key-value-store',
+  'ai-document-analyzer',
+  'microservices-ecommerce-platform',
+  'personal-finance-pwa',
+  'dev-portfolio-cms',
+];
+
+const guideSlugs = [
+  'building-distributed-cache',
+  'sql-vs-nosql-database-architecture',
+  'jwt-authentication-and-security',
+];
 
 const staticPages = [
   { path: '', priority: '1.0', changefreq: 'weekly' },
@@ -51,7 +63,6 @@ const staticPages = [
   { path: '/placement/dsa', priority: '0.8', changefreq: 'daily' },
   { path: '/placement/cs-fundamentals', priority: '0.7', changefreq: 'weekly' },
   { path: '/placement/interview', priority: '0.7', changefreq: 'weekly' },
-  { path: '/profile', priority: '0.5', changefreq: 'daily' },
   { path: '/open-source', priority: '0.7', changefreq: 'weekly' },
   { path: '/guides', priority: '0.7', changefreq: 'weekly' },
   { path: '/categories', priority: '0.7', changefreq: 'monthly' },
@@ -84,16 +95,22 @@ const urls = [
     priority: '0.8',
   })),
   ...roadmapSlugs.map((slug) => ({
-    loc: `${BASE_URL}/roadmaps/view?slug=${slug}`,
+    loc: `${BASE_URL}/roadmaps/${slug}`,
     lastmod: today,
     changefreq: 'weekly',
     priority: '0.8',
   })),
   ...projectSlugs.map((slug) => ({
-    loc: `${BASE_URL}/projects/view?slug=${slug}`,
+    loc: `${BASE_URL}/projects/${slug}`,
     lastmod: today,
-    changefreq: 'monthly',
-    priority: '0.7',
+    changefreq: 'weekly',
+    priority: '0.8',
+  })),
+  ...guideSlugs.map((slug) => ({
+    loc: `${BASE_URL}/guides/${slug}`,
+    lastmod: today,
+    changefreq: 'weekly',
+    priority: '0.8',
   })),
 ];
 

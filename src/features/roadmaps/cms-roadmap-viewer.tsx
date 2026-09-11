@@ -1,14 +1,13 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 'use client';
 
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { doc, getDoc, collection, query, where, getDocs, limit, documentId } from 'firebase/firestore';
+import { collection, query, where, getDocs, limit, documentId } from 'firebase/firestore';
 import { getFirebaseDb, isFirebaseConfigured } from '@/lib/firebase/client';
 import { trackPageView } from '@/lib/cms/analytics';
 import { InteractiveRoadmap } from './interactive-roadmap';
 import type { Roadmap } from '@/types/roadmap';
-import { ArrowLeft, Clock, BookOpen, Code2, Loader2, FolderOpen, FileText } from 'lucide-react';
+import { ArrowLeft, Clock, BookOpen, Loader2, FolderOpen, FileText } from 'lucide-react';
 import Link from 'next/link';
 import { ViewCounter } from '@/components/engagement/view-counter';
 import { BookmarkButton } from '@/components/engagement/bookmark-button';

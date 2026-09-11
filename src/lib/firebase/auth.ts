@@ -45,7 +45,8 @@ export function useAuth() {
               role: data.role || 'editor',
             });
           } else {
-            await firebaseSignOut(auth);
+            // User is signed into Firebase, but is not an admin.
+            // Do NOT call firebaseSignOut(auth) here, as that wipes out student sessions globally.
             setUser(null);
           }
         } catch {
@@ -65,7 +66,6 @@ export function useAuth() {
     const result = await signInWithPopup(auth, provider);
     const adminDoc = await getDoc(doc(getFirebaseDb(), 'admins', result.user.uid));
     if (!adminDoc.exists()) {
-      await firebaseSignOut(auth);
       throw new Error('You do not have admin access.');
     }
     return result.user;

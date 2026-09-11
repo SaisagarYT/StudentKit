@@ -16,6 +16,10 @@ import {
   FolderOpen,
   X,
   PlusCircle,
+  ChevronUp,
+  ChevronDown,
+  Clock,
+  RefreshCw,
 } from 'lucide-react';
 
 type Section = {
@@ -47,12 +51,25 @@ const STEPS = [
   'Review',
 ];
 
+const DRAFT_KEY = 'sk-admin-roadmap-draft';
+
+function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, '')
+    .replace(/[\s_-]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
 export function RoadmapForm() {
   const router = useRouter();
   const { user } = useAuth();
   const [step, setStep] = useState(0);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
+  const [slugCustomized, setSlugCustomized] = useState(false);
+  const [draftFound, setDraftFound] = useState<{ date: string; data: any } | null>(null);
 
   const [form, setForm] = useState({
     slug: '',
@@ -70,6 +87,52 @@ export function RoadmapForm() {
     tags: [''],
     sections: [] as Section[],
   });
+
+  // Check for saved draft on mount
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(DRAFT_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed?.data && (parsed.data.title || parsed.data.sections?.length > 0)) {
+          setDraftFound(parsed);
+        }
+      }
+    } catch {}
+  }, []);
+
+  // Debounced auto-save draft to localStorage
+  useEffect(() => {
+    if (form.title || form.description || form.sections.length > 0) {
+      const timer = setTimeout(() => {
+        try {
+          localStorage.setItem(
+            DRAFT_KEY,
+            JSON.stringify({
+              date: new Date().toLocaleString(),
+              data: form,
+            })
+          );
+        } catch {}
+      }, 600);
+      return () => clearTimeout(timer);
+    }
+  }, [form]);
+
+  function restoreDraft() {
+    if (draftFound?.data) {
+      setForm(draftFound.data);
+      if (draftFound.data.slug) setSlugCustomized(true);
+      setDraftFound(null);
+    }
+  }
+
+  function discardDraft() {
+    try {
+      localStorage.removeItem(DRAFT_KEY);
+    } catch {}
+    setDraftFound(null);
+  }
 
   function update(fields: Partial<typeof form>) {
     setForm((prev) => ({ ...prev, ...fields }));
@@ -102,7 +165,19 @@ export function RoadmapForm() {
   }
 
   function removeSection(idx: number) {
-    update({ sections: form.sections.filter((_, i) => i !== idx) });
+    const sections = form.sections.filter((_, i) => i !== idx).map((s, i) => ({ ...s, order: i }));
+    update({ sections });
+  }
+
+  function moveSection(idx: number, direction: 'up' | 'down') {
+    const targetIdx = direction === 'up' ? idx - 1 : idx + 1;
+    if (targetIdx < 0 || targetIdx >= form.sections.length) return;
+    const sections = [...form.sections];
+    const temp = sections[idx];
+    sections[idx] = sections[targetIdx];
+    sections[targetIdx] = temp;
+    sections.forEach((s, i) => { s.order = i; });
+    update({ sections });
   }
 
   function addTopic(sectionIdx: number) {
@@ -131,6 +206,18 @@ export function RoadmapForm() {
   function removeTopic(sectionIdx: number, topicIdx: number) {
     const sections = [...form.sections];
     sections[sectionIdx].topics = sections[sectionIdx].topics.filter((_, i) => i !== topicIdx);
+    update({ sections });
+  }
+
+  function moveTopic(sectionIdx: number, topicIdx: number, direction: 'up' | 'down') {
+    const sections = [...form.sections];
+    const topics = [...sections[sectionIdx].topics];
+    const targetIdx = direction === 'up' ? topicIdx - 1 : topicIdx + 1;
+    if (targetIdx < 0 || targetIdx >= topics.length) return;
+    const temp = topics[topicIdx];
+    topics[topicIdx] = topics[targetIdx];
+    topics[targetIdx] = temp;
+    sections[sectionIdx] = { ...sections[sectionIdx], topics };
     update({ sections });
   }
 
@@ -232,6 +319,9 @@ export function RoadmapForm() {
         seo: {},
       };
       await roadmapService.create(payload, user!.uid);
+      try {
+        localStorage.removeItem(DRAFT_KEY);
+      } catch {}
       router.push('/admin/roadmaps');
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : 'Failed to create roadmap');
@@ -253,6 +343,34 @@ export function RoadmapForm() {
         </div>
       </div>
 
+      {/* Draft Recovery Banner */}
+      {draftFound && (
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-3 p-4 rounded-sm border border-amber-500/30 bg-amber-500/10 text-amber-600 dark:text-amber-400 text-sm">
+          <div className="flex items-center gap-2">
+            <Clock className="w-4 h-4 shrink-0" />
+            <span>
+              Unsaved draft found from <strong>{draftFound.date}</strong> ({draftFound.data.title || 'Untitled'}).
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={restoreDraft}
+              className="px-3 py-1 text-xs font-semibold rounded-sm bg-amber-500 text-black hover:bg-amber-400 transition-colors"
+            >
+              Restore Draft
+            </button>
+            <button
+              type="button"
+              onClick={discardDraft}
+              className="px-2 py-1 text-xs font-medium text-[var(--text-subtle)] hover:text-red-500 transition-colors"
+            >
+              Discard
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Progress Bar */}
       <div className="flex gap-1 mb-8">
         {STEPS.map((_, i) => (
@@ -269,7 +387,14 @@ export function RoadmapForm() {
 
       {/* Step Content */}
       <div className="rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] p-6">
-        {step === 0 && <StepBasicInfo form={form} update={update} />}
+        {step === 0 && (
+          <StepBasicInfo
+            form={form}
+            update={update}
+            slugCustomized={slugCustomized}
+            setSlugCustomized={setSlugCustomized}
+          />
+        )}
         {step === 1 && <StepDetails form={form} update={update} />}
         {step === 2 && <StepAudience form={form} update={update} />}
         {step === 3 && (
@@ -278,9 +403,11 @@ export function RoadmapForm() {
             addSection={addSection}
             updateSection={updateSection}
             removeSection={removeSection}
+            moveSection={moveSection}
             addTopic={addTopic}
             updateTopic={updateTopic}
             removeTopic={removeTopic}
+            moveTopic={moveTopic}
             update={update}
           />
         )}
@@ -311,14 +438,58 @@ export function RoadmapForm() {
 
 // --- Step Components ---
 
-function StepBasicInfo({ form, update }: { form: any; update: (f: any) => void }) {
+function StepBasicInfo({
+  form,
+  update,
+  slugCustomized,
+  setSlugCustomized,
+}: {
+  form: any;
+  update: (f: any) => void;
+  slugCustomized: boolean;
+  setSlugCustomized: (v: boolean) => void;
+}) {
   return (
     <div className="space-y-5">
       <Field label="Title" required>
-        <input value={form.title} onChange={(e) => update({ title: e.target.value, slug: e.target.value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') })} placeholder="e.g. Frontend Developer" className="input-field" />
+        <input
+          value={form.title}
+          onChange={(e) => {
+            const newTitle = e.target.value;
+            if (!slugCustomized) {
+              update({ title: newTitle, slug: slugify(newTitle) });
+            } else {
+              update({ title: newTitle });
+            }
+          }}
+          placeholder="e.g. Frontend Developer"
+          className="input-field"
+        />
       </Field>
       <Field label="Slug" required hint="URL-friendly identifier">
-        <input value={form.slug} onChange={(e) => update({ slug: e.target.value })} placeholder="frontend-developer" className="input-field font-mono text-sm" />
+        <div className="flex items-center gap-2">
+          <input
+            value={form.slug}
+            onChange={(e) => {
+              setSlugCustomized(true);
+              update({ slug: e.target.value });
+            }}
+            placeholder="frontend-developer"
+            className="input-field font-mono text-sm flex-1"
+          />
+          <button
+            type="button"
+            onClick={() => {
+              update({ slug: slugify(form.title) });
+              setSlugCustomized(false);
+            }}
+            title="Auto-generate slug from title"
+            className="px-2.5 py-2 rounded-sm border border-[var(--border-default)] hover:bg-[var(--bg-subtle)] text-[var(--text-subtle)] hover:text-[var(--text-primary)] transition-colors text-xs flex items-center gap-1 shrink-0"
+          >
+            <RefreshCw className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">From Title</span>
+          </button>
+        </div>
       </Field>
       <Field label="Short Description" required hint="Max 200 characters">
         <textarea value={form.shortDescription} onChange={(e) => update({ shortDescription: e.target.value })} placeholder="A brief summary shown in cards..." rows={2} maxLength={200} className="input-field resize-none" />
@@ -376,7 +547,18 @@ function StepAudience({ form, update }: { form: any; update: (f: any) => void })
   );
 }
 
-function StepSections({ form, addSection, updateSection, removeSection, addTopic, updateTopic, removeTopic, update }: any) {
+function StepSections({
+  form,
+  addSection,
+  updateSection,
+  removeSection,
+  moveSection,
+  addTopic,
+  updateTopic,
+  removeTopic,
+  moveTopic,
+  update,
+}: any) {
   const { user } = useAuth();
   const [allProjects, setAllProjects] = useState<ProjectListItem[]>([]);
   const [projectsLoaded, setProjectsLoaded] = useState(false);
@@ -486,7 +668,26 @@ function StepSections({ form, addSection, updateSection, removeSection, addTopic
         <div key={section.id} className="border border-[var(--border-soft)] rounded-sm p-5 space-y-4">
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-2">
-              <GripVertical className="w-4 h-4 text-[var(--text-subtle)]" />
+              <div className="flex items-center gap-0.5">
+                <button
+                  type="button"
+                  onClick={() => moveSection(sIdx, 'up')}
+                  disabled={sIdx === 0}
+                  className="p-1 rounded-sm hover:bg-[var(--bg-subtle)] disabled:opacity-25 disabled:pointer-events-none text-[var(--text-subtle)] hover:text-[var(--text-primary)] transition-colors"
+                  title="Move section up"
+                >
+                  <ChevronUp className="w-4 h-4" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => moveSection(sIdx, 'down')}
+                  disabled={sIdx === form.sections.length - 1}
+                  className="p-1 rounded-sm hover:bg-[var(--bg-subtle)] disabled:opacity-25 disabled:pointer-events-none text-[var(--text-subtle)] hover:text-[var(--text-primary)] transition-colors"
+                  title="Move section down"
+                >
+                  <ChevronDown className="w-4 h-4" />
+                </button>
+              </div>
               <span className="text-xs font-semibold text-[var(--text-subtle)] uppercase">Section {sIdx + 1}</span>
             </div>
             <button onClick={() => removeSection(sIdx)} className="p-1.5 rounded-sm hover:bg-red-50 text-[var(--text-subtle)] hover:text-red-500 transition-colors">
@@ -614,7 +815,29 @@ function StepSections({ form, addSection, updateSection, removeSection, addTopic
             {section.topics.map((topic: Topic, tIdx: number) => (
               <div key={topic.id} className="bg-[var(--bg-subtle)] rounded-sm p-4 space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-medium text-[var(--text-subtle)]">Topic {tIdx + 1}</span>
+                  <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-0.5">
+                      <button
+                        type="button"
+                        onClick={() => moveTopic(sIdx, tIdx, 'up')}
+                        disabled={tIdx === 0}
+                        className="p-1 rounded-sm hover:bg-[var(--bg-surface)] disabled:opacity-25 disabled:pointer-events-none text-[var(--text-subtle)] hover:text-[var(--text-primary)] transition-colors"
+                        title="Move topic up"
+                      >
+                        <ChevronUp className="w-3.5 h-3.5" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => moveTopic(sIdx, tIdx, 'down')}
+                        disabled={tIdx === section.topics.length - 1}
+                        className="p-1 rounded-sm hover:bg-[var(--bg-surface)] disabled:opacity-25 disabled:pointer-events-none text-[var(--text-subtle)] hover:text-[var(--text-primary)] transition-colors"
+                        title="Move topic down"
+                      >
+                        <ChevronDown className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                    <span className="text-xs font-medium text-[var(--text-subtle)]">Topic {tIdx + 1}</span>
+                  </div>
                   <button onClick={() => removeTopic(sIdx, tIdx)} className="text-[var(--text-subtle)] hover:text-red-500">
                     <Trash2 className="w-3.5 h-3.5" />
                   </button>

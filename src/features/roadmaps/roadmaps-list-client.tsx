@@ -17,7 +17,6 @@ import {
   Blocks,
   Loader2,
 } from 'lucide-react';
-import { cn } from '@/lib/utils';
 import { StreakBanner } from '@/components/engagement/streak-banner';
 import { RoadmapProgressCard } from '@/components/engagement/roadmap-progress-card';
 import { fetchAllRoadmaps, type RoadmapListEntry } from '@/lib/firebase/roadmaps';
@@ -49,27 +48,29 @@ export function RoadmapsListClient() {
       try {
         if (isFirebaseConfigured) {
           const data = await fetchAllRoadmaps();
-          if (data.length > 0) {
-            setRoadmaps(data);
-            return;
-          }
+          setRoadmaps(data);
+          return;
         }
       } catch {
         // Fall through to static fallback
       }
 
-      // Fallback: use static config data
-      const fallback: RoadmapListEntry[] = staticRoadmaps.map((r) => ({
-        slug: r.slug,
-        title: r.title,
-        description: r.description,
-        icon: r.icon || 'Map',
-        accent: r.accent || '#C7FF3D',
-        totalTime: r.totalTime,
-        totalTopics: r.stages.reduce((sum, s) => sum + s.topics.length, 0),
-        stageCount: r.stages.length,
-      }));
-      setRoadmaps(fallback);
+      // Fallback: use static config data if available
+      if (staticRoadmaps && staticRoadmaps.length > 0) {
+        const fallback: RoadmapListEntry[] = staticRoadmaps.map((r) => ({
+          slug: r.slug,
+          title: r.title,
+          description: r.description,
+          icon: r.icon || 'Map',
+          accent: r.accent || '#C7FF3D',
+          totalTime: r.totalTime,
+          totalTopics: r.stages.reduce((sum, s) => sum + s.topics.length, 0),
+          stageCount: r.stages.length,
+        }));
+        setRoadmaps(fallback);
+      } else {
+        setRoadmaps([]);
+      }
     }
 
     load().finally(() => setLoading(false));
@@ -125,54 +126,64 @@ export function RoadmapsListClient() {
         </div>
 
         {/* Roadmap Grid */}
-        <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {roadmaps.map((roadmap) => {
-            const Icon = getIcon(roadmap.icon);
+        {roadmaps.length === 0 ? (
+          <div className="mt-8 p-12 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] text-center">
+            <Map className="w-10 h-10 mx-auto text-[var(--text-subtle)] mb-3 opacity-40" />
+            <h3 className="text-base font-semibold text-[var(--text-primary)]">No roadmaps available yet</h3>
+            <p className="mt-1.5 text-xs text-[var(--text-secondary)] max-w-sm mx-auto">
+              Learning paths will appear here once published from the admin dashboard.
+            </p>
+          </div>
+        ) : (
+          <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {roadmaps.map((roadmap) => {
+              const Icon = getIcon(roadmap.icon);
 
-            return (
-              <Link
-                key={roadmap.slug}
-                href={`/roadmaps/view?slug=${roadmap.slug}`}
-                className="group relative p-5 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] hover:border-[var(--accent-primary)]/40 hover:shadow-sm transition-all duration-200"
-              >
-                <div
-                  className="flex items-center justify-center w-10 h-10 rounded-sm mb-4"
-                  style={{ backgroundColor: `${roadmap.accent}20` }}
+              return (
+                <Link
+                  key={roadmap.slug}
+                  href={`/roadmaps/${roadmap.slug}`}
+                  className="group relative p-5 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] hover:border-[var(--accent-primary)]/40 hover:shadow-sm transition-all duration-200"
                 >
-                  <Icon
-                    className="w-5 h-5"
-                    style={{
-                      color:
-                        roadmap.accent === '#C7FF3D'
-                          ? '#6B8F00'
-                          : roadmap.accent.replace('FF', 'CC'),
-                    }}
-                  />
-                </div>
-                <h3 className="text-sm font-semibold text-[var(--text-primary)]">
-                  {roadmap.title}
-                </h3>
-                <p className="mt-1.5 text-xs text-[var(--text-subtle)] leading-relaxed">
-                  {roadmap.description}
-                </p>
-                <div className="mt-4 flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <span className="flex items-center gap-1 text-[10px] text-[var(--text-subtle)]">
-                      <Clock className="w-3 h-3" />
-                      {roadmap.totalTime}
-                    </span>
-                    <span className="flex items-center gap-1 text-[10px] text-[var(--text-subtle)]">
-                      <BookOpen className="w-3 h-3" />
-                      {roadmap.totalTopics} topics
-                    </span>
+                  <div
+                    className="flex items-center justify-center w-10 h-10 rounded-sm mb-4"
+                    style={{ backgroundColor: `${roadmap.accent}20` }}
+                  >
+                    <Icon
+                      className="w-5 h-5"
+                      style={{
+                        color:
+                          roadmap.accent === '#C7FF3D'
+                            ? '#6B8F00'
+                            : roadmap.accent.replace('FF', 'CC'),
+                      }}
+                    />
                   </div>
-                  <ArrowRight className="w-3.5 h-3.5 text-[var(--accent-dark)] opacity-100 transition-opacity" />
-                </div>
-                <RoadmapProgressCard slug={roadmap.slug} totalTopics={roadmap.totalTopics} />
-              </Link>
-            );
-          })}
-        </div>
+                  <h3 className="text-sm font-semibold text-[var(--text-primary)]">
+                    {roadmap.title}
+                  </h3>
+                  <p className="mt-1.5 text-xs text-[var(--text-subtle)] leading-relaxed">
+                    {roadmap.description}
+                  </p>
+                  <div className="mt-4 flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <span className="flex items-center gap-1 text-[10px] text-[var(--text-subtle)]">
+                        <Clock className="w-3 h-3" />
+                        {roadmap.totalTime}
+                      </span>
+                      <span className="flex items-center gap-1 text-[10px] text-[var(--text-subtle)]">
+                        <BookOpen className="w-3 h-3" />
+                        {roadmap.totalTopics} topics
+                      </span>
+                    </div>
+                    <ArrowRight className="w-3.5 h-3.5 text-[var(--accent-dark)] opacity-100 transition-opacity" />
+                  </div>
+                  <RoadmapProgressCard slug={roadmap.slug} totalTopics={roadmap.totalTopics} />
+                </Link>
+              );
+            })}
+          </div>
+        )}
 
         {/* CTA */}
         <div className="mt-16 p-8 md:p-12 rounded-3xl bg-[var(--bg-subtle)] border border-[var(--border-soft)] text-center">

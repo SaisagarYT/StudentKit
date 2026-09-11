@@ -124,7 +124,7 @@ export function StartFlow() {
       try {
         const data: OnboardingData = JSON.parse(stored);
         if (data.goal && data.level) {
-          router.replace(`/roadmaps/view?slug=${data.goal}`);
+          router.replace(`/roadmaps/${data.goal}`);
         }
       } catch {}
     }
@@ -141,7 +141,7 @@ export function StartFlow() {
   }
 
   function skipAuthAndGo() {
-    router.push(`/roadmaps/view?slug=${selectedGoal}`);
+    router.push(`/roadmaps/${selectedGoal}`);
   }
 
   async function handleGoogleSignIn() {
@@ -153,7 +153,7 @@ export function StartFlow() {
         if (auth.currentUser) {
           await syncProgressOnLogin(auth.currentUser.uid);
         }
-        router.push(`/roadmaps/view?slug=${selectedGoal}`);
+        router.push(`/roadmaps/${selectedGoal}`);
       }, 500);
     } catch {
       setAuthLoading(false);

@@ -35,15 +35,27 @@ const DIFFICULTY_COLORS: Record<string, string> = {
   expert: 'text-red-500 bg-red-500/10',
 };
 
-export function CmsProjectViewer() {
+import { Suspense } from 'react';
+import { getProjectBySlug } from '@/config/projects';
+
+function ProjectQueryParamReader({ onSlug }: { onSlug: (slug: string) => void }) {
   const searchParams = useSearchParams();
   const slug = searchParams.get('slug');
+  useEffect(() => {
+    if (slug) onSlug(slug);
+  }, [slug, onSlug]);
+  return null;
+}
+
+export function CmsProjectViewer({ slug: propSlug }: { slug?: string } = {}) {
+  const [querySlug, setQuerySlug] = useState<string | null>(null);
+  const slug = propSlug || querySlug;
   const [project, setProject] = useState<CmsProjectData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
   useEffect(() => {
-    if (!slug || !isFirebaseConfigured) {
+    if (!slug) {
       setLoading(false);
       setError('Project not found');
       return;
@@ -51,21 +63,36 @@ export function CmsProjectViewer() {
 
     async function load() {
       try {
-        const q = query(
-          collection(getFirebaseDb(), 'projects'),
-          where('slug', '==', slug),
-          where('status', '==', 'published'),
-          limit(1)
-        );
-        const snap = await getDocs(q);
-        if (snap.empty) {
-          setError('Project not found');
+        if (isFirebaseConfigured) {
+          const q = query(
+            collection(getFirebaseDb(), 'projects'),
+            where('slug', '==', slug),
+            where('status', '==', 'published'),
+            limit(1)
+          );
+          const snap = await getDocs(q);
+          if (!snap.empty) {
+            setProject(snap.docs[0].data() as CmsProjectData);
+            trackPageView('project', slug!);
+            return;
+          }
+        }
+        
+        // Fallback to static project dataset
+        const staticItem = getProjectBySlug(slug!);
+        if (staticItem) {
+          setProject(staticItem as unknown as CmsProjectData);
           return;
         }
-        setProject(snap.docs[0].data() as CmsProjectData);
-        trackPageView('project', slug!);
+
+        setError('Project not found');
       } catch {
-        setError('Failed to load project');
+        const staticItem = getProjectBySlug(slug!);
+        if (staticItem) {
+          setProject(staticItem as unknown as CmsProjectData);
+        } else {
+          setError('Failed to load project');
+        }
       } finally {
         setLoading(false);
       }
@@ -73,31 +100,31 @@ export function CmsProjectViewer() {
     load();
   }, [slug]);
 
-  if (loading) {
-    return (
-      <div className="py-20 flex justify-center">
-        <Loader2 className="w-6 h-6 animate-spin text-[var(--text-subtle)]" />
-      </div>
-    );
-  }
-
-  if (error || !project) {
-    return (
-      <div className="py-20 text-center">
-        <p className="text-[var(--text-secondary)]">{error}</p>
-        <Link href="/projects" className="mt-4 inline-flex items-center gap-1.5 text-sm text-[var(--accent-dark)] hover:underline">
-          <ArrowLeft className="w-4 h-4" /> Back to projects
-        </Link>
-      </div>
-    );
-  }
-
   return (
-    <div className="py-8 md:py-12">
-      <div className="container-main">
-        <Link href="/projects" className="inline-flex items-center gap-1.5 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors mb-8">
-          <ArrowLeft className="w-4 h-4" /> All Projects
-        </Link>
+    <>
+      {!propSlug && (
+        <Suspense fallback={null}>
+          <ProjectQueryParamReader onSlug={setQuerySlug} />
+        </Suspense>
+      )}
+
+      {loading ? (
+        <div className="py-20 flex justify-center">
+          <Loader2 className="w-6 h-6 animate-spin text-[var(--text-subtle)]" />
+        </div>
+      ) : error || !project ? (
+        <div className="py-20 text-center">
+          <p className="text-[var(--text-secondary)]">{error}</p>
+          <Link href="/projects" className="mt-4 inline-flex items-center gap-1.5 text-sm text-[var(--accent-dark)] hover:underline">
+            <ArrowLeft className="w-4 h-4" /> Back to projects
+          </Link>
+        </div>
+      ) : (
+        <div className="py-8 md:py-12">
+          <div className="container-main">
+            <Link href="/projects" className="inline-flex items-center gap-1.5 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors mb-8">
+              <ArrowLeft className="w-4 h-4" /> All Projects
+            </Link>
 
         <div className="max-w-4xl">
           {/* Header */}
@@ -155,7 +182,7 @@ export function CmsProjectViewer() {
                 {project.relatedRoadmapIds.map((roadmapSlug) => (
                   <Link
                     key={roadmapSlug}
-                    href={`/roadmaps/view?slug=${roadmapSlug}`}
+                    href={`/roadmaps/${roadmapSlug}`}
                     className="group flex items-center gap-3 p-3.5 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] hover:border-[var(--border-default)] hover:shadow-sm transition-all"
                   >
                     <div className="w-8 h-8 rounded-sm bg-blue-500/10 flex items-center justify-center shrink-0">
@@ -239,5 +266,7 @@ export function CmsProjectViewer() {
         </div>
       </div>
     </div>
+    )}
+  </>
   );
 }

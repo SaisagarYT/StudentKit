@@ -1,35 +1,24 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { ReturningDashboard, hasExistingProgress } from './returning-dashboard';
+import { useUserAuth } from '@/lib/firebase/user-auth';
+import { ReturningDashboard } from './returning-dashboard';
 
 interface SmartHomeProps {
   marketingContent: React.ReactNode;
 }
 
 export function SmartHome({ marketingContent }: SmartHomeProps) {
-  const [isReturning, setIsReturning] = useState<boolean | null>(null);
+  const { user, loading } = useUserAuth();
 
-  useEffect(() => {
-    setIsReturning(hasExistingProgress());
-  }, []);
-
-  useEffect(() => {
-    if (isReturning) {
-      document.body.setAttribute('data-no-footer', 'true');
-    } else {
-      document.body.removeAttribute('data-no-footer');
-    }
-    return () => document.body.removeAttribute('data-no-footer');
-  }, [isReturning]);
-
-  if (isReturning === null) {
+  if (loading) {
     return <>{marketingContent}</>;
   }
 
-  if (isReturning) {
+  // If user is logged in, show SaaS dashboard
+  if (user) {
     return <ReturningDashboard />;
   }
 
+  // Otherwise show public landing page
   return <>{marketingContent}</>;
 }

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { collection, addDoc, getDocs, query, where, serverTimestamp } from 'firebase/firestore';
 import { getFirebaseDb } from '@/lib/firebase/client';
 import { useAuth } from '@/lib/firebase/auth';
-import { roadmaps as hardcodedRoadmaps } from '@/config/roadmaps';
+import { templateRoadmaps as hardcodedRoadmaps } from '@/config/roadmaps';
 import { Loader2, Upload, CheckCircle2, XCircle } from 'lucide-react';
 
 function guessCategory(slug: string) {

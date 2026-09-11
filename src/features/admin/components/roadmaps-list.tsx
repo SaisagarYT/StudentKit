@@ -79,9 +79,18 @@ export function RoadmapsList() {
 
   async function handleDelete(id: string) {
     if (!user) return;
-    if (!confirm('Permanently delete this roadmap? This cannot be undone.')) return;
+    const target = items.find((i) => i.id === id);
+    const isPublished = target?.status === 'published';
+    const confirmMsg = isPublished
+      ? 'This roadmap is currently published. Deleting it will automatically unpublish and permanently remove it. Continue?'
+      : 'Permanently delete this roadmap? This cannot be undone.';
+
+    if (!confirm(confirmMsg)) return;
     setActionLoading(id);
     try {
+      if (isPublished) {
+        await roadmapService.unpublish(id, user.uid);
+      }
       await roadmapService.remove(id);
       await load();
     } catch (e: unknown) {
@@ -107,15 +116,26 @@ export function RoadmapsList() {
 
   async function bulkAction(action: 'publish' | 'unpublish' | 'archive' | 'delete') {
     if (!user || selected.size === 0) return;
+    const hasPublished = action === 'delete' && Array.from(selected).some((id) => items.find((i) => i.id === id)?.status === 'published');
     const label = action === 'delete' ? 'permanently delete' : action;
-    if (!confirm(`${label.charAt(0).toUpperCase() + label.slice(1)} ${selected.size} roadmap(s)?`)) return;
+    const confirmMsg = hasPublished
+      ? `${label.charAt(0).toUpperCase() + label.slice(1)} ${selected.size} roadmap(s)? Note: Any published roadmaps will be unpublished before deletion.`
+      : `${label.charAt(0).toUpperCase() + label.slice(1)} ${selected.size} roadmap(s)?`;
+
+    if (!confirm(confirmMsg)) return;
     setBulkLoading(true);
     for (const id of selected) {
       try {
         if (action === 'publish') await roadmapService.publish(id, user.uid);
         else if (action === 'unpublish') await roadmapService.unpublish(id, user.uid);
         else if (action === 'archive') await roadmapService.archive(id, user.uid);
-        else if (action === 'delete') await roadmapService.remove(id);
+        else if (action === 'delete') {
+          const item = items.find((i) => i.id === id);
+          if (item?.status === 'published') {
+            await roadmapService.unpublish(id, user.uid);
+          }
+          await roadmapService.remove(id);
+        }
       } catch { /* continue with others */ }
     }
     setSelected(new Set());

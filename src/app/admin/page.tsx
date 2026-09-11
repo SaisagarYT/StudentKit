@@ -2,6 +2,7 @@
 
 import { AdminShell } from '@/features/admin/components/admin-shell';
 import { MigrateRoadmaps } from '@/features/admin/components/migrate-roadmaps';
+import { WipeDatabaseButton } from '@/features/admin/components/wipe-database-button';
 import { AnalyticsWidget } from '@/features/admin/components/analytics-widget';
 import { useAuth } from '@/lib/firebase/auth';
 import { roadmapService, projectService } from '@/lib/cms';
@@ -43,6 +44,7 @@ function DashboardContent() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let active = true;
     async function load() {
       try {
         const [allRoadmaps, pubRoadmaps, draftRoadmaps, allProjects, pubProjects, draftProjects] =
@@ -54,6 +56,7 @@ function DashboardContent() {
             projectService.list({ status: 'published' }),
             projectService.list({ status: 'draft' }),
           ]);
+        if (!active) return;
         setStats({
           roadmaps: allRoadmaps.length,
           publishedRoadmaps: pubRoadmaps.length,
@@ -65,10 +68,13 @@ function DashboardContent() {
       } catch {
         // Firestore may not be configured yet
       } finally {
-        setLoading(false);
+        if (active) setLoading(false);
       }
     }
     load();
+    return () => {
+      active = false;
+    };
   }, []);
 
   const greeting = getGreeting();
@@ -230,6 +236,9 @@ function DashboardContent() {
         <AnalyticsWidget />
         <MigrateRoadmaps />
       </div>
+
+      {/* Danger Zone: Wipe Database */}
+      <WipeDatabaseButton />
 
       {/* Footer Links */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">

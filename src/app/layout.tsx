@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { Geist, Instrument_Serif } from 'next/font/google';
+import { Roboto_Condensed, Instrument_Serif } from 'next/font/google';
 import Script from 'next/script';
 import { siteConfig } from '@/config/site';
 import { LayoutShell } from '@/components/layout/layout-shell';
@@ -7,9 +7,10 @@ import { JsonLd } from '@/components/seo/json-ld';
 import { organizationSchema, websiteSchema } from '@/lib/structured-data';
 import './globals.css';
 
-const geist = Geist({
+const robotoCondensed = Roboto_Condensed({
   subsets: ['latin'],
-  variable: '--font-geist',
+  style: ['normal', 'italic'],
+  variable: '--font-roboto-condensed',
   display: 'swap',
 });
 
@@ -79,13 +80,20 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geist.variable} ${instrumentSerif.variable}`}
+      className={`${robotoCondensed.variable} ${instrumentSerif.variable}`}
       suppressHydrationWarning
     >
       <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap"
+          rel="stylesheet"
+        />
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem('sk-theme');if(t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme:dark)').matches)){document.documentElement.setAttribute('data-theme','dark')}}catch(e){}})()`,
+            __html: `(function(){try{var t=localStorage.getItem('sk-theme');if(t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme:dark)').matches)){document.documentElement.setAttribute('data-theme','dark')}}catch(e){}})();
+window.addEventListener('unhandledrejection',function(e){if(e.reason&&(e.reason.name==='AbortError'||(e.reason.message&&e.reason.message.indexOf('aborted')!==-1))){e.preventDefault();e.stopImmediatePropagation();}});`,
           }}
         />
         <link rel="apple-touch-icon" href="/icons/icon-192.png" />
@@ -94,21 +102,25 @@ export default function RootLayout({
         <meta name="mobile-web-app-capable" content="yes" />
       </head>
       <body className="min-h-screen flex flex-col bg-background text-foreground font-sans antialiased">
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-X85YECWQZL"
-          strategy="afterInteractive"
-        />
-        <Script id="gtag-init" strategy="afterInteractive">
-          {`window.dataLayer = window.dataLayer || [];
+        {process.env.NODE_ENV === 'production' && (
+          <>
+            <Script
+              src="https://www.googletagmanager.com/gtag/js?id=G-X85YECWQZL"
+              strategy="afterInteractive"
+            />
+            <Script id="gtag-init" strategy="afterInteractive">
+              {`window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'G-X85YECWQZL');`}
-        </Script>
-        <Script
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4789559777617370"
-          strategy="afterInteractive"
-          crossOrigin="anonymous"
-        />
+            </Script>
+            <Script
+              src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4789559777617370"
+              strategy="afterInteractive"
+              crossOrigin="anonymous"
+            />
+          </>
+        )}
         <JsonLd data={organizationSchema()} />
         <JsonLd data={websiteSchema()} />
         <LayoutShell>{children}</LayoutShell>

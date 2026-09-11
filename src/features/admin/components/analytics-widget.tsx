@@ -9,7 +9,18 @@ export function AnalyticsWidget() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getTopContent(8).then(setData).finally(() => setLoading(false));
+    let active = true;
+    getTopContent(8)
+      .then((data) => {
+        if (active) setData(data);
+      })
+      .catch(() => {})
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+    return () => {
+      active = false;
+    };
   }, []);
 
   return (

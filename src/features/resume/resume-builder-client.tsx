@@ -1,9 +1,10 @@
 'use client';
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import Link from 'next/link';
 import {
-  FileText, Download, Eye, Edit3, Plus, Trash2, GripVertical,
-  User, Briefcase, GraduationCap, Code, Award, Link2, Mail, Phone, MapPin
+  FileText, Download, Eye, Edit3, Plus, Trash2,
+  User, Briefcase, GraduationCap, Code, Award, Link2, Mail, Phone, MapPin, Flame
 } from 'lucide-react';
 
 const RESUME_KEY = 'sk-resume-data';
@@ -283,6 +284,13 @@ export function ResumeBuilderClient() {
                 <Eye className="w-3 h-3 inline mr-1" />Preview
               </button>
             </div>
+            <Link
+              href="/placement/resume-roaster"
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-red-500/20 bg-red-500/5 hover:bg-red-500/10 text-xs font-semibold text-red-500 transition-all"
+            >
+              <Flame className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Roast Bullets</span>
+            </Link>
             <button
               onClick={handlePrint}
               className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-[var(--accent-dark)] text-[var(--accent-primary)] text-xs font-semibold hover:opacity-90 transition-opacity"
@@ -293,11 +301,15 @@ export function ResumeBuilderClient() {
           </div>
         </div>
 
-        {activeTab === 'preview' ? (
-          <div className="overflow-auto rounded-xl border border-[var(--border-soft)]">
+        {/* Preview Container: Always mounted for @media print, visible on screen only when preview tab is active */}
+        <div className={activeTab === 'preview' ? 'block' : 'hidden print:block'}>
+          <div className="overflow-auto rounded-xl border border-[var(--border-soft)] print:border-none print:rounded-none">
             <ResumePreview data={data} />
           </div>
-        ) : (
+        </div>
+
+        {/* Edit Container: Hidden on print and when preview tab is active */}
+        <div className={activeTab === 'edit' ? 'block print:hidden' : 'hidden'}>
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
             {/* Section nav */}
             <div className="lg:col-span-1">
@@ -555,7 +567,7 @@ export function ResumeBuilderClient() {
               )}
             </div>
           </div>
-        )}
+        </div>
       </div>
     </div>
   );

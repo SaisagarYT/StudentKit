@@ -48,7 +48,7 @@ export default function TypingPracticePage() {
         { slug: 'readme-generator', title: 'README Generator', description: 'Generate professional GitHub READMEs' },
         { slug: 'json-formatter', title: 'JSON Formatter', description: 'Format, validate & minify JSON' },
         { slug: 'regex-tester', title: 'Regex Tester', description: 'Test regular expressions live' },
-        { slug: 'lorem-ipsum-generator', title: 'Lorem Ipsum Generator', description: 'Generate placeholder text' },
+        { slug: 'gitignore-generator', title: '.gitignore Generator', description: 'Generate tech-stack gitignore files' },
       ]}
     >
       <TypingPracticeForm />

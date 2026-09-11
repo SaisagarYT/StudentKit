@@ -26,8 +26,8 @@ export function NewsletterCapture() {
             <div className="w-12 h-12 mx-auto rounded-sm bg-[var(--accent-primary)]/20 flex items-center justify-center mb-4">
               <Check className="w-6 h-6 text-[var(--accent-dark)]" />
             </div>
-            <h3 className="text-lg font-bold text-[var(--text-primary)]">You're subscribed!</h3>
-            <p className="text-sm text-[var(--text-secondary)] mt-1">We'll notify you when new roadmaps and tools drop.</p>
+            <h3 className="text-lg font-bold text-[var(--text-primary)]">You&apos;re subscribed!</h3>
+            <p className="text-sm text-[var(--text-secondary)] mt-1">We&apos;ll notify you when new roadmaps and tools drop.</p>
           </div>
         </section>
       );

@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import { ToolPageShell } from '@/components/layout/tool-page-shell';
 import { ToolStructuredData } from '@/components/seo/tool-structured-data';
-import { CGPAToPercentageForm } from '@/features/percentage/cgpa-to-percentage-form';
+import { UnifiedAcademicCalculator } from '@/features/academic/unified-academic-calculator';
 import { generateToolMetadata } from '@/lib/seo';
 import { getToolBySlug } from '@/config/tools';
 
@@ -61,7 +61,7 @@ export default function CGPAToPercentagePage() {
         { slug: 'attendance-calculator', title: 'Attendance Calculator', description: 'Track & manage your attendance' },
       ]}
     >
-      <CGPAToPercentageForm />
+      <UnifiedAcademicCalculator initialTab="percentage" />
     </ToolPageShell>
     </>
   );

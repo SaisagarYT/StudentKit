@@ -119,7 +119,6 @@ const pages = [
   { filename: 'tools-json-formatter.png', title: 'JSON Formatter', subtitle: 'Format, validate, and beautify JSON data', tag: 'Dev Tools', icon: null },
   { filename: 'tools-regex-tester.png', title: 'Regex Tester', subtitle: 'Test and debug regular expressions live', tag: 'Dev Tools', icon: null },
   { filename: 'tools-base64-encoder.png', title: 'Base64 Encoder/Decoder', subtitle: 'Encode and decode Base64 strings', tag: 'Dev Tools', icon: null },
-  { filename: 'tools-lorem-ipsum-generator.png', title: 'Lorem Ipsum Generator', subtitle: 'Generate placeholder text for your designs', tag: 'Dev Tools', icon: null },
   { filename: 'tools-uuid-generator.png', title: 'UUID Generator', subtitle: 'Generate unique identifiers instantly', tag: 'Dev Tools', icon: null },
 
   // Roadmaps

@@ -113,8 +113,30 @@ export function CTCForm() {
               </span>
             </div>
             <p className="mt-1 text-sm text-[var(--text-subtle)]">
-              ₹{Math.round(result.annualInHand).toLocaleString('en-IN')} / year
+              ₹{Math.round(result.annualInHand).toLocaleString('en-IN')} net take-home per year
             </p>
+
+            {/* Quick Period Equivalent Grid */}
+            <div className="mt-4 grid grid-cols-3 gap-2 p-3 rounded-sm bg-[var(--bg-subtle)] border border-[var(--border-soft)] text-center">
+              <div>
+                <p className="text-[10px] uppercase font-semibold text-[var(--text-subtle)]">Weekly</p>
+                <p className="text-xs font-bold text-[var(--text-primary)] mt-0.5">
+                  ₹{Math.round(result.annualInHand / 52).toLocaleString('en-IN')}
+                </p>
+              </div>
+              <div>
+                <p className="text-[10px] uppercase font-semibold text-[var(--text-subtle)]">Daily (260d)</p>
+                <p className="text-xs font-bold text-[var(--text-primary)] mt-0.5">
+                  ₹{Math.round(result.annualInHand / 260).toLocaleString('en-IN')}
+                </p>
+              </div>
+              <div>
+                <p className="text-[10px] uppercase font-semibold text-[var(--text-subtle)]">Hourly</p>
+                <p className="text-xs font-bold text-[var(--text-primary)] mt-0.5">
+                  ₹{Math.round(result.annualInHand / (260 * 8)).toLocaleString('en-IN')}
+                </p>
+              </div>
+            </div>
 
             {/* Breakdown */}
             <div className="mt-6 space-y-3">
@@ -131,6 +153,24 @@ export function CTCForm() {
                 <BreakdownRow label="Employee PF" amount={-result.employeePF} isDeduction />
                 <BreakdownRow label="Professional Tax" amount={-result.professionalTax} isDeduction />
                 <BreakdownRow label="Income Tax (est.)" amount={-result.incomeTax} isDeduction />
+              </div>
+
+              {/* Contextual Career CTA */}
+              <div className="mt-6 pt-4 border-t border-[var(--border-soft)]">
+                <div className="p-3 rounded-sm bg-[var(--accent-primary)]/10 border border-[var(--accent-primary)]/30">
+                  <p className="text-xs font-semibold text-[var(--text-primary)]">
+                    Preparing for job offers and technical interviews?
+                  </p>
+                  <p className="text-[11px] text-[var(--text-secondary)] mt-0.5">
+                    Practice company-wise questions, HR tips, and CS fundamentals.
+                  </p>
+                  <a
+                    href="/placement/interview"
+                    className="mt-2.5 inline-flex items-center gap-1 text-xs font-semibold text-[var(--accent-dark)] hover:underline"
+                  >
+                    Explore Interview Prep →
+                  </a>
+                </div>
               </div>
             </div>
           </>

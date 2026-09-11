@@ -27,6 +27,7 @@ import { trackRoadmapProgress } from '@/lib/analytics';
 import { logXpEvent } from '@/lib/xp';
 import { ShareProgress } from '@/components/engagement/share-progress';
 import { emitProgressChanged } from '@/lib/firebase/user-progress-sync';
+import Link from 'next/link';
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
@@ -302,6 +303,15 @@ function TopicBranchNode({
               <p className="mt-1 text-[11px] text-[var(--text-secondary)] leading-relaxed">
                 {topic.project.description}
               </p>
+              <div className="mt-2.5 pt-2 border-t border-[var(--accent-primary)]/20 flex justify-end">
+                <Link
+                  href="/projects"
+                  onClick={(e) => e.stopPropagation()}
+                  className="inline-flex items-center gap-1 text-[11px] font-semibold text-[var(--accent-dark)] hover:underline"
+                >
+                  Explore Guided Projects <ArrowRight className="w-3 h-3" />
+                </Link>
+              </div>
             </div>
           )}
 
@@ -325,7 +335,7 @@ function TopicBranchNode({
                   </div>
                 </div>
               )}
-              <a
+              <Link
                 href="/projects"
                 onClick={(e) => e.stopPropagation()}
                 className="flex items-center gap-2.5 px-2.5 py-2 rounded-sm bg-[var(--bg-surface)] border border-[var(--border-soft)] hover:border-[var(--border-default)] transition-colors group/next"
@@ -337,8 +347,8 @@ function TopicBranchNode({
                   Build a guided project
                 </p>
                 <ArrowRight className="w-3 h-3 text-[var(--text-subtle)] opacity-0 group-hover/next:opacity-100 transition-opacity" />
-              </a>
-              <a
+              </Link>
+              <Link
                 href="/placement/dsa"
                 onClick={(e) => e.stopPropagation()}
                 className="flex items-center gap-2.5 px-2.5 py-2 rounded-sm bg-[var(--bg-surface)] border border-[var(--border-soft)] hover:border-[var(--border-default)] transition-colors group/next"
@@ -350,9 +360,9 @@ function TopicBranchNode({
                   Practice DSA problems
                 </p>
                 <ArrowRight className="w-3 h-3 text-[var(--text-subtle)] opacity-0 group-hover/next:opacity-100 transition-opacity" />
-              </a>
+              </Link>
               {isLastInRoadmap && (
-                <a
+                <Link
                   href="/placement/interview"
                   onClick={(e) => e.stopPropagation()}
                   className="flex items-center gap-2.5 px-2.5 py-2 rounded-sm bg-[var(--bg-surface)] border border-[var(--border-soft)] hover:border-[var(--border-default)] transition-colors group/next"
@@ -364,7 +374,7 @@ function TopicBranchNode({
                     Start interview preparation
                   </p>
                   <ArrowRight className="w-3 h-3 text-[var(--text-subtle)] opacity-0 group-hover/next:opacity-100 transition-opacity" />
-                </a>
+                </Link>
               )}
             </div>
           </div>
@@ -426,9 +436,17 @@ function ProjectMilestone({
         </div>
         <p className="text-[13px] font-semibold text-[var(--text-primary)]">{title}</p>
         <p className="mt-1 text-[12px] text-[var(--text-secondary)] leading-relaxed">{description}</p>
-        <p className="mt-2 text-[10px] font-medium uppercase tracking-wider text-[var(--text-subtle)]">
-          Build this before moving to the next stage
-        </p>
+        <div className="mt-3 pt-2.5 border-t border-[var(--accent-primary)]/20 flex items-center justify-between">
+          <p className="text-[10px] font-medium uppercase tracking-wider text-[var(--text-subtle)]">
+            Stage Checkpoint
+          </p>
+          <Link
+            href="/projects"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm bg-[var(--accent-dark)] text-[var(--accent-primary)] text-xs font-semibold hover:opacity-90 transition-opacity"
+          >
+            Explore Projects <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
+        </div>
       </div>
     </div>
   );
@@ -732,7 +750,6 @@ export function InteractiveRoadmap({ roadmap }: { roadmap: Roadmap }) {
   const treeRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setProgress(loadProgress(roadmap.slug));
     setMounted(true);
   }, [roadmap.slug]);

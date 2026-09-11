@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import { ToolPageShell } from '@/components/layout/tool-page-shell';
 import { ToolStructuredData } from '@/components/seo/tool-structured-data';
-import { CGPAForm } from '@/features/cgpa/cgpa-form';
+import { UnifiedAcademicCalculator } from '@/features/academic/unified-academic-calculator';
 import { generateToolMetadata } from '@/lib/seo';
 import { getToolBySlug } from '@/config/tools';
 
@@ -66,7 +66,7 @@ export default function CGPACalculatorPage() {
         { slug: 'attendance-calculator', title: 'Attendance Calculator', description: 'Track & manage your attendance' },
       ]}
     >
-      <CGPAForm />
+      <UnifiedAcademicCalculator initialTab="cgpa" />
     </ToolPageShell>
     </>
   );

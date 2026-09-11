@@ -36,6 +36,16 @@ const sections = [
     tag: 'Final Round',
     gradient: 'from-[#D8CCFF]/10 to-transparent',
   },
+  {
+    title: 'ATS Resume Roaster',
+    description: 'Score your project descriptions, flag tutorial clichés, and generate Google X-Y-Z STAR rewrites with quantifiable metrics.',
+    href: '/placement/resume-roaster',
+    icon: Sparkles,
+    color: '#FFB36B',
+    stats: 'Instant ATS Scoring',
+    tag: 'Game Changer',
+    gradient: 'from-[#FFB36B]/10 to-transparent',
+  },
 ];
 
 const roadmapSteps = [
@@ -279,7 +289,7 @@ export function PlacementHero() {
         </div>
 
         {/* Main Section Cards */}
-        <div ref={cardsRef} className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-20">
+        <div ref={cardsRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-20">
           {sections.map((section) => {
             const Icon = section.icon;
             return (

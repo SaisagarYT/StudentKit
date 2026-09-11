@@ -9,7 +9,7 @@ import { cybersecurityRoadmap } from './cybersecurity';
 import { placementPreparationRoadmap } from './placement-preparation';
 import { oopRoadmap } from './object-oriented-programming';
 
-export const roadmaps: Roadmap[] = [
+export const templateRoadmaps: Roadmap[] = [
   frontendDeveloperRoadmap,
   backendDeveloperRoadmap,
   fullStackDeveloperRoadmap,
@@ -20,6 +20,8 @@ export const roadmaps: Roadmap[] = [
   placementPreparationRoadmap,
   oopRoadmap,
 ];
+
+export const roadmaps: Roadmap[] = templateRoadmaps;
 
 export function getRoadmapBySlug(slug: string): Roadmap | undefined {
   return roadmaps.find((r) => r.slug === slug);

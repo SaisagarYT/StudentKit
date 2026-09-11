@@ -282,7 +282,64 @@ export function CsFundamentalsView() {
           .cs-subjects-nav { gap: 6px; }
           .cs-subject-tab { padding: 8px 12px; font-size: 12px; }
         }
+
+        @media print {
+          nav, header, footer, .cs-subjects-nav, .cs-search, .cs-toolbar, .cs-concept-check {
+            display: none !important;
+          }
+          .cs-print-header, .cs-print-footer {
+            display: block !important;
+          }
+          .cs-subtopic {
+            border: 1px solid #ccc !important;
+            break-inside: avoid;
+            page-break-inside: avoid;
+            margin-bottom: 16px !important;
+          }
+          .cs-concepts {
+            display: block !important;
+          }
+          .cs-subtopic-header {
+            background: #f3f4f6 !important;
+            color: #000 !important;
+            padding: 8px 12px !important;
+          }
+          .cs-concept {
+            padding: 10px 12px !important;
+            border-bottom: 1px solid #eee !important;
+          }
+          .cs-key-point {
+            color: #222 !important;
+            font-size: 11px !important;
+          }
+          .cs-questions {
+            background: #fafafa !important;
+            border-left: 2px solid #666 !important;
+            padding: 6px 10px !important;
+          }
+          .cs-question {
+            color: #333 !important;
+            font-size: 10.5px !important;
+          }
+        }
       `}</style>
+
+      {/* Print-only Cheatsheet Header */}
+      <div className="hidden cs-print-header mb-6 pb-4 border-b-2 border-black">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-black uppercase tracking-tight text-black">
+              StudentKit High-Yield Cheatsheet: {currentSubject.title}
+            </h1>
+            <p className="text-xs text-neutral-600 mt-1">
+              Core Concepts, System Mechanics & High-Frequency Interview Questions • studentkit.me/placement/cs-fundamentals
+            </p>
+          </div>
+          <div className="text-right text-xs text-neutral-500 font-mono">
+            Generated: {new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+          </div>
+        </div>
+      </div>
 
       {/* Subject tabs */}
       <div className="cs-subjects-nav">
@@ -304,20 +361,41 @@ export function CsFundamentalsView() {
         })}
       </div>
 
-      {/* Search */}
-      <div className="cs-search">
-        <Search className="w-4 h-4" />
-        <input
-          type="text"
-          placeholder={`Search in ${currentSubject.title}...`}
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
+      {/* Search & Actions Toolbar */}
+      <div className="cs-toolbar flex flex-col sm:flex-row gap-3 mb-5 items-stretch sm:items-center justify-between">
+        <div className="cs-search flex-1 !mb-0">
+          <Search className="w-4 h-4" />
+          <input
+            type="text"
+            placeholder={`Search in ${currentSubject.title}...`}
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
+
+        <div className="flex items-center gap-2 shrink-0">
+          <button
+            onClick={() => setExpandedSubtopic(expandedSubtopic === 'ALL' ? null : 'ALL')}
+            className="px-3 py-2 text-xs font-medium rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-[var(--border-default)] transition-colors"
+          >
+            {expandedSubtopic === 'ALL' ? 'Collapse All' : 'Expand All'}
+          </button>
+          <button
+            onClick={() => {
+              logXpEvent('CHEATSHEET_PRINT', 'Printed CS Fundamentals cheatsheet');
+              window.print();
+            }}
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-sm bg-[var(--accent-dark)] text-[var(--text-inverse)] hover:bg-[var(--accent-primary)] hover:text-black transition-all"
+          >
+            <Icons.Printer className="w-3.5 h-3.5" />
+            Print Cheatsheet
+          </button>
+        </div>
       </div>
 
       {/* Subtopics */}
       {filteredSubtopics.map(subtopic => {
-        const isExpanded = expandedSubtopic === subtopic.id;
+        const isExpanded = expandedSubtopic === subtopic.id || expandedSubtopic === 'ALL';
         const doneCount = subtopic.concepts.filter(c => progress[c.id]).length;
 
         return (

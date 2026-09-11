@@ -1,13 +1,21 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
+import { useEffect } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { RoadmapDetailClient } from './roadmap-detail-client';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 
 export function RoadmapViewWrapper() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const slug = searchParams.get('slug');
+
+  useEffect(() => {
+    if (slug) {
+      router.replace(`/roadmaps/${slug}`);
+    }
+  }, [slug, router]);
 
   if (!slug) {
     return (
