@@ -1,12 +1,15 @@
 'use client';
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import Link from 'next/link';
 import {
   Trophy, Clock, Flame, Zap, Target, ChevronRight,
   Play, Pause, CheckCircle2, Timer, Calendar, TrendingUp
 } from 'lucide-react';
 import { emitProgressChanged } from '@/lib/firebase/user-progress-sync';
+import { dsaProblemRepository } from '@/lib/cms/repository';
+import type { DsaProblemListItem } from '@/lib/cms/types';
 
 const DAILY_KEY = 'sk-daily-challenge';
 const DAILY_HISTORY_KEY = 'sk-daily-history';
@@ -41,168 +44,6 @@ interface DailyProblem {
 
 function getDayId(): string {
   return new Date().toISOString().split('T')[0];
-}
-
-const PROBLEMS: DailyProblem[] = [
-  {
-    id: 'two-sum',
-    title: 'Two Sum',
-    difficulty: 'easy',
-    category: 'Arrays & Hashing',
-    description: 'Given an array of integers nums and an integer target, return indices of the two numbers that add up to target. You may assume each input has exactly one solution, and you may not use the same element twice.',
-    hints: ['Think about what value you need to find for each element.', 'A hash map can give you O(1) lookups for the complement.', 'Single pass: for each num, check if (target - num) exists in the map.'],
-    approach: '1. Create an empty hash map.\n2. For each element num at index i:\n   - Calculate complement = target - num\n   - If complement exists in map, return [map[complement], i]\n   - Otherwise, store map[num] = i\n3. Return empty (won\'t reach here per constraint)',
-    timeComplexity: 'O(n)',
-    spaceComplexity: 'O(n)',
-  },
-  {
-    id: 'valid-parentheses',
-    title: 'Valid Parentheses',
-    difficulty: 'easy',
-    category: 'Stack',
-    description: 'Given a string s containing just the characters (, ), {, }, [ and ], determine if the input string is valid.',
-    hints: ['Use a stack to track opening brackets.', 'When you see a closing bracket, the top of stack must match.', 'If stack is empty at the end, the string is valid.'],
-    approach: '1. Initialize an empty stack.\n2. For each character c:\n   - If c is opening bracket: push to stack\n   - If c is closing bracket: check stack top matches, pop if yes, return false if no\n3. Return true if stack is empty, false otherwise.',
-    timeComplexity: 'O(n)',
-    spaceComplexity: 'O(n)',
-  },
-  {
-    id: 'best-time-buy-sell',
-    title: 'Best Time to Buy and Sell Stock',
-    difficulty: 'easy',
-    category: 'Sliding Window',
-    description: 'Find the maximum profit from one transaction (buy one day, sell a later day). Return 0 if no profit possible.',
-    hints: ['Track the minimum price seen so far.', 'At each day, the max profit is current price minus the minimum so far.', 'You only need one pass through the array.'],
-    approach: '1. Set minPrice = prices[0], maxProfit = 0.\n2. For each price from index 1:\n   - maxProfit = max(maxProfit, price - minPrice)\n   - minPrice = min(minPrice, price)\n3. Return maxProfit.',
-    timeComplexity: 'O(n)',
-    spaceComplexity: 'O(1)',
-  },
-  {
-    id: 'climbing-stairs',
-    title: 'Climbing Stairs',
-    difficulty: 'easy',
-    category: 'Dynamic Programming',
-    description: 'You are climbing a staircase. It takes n steps to reach the top. Each time you can climb 1 or 2 steps. In how many distinct ways can you climb to the top?',
-    hints: ['Think about how you reach step n — from step n-1 or n-2.', 'This is the Fibonacci pattern.', 'You only need the previous two values, not the whole array.'],
-    approach: '1. Base: dp[1] = 1, dp[2] = 2.\n2. For i from 3 to n: dp[i] = dp[i-1] + dp[i-2].\n3. Optimize space: keep only prev and curr.\n4. Return dp[n].',
-    timeComplexity: 'O(n)',
-    spaceComplexity: 'O(1)',
-  },
-  {
-    id: 'merge-intervals',
-    title: 'Merge Intervals',
-    difficulty: 'medium',
-    category: 'Intervals',
-    description: 'Given an array of intervals, merge all overlapping intervals and return an array of the non-overlapping intervals.',
-    hints: ['Sort intervals by start time first.', 'Two intervals overlap if current.start <= previous.end.', 'When merging, take max of both end times.'],
-    approach: '1. Sort intervals by start time.\n2. Initialize result with first interval.\n3. For each remaining interval:\n   - If it overlaps: merge by updating last.end = max(last.end, current.end)\n   - Otherwise: add to result\n4. Return result.',
-    timeComplexity: 'O(n log n)',
-    spaceComplexity: 'O(n)',
-  },
-  {
-    id: 'container-most-water',
-    title: 'Container With Most Water',
-    difficulty: 'medium',
-    category: 'Two Pointers',
-    description: 'Find two lines that together with the x-axis form a container that holds the most water.',
-    hints: ['Area = min(height[left], height[right]) * (right - left).', 'Start with widest container (pointers at both ends).', 'Always move the pointer pointing to the shorter line inward.'],
-    approach: '1. Set left = 0, right = n-1, maxArea = 0.\n2. While left < right:\n   - area = min(height[left], height[right]) * (right - left)\n   - maxArea = max(maxArea, area)\n   - Move the shorter pointer inward\n3. Return maxArea.',
-    timeComplexity: 'O(n)',
-    spaceComplexity: 'O(1)',
-  },
-  {
-    id: 'longest-substring',
-    title: 'Longest Substring Without Repeating Characters',
-    difficulty: 'medium',
-    category: 'Sliding Window',
-    description: 'Given a string s, find the length of the longest substring without repeating characters.',
-    hints: ['Use a sliding window with two pointers.', 'Track characters in the current window with a Set or Map.', 'When a duplicate enters, shrink from the left until it\'s removed.'],
-    approach: '1. Use a Set and two pointers (left, right).\n2. Expand right: add s[right] to set.\n3. If s[right] already in set: remove s[left] and advance left.\n4. Track max window size = right - left + 1.\n5. Return max.',
-    timeComplexity: 'O(n)',
-    spaceComplexity: 'O(min(n, 26))',
-  },
-  {
-    id: 'group-anagrams',
-    title: 'Group Anagrams',
-    difficulty: 'medium',
-    category: 'Arrays & Hashing',
-    description: 'Given an array of strings strs, group the anagrams together.',
-    hints: ['Two words are anagrams if they have the same sorted form.', 'Use sorted string as a hash key.', 'Alternatively, use character frequency as a tuple key.'],
-    approach: '1. Create a hash map: key → list of words.\n2. For each word, compute its key (sorted characters).\n3. Append word to map[key].\n4. Return all values from the map.',
-    timeComplexity: 'O(n * k log k)',
-    spaceComplexity: 'O(n * k)',
-  },
-  {
-    id: 'binary-search',
-    title: 'Binary Search',
-    difficulty: 'easy',
-    category: 'Binary Search',
-    description: 'Given a sorted array of distinct integers and a target value, return the index if the target is found. If not, return -1.',
-    hints: ['Use lo and hi pointers on the search space.', 'Calculate mid = lo + (hi - lo) / 2 to avoid overflow.', 'Narrow the half that cannot contain the target.'],
-    approach: '1. Set lo = 0, hi = n - 1.\n2. While lo <= hi:\n   - mid = lo + (hi - lo) / 2\n   - If nums[mid] == target: return mid\n   - If nums[mid] < target: lo = mid + 1\n   - Else: hi = mid - 1\n3. Return -1.',
-    timeComplexity: 'O(log n)',
-    spaceComplexity: 'O(1)',
-  },
-  {
-    id: 'reverse-linked-list',
-    title: 'Reverse Linked List',
-    difficulty: 'easy',
-    category: 'Linked List',
-    description: 'Given the head of a singly linked list, reverse the list and return the reversed list.',
-    hints: ['Use three pointers: prev, curr, next.', 'At each step, flip curr.next to point to prev.', 'Advance all three pointers forward.'],
-    approach: '1. Set prev = null, curr = head.\n2. While curr is not null:\n   - next = curr.next\n   - curr.next = prev\n   - prev = curr\n   - curr = next\n3. Return prev (new head).',
-    timeComplexity: 'O(n)',
-    spaceComplexity: 'O(1)',
-  },
-  {
-    id: 'invert-binary-tree',
-    title: 'Invert Binary Tree',
-    difficulty: 'easy',
-    category: 'Trees',
-    description: 'Given the root of a binary tree, invert the tree and return its root.',
-    hints: ['Think recursively: swap children, then recurse.', 'Base case: null node, just return null.', 'BFS also works — swap children level by level.'],
-    approach: '1. If root is null, return null.\n2. Swap root.left and root.right.\n3. Recursively invert(root.left) and invert(root.right).\n4. Return root.',
-    timeComplexity: 'O(n)',
-    spaceComplexity: 'O(h) — recursion stack',
-  },
-  {
-    id: 'three-sum',
-    title: '3Sum',
-    difficulty: 'medium',
-    category: 'Two Pointers',
-    description: 'Return all unique triplets [nums[i], nums[j], nums[k]] such that nums[i] + nums[j] + nums[k] == 0.',
-    hints: ['Sort the array first.', 'Fix one element, then use two pointers for the remaining two.', 'Skip duplicates at each level to avoid repeated triplets.'],
-    approach: '1. Sort nums.\n2. For each i from 0 to n-3:\n   - Skip if nums[i] == nums[i-1]\n   - Set left = i+1, right = n-1\n   - While left < right: check sum\n3. Return results.',
-    timeComplexity: 'O(n²)',
-    spaceComplexity: 'O(1) (excluding output)',
-  },
-  {
-    id: 'max-depth-binary-tree',
-    title: 'Maximum Depth of Binary Tree',
-    difficulty: 'easy',
-    category: 'Trees',
-    description: 'Given the root of a binary tree, return its maximum depth.',
-    hints: ['The depth of a node is 1 + max depth of its children.', 'Base case: null node has depth 0.', 'BFS counting levels also works.'],
-    approach: '1. If root is null, return 0.\n2. Return 1 + max(maxDepth(root.left), maxDepth(root.right)).',
-    timeComplexity: 'O(n)',
-    spaceComplexity: 'O(h)',
-  },
-  {
-    id: 'product-except-self',
-    title: 'Product of Array Except Self',
-    difficulty: 'medium',
-    category: 'Arrays & Hashing',
-    description: 'Return an array where answer[i] is equal to the product of all elements except nums[i]. Solve in O(n) without division.',
-    hints: ['answer[i] = product of everything to its left × product of everything to its right.', 'Compute prefix products left-to-right, then suffix products right-to-left.', 'You can do it in a single output array with two passes.'],
-    approach: '1. Create output array, filled with 1.\n2. Left pass: for i from 0 to n-1, output[i] = running left product, then multiply.\n3. Right pass: for i from n-1 to 0, output[i] *= running right product.\n4. Return output.',
-    timeComplexity: 'O(n)',
-    spaceComplexity: 'O(1) (excluding output)',
-  },
-];
-
-function getDailyProblem(dayId: string): DailyProblem {
-  const seed = dayId.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
-  return PROBLEMS[seed % PROBLEMS.length];
 }
 
 function formatTime(seconds: number): string {
@@ -244,6 +85,8 @@ const DIFFICULTY_STYLE: Record<string, { label: string; cls: string }> = {
 
 export function DailyChallengeClient() {
   const [mounted, setMounted] = useState(false);
+  const [backendProblems, setBackendProblems] = useState<DsaProblemListItem[]>([]);
+  const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState<DailyChallengeProgress | null>(null);
   const [timerRunning, setTimerRunning] = useState(false);
   const [elapsed, setElapsed] = useState(0);
@@ -253,23 +96,34 @@ export function DailyChallengeClient() {
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const dayId = getDayId();
-  const problem = getDailyProblem(dayId);
 
   useEffect(() => {
     setMounted(true);
+    setHistory(loadHistory());
+
     const saved = loadProgress();
     if (saved && saved.dayId === dayId) {
       setProgress(saved);
       setElapsed(saved.timerSeconds);
       setRevealedHints(saved.hintsUsed);
     }
-    setHistory(loadHistory());
+
+    dsaProblemRepository
+      .listPublished()
+      .then((items) => {
+        setBackendProblems(items);
+        setLoading(false);
+      })
+      .catch(() => {
+        setBackendProblems([]);
+        setLoading(false);
+      });
   }, [dayId]);
 
   useEffect(() => {
     if (timerRunning) {
       timerRef.current = setInterval(() => {
-        setElapsed(prev => {
+        setElapsed((prev) => {
           const next = prev + 1;
           if (progress) {
             saveChallengeProgress({ ...progress, timerSeconds: next });
@@ -320,22 +174,47 @@ export function DailyChallengeClient() {
       hintsUsed: revealedHints,
       finishedAt: new Date().toISOString(),
     };
-    const hist = [entry, ...loadHistory().filter(h => h.dayId !== progress.dayId)].slice(0, 30);
+    const hist = [entry, ...loadHistory().filter((h) => h.dayId !== progress.dayId)].slice(0, 30);
     saveHistory(hist);
     setHistory(hist);
     emitProgressChanged();
   }, [progress, elapsed, revealedHints]);
 
+  const problem: DailyProblem | null = useMemo(() => {
+    if (backendProblems.length === 0) return null;
+    const seed = dayId.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
+    const rawProblem = backendProblems[seed % backendProblems.length];
+    return {
+      id: rawProblem.id,
+      title: rawProblem.title,
+      difficulty: (rawProblem.difficulty as 'easy' | 'medium' | 'hard') || 'easy',
+      category: (rawProblem.category || 'algorithms').replace(/-/g, ' '),
+      description:
+        rawProblem.description ||
+        `Practice ${rawProblem.title} to improve algorithmic problem solving and interview performance.`,
+      hints:
+        rawProblem.hints && rawProblem.hints.length > 0
+          ? rawProblem.hints
+          : ['Analyze input constraints and bounds.', 'Consider space vs time tradeoffs.'],
+      approach:
+        rawProblem.editorial ||
+        rawProblem.approach ||
+        'Detailed editorial and step-by-step approach available in the DSA Practice Sheet.',
+      timeComplexity: rawProblem.timeComplexity || 'O(n)',
+      spaceComplexity: rawProblem.spaceComplexity || 'O(1)',
+    };
+  }, [backendProblems, dayId]);
+
   const revealNextHint = useCallback(() => {
-    if (revealedHints >= problem.hints.length) return;
+    if (!problem || revealedHints >= problem.hints.length) return;
     const next = revealedHints + 1;
     setRevealedHints(next);
     if (progress) {
       saveChallengeProgress({ ...progress, hintsUsed: next });
     }
-  }, [revealedHints, problem.hints.length, progress]);
+  }, [revealedHints, problem, progress]);
 
-  if (!mounted) {
+  if (!mounted || loading) {
     return (
       <div className="py-20 flex justify-center">
         <div className="w-6 h-6 border-2 border-[var(--accent-dark)] border-t-transparent rounded-full animate-spin" />
@@ -343,14 +222,63 @@ export function DailyChallengeClient() {
     );
   }
 
+  if (!problem) {
+    return (
+      <div className="py-8 md:py-12">
+        <div className="container-main max-w-3xl">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="text-center mb-8"
+          >
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-sm bg-[var(--bg-subtle)] border border-[var(--border-soft)] mb-4">
+              <Zap className="w-3.5 h-3.5 text-amber-500" />
+              <span className="text-[11px] font-semibold text-[var(--text-secondary)] uppercase tracking-wider">
+                Daily Challenge
+              </span>
+              <span className="text-[10px] text-[var(--text-subtle)]">{dayId}</span>
+            </div>
+            <h1 className="text-2xl md:text-3xl font-bold text-[var(--text-primary)] mb-2">
+              Problem of the Day
+            </h1>
+          </motion.div>
+
+          <div className="rounded-sm border border-dashed border-[var(--border-soft)] bg-[var(--bg-surface)] p-12 text-center my-6">
+            <Zap className="w-10 h-10 mx-auto text-[var(--text-subtle)] opacity-40 mb-3" />
+            <h2 className="text-base font-bold text-[var(--text-primary)]">
+              No Daily Challenges Published Yet
+            </h2>
+            <p className="text-xs text-[var(--text-secondary)] mt-1.5 max-w-md mx-auto leading-relaxed">
+              Daily challenges and timed sprints will automatically unlock here once algorithm practice problems are published in the Admin Dashboard.
+            </p>
+            <div className="mt-6 flex items-center justify-center gap-3">
+              <Link
+                href="/roadmaps"
+                className="px-4 py-2 rounded-sm text-xs font-semibold bg-[var(--accent-dark)] text-[var(--text-inverse)] hover:opacity-90 transition-opacity"
+              >
+                Explore Roadmaps
+              </Link>
+              <Link
+                href="/placement/cs-fundamentals"
+                className="px-4 py-2 rounded-sm text-xs font-semibold bg-[var(--bg-subtle)] text-[var(--text-primary)] border border-[var(--border-soft)] hover:bg-[var(--border-soft)] transition-colors"
+              >
+                CS Fundamentals
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   const isFinished = progress?.completed || false;
   const streakDays = history.length;
-  const diffStyle = DIFFICULTY_STYLE[problem.difficulty];
+  const diffStyle = DIFFICULTY_STYLE[problem.difficulty] || DIFFICULTY_STYLE.easy;
 
   return (
     <div className="py-8 md:py-12">
       <div className="container-main max-w-3xl">
-
         {/* Hero */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -412,91 +340,102 @@ export function DailyChallengeClient() {
                   <span className={`px-2 py-0.5 rounded-sm text-[10px] font-semibold ${diffStyle.cls}`}>
                     {diffStyle.label}
                   </span>
-                  <span className="text-[11px] text-[var(--text-subtle)]">{problem.category}</span>
+                  <span className="text-[11px] text-[var(--text-subtle)] capitalize">{problem.category}</span>
                 </div>
               </div>
               {isFinished && (
                 <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-sm bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400">
                   <CheckCircle2 className="w-3.5 h-3.5" />
-                  <span className="text-[10px] font-bold uppercase">Solved</span>
+                  <span className="text-xs font-semibold">Done</span>
                 </div>
               )}
             </div>
           </div>
 
-          {/* Problem description */}
+          {/* Description */}
           <div className="p-5 border-b border-[var(--border-soft)]">
-            <p className="text-sm text-[var(--text-secondary)] leading-relaxed">{problem.description}</p>
+            <p className="text-sm text-[var(--text-secondary)] leading-relaxed">
+              {problem.description}
+            </p>
           </div>
 
-          {/* Timer + Actions */}
+          {/* Timer & Controls */}
           <div className="p-5 border-b border-[var(--border-soft)] bg-[var(--bg-subtle)]">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
               <div className="flex items-center gap-3">
                 <Timer className="w-5 h-5 text-[var(--text-secondary)]" />
-                <span className="text-xl font-bold font-mono text-[var(--text-primary)]">
+                <span className="text-3xl font-bold font-mono text-[var(--text-primary)]">
                   {formatTime(elapsed)}
                 </span>
-                {progress && !isFinished && (
-                  <button
-                    onClick={() => setTimerRunning(!timerRunning)}
-                    className="p-1.5 rounded-sm hover:bg-[var(--bg-surface)] text-[var(--text-secondary)] transition-colors"
-                  >
-                    {timerRunning ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
-                  </button>
+                {timerRunning && (
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                 )}
               </div>
 
-              {!progress && (
-                <button
-                  onClick={startChallenge}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-sm bg-[var(--accent-dark)] text-[var(--text-inverse)] text-xs font-semibold hover:opacity-90 transition-opacity"
-                >
-                  <Play className="w-3.5 h-3.5" />
-                  Start Timer
-                </button>
-              )}
+              <div className="flex items-center gap-2">
+                {!progress && (
+                  <button
+                    onClick={startChallenge}
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-sm text-xs font-semibold bg-[var(--accent-dark)] text-[var(--text-inverse)] hover:opacity-90 transition-opacity"
+                  >
+                    <Play className="w-3.5 h-3.5 fill-current" />
+                    Start Timer
+                  </button>
+                )}
 
-              {progress && !isFinished && (
-                <button
-                  onClick={markComplete}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-sm text-xs font-semibold transition-colors"
-                  style={{ background: 'var(--color-success)', color: 'var(--bg-primary)' }}
-                >
-                  <CheckCircle2 className="w-3.5 h-3.5" />
-                  Mark Solved
-                </button>
-              )}
+                {progress && !isFinished && (
+                  <>
+                    <button
+                      onClick={() => setTimerRunning(!timerRunning)}
+                      className="inline-flex items-center gap-1.5 px-3 py-2 rounded-sm text-xs font-semibold bg-[var(--bg-surface)] hover:bg-[var(--bg-subtle)] border border-[var(--border-soft)] transition-colors"
+                    >
+                      {timerRunning ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
+                      {timerRunning ? 'Pause' : 'Resume'}
+                    </button>
+                    <button
+                      onClick={markComplete}
+                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-sm text-xs font-semibold bg-[var(--color-success)] text-white hover:opacity-90 transition-opacity"
+                    >
+                      <CheckCircle2 className="w-3.5 h-3.5" />
+                      Mark Solved
+                    </button>
+                  </>
+                )}
+              </div>
             </div>
           </div>
 
-          {/* Hints section */}
+          {/* Hints & Approach */}
           {progress && (
-            <div className="p-5">
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-xs font-bold text-[var(--text-subtle)] uppercase tracking-wider">
+            <div className="p-5 space-y-4">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-semibold text-[var(--text-secondary)]">
                   Hints ({revealedHints}/{problem.hints.length})
                 </span>
-                {revealedHints < problem.hints.length && (
+                {revealedHints < problem.hints.length && !isFinished && (
                   <button
                     onClick={revealNextHint}
-                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-sm text-[11px] font-medium text-[var(--text-primary)] hover:bg-[var(--bg-subtle)] border border-[var(--border-soft)] transition-colors"
+                    className="text-xs text-[var(--accent-dark)] hover:underline flex items-center gap-1"
                   >
+                    Reveal Hint #{revealedHints + 1}
                     <ChevronRight className="w-3 h-3" />
-                    Reveal Hint {revealedHints + 1}
                   </button>
                 )}
               </div>
 
+              {/* Revealed hints */}
               <AnimatePresence>
                 {revealedHints > 0 && (
                   <motion.div
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: 'auto' }}
-                    className="space-y-2 mb-4"
+                    className="space-y-2"
                   >
                     {problem.hints.slice(0, revealedHints).map((hint, i) => (
-                      <div key={i} className="flex items-start gap-2">
+                      <div
+                        key={i}
+                        className="p-3 rounded-sm bg-[var(--bg-subtle)] border border-[var(--border-soft)] flex items-start gap-2.5"
+                      >
                         <span className="text-[10px] font-bold text-[var(--accent-dark)] mt-0.5 shrink-0">#{i + 1}</span>
                         <p className="text-xs text-[var(--text-secondary)] leading-relaxed">{hint}</p>
                       </div>
@@ -575,7 +514,7 @@ export function DailyChallengeClient() {
               <h3 className="text-sm font-bold text-[var(--text-primary)]">Recent Solves</h3>
             </div>
             <div className="space-y-2">
-              {history.slice(0, 10).map(h => (
+              {history.slice(0, 10).map((h) => (
                 <div key={h.dayId} className="flex items-center justify-between py-2 border-b border-[var(--border-soft)] last:border-0">
                   <span className="text-xs font-medium text-[var(--text-primary)]">{h.dayId}</span>
                   <div className="flex items-center gap-3">

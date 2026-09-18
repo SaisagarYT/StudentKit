@@ -142,7 +142,7 @@ export function ReturningDashboard() {
             <DailyChallengeWidget isSolved={isDsaSolvedToday} />
 
             {/* Community Leaderboard Preview & Fast Links */}
-            <LeaderboardWidget userRank={12} />
+            <LeaderboardWidget />
           </div>
         </div>
       </div>

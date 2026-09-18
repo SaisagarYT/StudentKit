@@ -1,20 +1,48 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Trophy, ArrowRight, FileText, Bookmark, Crown, Medal } from 'lucide-react';
+import { Trophy, ArrowRight, FileText, Bookmark, Crown, Medal, Award } from 'lucide-react';
 import { motion } from 'motion/react';
+import { subscribeToLeaderboard, type LeaderboardEntry } from '@/lib/firebase/leaderboard';
+import { useUserAuth } from '@/lib/firebase/user-auth';
+import { isFirebaseConfigured } from '@/lib/firebase/client';
 
 interface LeaderboardWidgetProps {
   userRank?: number;
 }
 
-const mockTopLearners = [
-  { rank: 1, name: 'Arjun M.', xp: 2450, icon: Crown },
-  { rank: 2, name: 'Priya S.', xp: 2180, icon: Medal },
-  { rank: 3, name: 'Dev R.', xp: 1920, icon: Medal },
-];
+const RANK_ICONS = [Crown, Medal, Award];
 
-export function LeaderboardWidget({ userRank = 12 }: LeaderboardWidgetProps) {
+export function LeaderboardWidget({ userRank }: LeaderboardWidgetProps) {
+  const { user } = useUserAuth();
+  const [topLearners, setTopLearners] = useState<LeaderboardEntry[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!isFirebaseConfigured) {
+      setLoading(false);
+      return;
+    }
+
+    const unsubscribe = subscribeToLeaderboard(3, 'xp', (entries) => {
+      setTopLearners(entries);
+      setLoading(false);
+    });
+
+    return () => {
+      if (typeof unsubscribe === 'function') unsubscribe();
+    };
+  }, []);
+
+  const currentUserEntryIndex = topLearners.findIndex((l) => user && l.uid === user.uid);
+  const displayRank =
+    currentUserEntryIndex !== -1
+      ? `#${currentUserEntryIndex + 1}`
+      : userRank
+      ? `#${userRank}`
+      : 'Unranked';
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 15 }}
@@ -48,32 +76,58 @@ export function LeaderboardWidget({ userRank = 12 }: LeaderboardWidgetProps) {
       <div className="p-3 rounded-md bg-[var(--bg-subtle)] border border-[var(--border-soft)] flex items-center justify-between">
         <div>
           <span className="text-[10px] uppercase font-bold text-[var(--text-subtle)]">Your Standing</span>
-          <p className="text-sm font-bold text-[var(--text-primary)]">Top 5% of Learners</p>
+          <p className="text-sm font-bold text-[var(--text-primary)]">
+            {displayRank === 'Unranked' ? 'Join the Competition' : `Ranked ${displayRank}`}
+          </p>
         </div>
         <span className="text-base font-extrabold text-[var(--accent-dark)] font-mono">
-          #{userRank}
+          {displayRank}
         </span>
       </div>
 
-      {/* Top 3 Preview */}
+      {/* Top 3 Preview or Empty State */}
       <div className="space-y-2">
-        {mockTopLearners.map((learner) => {
-          const Icon = learner.icon;
-          return (
-            <div
-              key={learner.rank}
-              className="flex items-center justify-between p-2 rounded-sm bg-[var(--bg-subtle)]/50 border border-[var(--border-soft)] text-xs"
-            >
-              <div className="flex items-center gap-2">
-                <Icon className="w-3.5 h-3.5 text-[var(--text-subtle)]" />
-                <span className="font-semibold text-[var(--text-primary)]">{learner.name}</span>
+        {loading ? (
+          <div className="space-y-2 py-1">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="h-8 rounded-sm bg-[var(--bg-subtle)] animate-pulse" />
+            ))}
+          </div>
+        ) : topLearners.length === 0 ? (
+          <div className="py-6 text-center p-3 rounded-md bg-[var(--bg-subtle)]/40 border border-dashed border-[var(--border-soft)]">
+            <Trophy className="w-6 h-6 mx-auto text-[var(--text-subtle)] opacity-40 mb-1.5" />
+            <p className="text-xs font-semibold text-[var(--text-primary)]">No Learners Ranked Yet</p>
+            <p className="text-[11px] text-[var(--text-secondary)] mt-0.5 leading-relaxed">
+              Solve problems and earn XP to take the #1 spot on the leaderboard!
+            </p>
+          </div>
+        ) : (
+          topLearners.map((learner, index) => {
+            const Icon = RANK_ICONS[index] || Medal;
+            const isMe = user && learner.uid === user.uid;
+            return (
+              <div
+                key={learner.uid || index}
+                className={`flex items-center justify-between p-2 rounded-sm border text-xs transition-colors ${
+                  isMe
+                    ? 'bg-[var(--accent-dark)]/10 border-[var(--accent-dark)]'
+                    : 'bg-[var(--bg-subtle)]/50 border-[var(--border-soft)]'
+                }`}
+              >
+                <div className="flex items-center gap-2 min-w-0">
+                  <Icon className="w-3.5 h-3.5 text-[var(--text-subtle)] shrink-0" />
+                  <span className="font-semibold text-[var(--text-primary)] truncate">
+                    {learner.displayName || 'Anonymous'}
+                    {isMe && ' (You)'}
+                  </span>
+                </div>
+                <span className="font-mono text-[var(--text-secondary)] font-medium shrink-0 ml-2">
+                  {(learner.xp || 0).toLocaleString()} XP
+                </span>
               </div>
-              <span className="font-mono text-[var(--text-secondary)] font-medium">
-                {learner.xp.toLocaleString()} XP
-              </span>
-            </div>
-          );
-        })}
+            );
+          })
+        )}
       </div>
 
       {/* Quick Utilities */}

@@ -72,7 +72,7 @@ export function DashboardHeader({ user, streak, xpState }: DashboardHeaderProps)
           <div>
             <div className="flex items-center gap-1.5">
               <span className="text-sm font-bold text-[var(--text-primary)] font-mono">
-                <AnimatedCounter value={streak.current || 1} suffix="-day" />
+                <AnimatedCounter value={streak.current} suffix="-day" />
               </span>
               <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-subtle)] bg-[var(--bg-subtle)] px-1.5 py-0.5 rounded-sm">
                 streak
