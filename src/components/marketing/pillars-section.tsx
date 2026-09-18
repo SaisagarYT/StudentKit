@@ -1,141 +1,150 @@
 'use client';
 
-import { useRef, useEffect } from 'react';
 import Link from 'next/link';
-import { ArrowRight, Calculator, Map, Hammer } from 'lucide-react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
+import { ArrowRight, Map, Hammer, Target } from 'lucide-react';
+import { motion } from 'motion/react';
 
 const pillars = [
   {
     number: '01',
-    title: 'Calculate',
-    subtitle: 'Tools',
-    description: 'Instant calculators for grades, attendance, salary, documents, and more.',
-    href: '/tools',
-    icon: Calculator,
-    accent: '#C7FF3D',
+    title: 'Learn',
+    subtitle: 'Career Roadmaps',
+    description: 'Structured step-by-step engineering paths so you always know what to learn next without tutorial hell.',
+    href: '/roadmaps',
+    icon: Map,
+    highlights: ['9 Tech Paths', 'Milestone Checklists', 'Curated Resources'],
   },
   {
     number: '02',
-    title: 'Learn',
-    subtitle: 'Roadmaps',
-    description: 'Interactive career and technology paths to know exactly what to learn next.',
-    href: '/roadmaps',
-    icon: Map,
-    accent: '#D8CCFF',
+    title: 'Prepare',
+    subtitle: 'Placement & DSA',
+    description: 'Master 250+ essential algorithmic patterns and review CS fundamentals (OS, DBMS, CN) to crack technical interviews.',
+    href: '/placement',
+    icon: Target,
+    highlights: ['250+ Pattern Sheet', 'Core CS Notes', 'Company Breakdowns'],
   },
   {
     number: '03',
     title: 'Build',
-    subtitle: 'Projects',
-    description: 'Curated project ideas with architecture, milestones, and real-world stacks.',
+    subtitle: 'Guided Projects',
+    description: 'Build production-grade portfolio projects with architecture diagrams, phased milestones, and real-world tech stacks.',
     href: '/projects',
     icon: Hammer,
-    accent: '#A8F0E6',
+    highlights: ['System Architecture', 'Production Stacks', 'Resume-Ready'],
   },
 ];
 
 export function PillarsSection() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const headingRef = useRef<HTMLDivElement>(null);
-  const cardsRef = useRef<HTMLDivElement>(null);
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15,
+      },
+    },
+  };
 
-  useEffect(() => {
-    const prefersReducedMotion = window.matchMedia(
-      '(prefers-reduced-motion: reduce)'
-    ).matches;
-
-    if (prefersReducedMotion) return;
-
-    const ctx = gsap.context(() => {
-      gsap.set(headingRef.current, { opacity: 0, y: 30 });
-      gsap.set(cardsRef.current?.children || [], { opacity: 0, y: 40 });
-
-      ScrollTrigger.create({
-        trigger: sectionRef.current,
-        start: 'top 80%',
-        once: true,
-        onEnter: () => {
-          gsap.to(headingRef.current, {
-            opacity: 1,
-            y: 0,
-            duration: 0.8,
-            ease: 'power3.out',
-          });
-          gsap.to(cardsRef.current?.children || [], {
-            opacity: 1,
-            y: 0,
-            duration: 0.7,
-            ease: 'power3.out',
-            stagger: 0.15,
-            delay: 0.2,
-          });
-        },
-      });
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
+  const cardVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const },
+    },
+  };
 
   return (
-    <section ref={sectionRef} className="section-spacing">
+    <section className="section-spacing">
       <div className="container-main">
-        <div ref={headingRef} className="text-center max-w-xl mx-auto mb-14">
+        {/* Section Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-60px' }}
+          transition={{ duration: 0.7 }}
+          className="text-center max-w-2xl mx-auto mb-14"
+        >
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[var(--bg-subtle)] border border-[var(--border-soft)] text-xs font-semibold text-[var(--text-secondary)] mb-4">
+            <span>Structured for Student Success</span>
+          </div>
           <h2 className="text-h2 font-bold tracking-tight">
-            Three ways to{' '}
-            <span className="font-serif italic font-normal">move forward</span>
+            Three pillars to{' '}
+            <span className="font-serif italic font-normal">accelerate your career</span>
           </h2>
-          <p className="mt-4 text-[var(--text-secondary)] text-body-lg">
-            Tools for today, paths for tomorrow, projects for your portfolio.
+          <p className="mt-4 text-[var(--text-secondary)] text-body-lg leading-relaxed">
+            From your first line of code to landing high-impact offers — structured paths, interview mastery, and resume-defining projects.
           </p>
-        </div>
+        </motion.div>
 
-        <div
-          ref={cardsRef}
-          className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5"
+        {/* Pillars Grid */}
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-60px' }}
+          className="grid grid-cols-1 md:grid-cols-3 gap-6"
         >
           {pillars.map((pillar) => {
             const Icon = pillar.icon;
             return (
-              <Link
+              <motion.div
                 key={pillar.number}
-                href={pillar.href}
-                className="group relative p-7 md:p-8 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] hover:border-[var(--border-default)] hover:shadow-sm transition-all duration-200"
+                variants={cardVariants}
+                whileHover={{ y: -6 }}
+                transition={{ type: 'spring', stiffness: 280, damping: 22 }}
               >
-                <div className="flex items-center justify-between mb-6">
-                  <div
-                    className="flex items-center justify-center w-11 h-11 rounded-sm"
-                    style={{ backgroundColor: `${pillar.accent}20` }}
-                  >
-                    <Icon
-                      className="w-5 h-5"
-                      style={{ color: pillar.accent === '#C7FF3D' ? '#6B8F00' : pillar.accent.replace('FF', 'BB') }}
-                    />
+                <Link
+                  href={pillar.href}
+                  className="group relative flex flex-col justify-between h-full p-7 md:p-8 rounded-md border border-[var(--border-soft)] bg-[var(--bg-surface)] hover:border-[var(--border-default)] hover:shadow-lg hover:shadow-black/5 transition-all duration-200"
+                >
+                  <div>
+                    {/* Top Row: Icon + Number */}
+                    <div className="flex items-center justify-between mb-6">
+                      <div className="flex items-center justify-center w-12 h-12 rounded-sm bg-[var(--bg-subtle)] border border-[var(--border-soft)] text-[var(--text-primary)] group-hover:bg-[var(--accent-dark)] group-hover:text-[var(--text-inverse)] transition-colors">
+                        <Icon className="w-5 h-5" />
+                      </div>
+                      <span className="text-xs font-mono font-semibold text-[var(--text-subtle)]">
+                        {pillar.number}
+                      </span>
+                    </div>
+
+                    {/* Subtitle & Title */}
+                    <p className="text-xs font-semibold uppercase tracking-wider text-[var(--text-subtle)]">
+                      {pillar.title}
+                    </p>
+                    <h3 className="mt-1 text-xl font-bold tracking-tight text-[var(--text-primary)] group-hover:text-[var(--text-primary)] transition-colors">
+                      {pillar.subtitle}
+                    </h3>
+
+                    {/* Description */}
+                    <p className="mt-3 text-sm text-[var(--text-secondary)] leading-relaxed">
+                      {pillar.description}
+                    </p>
+
+                    {/* Highlights Badges */}
+                    <div className="mt-5 flex flex-wrap gap-1.5">
+                      {pillar.highlights.map((h) => (
+                        <span
+                          key={h}
+                          className="px-2 py-0.5 text-[10px] font-mono font-medium rounded-sm bg-[var(--bg-subtle)] border border-[var(--border-soft)] text-[var(--text-secondary)]"
+                        >
+                          {h}
+                        </span>
+                      ))}
+                    </div>
                   </div>
-                  <span className="text-xs font-mono text-[var(--text-subtle)]">
-                    {pillar.number}
-                  </span>
-                </div>
-                <h3 className="text-2xl font-bold tracking-tight text-[var(--text-primary)]">
-                  {pillar.title}
-                </h3>
-                <p className="text-xs font-medium uppercase tracking-wider text-[var(--text-subtle)] mt-1">
-                  {pillar.subtitle}
-                </p>
-                <p className="mt-4 text-sm text-[var(--text-secondary)] leading-relaxed">
-                  {pillar.description}
-                </p>
-                <div className="mt-6 flex items-center gap-1.5 text-xs font-medium text-[var(--text-primary)] group-hover:gap-2.5 transition-all">
-                  Explore
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </div>
-              </Link>
+
+                  {/* Bottom Link Action */}
+                  <div className="mt-8 pt-5 border-t border-[var(--border-soft)] flex items-center justify-between text-xs font-semibold text-[var(--text-primary)] group-hover:text-[var(--accent-dark)] transition-colors">
+                    <span>Explore {pillar.subtitle}</span>
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </div>
+                </Link>
+              </motion.div>
             );
           })}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

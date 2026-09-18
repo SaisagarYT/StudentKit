@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
-import { X, ArrowRight, ArrowLeft, Sparkles, MapPin } from 'lucide-react';
+import { X, ArrowRight, ArrowLeft, Compass, MapPin } from 'lucide-react';
 
 interface TourStep {
   target?: string;
@@ -206,7 +206,7 @@ export function ProductTour() {
         <div className="bg-[var(--bg-surface)] border border-[var(--border-soft)] rounded-sm shadow-xl p-5 max-w-xs">
           <div className="flex items-start gap-3">
             <div className="w-10 h-10 rounded-sm bg-[var(--accent-primary)]/10 flex items-center justify-center shrink-0">
-              <Sparkles className="w-5 h-5 text-[var(--accent-dark)]" />
+              <Compass className="w-5 h-5 text-[var(--accent-dark)]" />
             </div>
             <div>
               <p className="text-sm font-semibold text-[var(--text-primary)]">New here?</p>
@@ -216,7 +216,7 @@ export function ProductTour() {
           <div className="flex items-center gap-2 mt-4">
             <button
               onClick={startTour}
-              className="flex-1 px-4 py-2 text-xs font-medium rounded-sm bg-[var(--accent-dark)] text-[var(--accent-primary)] hover:opacity-90 transition-opacity"
+              className="flex-1 px-4 py-2 text-xs font-medium rounded-sm bg-[var(--accent-dark)] text-[var(--text-inverse)] hover:opacity-90 transition-opacity"
             >
               Start Tour
             </button>
@@ -268,7 +268,7 @@ export function ProductTour() {
           {/* Icon for first/last steps */}
           {isFirstOrLast && (
             <div className="w-12 h-12 mx-auto mb-3 rounded-sm bg-[var(--accent-primary)]/10 flex items-center justify-center">
-              {step === 0 ? <Sparkles className="w-6 h-6 text-[var(--accent-dark)]" /> : <MapPin className="w-6 h-6 text-[var(--accent-dark)]" />}
+              {step === 0 ? <Compass className="w-6 h-6 text-[var(--accent-dark)]" /> : <MapPin className="w-6 h-6 text-[var(--accent-dark)]" />}
             </div>
           )}
 
@@ -283,7 +283,7 @@ export function ProductTour() {
                 <div
                   key={i}
                   className={`w-1.5 h-1.5 rounded-full transition-all ${
-                    i === step ? 'bg-[var(--accent-dark)] w-4' : i < step ? 'bg-[var(--accent-primary)]' : 'bg-[var(--border-default)]'
+                    i === step ? 'bg-[var(--accent-dark)] w-4' : i < step ? 'bg-[var(--accent-dark)]/50' : 'bg-[var(--border-default)]'
                   }`}
                 />
               ))}
@@ -299,7 +299,7 @@ export function ProductTour() {
               )}
               <button
                 onClick={nextStep}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-xs font-medium bg-[var(--accent-dark)] text-[var(--accent-primary)] hover:opacity-90 transition-opacity"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-xs font-medium bg-[var(--accent-dark)] text-[var(--text-inverse)] hover:opacity-90 transition-opacity"
               >
                 {step === TOUR_STEPS.length - 1 ? 'Done' : 'Next'}
                 {step < TOUR_STEPS.length - 1 && <ArrowRight className="w-3 h-3" />}

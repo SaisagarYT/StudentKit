@@ -1,46 +1,46 @@
 'use client';
 
-import { useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
-import gsap from 'gsap';
+import { motion } from 'motion/react';
 import { CsFundamentalsView } from '@/features/placement/cs-fundamentals-view';
 
 export function CsPageClient() {
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.fromTo('.cs-header', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out' });
-      gsap.fromTo('.cs-content', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out', delay: 0.15 });
-    }, ref);
-    return () => ctx.revert();
-  }, []);
-
   return (
-    <div ref={ref} className="py-8 md:py-12">
-      <div className="container-main">
-        <div className="cs-header">
+    <div className="min-h-screen bg-[var(--bg-primary)] py-8 md:py-12">
+      <div className="container-main max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="mb-8"
+        >
           <Link
             href="/placement"
-            className="inline-flex items-center gap-1.5 text-xs font-medium text-[var(--text-subtle)] hover:text-[var(--text-primary)] transition-colors mb-6"
+            className="inline-flex items-center gap-1.5 text-xs font-mono font-medium text-[var(--text-subtle)] hover:text-[var(--text-primary)] transition-colors mb-5"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
-            Placement Hub
+            <span>Placement Hub</span>
           </Link>
 
-          <h1 className="text-h1 font-bold text-[var(--text-primary)] tracking-tight">
-            CS <span className="font-serif italic font-normal">Fundamentals</span>
+          <h1 className="text-3xl sm:text-5xl font-bold text-[var(--text-primary)] tracking-tight">
+            CS <span className="font-serif italic font-normal text-[var(--accent-dark)]">Fundamentals</span>
           </h1>
-          <p className="mt-3 text-sm text-[var(--text-secondary)] max-w-2xl leading-relaxed">
-            Every concept you need for theory rounds — Operating Systems, DBMS, Computer Networks, and OOPs.
-            Mark concepts as done and track your preparation progress.
+          <p className="mt-3 text-xs sm:text-sm text-[var(--text-secondary)] max-w-2xl leading-relaxed">
+            Every concept you need for theory and core rounds — Operating Systems, DBMS & SQL, Computer Networks, and OOPs.
+            Master key definitions, architectural trade-offs, and common interview questions.
           </p>
-        </div>
+        </motion.div>
 
-        <div className="cs-content mt-8">
+        {/* CS Fundamentals Interactive View */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.15 }}
+        >
           <CsFundamentalsView />
-        </div>
+        </motion.div>
       </div>
     </div>
   );

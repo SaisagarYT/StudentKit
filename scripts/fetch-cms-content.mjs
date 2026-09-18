@@ -23,7 +23,7 @@ try {
     throw new Error('No credentials configured');
   }
   db = getFirestore();
-} catch (e) {
+} catch {
   console.log('Firebase Admin not configured — generating empty manifests');
   console.log('Set FIREBASE_SERVICE_ACCOUNT env var for full build-time SEO.');
   generateEmptyManifests();

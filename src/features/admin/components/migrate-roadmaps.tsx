@@ -122,7 +122,7 @@ export function MigrateRoadmaps() {
         <button
           onClick={handleMigrate}
           disabled={running}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-sm text-sm font-medium bg-[var(--accent-dark)] text-[var(--accent-primary)] hover:opacity-90 disabled:opacity-50 transition-opacity"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-sm text-sm font-medium bg-[var(--accent-dark)] text-[var(--text-inverse)] hover:opacity-90 disabled:opacity-50 transition-opacity"
         >
           {running ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
           {running ? 'Migrating...' : 'Run Migration'}
@@ -136,6 +136,9 @@ export function MigrateRoadmaps() {
               {r.status === 'ok' && <CheckCircle2 className="w-3.5 h-3.5 text-green-500 shrink-0" />}
               {r.status === 'skip' && <CheckCircle2 className="w-3.5 h-3.5 text-yellow-500 shrink-0" />}
               {r.status === 'fail' && <XCircle className="w-3.5 h-3.5 text-red-500 shrink-0" />}
+              {r.status === 'ok' && <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />}
+              {r.status === 'skip' && <CheckCircle2 className="w-3.5 h-3.5 text-amber-500 shrink-0" />}
+              {r.status === 'fail' && <XCircle className="w-3.5 h-3.5 text-rose-500 shrink-0" />}
               <span className="font-medium text-[var(--text-primary)]">{r.slug}</span>
               <span className="text-[var(--text-subtle)]">— {r.msg}</span>
             </div>

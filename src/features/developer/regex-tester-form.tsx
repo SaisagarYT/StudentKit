@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useCallback, useRef, Fragment } from 'react';
+import { useState, useEffect, useMemo, useCallback, useRef, Fragment } from 'react';
 import { trackToolUsage } from '@/lib/analytics';
 import { Copy, Check, ChevronDown, ChevronRight, Replace } from 'lucide-react';
 
@@ -121,10 +121,12 @@ export function RegexTesterForm() {
     return results;
   }, [regex, testString]);
 
-  if (matches.length > 0 && !trackedRef.current) {
-    trackedRef.current = true;
-    trackToolUsage('regex-tester');
-  }
+  useEffect(() => {
+    if (matches.length > 0 && !trackedRef.current) {
+      trackedRef.current = true;
+      trackToolUsage('regex-tester');
+    }
+  }, [matches.length]);
 
   const highlightedParts = useMemo(() => {
     if (!matches.length || !testString) return null;

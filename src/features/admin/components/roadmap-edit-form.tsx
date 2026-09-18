@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/lib/firebase/auth';
-import { roadmapService, projectRepository, type ProjectListItem } from '@/lib/cms';
+import { roadmapService, projectRepository, type ProjectListItem, type ContentStatus, type Difficulty } from '@/lib/cms';
 import { ROADMAP_CATEGORIES, DIFFICULTIES, STAGE_COLORS } from '@/lib/cms/schemas';
 import {
   ArrowLeft,
@@ -17,6 +17,13 @@ import {
   X,
   PlusCircle,
 } from 'lucide-react';
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from '@/components/ui/select';
 
 type Section = {
   id: string;
@@ -216,7 +223,7 @@ export function RoadmapEditForm() {
             <p className="text-sm text-[var(--text-secondary)]">{form.title || 'Untitled'}</p>
           </div>
         </div>
-        <button onClick={handleSave} disabled={saving} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-sm text-sm font-medium bg-[var(--accent-dark)] text-[var(--accent-primary)] hover:opacity-90 disabled:opacity-50 transition-opacity">
+        <button onClick={handleSave} disabled={saving} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-sm text-sm font-medium bg-[var(--accent-dark)] text-[var(--text-inverse)] hover:opacity-90 disabled:opacity-50 transition-opacity">
           {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
           {saving ? 'Saving...' : 'Save Changes'}
         </button>
@@ -224,6 +231,8 @@ export function RoadmapEditForm() {
 
       {error && <div className="mb-6 p-3 rounded-sm bg-red-50 border border-red-200 text-sm text-red-600">{error}</div>}
       {success && <div className="mb-6 p-3 rounded-sm bg-green-50 border border-green-200 text-sm text-green-600">{success}</div>}
+      {error && <div className="mb-6 p-3 rounded-sm bg-rose-500/10 border border-rose-500/20 text-sm text-rose-600 dark:text-rose-400">{error}</div>}
+      {success && <div className="mb-6 p-3 rounded-sm bg-emerald-500/10 border border-emerald-500/20 text-sm text-emerald-600 dark:text-emerald-400">{success}</div>}
 
       {/* Basic Info */}
       <div className="rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] p-6 mb-6">
@@ -237,14 +246,28 @@ export function RoadmapEditForm() {
           <Field label="Description"><textarea value={form.description} onChange={(e) => update({ description: e.target.value })} rows={4} className="input-field resize-y" /></Field>
           <div className="grid grid-cols-4 gap-4">
             <Field label="Category">
-              <select value={form.category} onChange={(e) => update({ category: e.target.value })} className="input-field">
-                {ROADMAP_CATEGORIES.map((c) => <option key={c.value} value={c.value}>{c.label}</option>)}
-              </select>
+              <Select value={form.category} onValueChange={(val) => update({ category: val })}>
+                <SelectTrigger className="h-10 text-sm">
+                  <SelectValue placeholder="Select Category" />
+                </SelectTrigger>
+                <SelectContent>
+                  {ROADMAP_CATEGORIES.map((c) => (
+                    <SelectItem key={c.value} value={c.value}>{c.label}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </Field>
             <Field label="Difficulty">
-              <select value={form.difficulty} onChange={(e) => update({ difficulty: e.target.value })} className="input-field">
-                {DIFFICULTIES.map((d) => <option key={d.value} value={d.value}>{d.label}</option>)}
-              </select>
+              <Select value={form.difficulty} onValueChange={(val) => update({ difficulty: val as Difficulty })}>
+                <SelectTrigger className="h-10 text-sm">
+                  <SelectValue placeholder="Select Difficulty" />
+                </SelectTrigger>
+                <SelectContent>
+                  {DIFFICULTIES.map((d) => (
+                    <SelectItem key={d.value} value={d.value}>{d.label}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </Field>
             <Field label="Duration"><input value={form.estimatedDuration} onChange={(e) => update({ estimatedDuration: e.target.value })} className="input-field" /></Field>
             <Field label="Accent">
@@ -271,7 +294,7 @@ export function RoadmapEditForm() {
 
       {/* Bottom save */}
       <div className="mt-6 flex justify-end">
-        <button onClick={handleSave} disabled={saving} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-sm text-sm font-medium bg-[var(--accent-dark)] text-[var(--accent-primary)] hover:opacity-90 disabled:opacity-50 transition-opacity">
+        <button onClick={handleSave} disabled={saving} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-sm text-sm font-medium bg-[var(--accent-dark)] text-[var(--text-inverse)] hover:opacity-90 disabled:opacity-50 transition-opacity">
           {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
           {saving ? 'Saving...' : 'Save Changes'}
         </button>
@@ -280,7 +303,23 @@ export function RoadmapEditForm() {
   );
 }
 
-function SectionsEditor({ form, addSection, updateSection, removeSection, addTopic, updateTopic, removeTopic }: any) {
+function SectionsEditor({
+  form,
+  addSection,
+  updateSection,
+  removeSection,
+  addTopic,
+  updateTopic,
+  removeTopic,
+}: {
+  form: { sections: Section[] };
+  addSection: () => void;
+  updateSection: (sIdx: number, fields: Partial<Section>) => void;
+  removeSection: (sIdx: number) => void;
+  addTopic: (sIdx: number) => void;
+  updateTopic: (sIdx: number, tIdx: number, fields: Partial<Topic>) => void;
+  removeTopic: (sIdx: number, tIdx: number) => void;
+}) {
   const { user } = useAuth();
   const [allProjects, setAllProjects] = useState<ProjectListItem[]>([]);
   const [projectsLoaded, setProjectsLoaded] = useState(false);
@@ -290,7 +329,7 @@ function SectionsEditor({ form, addSection, updateSection, removeSection, addTop
   const [createError, setCreateError] = useState('');
 
   useEffect(() => {
-    projectRepository.list({ status: 'published' as any }).then((p) => {
+    projectRepository.list({ status: 'published' as ContentStatus }).then((p) => {
       setAllProjects(p);
       setProjectsLoaded(true);
     }).catch(() => setProjectsLoaded(true));
@@ -329,7 +368,7 @@ function SectionsEditor({ form, addSection, updateSection, removeSection, addTop
         relatedRoadmapIds: [], prerequisiteRoadmapIds: [], relatedProjectIds: [],
       }, user.uid);
       await projectRepository.publish(id, user.uid);
-      const newEntry: ProjectListItem = { id, slug: newProject.slug, title: newProject.title, status: 'published', category: 'web', difficulty: newProject.difficulty as any, featured: false, technologies: newProject.technologies.split(',').map((t: string) => t.trim()).filter(Boolean), updatedAt: new Date(), publishedAt: new Date() };
+      const newEntry: ProjectListItem = { id, slug: newProject.slug, title: newProject.title, status: 'published', category: 'web', difficulty: newProject.difficulty as Difficulty, featured: false, technologies: newProject.technologies.split(',').map((t: string) => t.trim()).filter(Boolean), updatedAt: new Date(), publishedAt: new Date() };
       setAllProjects(prev => [newEntry, ...prev]);
       addProjectToSection(creatingForSection, id);
       setCreatingForSection(null);
@@ -344,7 +383,7 @@ function SectionsEditor({ form, addSection, updateSection, removeSection, addTop
     <div className="rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] p-6">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-sm font-semibold text-[var(--text-primary)]">Sections ({form.sections.length})</h2>
-        <button onClick={addSection} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-xs font-medium bg-[var(--accent-dark)] text-[var(--accent-primary)]">
+        <button onClick={addSection} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-xs font-medium bg-[var(--accent-dark)] text-[var(--text-inverse)] hover:opacity-90 transition-opacity">
           <Plus className="w-3.5 h-3.5" /> Add Section
         </button>
       </div>
@@ -357,16 +396,28 @@ function SectionsEditor({ form, addSection, updateSection, removeSection, addTop
                 <GripVertical className="w-4 h-4 text-[var(--text-subtle)]" />
                 <span className="text-xs font-semibold text-[var(--text-subtle)] uppercase">Section {sIdx + 1}</span>
               </div>
-              <button onClick={() => removeSection(sIdx)} className="p-1.5 rounded-sm hover:bg-red-50 text-[var(--text-subtle)] hover:text-red-500"><Trash2 className="w-4 h-4" /></button>
+              <button onClick={() => removeSection(sIdx)} className="p-1.5 rounded-sm hover:bg-rose-500/10 text-[var(--text-subtle)] hover:text-rose-600 dark:hover:text-rose-400 transition-colors"><Trash2 className="w-4 h-4" /></button>
             </div>
             <div className="grid grid-cols-3 gap-3">
-              <input value={section.title} onChange={(e: any) => updateSection(sIdx, { title: e.target.value })} placeholder="Title" className="input-field col-span-1" />
-              <select value={section.color} onChange={(e: any) => updateSection(sIdx, { color: e.target.value })} className="input-field">
-                {STAGE_COLORS.map((c) => <option key={c.value} value={c.value}>{c.label}</option>)}
-              </select>
-              <input value={section.timeEstimate} onChange={(e: any) => updateSection(sIdx, { timeEstimate: e.target.value })} placeholder="e.g. 2 weeks" className="input-field" />
+              <input value={section.title} onChange={(e) => updateSection(sIdx, { title: e.target.value })} placeholder="Title" className="input-field col-span-1" />
+              <Select value={section.color} onValueChange={(val) => updateSection(sIdx, { color: val })}>
+                <SelectTrigger className="h-10 text-sm">
+                  <SelectValue placeholder="Color" />
+                </SelectTrigger>
+                <SelectContent>
+                  {STAGE_COLORS.map((c) => (
+                    <SelectItem key={c.value} value={c.value}>
+                      <div className="flex items-center gap-2">
+                        <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: c.value }} />
+                        <span>{c.label}</span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <input value={section.timeEstimate} onChange={(e) => updateSection(sIdx, { timeEstimate: e.target.value })} placeholder="e.g. 2 weeks" className="input-field" />
             </div>
-            <textarea value={section.description} onChange={(e: any) => updateSection(sIdx, { description: e.target.value })} placeholder="Description" rows={2} className="input-field resize-none" />
+            <textarea value={section.description} onChange={(e) => updateSection(sIdx, { description: e.target.value })} placeholder="Description" rows={2} className="input-field resize-none" />
 
             {/* Linked Projects */}
             <div className="space-y-2">
@@ -377,9 +428,9 @@ function SectionsEditor({ form, addSection, updateSection, removeSection, addTop
                 </div>
                 <button
                   onClick={() => { setCreatingForSection(sIdx); setNewProject({ title: '', slug: '', shortDescription: '', difficulty: 'beginner', technologies: '', estimatedDuration: '' }); setCreateError(''); }}
-                  className="inline-flex items-center gap-1 px-2 py-1 rounded-sm text-[10px] font-medium text-[var(--accent-dark)] hover:bg-[var(--bg-subtle)] border border-[var(--border-soft)] transition-colors"
+                  className="inline-flex items-center gap-1 px-2 py-1 rounded-sm text-[10px] font-medium text-[var(--text-primary)] hover:bg-[var(--bg-subtle)] border border-[var(--border-soft)] transition-colors"
                 >
-                  <PlusCircle className="w-3 h-3" /> Create New
+                  <PlusCircle className="w-3 h-3 text-[var(--accent-dark)]" /> Create New
                 </button>
               </div>
               {section.projectIds.length > 0 && (
@@ -387,21 +438,37 @@ function SectionsEditor({ form, addSection, updateSection, removeSection, addTop
                   {section.projectIds.map((pid: string) => {
                     const proj = allProjects.find((p) => p.id === pid);
                     return (
-                      <span key={pid} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-sm text-xs font-medium bg-[var(--accent-primary)]/15 text-[var(--accent-dark)]">
+                      <span key={pid} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-sm text-xs font-medium bg-[var(--bg-subtle)] border border-[var(--border-soft)] text-[var(--text-primary)]">
                         {proj?.title || pid}
-                        <button onClick={() => removeProjectFromSection(sIdx, pid)} className="hover:text-red-500 transition-colors"><X className="w-3 h-3" /></button>
+                        <button onClick={() => removeProjectFromSection(sIdx, pid)} className="text-[var(--text-subtle)] hover:text-rose-600 dark:hover:text-rose-400 transition-colors"><X className="w-3 h-3" /></button>
                       </span>
                     );
                   })}
                 </div>
               )}
               {projectsLoaded && allProjects.length > 0 ? (
-                <select value="" onChange={(e) => { if (e.target.value) addProjectToSection(sIdx, e.target.value); }} className="input-field text-xs">
-                  <option value="">+ Link an existing project...</option>
-                  {allProjects.filter((p) => !section.projectIds.includes(p.id)).map((p) => (
-                    <option key={p.id} value={p.id}>{p.title} ({p.difficulty})</option>
-                  ))}
-                </select>
+                <Select
+                  value=""
+                  onValueChange={(val) => {
+                    if (val) addProjectToSection(sIdx, val);
+                  }}
+                >
+                  <SelectTrigger className="h-9 text-xs">
+                    <SelectValue placeholder="+ Link an existing project..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {allProjects
+                      .filter((p) => !section.projectIds.includes(p.id))
+                      .map((p) => (
+                        <SelectItem key={p.id} value={p.id}>
+                          <div className="flex items-center justify-between gap-3 w-full">
+                            <span className="font-medium text-[var(--text-primary)]">{p.title}</span>
+                            <span className="text-[10px] text-[var(--text-subtle)] uppercase">({p.difficulty})</span>
+                          </div>
+                        </SelectItem>
+                      ))}
+                  </SelectContent>
+                </Select>
               ) : projectsLoaded ? (
                 <p className="text-[10px] text-[var(--text-subtle)]">No published projects yet. Use &quot;Create New&quot; to add one.</p>
               ) : null}
@@ -410,22 +477,29 @@ function SectionsEditor({ form, addSection, updateSection, removeSection, addTop
                 <div className="mt-3 p-4 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-subtle)] space-y-3">
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-semibold text-[var(--text-primary)]">Quick Create Project</span>
-                    <button onClick={() => setCreatingForSection(null)} className="text-[var(--text-subtle)] hover:text-red-500"><X className="w-3.5 h-3.5" /></button>
+                    <button onClick={() => setCreatingForSection(null)} className="text-[var(--text-subtle)] hover:text-rose-600 dark:hover:text-rose-400 transition-colors"><X className="w-3.5 h-3.5" /></button>
                   </div>
-                  {createError && <p className="text-[10px] text-red-500">{createError}</p>}
+                  {createError && <p className="text-[10px] text-rose-600 dark:text-rose-400">{createError}</p>}
                   <div className="grid grid-cols-2 gap-2">
                     <input value={newProject.title} onChange={(e) => setNewProject(p => ({ ...p, title: e.target.value, slug: e.target.value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') }))} placeholder="Project title *" className="input-field" />
                     <input value={newProject.slug} onChange={(e) => setNewProject(p => ({ ...p, slug: e.target.value }))} placeholder="slug *" className="input-field font-mono text-xs" />
                   </div>
                   <textarea value={newProject.shortDescription} onChange={(e) => setNewProject(p => ({ ...p, shortDescription: e.target.value }))} placeholder="Short description" rows={2} className="input-field resize-none" />
                   <div className="grid grid-cols-3 gap-2">
-                    <select value={newProject.difficulty} onChange={(e) => setNewProject(p => ({ ...p, difficulty: e.target.value }))} className="input-field text-xs">
-                      {DIFFICULTIES.map((d) => <option key={d.value} value={d.value}>{d.label}</option>)}
-                    </select>
+                    <Select value={newProject.difficulty} onValueChange={(val) => setNewProject(p => ({ ...p, difficulty: val }))}>
+                      <SelectTrigger className="h-8 text-xs">
+                        <SelectValue placeholder="Difficulty" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {DIFFICULTIES.map((d) => (
+                          <SelectItem key={d.value} value={d.value}>{d.label}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                     <input value={newProject.technologies} onChange={(e) => setNewProject(p => ({ ...p, technologies: e.target.value }))} placeholder="Tech (comma-sep)" className="input-field text-xs" />
                     <input value={newProject.estimatedDuration} onChange={(e) => setNewProject(p => ({ ...p, estimatedDuration: e.target.value }))} placeholder="e.g. 1-2 weeks" className="input-field text-xs" />
                   </div>
-                  <button onClick={handleCreateProject} disabled={createSaving} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-xs font-medium bg-[var(--accent-dark)] text-[var(--accent-primary)] hover:opacity-90 disabled:opacity-50 transition-opacity">
+                  <button onClick={handleCreateProject} disabled={createSaving} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-xs font-medium bg-[var(--accent-dark)] text-[var(--text-inverse)] hover:opacity-90 disabled:opacity-50 transition-opacity">
                     {createSaving ? <Loader2 className="w-3 h-3 animate-spin" /> : <Check className="w-3 h-3" />}
                     {createSaving ? 'Creating...' : 'Create & Link'}
                   </button>
@@ -439,17 +513,17 @@ function SectionsEditor({ form, addSection, updateSection, removeSection, addTop
                 <div key={topic.id} className="bg-[var(--bg-subtle)] rounded-sm p-3 space-y-2">
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-medium text-[var(--text-subtle)]">Topic {tIdx + 1}</span>
-                    <button onClick={() => removeTopic(sIdx, tIdx)} className="text-[var(--text-subtle)] hover:text-red-500"><Trash2 className="w-3.5 h-3.5" /></button>
+                    <button onClick={() => removeTopic(sIdx, tIdx)} className="text-[var(--text-subtle)] hover:text-rose-600 dark:hover:text-rose-400 transition-colors"><Trash2 className="w-3.5 h-3.5" /></button>
                   </div>
                   <div className="grid grid-cols-2 gap-2">
-                    <input value={topic.title} onChange={(e: any) => updateTopic(sIdx, tIdx, { title: e.target.value })} placeholder="Title" className="input-field" />
-                    <input value={topic.timeEstimate} onChange={(e: any) => updateTopic(sIdx, tIdx, { timeEstimate: e.target.value })} placeholder="Time" className="input-field" />
+                    <input value={topic.title} onChange={(e) => updateTopic(sIdx, tIdx, { title: e.target.value })} placeholder="Title" className="input-field" />
+                    <input value={topic.timeEstimate} onChange={(e) => updateTopic(sIdx, tIdx, { timeEstimate: e.target.value })} placeholder="Time" className="input-field" />
                   </div>
-                  <textarea value={topic.description} onChange={(e: any) => updateTopic(sIdx, tIdx, { description: e.target.value })} placeholder="Description" rows={2} className="input-field resize-none" />
-                  <textarea value={topic.whatToLearn.join('\n')} onChange={(e: any) => updateTopic(sIdx, tIdx, { whatToLearn: e.target.value.split('\n') })} placeholder="What to learn (one per line)" rows={3} className="input-field resize-none font-mono text-xs" />
+                  <textarea value={topic.description} onChange={(e) => updateTopic(sIdx, tIdx, { description: e.target.value })} placeholder="Description" rows={2} className="input-field resize-none" />
+                  <textarea value={topic.whatToLearn.join('\n')} onChange={(e) => updateTopic(sIdx, tIdx, { whatToLearn: e.target.value.split('\n') })} placeholder="What to learn (one per line)" rows={3} className="input-field resize-none font-mono text-xs" />
                   <div className="grid grid-cols-2 gap-2">
-                    <input value={topic.project.title} onChange={(e: any) => updateTopic(sIdx, tIdx, { project: { ...topic.project, title: e.target.value } })} placeholder="Mini-project title" className="input-field" />
-                    <input value={topic.project.description} onChange={(e: any) => updateTopic(sIdx, tIdx, { project: { ...topic.project, description: e.target.value } })} placeholder="Mini-project desc" className="input-field" />
+                    <input value={topic.project.title} onChange={(e) => updateTopic(sIdx, tIdx, { project: { ...topic.project, title: e.target.value } })} placeholder="Mini-project title" className="input-field" />
+                    <input value={topic.project.description} onChange={(e) => updateTopic(sIdx, tIdx, { project: { ...topic.project, description: e.target.value } })} placeholder="Mini-project desc" className="input-field" />
                   </div>
                 </div>
               ))}

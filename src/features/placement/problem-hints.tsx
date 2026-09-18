@@ -40,8 +40,8 @@ export function ProblemHints({ problem, categoryPattern }: ProblemHintsProps) {
       {hints.length > 0 && (
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <Lightbulb className="w-3.5 h-3.5 text-yellow-500" />
-            <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-subtle)]">
+            <Lightbulb className="w-3.5 h-3.5 text-[var(--accent-dark)]" />
+            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[var(--text-subtle)]">
               Hints ({revealedHints}/{hints.length})
             </span>
           </div>
@@ -57,7 +57,7 @@ export function ProblemHints({ problem, categoryPattern }: ProblemHintsProps) {
                 ) : i === revealedHints ? (
                   <button
                     onClick={() => setRevealedHints(i + 1)}
-                    className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-sm text-[11px] font-medium text-[var(--accent-dark)] hover:bg-[var(--accent-primary)]/10 transition-colors"
+                    className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-sm text-[11px] font-medium text-[var(--accent-dark)] hover:bg-[var(--bg-surface)] border border-[var(--border-soft)] transition-colors cursor-pointer"
                   >
                     <Eye className="w-3 h-3" />
                     Reveal Hint {i + 1}

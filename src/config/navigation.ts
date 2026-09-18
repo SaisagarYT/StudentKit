@@ -49,7 +49,6 @@ export const mainNavItems: NavGroup[] = [
 ];
 
 export const secondaryNavItems: NavItem[] = [
-  { label: 'Tools', href: '/tools', description: 'Calculators & utilities', icon: 'Wrench' },
   { label: 'Leaderboard', href: '/leaderboard', description: 'Top learners ranked', icon: 'Trophy' },
 ];
 
@@ -76,15 +75,6 @@ export const footerNavSections = [
       { label: 'CS Fundamentals', href: '/placement/cs-fundamentals' },
       { label: 'Interview Prep', href: '/placement/interview' },
       { label: 'Leaderboard', href: '/leaderboard' },
-    ],
-  },
-  {
-    title: 'Tools',
-    links: [
-      { label: 'College Tools', href: '/categories/college' },
-      { label: 'Exam Tools', href: '/categories/exams' },
-      { label: 'Career Tools', href: '/categories/career' },
-      { label: 'Developer Tools', href: '/categories/developer' },
     ],
   },
   {

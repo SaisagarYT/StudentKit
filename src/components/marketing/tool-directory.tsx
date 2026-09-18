@@ -1,17 +1,12 @@
 'use client';
 
-import { useRef, useEffect, useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { Search, ArrowUpRight } from 'lucide-react';
 import * as Icons from 'lucide-react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { tools } from '@/config/tools';
 import { categories } from '@/config/categories';
-import { Badge } from '@/components/ui/badge';
 import { type ToolCategory } from '@/types/tool';
-
-gsap.registerPlugin(ScrollTrigger);
 
 function getIcon(name: string) {
   const Icon = Icons[name as keyof typeof Icons] as React.ElementType;
@@ -21,8 +16,6 @@ function getIcon(name: string) {
 type FilterCategory = 'all' | ToolCategory;
 
 export function ToolDirectory() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const headingRef = useRef<HTMLDivElement>(null);
   const [search, setSearch] = useState('');
   const [activeCategory, setActiveCategory] = useState<FilterCategory>('all');
 
@@ -46,39 +39,11 @@ export function ToolDirectory() {
     return filtered;
   }, [search, activeCategory]);
 
-  useEffect(() => {
-    const prefersReducedMotion = window.matchMedia(
-      '(prefers-reduced-motion: reduce)'
-    ).matches;
-
-    if (prefersReducedMotion) return;
-
-    const ctx = gsap.context(() => {
-      gsap.set(headingRef.current, { opacity: 0, y: 30 });
-
-      ScrollTrigger.create({
-        trigger: sectionRef.current,
-        start: 'top 80%',
-        once: true,
-        onEnter: () => {
-          gsap.to(headingRef.current, {
-            opacity: 1,
-            y: 0,
-            duration: 0.8,
-            ease: 'power3.out',
-          });
-        },
-      });
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
-
   return (
-    <section ref={sectionRef} className="section-spacing">
+    <section className="section-spacing">
       <div className="container-main">
-        <div ref={headingRef}>
-          <h2 className="text-h2 font-bold tracking-tight">
+        <div>
+          <h2 className="text-h2 font-bold tracking-tight text-[var(--text-primary)]">
             All tools.
           </h2>
           <p className="mt-4 text-body-lg text-[var(--text-secondary)] max-w-lg">
@@ -95,7 +60,7 @@ export function ToolDirectory() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search tools..."
-              className="w-full h-11 pl-10 pr-4 text-sm border border-[var(--border-default)] rounded-sm bg-[var(--bg-surface)] text-[var(--text-primary)] placeholder:text-[var(--text-subtle)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-primary)] focus:border-transparent transition-all"
+              className="w-full h-11 pl-10 pr-4 text-sm border border-[var(--border-default)] rounded-sm bg-[var(--bg-surface)] text-[var(--text-primary)] placeholder:text-[var(--text-subtle)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-primary)]/40 focus:border-transparent transition-all"
             />
           </div>
 
@@ -122,9 +87,9 @@ export function ToolDirectory() {
             <Link
               key={tool.slug}
               href={`/tools/${tool.slug}`}
-              className="group flex items-center gap-4 p-4 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)] hover:border-[var(--border-default)] hover:bg-[var(--bg-muted)] transition-all"
+              className="group flex items-center gap-4 p-4 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)] hover:border-[var(--border-default)] hover:bg-[var(--bg-subtle)] transition-all"
             >
-              <div className="flex items-center justify-center w-9 h-9 rounded-sm bg-[var(--bg-subtle)] text-[var(--text-secondary)] shrink-0">
+              <div className="flex items-center justify-center w-9 h-9 rounded-sm bg-[var(--bg-subtle)] border border-[var(--border-soft)] text-[var(--text-secondary)] group-hover:bg-[var(--accent-dark)] group-hover:text-[var(--text-inverse)] transition-colors shrink-0">
                 {getIcon(tool.icon)}
               </div>
               <div className="flex-1 min-w-0">
@@ -174,10 +139,10 @@ function CategoryPill({
   return (
     <button
       onClick={onClick}
-      className={`px-3.5 py-1.5 text-sm font-medium rounded-sm transition-all ${
+      className={`px-3.5 py-1.5 text-xs font-semibold rounded-sm transition-all cursor-pointer ${
         isActive
-          ? 'bg-[var(--accent-dark)] text-[var(--text-inverse)]'
-          : 'bg-[var(--bg-subtle)] text-[var(--text-secondary)] hover:bg-[var(--border-soft)] hover:text-[var(--text-primary)]'
+          ? 'bg-[var(--accent-dark)] text-[var(--text-inverse)] shadow-xs'
+          : 'bg-[var(--bg-subtle)] border border-[var(--border-soft)] text-[var(--text-secondary)] hover:border-[var(--border-strong)] hover:text-[var(--text-primary)]'
       }`}
     >
       {label}

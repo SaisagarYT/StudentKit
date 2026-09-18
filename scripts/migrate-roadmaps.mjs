@@ -61,8 +61,6 @@ const ROADMAPS = [
 // For maximum compatibility, we'll use a different approach:
 // Read the source, strip TypeScript syntax, and eval.
 
-import { createRequire } from 'module';
-
 async function loadRoadmap(slug) {
   const filePath = resolve(root, `src/config/roadmaps/${slug}.ts`);
   let source = readFileSync(filePath, 'utf-8');

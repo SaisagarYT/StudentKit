@@ -33,10 +33,33 @@ function FooterWrapper() {
 
 export function LayoutShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+
+  useEffect(() => {
+    const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
+      const reason = event.reason;
+      if (
+        reason &&
+        (reason.name === 'AbortError' ||
+          reason.code === 20 ||
+          (typeof reason.message === 'string' &&
+            (reason.message.includes('aborted') ||
+              reason.message.includes('The user aborted a request'))))
+      ) {
+        event.preventDefault();
+        event.stopImmediatePropagation?.();
+      }
+    };
+
+    window.addEventListener('unhandledrejection', handleUnhandledRejection, { capture: true });
+    return () => {
+      window.removeEventListener('unhandledrejection', handleUnhandledRejection, { capture: true });
+    };
+  }, []);
+
   const isAdmin = pathname.startsWith('/admin');
 
   if (isAdmin) {
-    return <>{children}</>;
+    return <ThemeProvider>{children}</ThemeProvider>;
   }
 
   return (

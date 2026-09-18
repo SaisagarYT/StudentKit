@@ -1,10 +1,11 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
+import Image from 'next/image';
 import {
-  Flame, Trophy, Calendar, TrendingUp, Code, BookOpen,
+  Flame, Trophy, Calendar,
   Target, Award, Zap, Star, CheckCircle2, BarChart3,
-  Crown, Shield, Rocket, LogOut, Cloud, Share2
+  Crown, Shield, Rocket, LogOut, Cloud, Share2, Code
 } from 'lucide-react';
 import { getStreak, getProgressSummary, type StreakData, type ProgressSummary } from '@/lib/user-progress';
 import { getXpState, type XpState } from '@/lib/xp';
@@ -59,7 +60,7 @@ function AnimatedRing({ value, max, size = 100, strokeWidth = 8, label, sublabel
           />
           <circle
             cx={size / 2} cy={size / 2} r={radius}
-            fill="none" stroke="var(--accent-primary)" strokeWidth={strokeWidth}
+            fill="none" stroke="var(--accent-dark)" strokeWidth={strokeWidth}
             strokeDasharray={circumference} strokeDashoffset={offset}
             strokeLinecap="round"
             className="transition-all duration-1000 ease-out"
@@ -105,8 +106,7 @@ function HeatmapGrid({ streak }: { streak: StreakData }) {
                 key={d}
                 className="w-[10px] h-[10px] rounded-sm"
                 style={{
-                  background: cell.level === 3 ? 'var(--accent-primary)' :
-                    cell.level === 2 ? 'var(--accent-primary)' :
+                  background: cell.level >= 2 ? 'var(--accent-dark)' :
                     cell.level === 1 ? 'var(--border-default)' :
                     'var(--bg-subtle)'
                 }}
@@ -129,9 +129,10 @@ function BadgeCard({ badge, onShare }: { badge: Badge; onShare?: (badge: Badge) 
         : 'border-transparent bg-[var(--bg-subtle)] opacity-50'
     }`}>
       <div className={`w-9 h-9 rounded-sm flex items-center justify-center shrink-0 ${
-        badge.earned ? 'bg-[var(--accent-primary)]' : 'bg-[var(--border-soft)]'
+        badge.earned ? 'bg-[var(--accent-dark)]' : 'bg-[var(--bg-subtle)] border border-[var(--border-soft)]'
       }`}>
-        <Icon className="w-4 h-4" style={{ color: badge.earned ? 'var(--accent-dark)' : 'var(--text-subtle)' }} />
+        <Icon className="w-4 h-4" style={{ color: badge.earned ? 'var(--accent-primary)' : 'var(--text-subtle)' }} />
+        <Icon className="w-4 h-4" style={{ color: badge.earned ? 'var(--text-inverse)' : 'var(--text-subtle)' }} />
       </div>
       <div className="min-w-0 flex-1">
         <p className={`text-xs font-semibold ${badge.earned ? 'text-[var(--text-primary)]' : 'text-[var(--text-subtle)]'}`}>
@@ -149,13 +150,13 @@ function BadgeCard({ badge, onShare }: { badge: Badge; onShare?: (badge: Badge) 
         </button>
       )}
       {badge.earned && !onShare && (
-        <CheckCircle2 className="w-4 h-4 shrink-0 text-[var(--accent-dark)]" />
+        <CheckCircle2 className="w-4 h-4 shrink-0 text-[var(--color-success)]" />
       )}
     </div>
   );
 }
 
-function CategoryBar({ cat, index }: { cat: DsaCategoryStats; index: number }) {
+function CategoryBar({ cat }: { cat: DsaCategoryStats }) {
   const pct = cat.total > 0 ? (cat.solved / cat.total) * 100 : 0;
   return (
     <div className="flex items-center gap-3">
@@ -216,19 +217,20 @@ export function ProfileDashboard() {
   }, [dsaProgress]);
 
   const badges: Badge[] = useMemo(() => [
-    { id: 'first-solve', title: 'First Blood', description: 'Solve your first problem', icon: Zap, earned: dsaSolved >= 1, stat: String(dsaSolved), statLabel: 'problems solved', color: '#C7FF3D' },
-    { id: 'ten-solved', title: 'Getting Serious', description: 'Solve 10 problems', icon: Code, earned: dsaSolved >= 10, stat: String(dsaSolved), statLabel: 'problems solved', color: '#C7FF3D' },
-    { id: 'fifty-solved', title: 'Half Century', description: 'Solve 50 problems', icon: Target, earned: dsaSolved >= 50, stat: String(dsaSolved), statLabel: 'problems solved', color: '#FFD700' },
-    { id: 'hundred-solved', title: 'Centurion', description: 'Solve 100 problems', icon: Crown, earned: dsaSolved >= 100, stat: String(dsaSolved), statLabel: 'problems solved', color: '#FFD700' },
-    { id: 'streak-3', title: 'Consistent', description: '3-day streak', icon: Flame, earned: streak.longest >= 3, stat: String(streak.longest), statLabel: 'day streak', color: '#FF6B35' },
-    { id: 'streak-7', title: 'Week Warrior', description: '7-day streak', icon: Flame, earned: streak.longest >= 7, stat: String(streak.longest), statLabel: 'day streak', color: '#FF6B35' },
-    { id: 'streak-30', title: 'Monthly Master', description: '30-day streak', icon: Star, earned: streak.longest >= 30, stat: String(streak.longest), statLabel: 'day streak', color: '#FF4500' },
-    { id: 'roadmap-done', title: 'Pathfinder', description: 'Complete a roadmap', icon: Rocket, earned: progress.roadmapsCompleted >= 1, stat: String(progress.roadmapsCompleted), statLabel: 'roadmap completed', color: '#10B981' },
-    { id: 'cs-10', title: 'CS Scholar', description: 'Complete 10 CS topics', icon: Shield, earned: csSolved >= 10, stat: String(csSolved), statLabel: 'CS topics done', color: '#06B6D4' },
-    { id: 'all-rounder', title: 'All-Rounder', description: 'Solve in 5+ categories', icon: Award, earned: categoryStats.filter(c => c.solved > 0).length >= 5, stat: String(categoryStats.filter(c => c.solved > 0).length), statLabel: 'categories covered', color: '#8B5CF6' },
+    { id: 'first-solve', title: 'First Blood', description: 'Solve your first problem', icon: Zap, earned: dsaSolved >= 1, stat: String(dsaSolved), statLabel: 'problems solved', color: 'var(--accent-primary)' },
+    { id: 'ten-solved', title: 'Getting Serious', description: 'Solve 10 problems', icon: Code, earned: dsaSolved >= 10, stat: String(dsaSolved), statLabel: 'problems solved', color: 'var(--accent-primary)' },
+    { id: 'fifty-solved', title: 'Half Century', description: 'Solve 50 problems', icon: Target, earned: dsaSolved >= 50, stat: String(dsaSolved), statLabel: 'problems solved', color: 'var(--color-warning)' },
+    { id: 'hundred-solved', title: 'Centurion', description: 'Solve 100 problems', icon: Crown, earned: dsaSolved >= 100, stat: String(dsaSolved), statLabel: 'problems solved', color: 'var(--color-warning)' },
+    { id: 'streak-3', title: 'Consistent', description: '3-day streak', icon: Flame, earned: streak.longest >= 3, stat: String(streak.longest), statLabel: 'day streak', color: 'var(--color-warning)' },
+    { id: 'streak-7', title: 'Week Warrior', description: '7-day streak', icon: Flame, earned: streak.longest >= 7, stat: String(streak.longest), statLabel: 'day streak', color: 'var(--color-warning)' },
+    { id: 'streak-30', title: 'Monthly Master', description: '30-day streak', icon: Star, earned: streak.longest >= 30, stat: String(streak.longest), statLabel: 'day streak', color: 'var(--color-error)' },
+    { id: 'roadmap-done', title: 'Pathfinder', description: 'Complete a roadmap', icon: Rocket, earned: progress.roadmapsCompleted >= 1, stat: String(progress.roadmapsCompleted), statLabel: 'roadmap completed', color: 'var(--color-success)' },
+    { id: 'cs-10', title: 'CS Scholar', description: 'Complete 10 CS topics', icon: Shield, earned: csSolved >= 10, stat: String(csSolved), statLabel: 'CS topics done', color: 'var(--accent-primary)' },
+    { id: 'all-rounder', title: 'All-Rounder', description: 'Solve in 5+ categories', icon: Award, earned: categoryStats.filter(c => c.solved > 0).length >= 5, stat: String(categoryStats.filter(c => c.solved > 0).length), statLabel: 'categories covered', color: 'var(--accent-primary)' },
   ], [dsaSolved, csSolved, streak, progress, categoryStats]);
 
   const earnedCount = badges.filter(b => b.earned).length;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const xpState: XpState = useMemo(() => getXpState(), [dsaSolved, csSolved, streak, progress]);
   const level = xpState.level.title;
   const xp = xpState.totalXp;
@@ -236,7 +238,7 @@ export function ProfileDashboard() {
   if (!mounted) {
     return (
       <div className="py-20 flex justify-center">
-        <div className="w-6 h-6 border-2 border-[var(--accent-primary)] border-t-transparent rounded-sm animate-spin" />
+        <div className="w-6 h-6 border-2 border-[var(--accent-dark)] border-t-transparent rounded-sm animate-spin" />
       </div>
     );
   }
@@ -250,15 +252,22 @@ export function ProfileDashboard() {
           <div className="flex flex-col md:flex-row items-start md:items-center gap-5">
             {/* Avatar */}
             {authUser?.photoURL ? (
-              <img src={authUser.photoURL} alt="" className="w-16 h-16 rounded-sm object-cover shrink-0" />
+              <Image
+                src={authUser.photoURL}
+                alt={authUser.displayName || 'Profile'}
+                width={64}
+                height={64}
+                className="w-16 h-16 rounded-sm object-cover shrink-0"
+                unoptimized
+              />
             ) : (
-              <div className="w-16 h-16 rounded-sm bg-[var(--accent-primary)] flex items-center justify-center shrink-0">
+              <div className="w-16 h-16 rounded-sm bg-[var(--accent-dark)] flex items-center justify-center shrink-0">
                 {authUser ? (
-                  <span className="text-xl font-bold text-[var(--accent-dark)]">
+                  <span className="text-xl font-bold text-[var(--text-inverse)]">
                     {(authUser.displayName || authUser.email || 'U')[0].toUpperCase()}
                   </span>
                 ) : (
-                  <Trophy className="w-7 h-7 text-[var(--accent-dark)]" />
+                  <Trophy className="w-7 h-7 text-[var(--text-inverse)]" />
                 )}
               </div>
             )}
@@ -269,7 +278,7 @@ export function ProfileDashboard() {
                 <h1 className="text-xl font-bold text-[var(--text-primary)]">
                   {authUser?.displayName || 'Your Progress'}
                 </h1>
-                <span className="px-2 py-0.5 rounded-sm text-[9px] font-bold uppercase tracking-wider bg-[var(--accent-primary)] text-[var(--accent-dark)]">
+                <span className="px-2 py-0.5 rounded-sm text-[9px] font-bold uppercase tracking-wider bg-[var(--accent-dark)] text-[var(--text-inverse)]">
                   {level}
                 </span>
               </div>
@@ -290,7 +299,7 @@ export function ProfileDashboard() {
                   />
                 </div>
                 {xpState.streakMultiplier > 1 && (
-                  <p className="mt-1 text-[9px] text-[var(--accent-dark)] font-medium">
+                  <p className="mt-1 text-[9px] text-[var(--text-secondary)] font-medium">
                     {xpState.streakMultiplier}x streak bonus active
                   </p>
                 )}
@@ -338,7 +347,7 @@ export function ProfileDashboard() {
               </a>
               <button
                 onClick={signOut}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-[11px] font-medium text-[var(--text-subtle)] hover:text-red-500 hover:bg-red-50 transition-colors"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-[11px] font-medium text-[var(--text-subtle)] hover:text-[var(--color-error)] hover:bg-[var(--bg-subtle)] transition-colors"
               >
                 <LogOut className="w-3.5 h-3.5" />
                 Sign Out
@@ -352,7 +361,7 @@ export function ProfileDashboard() {
             <div className="mt-5 pt-5 border-t border-[var(--border-soft)]">
               <a
                 href="/login"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-[11px] font-medium bg-[var(--accent-dark)] text-[var(--accent-primary)] hover:opacity-90 transition-opacity"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-[11px] font-medium bg-[var(--accent-dark)] text-[var(--text-inverse)] hover:opacity-90 transition-opacity"
               >
                 Sign in to sync progress across devices
               </a>
@@ -403,7 +412,7 @@ export function ProfileDashboard() {
             <span className="text-[9px] text-[var(--text-subtle)]">Less</span>
             <div className="w-[10px] h-[10px] rounded-sm bg-[var(--bg-subtle)]" />
             <div className="w-[10px] h-[10px] rounded-sm bg-[var(--border-default)]" />
-            <div className="w-[10px] h-[10px] rounded-sm bg-[var(--accent-primary)]" />
+            <div className="w-[10px] h-[10px] rounded-sm bg-[var(--accent-dark)]" />
             <span className="text-[9px] text-[var(--text-subtle)]">More</span>
           </div>
         </div>
@@ -419,8 +428,8 @@ export function ProfileDashboard() {
 
             {dsaSolved > 0 ? (
               <div className="space-y-3">
-                {categoryStats.filter(c => c.total > 0).map((cat, i) => (
-                  <CategoryBar key={cat.id} cat={cat} index={i} />
+                {categoryStats.filter(c => c.total > 0).map(cat => (
+                  <CategoryBar key={cat.id} cat={cat} />
                 ))}
               </div>
             ) : (
@@ -438,7 +447,7 @@ export function ProfileDashboard() {
                 <Award className="w-4 h-4 text-[var(--text-secondary)]" />
                 <h2 className="text-sm font-bold text-[var(--text-primary)]">Badges</h2>
               </div>
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded-sm bg-[var(--accent-primary)] text-[var(--accent-dark)] tabular-nums">
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded-sm bg-[var(--accent-dark)] text-[var(--text-inverse)] tabular-nums">
                 {earnedCount}/{badges.length}
               </span>
             </div>
@@ -456,8 +465,8 @@ export function ProfileDashboard() {
                       description: b.description,
                       stat: b.stat || '',
                       statLabel: b.statLabel || '',
-                      icon: <Icon className="w-6 h-6" style={{ color: b.color || 'var(--accent-dark)' }} />,
-                      color: b.color || '#C7FF3D',
+                      icon: <Icon className="w-6 h-6" style={{ color: b.color || 'var(--accent-primary)' }} />,
+                      color: b.color || 'var(--accent-primary)',
                     });
                   } : undefined}
                 />

@@ -1,123 +1,172 @@
 'use client';
 
-import { useRef, useEffect } from 'react';
 import Link from 'next/link';
-import { ArrowRight, Search } from 'lucide-react';
-import gsap from 'gsap';
+import { ArrowRight, Search, Map, Binary, FolderKanban, ShieldCheck } from 'lucide-react';
+import { motion } from 'motion/react';
 import { HeroVisual } from './hero-visual';
+import { AnimatedCounter } from '@/components/ui/animated-counter';
+
+const stats = [
+  { value: 9, suffix: '+', label: 'Career Roadmaps', icon: Map },
+  { value: 250, suffix: '+', label: 'DSA Patterns', icon: Binary },
+  { value: 6, suffix: '+', label: 'Portfolio Projects', icon: FolderKanban },
+  { value: 100, suffix: '%', label: 'Free & Open', icon: ShieldCheck },
+];
+
+const quickPills = [
+  { label: 'Frontend Path', href: '/roadmaps/view?slug=frontend-developer' },
+  { label: 'DSA Sheet', href: '/placement/dsa' },
+  { label: 'React & Node Projects', href: '/projects' },
+  { label: 'Interview Prep', href: '/placement/interview' },
+  { label: 'Open Source', href: '/open-source' },
+];
 
 export function HeroSection() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const headingRef = useRef<HTMLHeadingElement>(null);
-  const subtextRef = useRef<HTMLParagraphElement>(null);
-  const ctaRef = useRef<HTMLDivElement>(null);
-  const searchRef = useRef<HTMLDivElement>(null);
+  const triggerSearch = () => {
+    window.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', metaKey: true }));
+  };
 
-  useEffect(() => {
-    const prefersReducedMotion = window.matchMedia(
-      '(prefers-reduced-motion: reduce)'
-    ).matches;
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.12,
+        delayChildren: 0.1,
+      },
+    },
+  };
 
-    if (prefersReducedMotion) return;
-
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-
-      tl.set([headingRef.current, subtextRef.current, ctaRef.current, searchRef.current], {
-        opacity: 0,
-        y: 50,
-      });
-
-      tl.to(headingRef.current, {
-        opacity: 1,
-        y: 0,
-        duration: 1,
-        delay: 0.2,
-      })
-        .to(
-          subtextRef.current,
-          { opacity: 1, y: 0, duration: 0.8 },
-          '-=0.5'
-        )
-        .to(ctaRef.current, { opacity: 1, y: 0, duration: 0.7 }, '-=0.4')
-        .to(searchRef.current, { opacity: 1, y: 0, duration: 0.7 }, '-=0.3');
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
+  const itemVariants = {
+    hidden: { opacity: 0, y: 24 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] as const },
+    },
+  };
 
   return (
-    <section
-      ref={sectionRef}
-      className="relative overflow-hidden pt-12 pb-16 md:pt-20 md:pb-24 lg:pt-28 lg:pb-32"
-    >
+    <section className="relative overflow-hidden pt-12 pb-16 md:pt-20 md:pb-24 lg:pt-24 lg:pb-28">
       <div className="container-main">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center">
-          {/* Left: Copy */}
-          <div className="max-w-2xl">
-            <h1
-              ref={headingRef}
+          {/* Left: Copy & Actions */}
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            className="max-w-2xl"
+          >
+            {/* Tagline Pill */}
+            <motion.div variants={itemVariants} className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--bg-subtle)] border border-[var(--border-soft)] text-xs font-semibold text-[var(--text-secondary)] mb-6">
+              <span>Zero-cost engineering mastery for students</span>
+            </motion.div>
+
+            {/* Heading */}
+            <motion.h1
+              variants={itemVariants}
               className="text-display font-bold tracking-tighter leading-[0.92]"
             >
               Learn.
               <br />
               Build.
               <br />
-              <span className="font-serif italic font-normal">Get Hired</span>.
-            </h1>
+              <span className="font-serif italic font-normal text-gradient-primary">
+                Get Hired
+              </span>.
+            </motion.h1>
 
-            <p
-              ref={subtextRef}
-              className="mt-6 md:mt-8 text-body-lg text-text-secondary max-w-lg leading-relaxed"
+            {/* Subtext */}
+            <motion.p
+              variants={itemVariants}
+              className="mt-6 md:mt-8 text-body-lg text-[var(--text-secondary)] max-w-lg leading-relaxed"
             >
-              Your entire learning journey in one place — structured paths,
-              hands-on projects, and interview prep that takes you from
-              &ldquo;where do I start?&rdquo; to job-ready.
-            </p>
+              Your entire engineering journey in one place — structured career
+              paths, hands-on production projects, and interview prep that takes
+              you from &ldquo;where do I start?&rdquo; to job-ready.
+            </motion.p>
 
-            <div ref={ctaRef} className="mt-8 md:mt-10 flex flex-wrap gap-3">
-              <Link
-                href="/start"
-                className="inline-flex items-center gap-2 px-6 py-3 text-sm font-medium bg-[var(--accent-dark)] text-[var(--text-inverse)] rounded-sm hover:bg-[var(--accent-dark)]/90 transition-colors"
-              >
-                Start your journey
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-              <Link
-                href="/roadmaps"
-                className="inline-flex items-center gap-2 px-6 py-3 text-sm font-medium border border-[var(--border-default)] text-[var(--text-primary)] rounded-sm hover:bg-[var(--bg-subtle)] hover:border-[var(--border-strong)] transition-colors"
-              >
-                Browse learning paths
-              </Link>
-            </div>
+            {/* Primary CTA Buttons */}
+            <motion.div variants={itemVariants} className="mt-8 md:mt-10 flex flex-wrap gap-3.5">
+              <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                <Link
+                  href="/start"
+                  className="inline-flex items-center gap-2 px-6 py-3.5 text-sm font-semibold bg-[var(--accent-dark)] text-[var(--text-inverse)] rounded-sm hover:opacity-90 transition-opacity shadow-sm"
+                >
+                  Start your journey
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              </motion.div>
+
+              <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                <Link
+                  href="/roadmaps"
+                  className="inline-flex items-center gap-2 px-6 py-3.5 text-sm font-semibold border border-[var(--border-default)] text-[var(--text-primary)] rounded-sm hover:bg-[var(--bg-subtle)] hover:border-[var(--border-strong)] transition-all"
+                >
+                  Explore Roadmaps
+                </Link>
+              </motion.div>
+            </motion.div>
 
             {/* Search prompt */}
-            <div ref={searchRef} className="mt-10 md:mt-12">
-              <div className="flex items-center gap-3 px-4 py-3 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)] max-w-md cursor-pointer hover:border-[var(--border-default)] transition-colors group">
-                <Search className="w-4 h-4 text-[var(--text-subtle)] group-hover:text-[var(--text-secondary)] transition-colors" />
-                <span className="text-sm text-[var(--text-subtle)]">
-                  What do you need help with?
+            <motion.div variants={itemVariants} className="mt-8 md:mt-10">
+              <div
+                onClick={triggerSearch}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => e.key === 'Enter' && triggerSearch()}
+                className="flex items-center gap-3 px-4 py-3 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)] max-w-md cursor-pointer hover:border-[var(--accent-primary)] hover:ring-2 hover:ring-[var(--accent-primary)]/30 transition-all group shadow-sm"
+              >
+                <Search className="w-4 h-4 text-[var(--text-subtle)] group-hover:text-[var(--text-primary)] transition-colors" />
+                <span className="text-sm text-[var(--text-subtle)] group-hover:text-[var(--text-secondary)] transition-colors">
+                  Search roadmaps, projects, DSA sheets...
                 </span>
-                <kbd className="ml-auto hidden sm:inline-flex items-center gap-0.5 px-2 py-0.5 text-xs text-[var(--text-subtle)] bg-[var(--bg-subtle)] rounded-sm font-mono">
+                <kbd className="ml-auto hidden sm:inline-flex items-center gap-1 px-2 py-0.5 text-xs text-[var(--text-subtle)] bg-[var(--bg-subtle)] border border-[var(--border-soft)] rounded-sm font-mono">
                   ⌘K
                 </kbd>
               </div>
-              <div className="mt-3 flex flex-wrap gap-2">
-                {['Frontend Path', 'DSA Sheet', 'React Projects', 'Interview Prep', 'Open Source'].map(
-                  (tag) => (
-                    <span
-                      key={tag}
-                      className="px-2.5 py-1 text-xs text-[var(--text-subtle)] bg-[var(--bg-subtle)] rounded-sm"
-                    >
-                      {tag}
-                    </span>
-                  )
-                )}
-              </div>
-            </div>
-          </div>
 
-          {/* Right: Visual */}
+              {/* Quick Jump Tags */}
+              <div className="mt-3 flex flex-wrap gap-2">
+                {quickPills.map((pill) => (
+                  <Link
+                    key={pill.label}
+                    href={pill.href}
+                    className="px-2.5 py-1 text-xs text-[var(--text-secondary)] bg-[var(--bg-subtle)] hover:bg-[var(--border-soft)] hover:text-[var(--text-primary)] rounded-sm transition-colors"
+                  >
+                    {pill.label}
+                  </Link>
+                ))}
+              </div>
+            </motion.div>
+
+            {/* Live Stats Proof Ticker */}
+            <motion.div
+              variants={itemVariants}
+              className="mt-10 pt-8 border-t border-[var(--border-soft)] grid grid-cols-2 sm:grid-cols-4 gap-4"
+            >
+              {stats.map((stat) => {
+                const Icon = stat.icon;
+                return (
+                  <div key={stat.label} className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-sm bg-[var(--bg-subtle)] border border-[var(--border-soft)] flex items-center justify-center text-[var(--accent-dark)] shrink-0">
+                      <Icon className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <div className="text-lg font-bold text-[var(--text-primary)] leading-none">
+                        <AnimatedCounter value={stat.value} suffix={stat.suffix} />
+                      </div>
+                      <p className="text-[11px] text-[var(--text-subtle)] mt-1 leading-tight">
+                        {stat.label}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
+            </motion.div>
+          </motion.div>
+
+          {/* Right: Modern 3D Visual Widgets */}
           <div className="hidden lg:block">
             <HeroVisual />
           </div>

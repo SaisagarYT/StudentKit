@@ -1,9 +1,10 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import {
   Trophy, Clock, Flame, Zap, Target, ChevronRight,
-  Play, Pause, RotateCcw, CheckCircle2, Timer, Calendar, TrendingUp
+  Play, Pause, CheckCircle2, Timer, Calendar, TrendingUp
 } from 'lucide-react';
 import { emitProgressChanged } from '@/lib/firebase/user-progress-sync';
 
@@ -59,7 +60,7 @@ const PROBLEMS: DailyProblem[] = [
     title: 'Valid Parentheses',
     difficulty: 'easy',
     category: 'Stack',
-    description: 'Given a string s containing just the characters (, ), {, }, [ and ], determine if the input string is valid. An input string is valid if open brackets are closed by the same type and in the correct order.',
+    description: 'Given a string s containing just the characters (, ), {, }, [ and ], determine if the input string is valid.',
     hints: ['Use a stack to track opening brackets.', 'When you see a closing bracket, the top of stack must match.', 'If stack is empty at the end, the string is valid.'],
     approach: '1. Initialize an empty stack.\n2. For each character c:\n   - If c is opening bracket: push to stack\n   - If c is closing bracket: check stack top matches, pop if yes, return false if no\n3. Return true if stack is empty, false otherwise.',
     timeComplexity: 'O(n)',
@@ -70,7 +71,7 @@ const PROBLEMS: DailyProblem[] = [
     title: 'Best Time to Buy and Sell Stock',
     difficulty: 'easy',
     category: 'Sliding Window',
-    description: 'You are given an array prices where prices[i] is the price of a given stock on the ith day. Find the maximum profit from one transaction (buy one day, sell a later day). Return 0 if no profit possible.',
+    description: 'Find the maximum profit from one transaction (buy one day, sell a later day). Return 0 if no profit possible.',
     hints: ['Track the minimum price seen so far.', 'At each day, the max profit is current price minus the minimum so far.', 'You only need one pass through the array.'],
     approach: '1. Set minPrice = prices[0], maxProfit = 0.\n2. For each price from index 1:\n   - maxProfit = max(maxProfit, price - minPrice)\n   - minPrice = min(minPrice, price)\n3. Return maxProfit.',
     timeComplexity: 'O(n)',
@@ -92,9 +93,9 @@ const PROBLEMS: DailyProblem[] = [
     title: 'Merge Intervals',
     difficulty: 'medium',
     category: 'Intervals',
-    description: 'Given an array of intervals where intervals[i] = [start_i, end_i], merge all overlapping intervals and return an array of the non-overlapping intervals that cover all the intervals in the input.',
+    description: 'Given an array of intervals, merge all overlapping intervals and return an array of the non-overlapping intervals.',
     hints: ['Sort intervals by start time first.', 'Two intervals overlap if current.start <= previous.end.', 'When merging, take max of both end times.'],
-    approach: '1. Sort intervals by start time.\n2. Initialize result with first interval.\n3. For each remaining interval:\n   - If it overlaps with last in result (start <= last.end): merge by updating last.end = max(last.end, current.end)\n   - Otherwise: add to result\n4. Return result.',
+    approach: '1. Sort intervals by start time.\n2. Initialize result with first interval.\n3. For each remaining interval:\n   - If it overlaps: merge by updating last.end = max(last.end, current.end)\n   - Otherwise: add to result\n4. Return result.',
     timeComplexity: 'O(n log n)',
     spaceComplexity: 'O(n)',
   },
@@ -103,7 +104,7 @@ const PROBLEMS: DailyProblem[] = [
     title: 'Container With Most Water',
     difficulty: 'medium',
     category: 'Two Pointers',
-    description: 'Given n non-negative integers a1, a2, ..., an where each represents a point (i, ai). Find two lines that together with the x-axis form a container that holds the most water.',
+    description: 'Find two lines that together with the x-axis form a container that holds the most water.',
     hints: ['Area = min(height[left], height[right]) * (right - left).', 'Start with widest container (pointers at both ends).', 'Always move the pointer pointing to the shorter line inward.'],
     approach: '1. Set left = 0, right = n-1, maxArea = 0.\n2. While left < right:\n   - area = min(height[left], height[right]) * (right - left)\n   - maxArea = max(maxArea, area)\n   - Move the shorter pointer inward\n3. Return maxArea.',
     timeComplexity: 'O(n)',
@@ -116,7 +117,7 @@ const PROBLEMS: DailyProblem[] = [
     category: 'Sliding Window',
     description: 'Given a string s, find the length of the longest substring without repeating characters.',
     hints: ['Use a sliding window with two pointers.', 'Track characters in the current window with a Set or Map.', 'When a duplicate enters, shrink from the left until it\'s removed.'],
-    approach: '1. Use a Set and two pointers (left, right).\n2. Expand right: add s[right] to set.\n3. If s[right] already in set: remove s[left] and advance left until no duplicate.\n4. Track max window size = right - left + 1.\n5. Return max.',
+    approach: '1. Use a Set and two pointers (left, right).\n2. Expand right: add s[right] to set.\n3. If s[right] already in set: remove s[left] and advance left.\n4. Track max window size = right - left + 1.\n5. Return max.',
     timeComplexity: 'O(n)',
     spaceComplexity: 'O(min(n, 26))',
   },
@@ -125,22 +126,11 @@ const PROBLEMS: DailyProblem[] = [
     title: 'Group Anagrams',
     difficulty: 'medium',
     category: 'Arrays & Hashing',
-    description: 'Given an array of strings strs, group the anagrams together. An anagram is a word formed by rearranging the letters of a different word, using all the original letters exactly once.',
+    description: 'Given an array of strings strs, group the anagrams together.',
     hints: ['Two words are anagrams if they have the same sorted form.', 'Use sorted string as a hash key.', 'Alternatively, use character frequency as a tuple key.'],
-    approach: '1. Create a hash map: key → list of words.\n2. For each word, compute its key (sorted characters or frequency tuple).\n3. Append word to map[key].\n4. Return all values from the map.',
+    approach: '1. Create a hash map: key → list of words.\n2. For each word, compute its key (sorted characters).\n3. Append word to map[key].\n4. Return all values from the map.',
     timeComplexity: 'O(n * k log k)',
     spaceComplexity: 'O(n * k)',
-  },
-  {
-    id: 'product-except-self',
-    title: 'Product of Array Except Self',
-    difficulty: 'medium',
-    category: 'Arrays & Hashing',
-    description: 'Given an integer array nums, return an array answer such that answer[i] is equal to the product of all the elements of nums except nums[i]. You must solve it without using division and in O(n) time.',
-    hints: ['The answer for position i = product of everything to its left × product of everything to its right.', 'Compute prefix products left-to-right, then suffix products right-to-left.', 'You can do it in a single output array with two passes.'],
-    approach: '1. Create output array of length n, filled with 1.\n2. Left pass: for i from 0 to n-1, output[i] = running left product, then multiply left product by nums[i].\n3. Right pass: for i from n-1 to 0, output[i] *= running right product, then multiply right product by nums[i].\n4. Return output.',
-    timeComplexity: 'O(n)',
-    spaceComplexity: 'O(1) (excluding output)',
   },
   {
     id: 'binary-search',
@@ -169,7 +159,7 @@ const PROBLEMS: DailyProblem[] = [
     title: 'Invert Binary Tree',
     difficulty: 'easy',
     category: 'Trees',
-    description: 'Given the root of a binary tree, invert the tree and return its root. Inverting means swapping left and right children at every node.',
+    description: 'Given the root of a binary tree, invert the tree and return its root.',
     hints: ['Think recursively: swap children, then recurse.', 'Base case: null node, just return null.', 'BFS also works — swap children level by level.'],
     approach: '1. If root is null, return null.\n2. Swap root.left and root.right.\n3. Recursively invert(root.left) and invert(root.right).\n4. Return root.',
     timeComplexity: 'O(n)',
@@ -180,9 +170,9 @@ const PROBLEMS: DailyProblem[] = [
     title: '3Sum',
     difficulty: 'medium',
     category: 'Two Pointers',
-    description: 'Given an integer array nums, return all triplets [nums[i], nums[j], nums[k]] such that i != j != k and nums[i] + nums[j] + nums[k] == 0. The solution set must not contain duplicate triplets.',
+    description: 'Return all unique triplets [nums[i], nums[j], nums[k]] such that nums[i] + nums[j] + nums[k] == 0.',
     hints: ['Sort the array first.', 'Fix one element, then use two pointers for the remaining two.', 'Skip duplicates at each level to avoid repeated triplets.'],
-    approach: '1. Sort nums.\n2. For each i from 0 to n-3:\n   - Skip if nums[i] == nums[i-1] (avoid duplicates)\n   - Set left = i+1, right = n-1\n   - While left < right: check sum\n     - If sum == 0: add triplet, skip duplicates, move both pointers\n     - If sum < 0: left++\n     - If sum > 0: right--\n3. Return results.',
+    approach: '1. Sort nums.\n2. For each i from 0 to n-3:\n   - Skip if nums[i] == nums[i-1]\n   - Set left = i+1, right = n-1\n   - While left < right: check sum\n3. Return results.',
     timeComplexity: 'O(n²)',
     spaceComplexity: 'O(1) (excluding output)',
   },
@@ -191,11 +181,22 @@ const PROBLEMS: DailyProblem[] = [
     title: 'Maximum Depth of Binary Tree',
     difficulty: 'easy',
     category: 'Trees',
-    description: 'Given the root of a binary tree, return its maximum depth. Maximum depth is the number of nodes along the longest path from the root to the farthest leaf.',
+    description: 'Given the root of a binary tree, return its maximum depth.',
     hints: ['The depth of a node is 1 + max depth of its children.', 'Base case: null node has depth 0.', 'BFS counting levels also works.'],
     approach: '1. If root is null, return 0.\n2. Return 1 + max(maxDepth(root.left), maxDepth(root.right)).',
     timeComplexity: 'O(n)',
     spaceComplexity: 'O(h)',
+  },
+  {
+    id: 'product-except-self',
+    title: 'Product of Array Except Self',
+    difficulty: 'medium',
+    category: 'Arrays & Hashing',
+    description: 'Return an array where answer[i] is equal to the product of all elements except nums[i]. Solve in O(n) without division.',
+    hints: ['answer[i] = product of everything to its left × product of everything to its right.', 'Compute prefix products left-to-right, then suffix products right-to-left.', 'You can do it in a single output array with two passes.'],
+    approach: '1. Create output array, filled with 1.\n2. Left pass: for i from 0 to n-1, output[i] = running left product, then multiply.\n3. Right pass: for i from n-1 to 0, output[i] *= running right product.\n4. Return output.',
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(1) (excluding output)',
   },
 ];
 
@@ -235,10 +236,10 @@ function saveHistory(history: DailyHistory[]) {
   localStorage.setItem(DAILY_HISTORY_KEY, JSON.stringify(history));
 }
 
-const DIFFICULTY_COLORS = {
-  easy: { bg: 'rgba(34, 197, 94, 0.1)', text: '#22c55e', label: 'Easy' },
-  medium: { bg: 'rgba(234, 179, 8, 0.1)', text: '#eab308', label: 'Medium' },
-  hard: { bg: 'rgba(239, 68, 68, 0.1)', text: '#ef4444', label: 'Hard' },
+const DIFFICULTY_STYLE: Record<string, { label: string; cls: string }> = {
+  easy:   { label: 'Easy',   cls: 'text-[var(--color-success)] bg-[color-mix(in_srgb,var(--color-success)_12%,transparent)]' },
+  medium: { label: 'Medium', cls: 'text-[var(--color-warning)] bg-[color-mix(in_srgb,var(--color-warning)_12%,transparent)]' },
+  hard:   { label: 'Hard',   cls: 'text-[var(--color-error)]   bg-[color-mix(in_srgb,var(--color-error)_12%,transparent)]' },
 };
 
 export function DailyChallengeClient() {
@@ -337,23 +338,28 @@ export function DailyChallengeClient() {
   if (!mounted) {
     return (
       <div className="py-20 flex justify-center">
-        <div className="w-6 h-6 border-2 border-[var(--accent-primary)] border-t-transparent rounded-full animate-spin" />
+        <div className="w-6 h-6 border-2 border-[var(--accent-dark)] border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
 
   const isFinished = progress?.completed || false;
   const streakDays = history.length;
-  const colors = DIFFICULTY_COLORS[problem.difficulty];
+  const diffStyle = DIFFICULTY_STYLE[problem.difficulty];
 
   return (
     <div className="py-8 md:py-12">
-      <div className="container-main max-w-2xl">
+      <div className="container-main max-w-3xl">
 
         {/* Hero */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--bg-subtle)] border border-[var(--border-soft)] mb-4">
-            <Zap className="w-3.5 h-3.5 text-[var(--accent-dark)]" />
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="text-center mb-8"
+        >
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-sm bg-[var(--bg-subtle)] border border-[var(--border-soft)] mb-4">
+            <Zap className="w-3.5 h-3.5 text-amber-500" />
             <span className="text-[11px] font-semibold text-[var(--text-secondary)] uppercase tracking-wider">
               Daily Challenge
             </span>
@@ -365,12 +371,17 @@ export function DailyChallengeClient() {
           <p className="text-sm text-[var(--text-secondary)] max-w-md mx-auto">
             One problem every day. Solve it, track your time, build consistency. New problem at midnight.
           </p>
-        </div>
+        </motion.div>
 
         {/* Stats bar */}
-        <div className="flex items-center justify-center gap-6 mb-8">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.4, delay: 0.1 }}
+          className="flex items-center justify-center gap-6 mb-8"
+        >
           <div className="flex items-center gap-1.5 text-sm">
-            <Flame className="w-4 h-4 text-orange-500" />
+            <Flame className="w-4 h-4" style={{ color: 'var(--color-warning)' }} />
             <span className="font-semibold text-[var(--text-primary)]">{streakDays}</span>
             <span className="text-[var(--text-subtle)] text-xs">solved</span>
           </div>
@@ -383,27 +394,29 @@ export function DailyChallengeClient() {
               <span className="text-[var(--text-subtle)] text-xs">avg</span>
             </div>
           )}
-        </div>
+        </motion.div>
 
         {/* Problem Card */}
-        <div className="rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-surface)] overflow-hidden mb-6">
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45, delay: 0.15 }}
+          className="rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] overflow-hidden mb-6"
+        >
           {/* Problem header */}
           <div className="p-5 border-b border-[var(--border-soft)]">
             <div className="flex items-start justify-between gap-3">
               <div>
                 <h2 className="text-lg font-bold text-[var(--text-primary)] mb-1">{problem.title}</h2>
                 <div className="flex items-center gap-2">
-                  <span
-                    className="px-2 py-0.5 rounded text-[10px] font-semibold"
-                    style={{ background: colors.bg, color: colors.text }}
-                  >
-                    {colors.label}
+                  <span className={`px-2 py-0.5 rounded-sm text-[10px] font-semibold ${diffStyle.cls}`}>
+                    {diffStyle.label}
                   </span>
                   <span className="text-[11px] text-[var(--text-subtle)]">{problem.category}</span>
                 </div>
               </div>
               {isFinished && (
-                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-green-100 text-green-700">
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-sm bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400">
                   <CheckCircle2 className="w-3.5 h-3.5" />
                   <span className="text-[10px] font-bold uppercase">Solved</span>
                 </div>
@@ -417,7 +430,7 @@ export function DailyChallengeClient() {
           </div>
 
           {/* Timer + Actions */}
-          <div className="p-5 border-b border-[var(--border-soft)] bg-[var(--bg-background)]">
+          <div className="p-5 border-b border-[var(--border-soft)] bg-[var(--bg-subtle)]">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <Timer className="w-5 h-5 text-[var(--text-secondary)]" />
@@ -427,7 +440,7 @@ export function DailyChallengeClient() {
                 {progress && !isFinished && (
                   <button
                     onClick={() => setTimerRunning(!timerRunning)}
-                    className="p-1.5 rounded-lg hover:bg-[var(--bg-subtle)] text-[var(--text-secondary)] transition-colors"
+                    className="p-1.5 rounded-sm hover:bg-[var(--bg-surface)] text-[var(--text-secondary)] transition-colors"
                   >
                     {timerRunning ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
                   </button>
@@ -437,7 +450,7 @@ export function DailyChallengeClient() {
               {!progress && (
                 <button
                   onClick={startChallenge}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[var(--accent-dark)] text-[var(--accent-primary)] text-xs font-semibold hover:opacity-90 transition-opacity"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-sm bg-[var(--accent-dark)] text-[var(--text-inverse)] text-xs font-semibold hover:opacity-90 transition-opacity"
                 >
                   <Play className="w-3.5 h-3.5" />
                   Start Timer
@@ -447,7 +460,8 @@ export function DailyChallengeClient() {
               {progress && !isFinished && (
                 <button
                   onClick={markComplete}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-green-600 text-white text-xs font-semibold hover:bg-green-700 transition-colors"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-sm text-xs font-semibold transition-colors"
+                  style={{ background: 'var(--color-success)', color: 'var(--bg-primary)' }}
                 >
                   <CheckCircle2 className="w-3.5 h-3.5" />
                   Mark Solved
@@ -466,7 +480,7 @@ export function DailyChallengeClient() {
                 {revealedHints < problem.hints.length && (
                   <button
                     onClick={revealNextHint}
-                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-medium text-yellow-600 hover:bg-yellow-50 transition-colors"
+                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-sm text-[11px] font-medium text-[var(--text-primary)] hover:bg-[var(--bg-subtle)] border border-[var(--border-soft)] transition-colors"
                   >
                     <ChevronRight className="w-3 h-3" />
                     Reveal Hint {revealedHints + 1}
@@ -474,64 +488,88 @@ export function DailyChallengeClient() {
                 )}
               </div>
 
-              {revealedHints > 0 && (
-                <div className="space-y-2 mb-4">
-                  {problem.hints.slice(0, revealedHints).map((hint, i) => (
-                    <div key={i} className="flex items-start gap-2">
-                      <span className="text-[10px] font-bold text-yellow-500 mt-0.5 shrink-0">#{i + 1}</span>
-                      <p className="text-xs text-[var(--text-secondary)] leading-relaxed">{hint}</p>
-                    </div>
-                  ))}
-                </div>
-              )}
+              <AnimatePresence>
+                {revealedHints > 0 && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    className="space-y-2 mb-4"
+                  >
+                    {problem.hints.slice(0, revealedHints).map((hint, i) => (
+                      <div key={i} className="flex items-start gap-2">
+                        <span className="text-[10px] font-bold text-[var(--accent-dark)] mt-0.5 shrink-0">#{i + 1}</span>
+                        <p className="text-xs text-[var(--text-secondary)] leading-relaxed">{hint}</p>
+                      </div>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
 
               {/* Approach */}
               {(isFinished || revealedHints === problem.hints.length) && (
                 <div className="pt-3 border-t border-[var(--border-soft)]">
                   <button
                     onClick={() => setShowApproach(!showApproach)}
-                    className="text-[11px] font-semibold text-[var(--accent-dark)] hover:underline mb-2"
+                    className="text-[11px] font-semibold text-[var(--text-primary)] hover:underline mb-2"
                   >
                     {showApproach ? 'Hide Approach' : 'Show Full Approach'}
                   </button>
-                  {showApproach && (
-                    <div className="mt-2 space-y-3">
-                      <p className="text-xs text-[var(--text-secondary)] leading-relaxed whitespace-pre-line">
-                        {problem.approach}
-                      </p>
-                      <div className="flex items-center gap-4">
-                        <span className="inline-flex items-center gap-1 text-[10px] font-mono px-2 py-1 rounded bg-[var(--bg-subtle)] border border-[var(--border-soft)] text-[var(--text-secondary)]">
-                          <Clock className="w-3 h-3 text-[var(--text-subtle)]" />
-                          {problem.timeComplexity}
-                        </span>
-                        <span className="inline-flex items-center gap-1 text-[10px] font-mono px-2 py-1 rounded bg-[var(--bg-subtle)] border border-[var(--border-soft)] text-[var(--text-secondary)]">
-                          <Target className="w-3 h-3 text-[var(--text-subtle)]" />
-                          {problem.spaceComplexity}
-                        </span>
-                      </div>
-                    </div>
-                  )}
+                  <AnimatePresence>
+                    {showApproach && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        className="mt-2 space-y-3"
+                      >
+                        <p className="text-xs text-[var(--text-secondary)] leading-relaxed whitespace-pre-line">
+                          {problem.approach}
+                        </p>
+                        <div className="flex items-center gap-4">
+                          <span className="inline-flex items-center gap-1 text-[10px] font-mono px-2 py-1 rounded-sm bg-[var(--bg-subtle)] border border-[var(--border-soft)] text-[var(--text-secondary)]">
+                            <Clock className="w-3 h-3 text-[var(--text-subtle)]" />
+                            {problem.timeComplexity}
+                          </span>
+                          <span className="inline-flex items-center gap-1 text-[10px] font-mono px-2 py-1 rounded-sm bg-[var(--bg-subtle)] border border-[var(--border-soft)] text-[var(--text-secondary)]">
+                            <Target className="w-3 h-3 text-[var(--text-subtle)]" />
+                            {problem.spaceComplexity}
+                          </span>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
               )}
             </div>
           )}
-        </div>
+        </motion.div>
 
         {/* Completion card */}
-        {isFinished && (
-          <div className="rounded-2xl border border-green-200 bg-green-50/30 p-6 text-center mb-6">
-            <Trophy className="w-10 h-10 text-yellow-500 mx-auto mb-3" />
-            <h3 className="text-lg font-bold text-[var(--text-primary)] mb-1">Solved!</h3>
-            <p className="text-sm text-[var(--text-secondary)]">
-              Completed in <strong>{formatTime(elapsed)}</strong> with {revealedHints} hint{revealedHints !== 1 ? 's' : ''} used
-            </p>
-            <p className="text-xs text-[var(--text-subtle)] mt-2">Come back tomorrow for a new problem</p>
-          </div>
-        )}
+        <AnimatePresence>
+          {isFinished && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] p-6 text-center mb-6"
+            >
+              <Trophy className="w-10 h-10 mx-auto mb-3" style={{ color: 'var(--color-warning)' }} />
+              <h3 className="text-lg font-bold text-[var(--text-primary)] mb-1">Solved!</h3>
+              <p className="text-sm text-[var(--text-secondary)]">
+                Completed in <strong>{formatTime(elapsed)}</strong> with {revealedHints} hint{revealedHints !== 1 ? 's' : ''} used
+              </p>
+              <p className="text-xs text-[var(--text-subtle)] mt-2">Come back tomorrow for a new problem</p>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* History */}
         {history.length > 0 && (
-          <div className="rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-surface)] p-5">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.2 }}
+            className="rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] p-5"
+          >
             <div className="flex items-center gap-2 mb-4">
               <Calendar className="w-4 h-4 text-[var(--text-secondary)]" />
               <h3 className="text-sm font-bold text-[var(--text-primary)]">Recent Solves</h3>
@@ -547,7 +585,7 @@ export function DailyChallengeClient() {
                 </div>
               ))}
             </div>
-          </div>
+          </motion.div>
         )}
       </div>
     </div>

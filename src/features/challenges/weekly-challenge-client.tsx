@@ -1,8 +1,9 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import {
-  Trophy, Clock, Users, Flame, Zap, Target, ChevronRight,
+  Trophy, Clock, Flame, Zap, Target, ChevronRight,
   Play, Pause, RotateCcw, CheckCircle2, Timer
 } from 'lucide-react';
 import { useUserAuth } from '@/lib/firebase/user-auth';
@@ -111,14 +112,14 @@ function saveHistory(history: ChallengeHistory[]) {
   localStorage.setItem(CHALLENGE_HISTORY_KEY, JSON.stringify(history));
 }
 
-const DIFFICULTY_COLORS = {
-  easy: { bg: 'rgba(34, 197, 94, 0.1)', text: '#22c55e' },
-  medium: { bg: 'rgba(234, 179, 8, 0.1)', text: '#eab308' },
-  hard: { bg: 'rgba(239, 68, 68, 0.1)', text: '#ef4444' },
+const DIFFICULTY_STYLE: Record<string, string> = {
+  easy:   'text-[var(--color-success)] bg-[color-mix(in_srgb,var(--color-success)_12%,transparent)]',
+  medium: 'text-[var(--color-warning)] bg-[color-mix(in_srgb,var(--color-warning)_12%,transparent)]',
+  hard:   'text-[var(--color-error)]   bg-[color-mix(in_srgb,var(--color-error)_12%,transparent)]',
 };
 
 export function WeeklyChallengeClient() {
-  const { user } = useUserAuth();
+  const { user: _user } = useUserAuth();
   const [mounted, setMounted] = useState(false);
   const [progress, setProgress] = useState<ChallengeProgress | null>(null);
   const [timerRunning, setTimerRunning] = useState(false);
@@ -209,7 +210,7 @@ export function WeeklyChallengeClient() {
   }, [progress, elapsed, problems.length]);
 
   const resetChallenge = useCallback(() => {
-    if (!window.confirm('Reset this week\'s challenge? Timer will restart.')) return;
+    if (!window.confirm("Reset this week's challenge? Timer will restart.")) return;
     setTimerRunning(false);
     setElapsed(0);
     const newProgress: ChallengeProgress = {
@@ -226,22 +227,28 @@ export function WeeklyChallengeClient() {
   if (!mounted) {
     return (
       <div className="py-20 flex justify-center">
-        <div className="w-6 h-6 border-2 border-[var(--accent-primary)] border-t-transparent rounded-full animate-spin" />
+        <div className="w-6 h-6 border-2 border-[var(--accent-dark)] border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
 
   const completedCount = progress?.completedProblems.length || 0;
   const isFinished = progress?.finished || false;
+  const progressPct = (completedCount / problems.length) * 100;
 
   return (
     <div className="py-8 md:py-12">
       <div className="container-main max-w-3xl">
 
         {/* Hero */}
-        <div className="text-center mb-8">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="text-center mb-8"
+        >
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-sm bg-[var(--bg-subtle)] border border-[var(--border-soft)] mb-4">
-            <Zap className="w-3.5 h-3.5 text-[var(--accent-dark)]" />
+            <Zap className="w-3.5 h-3.5 text-amber-500" />
             <span className="text-[11px] font-semibold text-[var(--text-secondary)] uppercase tracking-wider">
               Weekly Challenge
             </span>
@@ -252,13 +259,17 @@ export function WeeklyChallengeClient() {
           <p className="text-sm text-[var(--text-secondary)] max-w-md mx-auto">
             5 curated problems refreshed every week. Start the timer, solve all 5, track your speed.
           </p>
-        </div>
+        </motion.div>
 
         {/* Timer + Stats Bar */}
-        <div className="rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] p-5 mb-6">
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.1 }}
+          className="rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] p-5 mb-6"
+        >
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              {/* Timer display */}
               <div className="flex items-center gap-2">
                 <Timer className="w-5 h-5 text-[var(--text-secondary)]" />
                 <span className="text-2xl font-bold font-mono text-[var(--text-primary)]">
@@ -266,7 +277,6 @@ export function WeeklyChallengeClient() {
                 </span>
               </div>
 
-              {/* Timer controls */}
               {progress && !isFinished && (
                 <div className="flex items-center gap-1.5">
                   <button
@@ -287,7 +297,6 @@ export function WeeklyChallengeClient() {
               )}
             </div>
 
-            {/* Progress */}
             <div className="flex items-center gap-3">
               <div className="flex items-center gap-1.5">
                 <Target className="w-4 h-4 text-[var(--text-subtle)]" />
@@ -296,7 +305,7 @@ export function WeeklyChallengeClient() {
                 </span>
               </div>
               {isFinished && (
-                <span className="px-2.5 py-1 rounded-sm text-[10px] font-bold uppercase bg-green-100 text-green-700">
+                <span className="px-2.5 py-1 rounded-sm text-[10px] font-bold uppercase bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400">
                   Complete
                 </span>
               )}
@@ -305,27 +314,32 @@ export function WeeklyChallengeClient() {
 
           {/* Progress bar */}
           <div className="mt-4 h-2 rounded-sm bg-[var(--bg-subtle)] overflow-hidden">
-            <div
-              className="h-full rounded-sm transition-all duration-300"
-              style={{
-                width: `${(completedCount / problems.length) * 100}%`,
-                background: isFinished ? '#22c55e' : 'var(--accent-primary)',
-              }}
+            <motion.div
+              className="h-full rounded-sm"
+              initial={{ width: 0 }}
+              animate={{ width: `${progressPct}%` }}
+              transition={{ duration: 0.4 }}
+              style={{ background: isFinished ? 'var(--color-success)' : 'var(--accent-dark)' }}
             />
           </div>
-        </div>
+        </motion.div>
 
-        {/* Start button (if not started) */}
+        {/* Start button */}
         {!progress && (
-          <div className="text-center mb-8">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3, delay: 0.2 }}
+            className="text-center mb-8"
+          >
             <button
               onClick={startChallenge}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-sm bg-[var(--accent-dark)] text-[var(--accent-primary)] text-sm font-semibold hover:opacity-90 transition-opacity"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-sm bg-[var(--accent-dark)] text-[var(--text-inverse)] text-sm font-semibold hover:opacity-90 transition-opacity"
             >
               <Play className="w-4 h-4" />
               Start Challenge
             </button>
-          </div>
+          </motion.div>
         )}
 
         {/* Problems list */}
@@ -333,15 +347,17 @@ export function WeeklyChallengeClient() {
           <div className="space-y-3 mb-8">
             {problems.map((problem, idx) => {
               const isDone = progress.completedProblems.includes(problem.id);
-              const colors = DIFFICULTY_COLORS[problem.difficulty];
               const hintVisible = showHint === problem.id;
 
               return (
-                <div
+                <motion.div
                   key={problem.id}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: idx * 0.05 }}
                   className={`rounded-sm border transition-all ${
                     isDone
-                      ? 'border-green-200 bg-green-50/30'
+                      ? 'border-emerald-500/30 bg-emerald-500/5'
                       : 'border-[var(--border-soft)] bg-[var(--bg-surface)]'
                   }`}
                 >
@@ -353,10 +369,10 @@ export function WeeklyChallengeClient() {
                     <button
                       onClick={() => toggleProblem(problem.id)}
                       disabled={isFinished && !isDone}
-                      className={`w-6 h-6 rounded-sm border-2 flex items-center justify-center shrink-0 transition-all ${
+                      className={`w-6 h-6 rounded-sm border flex items-center justify-center shrink-0 transition-all ${
                         isDone
-                          ? 'bg-green-500 border-green-500'
-                          : 'border-[var(--border-default)] hover:border-[var(--accent-primary)]'
+                          ? 'border-emerald-500 bg-emerald-500 text-white'
+                          : 'border-[var(--border-default)] hover:border-emerald-500'
                       }`}
                     >
                       {isDone && <CheckCircle2 className="w-3.5 h-3.5 text-white" />}
@@ -369,17 +385,16 @@ export function WeeklyChallengeClient() {
                       <p className="text-[10px] text-[var(--text-subtle)] mt-0.5">{problem.category}</p>
                     </div>
 
-                    <span
-                      className="px-2 py-0.5 rounded-sm text-[10px] font-semibold capitalize"
-                      style={{ background: colors.bg, color: colors.text }}
-                    >
+                    <span className={`px-2 py-0.5 rounded-sm text-[10px] font-semibold capitalize ${DIFFICULTY_STYLE[problem.difficulty]}`}>
                       {problem.difficulty}
                     </span>
 
                     <button
                       onClick={() => setShowHint(hintVisible ? null : problem.id)}
                       className={`p-1.5 rounded-sm text-xs transition-colors ${
-                        hintVisible ? 'bg-yellow-100 text-yellow-600' : 'text-[var(--text-subtle)] hover:bg-[var(--bg-subtle)]'
+                        hintVisible
+                          ? 'bg-[var(--accent-dark)] text-[var(--text-inverse)]'
+                          : 'text-[var(--text-subtle)] hover:bg-[var(--bg-subtle)]'
                       }`}
                       title="Show hint"
                     >
@@ -387,33 +402,51 @@ export function WeeklyChallengeClient() {
                     </button>
                   </div>
 
-                  {hintVisible && (
-                    <div className="px-4 pb-4 pt-0 pl-[60px]">
-                      <p className="text-xs text-[var(--text-secondary)] bg-yellow-50/50 border border-yellow-200/40 rounded-sm px-3 py-2 italic">
-                        {problem.hint}
-                      </p>
-                    </div>
-                  )}
-                </div>
+                  <AnimatePresence>
+                    {hintVisible && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        className="px-4 pb-4 pt-0 pl-[60px]"
+                      >
+                        <p className="text-xs text-[var(--text-secondary)] bg-[var(--bg-subtle)] border border-[var(--border-soft)] rounded-sm px-3 py-2 italic">
+                          {problem.hint}
+                        </p>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </motion.div>
               );
             })}
           </div>
         )}
 
         {/* Completion message */}
-        {isFinished && (
-          <div className="rounded-sm border border-green-200 bg-green-50/30 p-6 text-center mb-8">
-            <Trophy className="w-10 h-10 text-yellow-500 mx-auto mb-3" />
-            <h2 className="text-lg font-bold text-[var(--text-primary)] mb-1">Challenge Complete!</h2>
-            <p className="text-sm text-[var(--text-secondary)]">
-              You solved all {problems.length} problems in <strong>{formatTime(elapsed)}</strong>
-            </p>
-          </div>
-        )}
+        <AnimatePresence>
+          {isFinished && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] p-6 text-center mb-8"
+            >
+              <Trophy className="w-10 h-10 mx-auto mb-3" style={{ color: 'var(--color-warning)' }} />
+              <h2 className="text-lg font-bold text-[var(--text-primary)] mb-1">Challenge Complete!</h2>
+              <p className="text-sm text-[var(--text-secondary)]">
+                You solved all {problems.length} problems in <strong>{formatTime(elapsed)}</strong>
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* History */}
         {history.length > 0 && (
-          <div className="rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] p-5">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.2 }}
+            className="rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] p-5"
+          >
             <div className="flex items-center gap-2 mb-4">
               <Clock className="w-4 h-4 text-[var(--text-secondary)]" />
               <h2 className="text-sm font-bold text-[var(--text-primary)]">Past Challenges</h2>
@@ -432,7 +465,7 @@ export function WeeklyChallengeClient() {
                 </div>
               ))}
             </div>
-          </div>
+          </motion.div>
         )}
       </div>
     </div>

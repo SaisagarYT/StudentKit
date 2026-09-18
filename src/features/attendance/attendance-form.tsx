@@ -26,6 +26,7 @@ export function AttendanceForm() {
     },
   });
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const watchedValues = watch();
   const hasInput =
     watchedValues.totalClasses !== undefined &&

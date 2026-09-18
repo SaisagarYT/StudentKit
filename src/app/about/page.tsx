@@ -39,15 +39,15 @@ export default function AboutPage() {
           </h2>
           <ul className="space-y-4 list-none">
             <li className="flex gap-3">
-              <span className="text-[var(--accent-primary)] font-semibold shrink-0">01</span>
+              <span className="text-[var(--accent-dark)] font-mono font-bold shrink-0">01</span>
               <span><strong className="text-[var(--text-primary)]">Calculate.</strong> Instant tools for grades, attendance, salary, documents, and more.</span>
             </li>
             <li className="flex gap-3">
-              <span className="text-[var(--accent-primary)] font-semibold shrink-0">02</span>
+              <span className="text-[var(--accent-dark)] font-mono font-bold shrink-0">02</span>
               <span><strong className="text-[var(--text-primary)]">Learn.</strong> Interactive roadmaps for careers, technologies, and exam preparation.</span>
             </li>
             <li className="flex gap-3">
-              <span className="text-[var(--accent-primary)] font-semibold shrink-0">03</span>
+              <span className="text-[var(--accent-dark)] font-mono font-bold shrink-0">03</span>
               <span><strong className="text-[var(--text-primary)]">Build.</strong> Curated project ideas with architecture, milestones, and deployment guides.</span>
             </li>
           </ul>

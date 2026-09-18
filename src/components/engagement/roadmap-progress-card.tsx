@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { Progress } from '@/components/ui/progress';
 
 interface RoadmapProgressProps {
   slug: string;
@@ -22,7 +23,6 @@ export function RoadmapProgressCard({ slug, totalTopics }: RoadmapProgressProps)
 
   useEffect(() => {
     const progress = loadProgress(slug);
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setCompleted(Object.values(progress).filter(Boolean).length);
   }, [slug]);
 
@@ -33,23 +33,14 @@ export function RoadmapProgressCard({ slug, totalTopics }: RoadmapProgressProps)
   return (
     <div className="mt-3 pt-3 border-t border-[var(--border-soft)]">
       <div className="flex items-center justify-between mb-1.5">
-        <span className="text-[10px] font-medium text-[var(--text-subtle)]">
+        <span className="text-[10px] font-medium text-[var(--text-subtle)] font-mono">
           {completed}/{totalTopics} topics
         </span>
-        <span className="text-[10px] font-bold text-[var(--accent-dark)]">
+        <span className="text-[10px] font-bold text-[var(--text-primary)] font-mono">
           {percent}%
         </span>
       </div>
-      <div className="h-1.5 rounded-sm bg-[var(--border-soft)] overflow-hidden">
-        <div
-          className={
-            percent === 100
-              ? 'h-full rounded-sm bg-emerald-500 transition-all'
-              : 'h-full rounded-sm bg-[var(--accent-primary)] transition-all'
-          }
-          style={{ width: `${percent}%` }}
-        />
-      </div>
+      <Progress value={completed} max={totalTopics} className="h-1.5" />
     </div>
   );
 }

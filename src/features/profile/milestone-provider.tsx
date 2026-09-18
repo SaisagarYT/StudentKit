@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { Trophy } from 'lucide-react';
 import { PROGRESS_CHANGED_EVENT } from '@/lib/firebase/user-progress-sync';
 import { getStreak } from '@/lib/user-progress';
 import { checkNewMilestones, MilestoneToast, type MilestoneConfig, type MilestoneStats } from './milestone-toast';

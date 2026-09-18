@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, useRef, useCallback, useEffect, KeyboardEvent } from 'react';
+import { useState, useRef, useCallback, KeyboardEvent } from 'react';
 import {
   Bold, Italic, Code, Heading1, Heading2, Heading3,
   List, ListOrdered, Quote, Minus, Image, Link2,
-  Undo2, Redo2, Type
+  Type
 } from 'lucide-react';
 
 interface NotionEditorProps {

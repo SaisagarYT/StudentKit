@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/firebase/auth';
 import { Loader2, LogIn, AlertCircle } from 'lucide-react';
@@ -11,17 +11,18 @@ export default function AdminLoginPage() {
   const { signInWithGoogle, user, loading: authLoading } = useAuth();
   const router = useRouter();
 
-  if (authLoading) {
+  useEffect(() => {
+    if (!authLoading && user) {
+      router.replace('/admin');
+    }
+  }, [user, authLoading, router]);
+
+  if (authLoading || user) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[var(--bg-base)]">
         <Loader2 className="w-6 h-6 animate-spin text-[var(--text-subtle)]" />
       </div>
     );
-  }
-
-  if (user) {
-    router.replace('/admin');
-    return null;
   }
 
   async function handleGoogleSignIn() {
@@ -47,16 +48,16 @@ export default function AdminLoginPage() {
         </div>
 
         {error && (
-          <div className="mb-4 flex items-start gap-2 p-3 rounded-sm bg-red-500/10 border border-red-500/20">
-            <AlertCircle className="w-4 h-4 text-red-500 mt-0.5 shrink-0" />
-            <p className="text-sm text-red-500">{error}</p>
+          <div className="mb-4 flex items-start gap-2 p-3 rounded-sm bg-rose-500/10 border border-rose-500/20">
+            <AlertCircle className="w-4 h-4 text-rose-600 dark:text-rose-400 mt-0.5 shrink-0" />
+            <p className="text-sm text-rose-600 dark:text-rose-400">{error}</p>
           </div>
         )}
 
         <button
           onClick={handleGoogleSignIn}
           disabled={loading}
-          className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-sm text-sm font-medium bg-[var(--accent-dark)] text-[var(--accent-primary)] hover:opacity-90 disabled:opacity-50 transition-opacity"
+          className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-sm text-sm font-medium bg-[var(--accent-dark)] text-[var(--text-inverse)] hover:opacity-90 disabled:opacity-50 transition-opacity"
         >
           {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <LogIn className="w-4 h-4" />}
           {loading ? 'Signing in...' : 'Sign in with Google'}

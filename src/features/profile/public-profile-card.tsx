@@ -1,8 +1,10 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import Image from 'next/image';
+import { motion } from 'motion/react';
 import {
-  Code, Flame, Trophy, Calendar, Share2, Download, Check, Copy, TrendingUp
+  Code, Flame, Calendar, Share2, Check, Copy, TrendingUp
 } from 'lucide-react';
 import { useUserAuth } from '@/lib/firebase/user-auth';
 import { getStreak, type StreakData } from '@/lib/user-progress';
@@ -42,6 +44,13 @@ function getLevel(dsaSolved: number): string {
   if (dsaSolved >= 5) return 'Beginner';
   return 'Newbie';
 }
+
+const STAT_CARDS = [
+  { key: 'dsaSolved',      label: 'Problems',    icon: Code,       suffix: '' },
+  { key: 'streak.longest', label: 'Best Streak', icon: Flame,      suffix: 'd' },
+  { key: 'totalActiveDays',label: 'Active Days', icon: Calendar,   suffix: '' },
+  { key: 'xp',             label: 'Total XP',    icon: TrendingUp, suffix: '' },
+];
 
 export function PublicProfileCard() {
   const { user } = useUserAuth();
@@ -85,43 +94,68 @@ export function PublicProfileCard() {
   if (!mounted || !stats) {
     return (
       <div className="py-20 flex justify-center">
-        <div className="w-6 h-6 border-2 border-[var(--accent-primary)] border-t-transparent rounded-full animate-spin" />
+        <div className="w-6 h-6 border-2 border-[var(--accent-dark)] border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
 
   const displayName = user?.displayName || 'Learner';
 
+  // Resolve stat values
+  const statValues: Record<string, number> = {
+    dsaSolved: stats.dsaSolved,
+    'streak.longest': stats.streak.longest,
+    totalActiveDays: stats.totalActiveDays,
+    xp: stats.xp,
+  };
+
   return (
     <div className="py-8 md:py-12">
       <div className="container-main max-w-lg">
         {/* Header */}
-        <div className="text-center mb-8">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45 }}
+          className="text-center mb-8"
+        >
           <h1 className="text-xl font-bold text-[var(--text-primary)] mb-1">Your Dev Card</h1>
           <p className="text-sm text-[var(--text-subtle)]">Share your learning progress with the world</p>
-        </div>
+        </motion.div>
 
         {/* Card */}
-        <div className="rounded-2xl border border-[var(--border-soft)] overflow-hidden shadow-xl mb-6">
-          {/* Card gradient top */}
-          <div className="h-3 bg-[var(--accent-dark)]" />
+        <motion.div
+          initial={{ opacity: 0, y: 20, scale: 0.97 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="rounded-sm border border-[var(--border-soft)] overflow-hidden shadow-[var(--shadow-lg)] mb-6"
+        >
+          {/* Accent top bar */}
+          <div className="h-1 bg-[var(--accent-dark)]" />
 
           <div className="p-6 bg-[var(--bg-surface)]">
             {/* Avatar + name */}
             <div className="flex items-center gap-4 mb-6">
               {user?.photoURL ? (
-                <img src={user.photoURL} alt="" className="w-14 h-14 rounded-xl object-cover" />
+                <Image
+                  src={user.photoURL}
+                  alt={displayName}
+                  width={56}
+                  height={56}
+                  className="w-14 h-14 rounded-sm object-cover"
+                  unoptimized
+                />
               ) : (
-                <div className="w-14 h-14 rounded-xl bg-[var(--accent-primary)] flex items-center justify-center">
-                  <span className="text-xl font-bold text-[var(--accent-dark)]">
+                <div className="w-14 h-14 rounded-sm bg-[var(--accent-dark)] flex items-center justify-center">
+                  <span className="text-xl font-bold text-[var(--text-inverse)]">
                     {displayName[0]?.toUpperCase()}
                   </span>
                 </div>
               )}
               <div>
                 <h2 className="text-lg font-bold text-[var(--text-primary)]">{displayName}</h2>
-                <div className="flex items-center gap-2">
-                  <span className="px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider bg-[var(--accent-primary)] text-[var(--accent-dark)]">
+                <div className="flex items-center gap-2 mt-0.5">
+                  <span className="px-2 py-0.5 rounded-sm text-[9px] font-bold uppercase tracking-wider bg-[var(--accent-dark)] text-[var(--text-inverse)]">
                     {stats.level}
                   </span>
                   <span className="text-xs text-[var(--text-subtle)]">{stats.xp.toLocaleString()} XP</span>
@@ -131,41 +165,25 @@ export function PublicProfileCard() {
 
             {/* Stats grid */}
             <div className="grid grid-cols-2 gap-3 mb-6">
-              <div className="p-3 rounded-xl bg-[var(--bg-background)] border border-[var(--border-soft)]">
-                <div className="flex items-center gap-2 mb-1">
-                  <Code className="w-3.5 h-3.5 text-[var(--text-subtle)]" />
-                  <span className="text-[10px] text-[var(--text-subtle)] uppercase font-medium">Problems</span>
+              {STAT_CARDS.map(({ key, label, icon: Icon, suffix }) => (
+                <div key={key} className="p-3 rounded-sm bg-[var(--bg-subtle)] border border-[var(--border-soft)]">
+                  <div className="flex items-center gap-2 mb-1">
+                    <Icon className="w-3.5 h-3.5 text-[var(--text-subtle)]" />
+                    <span className="text-[10px] text-[var(--text-subtle)] uppercase font-medium">{label}</span>
+                  </div>
+                  <p className="text-2xl font-bold text-[var(--text-primary)] tabular-nums">
+                    {statValues[key].toLocaleString()}
+                    {suffix && <span className="text-sm text-[var(--text-subtle)]">{suffix}</span>}
+                  </p>
                 </div>
-                <p className="text-2xl font-bold text-[var(--text-primary)]">{stats.dsaSolved}</p>
-              </div>
-              <div className="p-3 rounded-xl bg-[var(--bg-background)] border border-[var(--border-soft)]">
-                <div className="flex items-center gap-2 mb-1">
-                  <Flame className="w-3.5 h-3.5 text-orange-500" />
-                  <span className="text-[10px] text-[var(--text-subtle)] uppercase font-medium">Best Streak</span>
-                </div>
-                <p className="text-2xl font-bold text-[var(--text-primary)]">{stats.streak.longest}<span className="text-sm text-[var(--text-subtle)]">d</span></p>
-              </div>
-              <div className="p-3 rounded-xl bg-[var(--bg-background)] border border-[var(--border-soft)]">
-                <div className="flex items-center gap-2 mb-1">
-                  <Calendar className="w-3.5 h-3.5 text-[var(--text-subtle)]" />
-                  <span className="text-[10px] text-[var(--text-subtle)] uppercase font-medium">Active Days</span>
-                </div>
-                <p className="text-2xl font-bold text-[var(--text-primary)]">{stats.totalActiveDays}</p>
-              </div>
-              <div className="p-3 rounded-xl bg-[var(--bg-background)] border border-[var(--border-soft)]">
-                <div className="flex items-center gap-2 mb-1">
-                  <TrendingUp className="w-3.5 h-3.5 text-[var(--text-subtle)]" />
-                  <span className="text-[10px] text-[var(--text-subtle)] uppercase font-medium">Total XP</span>
-                </div>
-                <p className="text-2xl font-bold text-[var(--text-primary)]">{stats.xp.toLocaleString()}</p>
-              </div>
+              ))}
             </div>
 
             {/* Footer */}
             <div className="flex items-center justify-between pt-4 border-t border-[var(--border-soft)]">
               <div className="flex items-center gap-2">
-                <div className="w-5 h-5 rounded bg-[var(--accent-primary)] flex items-center justify-center">
-                  <span className="text-[8px] font-bold text-[var(--accent-dark)]">SK</span>
+                <div className="w-5 h-5 rounded-sm bg-[var(--accent-dark)] flex items-center justify-center">
+                  <span className="text-[8px] font-bold text-[var(--text-inverse)]">SK</span>
                 </div>
                 <span className="text-[11px] font-medium text-[var(--text-subtle)]">studentkit.app</span>
               </div>
@@ -174,35 +192,45 @@ export function PublicProfileCard() {
               </span>
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* Share actions */}
-        <div className="rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-surface)] p-5">
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.2 }}
+          className="rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] p-5"
+        >
           <p className="text-xs font-bold text-[var(--text-subtle)] uppercase tracking-wider mb-3">Share your card</p>
           <div className="grid grid-cols-3 gap-3">
             <a
               href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText())}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex flex-col items-center gap-1.5 p-3 rounded-xl border border-[var(--border-soft)] hover:bg-[var(--bg-subtle)] transition-colors"
+              className="flex flex-col items-center gap-1.5 p-3 rounded-sm border border-[var(--border-soft)] hover:bg-[var(--bg-subtle)] transition-colors"
             >
+              {/* Twitter blue works in both modes — it's a brand color, not arbitrary */}
               <TwitterIcon className="w-5 h-5 text-[#1DA1F2]" />
-              <span className="text-[10px] font-medium text-[var(--text-secondary)]">Twitter</span>
+              <span className="text-[10px] font-medium text-[var(--text-secondary)]">X / Twitter</span>
             </a>
             <a
               href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent('https://studentkit.app')}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex flex-col items-center gap-1.5 p-3 rounded-xl border border-[var(--border-soft)] hover:bg-[var(--bg-subtle)] transition-colors"
+              className="flex flex-col items-center gap-1.5 p-3 rounded-sm border border-[var(--border-soft)] hover:bg-[var(--bg-subtle)] transition-colors"
             >
+              {/* LinkedIn blue is a brand color */}
               <LinkedInIcon className="w-5 h-5 text-[#0A66C2]" />
               <span className="text-[10px] font-medium text-[var(--text-secondary)]">LinkedIn</span>
             </a>
             <button
               onClick={handleCopy}
-              className="flex flex-col items-center gap-1.5 p-3 rounded-xl border border-[var(--border-soft)] hover:bg-[var(--bg-subtle)] transition-colors"
+              className="flex flex-col items-center gap-1.5 p-3 rounded-sm border border-[var(--border-soft)] hover:bg-[var(--bg-subtle)] transition-colors"
             >
-              {copied ? <Check className="w-5 h-5 text-green-500" /> : <Copy className="w-5 h-5 text-[var(--text-secondary)]" />}
+              {copied
+                ? <Check className="w-5 h-5 text-[var(--color-success)]" />
+                : <Copy className="w-5 h-5 text-[var(--text-secondary)]" />
+              }
               <span className="text-[10px] font-medium text-[var(--text-secondary)]">{copied ? 'Copied!' : 'Copy'}</span>
             </button>
           </div>
@@ -216,27 +244,32 @@ export function PublicProfileCard() {
                   url: 'https://studentkit.app/leaderboard',
                 }).catch(() => {});
               }}
-              className="w-full mt-3 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[var(--accent-dark)] text-[var(--accent-primary)] text-xs font-semibold hover:opacity-90 transition-opacity"
+              className="w-full mt-3 flex items-center justify-center gap-2 px-4 py-2.5 rounded-sm bg-[var(--accent-dark)] text-[var(--text-inverse)] text-xs font-semibold hover:opacity-90 transition-opacity"
             >
               <Share2 className="w-4 h-4" />
               Share via device
             </button>
           )}
-        </div>
+        </motion.div>
 
         {/* Not signed in */}
         {!user && (
-          <div className="mt-6 p-4 rounded-xl border border-[var(--border-soft)] bg-[var(--bg-subtle)] text-center">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.35, delay: 0.25 }}
+            className="mt-6 p-4 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-subtle)] text-center"
+          >
             <p className="text-xs text-[var(--text-secondary)] mb-2">
               Sign in to personalize your card with your name and photo.
             </p>
             <a
               href="/login"
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-semibold bg-[var(--accent-dark)] text-[var(--accent-primary)] hover:opacity-90 transition-opacity"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-sm text-xs font-semibold bg-[var(--accent-dark)] text-[var(--text-inverse)] hover:opacity-90 transition-opacity"
             >
               Sign in
             </a>
-          </div>
+          </motion.div>
         )}
       </div>
     </div>

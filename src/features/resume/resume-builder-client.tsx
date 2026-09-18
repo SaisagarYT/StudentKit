@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import { motion } from 'motion/react';
 import {
-  FileText, Download, Eye, Edit3, Plus, Trash2, GripVertical,
+  FileText, Download, Eye, Edit3, Plus, Trash2,
   User, Briefcase, GraduationCap, Code, Award, Link2, Mail, Phone, MapPin
 } from 'lucide-react';
 
@@ -94,21 +95,30 @@ function InputField({ label, value, onChange, placeholder, icon: Icon, type = 't
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
-          className={`w-full ${Icon ? 'pl-9' : 'pl-3'} pr-3 py-2.5 rounded-lg border border-[var(--border-soft)] bg-[var(--bg-surface)] text-sm text-[var(--text-primary)] placeholder:text-[var(--text-subtle)] focus:outline-none focus:border-[var(--accent-primary)] transition-colors`}
+          className={`w-full ${Icon ? 'pl-9' : 'pl-3'} pr-3 py-2.5 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] text-sm text-[var(--text-primary)] placeholder:text-[var(--text-subtle)] focus:outline-none focus:border-[var(--accent-primary)] transition-colors`}
         />
       </div>
     </div>
   );
 }
 
+/**
+ * ResumePreview — intentionally uses fixed light-mode colors (white bg, dark text,
+ * gray borders) because this is the actual print/PDF output which must be
+ * professional and legible regardless of the site's current theme.
+ */
 function ResumePreview({ data }: { data: ResumeData }) {
   const { personal } = data;
   return (
-    <div id="resume-preview" className="bg-white text-black p-8 font-[system-ui] text-[11px] leading-[1.4] min-h-[842px] w-full max-w-[595px] mx-auto shadow-lg" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
+    <div
+      id="resume-preview"
+      className="bg-white text-black p-8 text-[11px] leading-[1.4] min-h-[842px] w-full max-w-[595px] mx-auto"
+      style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}
+    >
       {/* Header */}
-      <div className="text-center mb-4 pb-3 border-b border-gray-300">
+      <div className="text-center mb-4 pb-3 border-b border-gray-200">
         <h1 className="text-xl font-bold text-gray-900 mb-1">{personal.fullName || 'Your Name'}</h1>
-        <div className="flex items-center justify-center flex-wrap gap-x-3 gap-y-0.5 text-[10px] text-gray-600">
+        <div className="flex items-center justify-center flex-wrap gap-x-3 gap-y-0.5 text-[10px] text-gray-500">
           {personal.email && <span>{personal.email}</span>}
           {personal.phone && <span>{personal.phone}</span>}
           {personal.location && <span>{personal.location}</span>}
@@ -120,7 +130,7 @@ function ResumePreview({ data }: { data: ResumeData }) {
       {/* Summary */}
       {data.summary && (
         <div className="mb-3">
-          <h2 className="text-[11px] font-bold uppercase tracking-wider text-gray-900 border-b border-gray-200 pb-0.5 mb-1.5">Summary</h2>
+          <h2 className="text-[11px] font-bold uppercase tracking-wider text-gray-800 border-b border-gray-200 pb-0.5 mb-1.5">Summary</h2>
           <p className="text-gray-700">{data.summary}</p>
         </div>
       )}
@@ -128,7 +138,7 @@ function ResumePreview({ data }: { data: ResumeData }) {
       {/* Experience */}
       {data.experience.length > 0 && (
         <div className="mb-3">
-          <h2 className="text-[11px] font-bold uppercase tracking-wider text-gray-900 border-b border-gray-200 pb-0.5 mb-1.5">Experience</h2>
+          <h2 className="text-[11px] font-bold uppercase tracking-wider text-gray-800 border-b border-gray-200 pb-0.5 mb-1.5">Experience</h2>
           {data.experience.map(exp => (
             <div key={exp.id} className="mb-2">
               <div className="flex justify-between items-baseline">
@@ -149,7 +159,7 @@ function ResumePreview({ data }: { data: ResumeData }) {
       {/* Education */}
       {data.education.length > 0 && (
         <div className="mb-3">
-          <h2 className="text-[11px] font-bold uppercase tracking-wider text-gray-900 border-b border-gray-200 pb-0.5 mb-1.5">Education</h2>
+          <h2 className="text-[11px] font-bold uppercase tracking-wider text-gray-800 border-b border-gray-200 pb-0.5 mb-1.5">Education</h2>
           {data.education.map(edu => (
             <div key={edu.id} className="mb-1.5">
               <div className="flex justify-between items-baseline">
@@ -165,7 +175,7 @@ function ResumePreview({ data }: { data: ResumeData }) {
       {/* Projects */}
       {data.projects.length > 0 && (
         <div className="mb-3">
-          <h2 className="text-[11px] font-bold uppercase tracking-wider text-gray-900 border-b border-gray-200 pb-0.5 mb-1.5">Projects</h2>
+          <h2 className="text-[11px] font-bold uppercase tracking-wider text-gray-800 border-b border-gray-200 pb-0.5 mb-1.5">Projects</h2>
           {data.projects.map(proj => (
             <div key={proj.id} className="mb-1.5">
               <div className="flex items-baseline gap-2">
@@ -181,7 +191,7 @@ function ResumePreview({ data }: { data: ResumeData }) {
       {/* Skills */}
       {data.skills.length > 0 && (
         <div className="mb-3">
-          <h2 className="text-[11px] font-bold uppercase tracking-wider text-gray-900 border-b border-gray-200 pb-0.5 mb-1.5">Skills</h2>
+          <h2 className="text-[11px] font-bold uppercase tracking-wider text-gray-800 border-b border-gray-200 pb-0.5 mb-1.5">Skills</h2>
           <p className="text-gray-700">{data.skills.join(' · ')}</p>
         </div>
       )}
@@ -189,7 +199,7 @@ function ResumePreview({ data }: { data: ResumeData }) {
       {/* Certifications */}
       {data.certifications.length > 0 && (
         <div>
-          <h2 className="text-[11px] font-bold uppercase tracking-wider text-gray-900 border-b border-gray-200 pb-0.5 mb-1.5">Certifications</h2>
+          <h2 className="text-[11px] font-bold uppercase tracking-wider text-gray-800 border-b border-gray-200 pb-0.5 mb-1.5">Certifications</h2>
           <ul className="ml-3 list-disc text-gray-700">
             {data.certifications.map((c, i) => <li key={i}>{c}</li>)}
           </ul>
@@ -227,17 +237,17 @@ export function ResumeBuilderClient() {
   if (!mounted) {
     return (
       <div className="py-20 flex justify-center">
-        <div className="w-6 h-6 border-2 border-[var(--accent-primary)] border-t-transparent rounded-full animate-spin" />
+        <div className="w-6 h-6 border-2 border-[var(--accent-dark)] border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
 
   const sections = [
-    { id: 'personal', label: 'Personal', icon: User },
-    { id: 'experience', label: 'Experience', icon: Briefcase },
-    { id: 'education', label: 'Education', icon: GraduationCap },
-    { id: 'projects', label: 'Projects', icon: Code },
-    { id: 'skills', label: 'Skills', icon: Award },
+    { id: 'personal',    label: 'Personal',    icon: User },
+    { id: 'experience',  label: 'Experience',  icon: Briefcase },
+    { id: 'education',   label: 'Education',   icon: GraduationCap },
+    { id: 'projects',    label: 'Projects',    icon: Code },
+    { id: 'skills',      label: 'Skills',      icon: Award },
   ];
 
   return (
@@ -252,10 +262,15 @@ export function ResumeBuilderClient() {
 
       <div className="container-main max-w-6xl">
         {/* Header */}
-        <div className="flex items-center justify-between mb-6">
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          className="flex items-center justify-between mb-6"
+        >
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-[var(--accent-primary)] flex items-center justify-center">
-              <FileText className="w-5 h-5 text-[var(--accent-dark)]" />
+            <div className="w-10 h-10 rounded-sm bg-[var(--accent-dark)] text-[var(--text-inverse)] flex items-center justify-center">
+              <FileText className="w-5 h-5" />
             </div>
             <div>
               <h1 className="text-xl font-bold text-[var(--text-primary)]">Resume Builder</h1>
@@ -265,19 +280,23 @@ export function ResumeBuilderClient() {
 
           <div className="flex items-center gap-2">
             {/* Tab toggle */}
-            <div className="flex items-center bg-[var(--bg-subtle)] rounded-lg p-0.5 border border-[var(--border-soft)]">
+            <div className="flex items-center bg-[var(--bg-subtle)] rounded-sm p-0.5 border border-[var(--border-soft)]">
               <button
                 onClick={() => setActiveTab('edit')}
-                className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
-                  activeTab === 'edit' ? 'bg-[var(--bg-surface)] text-[var(--text-primary)] shadow-sm' : 'text-[var(--text-subtle)]'
+                className={`px-3 py-1.5 rounded-sm text-xs font-medium transition-all ${
+                  activeTab === 'edit'
+                    ? 'bg-[var(--bg-surface)] text-[var(--text-primary)] shadow-[var(--shadow-sm)]'
+                    : 'text-[var(--text-subtle)] hover:text-[var(--text-secondary)]'
                 }`}
               >
                 <Edit3 className="w-3 h-3 inline mr-1" />Edit
               </button>
               <button
                 onClick={() => setActiveTab('preview')}
-                className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
-                  activeTab === 'preview' ? 'bg-[var(--bg-surface)] text-[var(--text-primary)] shadow-sm' : 'text-[var(--text-subtle)]'
+                className={`px-3 py-1.5 rounded-sm text-xs font-medium transition-all ${
+                  activeTab === 'preview'
+                    ? 'bg-[var(--bg-surface)] text-[var(--text-primary)] shadow-[var(--shadow-sm)]'
+                    : 'text-[var(--text-subtle)] hover:text-[var(--text-secondary)]'
                 }`}
               >
                 <Eye className="w-3 h-3 inline mr-1" />Preview
@@ -285,32 +304,43 @@ export function ResumeBuilderClient() {
             </div>
             <button
               onClick={handlePrint}
-              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-[var(--accent-dark)] text-[var(--accent-primary)] text-xs font-semibold hover:opacity-90 transition-opacity"
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-sm bg-[var(--accent-dark)] text-[var(--text-inverse)] text-xs font-semibold hover:opacity-90 transition-opacity"
             >
               <Download className="w-3.5 h-3.5" />
               PDF
             </button>
           </div>
-        </div>
+        </motion.div>
 
         {activeTab === 'preview' ? (
-          <div className="overflow-auto rounded-xl border border-[var(--border-soft)]">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3 }}
+            className="overflow-auto rounded-sm border border-[var(--border-soft)] shadow-[var(--shadow-md)]"
+          >
             <ResumePreview data={data} />
-          </div>
+          </motion.div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3 }}
+            className="grid grid-cols-1 lg:grid-cols-4 gap-6"
+          >
             {/* Section nav */}
             <div className="lg:col-span-1">
               <nav className="space-y-1 sticky top-20">
                 {sections.map(s => {
                   const Icon = s.icon;
+                  const isActive = activeSection === s.id;
                   return (
                     <button
                       key={s.id}
                       onClick={() => setActiveSection(s.id)}
-                      className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-xs font-medium transition-all ${
-                        activeSection === s.id
-                          ? 'bg-[var(--accent-dark)] text-[var(--accent-primary)]'
+                      className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-sm text-xs font-medium transition-all ${
+                        isActive
+                          ? 'bg-[var(--accent-dark)] text-[var(--text-inverse)]'
                           : 'text-[var(--text-secondary)] hover:bg-[var(--bg-subtle)]'
                       }`}
                     >
@@ -323,8 +353,9 @@ export function ResumeBuilderClient() {
             </div>
 
             {/* Form area */}
-            <div className="lg:col-span-3 rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-surface)] p-6">
-              {/* Personal */}
+            <div className="lg:col-span-3 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] p-6">
+
+              {/* ── Personal ── */}
               {activeSection === 'personal' && (
                 <div className="space-y-4">
                   <h2 className="text-sm font-bold text-[var(--text-primary)] mb-4">Personal Information</h2>
@@ -345,20 +376,20 @@ export function ResumeBuilderClient() {
                       onChange={(e) => update(d => ({ ...d, summary: e.target.value }))}
                       placeholder="Brief professional summary (2-3 sentences)..."
                       rows={3}
-                      className="w-full px-3 py-2.5 rounded-lg border border-[var(--border-soft)] bg-[var(--bg-surface)] text-sm text-[var(--text-primary)] placeholder:text-[var(--text-subtle)] focus:outline-none focus:border-[var(--accent-primary)] resize-none transition-colors"
+                      className="w-full px-3 py-2.5 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] text-sm text-[var(--text-primary)] placeholder:text-[var(--text-subtle)] focus:outline-none focus:border-[var(--accent-primary)] resize-none transition-colors"
                     />
                   </div>
                 </div>
               )}
 
-              {/* Experience */}
+              {/* ── Experience ── */}
               {activeSection === 'experience' && (
                 <div>
                   <div className="flex items-center justify-between mb-4">
                     <h2 className="text-sm font-bold text-[var(--text-primary)]">Experience</h2>
                     <button
                       onClick={() => update(d => ({ ...d, experience: [...d.experience, { id: generateId(), company: '', role: '', startDate: '', endDate: '', bullets: [''] }] }))}
-                      className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[11px] font-medium text-[var(--accent-dark)] hover:bg-[var(--bg-subtle)] transition-colors"
+                      className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-sm text-[11px] font-medium bg-[var(--accent-dark)] text-[var(--text-inverse)] hover:opacity-90 transition-opacity"
                     >
                       <Plus className="w-3 h-3" />Add
                     </button>
@@ -368,10 +399,13 @@ export function ResumeBuilderClient() {
                   )}
                   <div className="space-y-4">
                     {data.experience.map((exp, idx) => (
-                      <div key={exp.id} className="p-4 rounded-xl border border-[var(--border-soft)] bg-[var(--bg-background)]">
+                      <div key={exp.id} className="p-4 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-subtle)]">
                         <div className="flex items-center justify-between mb-3">
                           <span className="text-[10px] font-bold text-[var(--text-subtle)] uppercase">#{idx + 1}</span>
-                          <button onClick={() => update(d => ({ ...d, experience: d.experience.filter(e => e.id !== exp.id) }))} className="p-1 rounded text-[var(--text-subtle)] hover:text-red-500 transition-colors">
+                          <button
+                            onClick={() => update(d => ({ ...d, experience: d.experience.filter(e => e.id !== exp.id) }))}
+                            className="p-1 rounded-sm text-[var(--text-subtle)] hover:text-[var(--color-error)] hover:bg-[color-mix(in_srgb,var(--color-error)_8%,transparent)] transition-colors"
+                          >
                             <Trash2 className="w-3.5 h-3.5" />
                           </button>
                         </div>
@@ -389,9 +423,14 @@ export function ResumeBuilderClient() {
                               value={bullet}
                               onChange={(e) => update(d => ({ ...d, experience: d.experience.map(ex => ex.id === exp.id ? { ...ex, bullets: ex.bullets.map((b, i) => i === bi ? e.target.value : b) } : ex) }))}
                               placeholder="Describe your accomplishment..."
-                              className="flex-1 px-2 py-1.5 rounded border border-[var(--border-soft)] bg-[var(--bg-surface)] text-xs text-[var(--text-primary)] placeholder:text-[var(--text-subtle)] focus:outline-none focus:border-[var(--accent-primary)]"
+                              className="flex-1 px-2 py-1.5 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] text-xs text-[var(--text-primary)] placeholder:text-[var(--text-subtle)] focus:outline-none focus:border-[var(--accent-primary)]"
                             />
-                            <button onClick={() => update(d => ({ ...d, experience: d.experience.map(ex => ex.id === exp.id ? { ...ex, bullets: ex.bullets.filter((_, i) => i !== bi) } : ex) }))} className="text-[var(--text-subtle)] hover:text-red-500"><Trash2 className="w-3 h-3" /></button>
+                            <button
+                              onClick={() => update(d => ({ ...d, experience: d.experience.map(ex => ex.id === exp.id ? { ...ex, bullets: ex.bullets.filter((_, i) => i !== bi) } : ex) }))}
+                              className="text-[var(--text-subtle)] hover:text-[var(--color-error)] transition-colors"
+                            >
+                              <Trash2 className="w-3 h-3" />
+                            </button>
                           </div>
                         ))}
                         <button
@@ -404,14 +443,14 @@ export function ResumeBuilderClient() {
                 </div>
               )}
 
-              {/* Education */}
+              {/* ── Education ── */}
               {activeSection === 'education' && (
                 <div>
                   <div className="flex items-center justify-between mb-4">
                     <h2 className="text-sm font-bold text-[var(--text-primary)]">Education</h2>
                     <button
                       onClick={() => update(d => ({ ...d, education: [...d.education, { id: generateId(), institution: '', degree: '', startDate: '', endDate: '', gpa: '' }] }))}
-                      className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[11px] font-medium text-[var(--accent-dark)] hover:bg-[var(--bg-subtle)] transition-colors"
+                      className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-sm text-[11px] font-medium bg-[var(--accent-dark)] text-[var(--text-inverse)] hover:opacity-90 transition-opacity"
                     >
                       <Plus className="w-3 h-3" />Add
                     </button>
@@ -421,10 +460,13 @@ export function ResumeBuilderClient() {
                   )}
                   <div className="space-y-4">
                     {data.education.map((edu, idx) => (
-                      <div key={edu.id} className="p-4 rounded-xl border border-[var(--border-soft)] bg-[var(--bg-background)]">
+                      <div key={edu.id} className="p-4 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-subtle)]">
                         <div className="flex items-center justify-between mb-3">
                           <span className="text-[10px] font-bold text-[var(--text-subtle)] uppercase">#{idx + 1}</span>
-                          <button onClick={() => update(d => ({ ...d, education: d.education.filter(e => e.id !== edu.id) }))} className="p-1 rounded text-[var(--text-subtle)] hover:text-red-500 transition-colors">
+                          <button
+                            onClick={() => update(d => ({ ...d, education: d.education.filter(e => e.id !== edu.id) }))}
+                            className="p-1 rounded-sm text-[var(--text-subtle)] hover:text-[var(--color-error)] hover:bg-[color-mix(in_srgb,var(--color-error)_8%,transparent)] transition-colors"
+                          >
                             <Trash2 className="w-3.5 h-3.5" />
                           </button>
                         </div>
@@ -441,14 +483,14 @@ export function ResumeBuilderClient() {
                 </div>
               )}
 
-              {/* Projects */}
+              {/* ── Projects ── */}
               {activeSection === 'projects' && (
                 <div>
                   <div className="flex items-center justify-between mb-4">
                     <h2 className="text-sm font-bold text-[var(--text-primary)]">Projects</h2>
                     <button
                       onClick={() => update(d => ({ ...d, projects: [...d.projects, { id: generateId(), name: '', tech: '', description: '', link: '' }] }))}
-                      className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[11px] font-medium text-[var(--accent-dark)] hover:bg-[var(--bg-subtle)] transition-colors"
+                      className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-sm text-[11px] font-medium bg-[var(--accent-dark)] text-[var(--text-inverse)] hover:opacity-90 transition-opacity"
                     >
                       <Plus className="w-3 h-3" />Add
                     </button>
@@ -458,10 +500,13 @@ export function ResumeBuilderClient() {
                   )}
                   <div className="space-y-4">
                     {data.projects.map((proj, idx) => (
-                      <div key={proj.id} className="p-4 rounded-xl border border-[var(--border-soft)] bg-[var(--bg-background)]">
+                      <div key={proj.id} className="p-4 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-subtle)]">
                         <div className="flex items-center justify-between mb-3">
                           <span className="text-[10px] font-bold text-[var(--text-subtle)] uppercase">#{idx + 1}</span>
-                          <button onClick={() => update(d => ({ ...d, projects: d.projects.filter(p => p.id !== proj.id) }))} className="p-1 rounded text-[var(--text-subtle)] hover:text-red-500 transition-colors">
+                          <button
+                            onClick={() => update(d => ({ ...d, projects: d.projects.filter(p => p.id !== proj.id) }))}
+                            className="p-1 rounded-sm text-[var(--text-subtle)] hover:text-[var(--color-error)] hover:bg-[color-mix(in_srgb,var(--color-error)_8%,transparent)] transition-colors"
+                          >
                             <Trash2 className="w-3.5 h-3.5" />
                           </button>
                         </div>
@@ -476,7 +521,7 @@ export function ResumeBuilderClient() {
                             onChange={(e) => update(d => ({ ...d, projects: d.projects.map(p => p.id === proj.id ? { ...p, description: e.target.value } : p) }))}
                             placeholder="Brief description of what you built and its impact..."
                             rows={2}
-                            className="w-full px-3 py-2 rounded-lg border border-[var(--border-soft)] bg-[var(--bg-surface)] text-xs text-[var(--text-primary)] placeholder:text-[var(--text-subtle)] focus:outline-none focus:border-[var(--accent-primary)] resize-none"
+                            className="w-full px-3 py-2 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] text-xs text-[var(--text-primary)] placeholder:text-[var(--text-subtle)] focus:outline-none focus:border-[var(--accent-primary)] resize-none"
                           />
                         </div>
                       </div>
@@ -485,16 +530,20 @@ export function ResumeBuilderClient() {
                 </div>
               )}
 
-              {/* Skills & Certifications */}
+              {/* ── Skills & Certifications ── */}
               {activeSection === 'skills' && (
-                <div className="space-y-6">
+                <div className="space-y-8">
+                  {/* Skills */}
                   <div>
                     <h2 className="text-sm font-bold text-[var(--text-primary)] mb-3">Skills</h2>
                     <div className="flex flex-wrap gap-2 mb-3">
                       {data.skills.map((skill, i) => (
-                        <span key={i} className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[var(--bg-subtle)] border border-[var(--border-soft)] text-xs text-[var(--text-secondary)]">
+                        <span key={i} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-sm bg-[var(--bg-subtle)] border border-[var(--border-soft)] text-xs text-[var(--text-secondary)]">
                           {skill}
-                          <button onClick={() => update(d => ({ ...d, skills: d.skills.filter((_, idx) => idx !== i) }))} className="text-[var(--text-subtle)] hover:text-red-500 ml-0.5">
+                          <button
+                            onClick={() => update(d => ({ ...d, skills: d.skills.filter((_, idx) => idx !== i) }))}
+                            className="text-[var(--text-subtle)] hover:text-[var(--color-error)] transition-colors"
+                          >
                             <Trash2 className="w-2.5 h-2.5" />
                           </button>
                         </span>
@@ -511,22 +560,26 @@ export function ResumeBuilderClient() {
                           }
                         }}
                         placeholder="Type a skill and press Enter..."
-                        className="flex-1 px-3 py-2 rounded-lg border border-[var(--border-soft)] bg-[var(--bg-surface)] text-xs text-[var(--text-primary)] placeholder:text-[var(--text-subtle)] focus:outline-none focus:border-[var(--accent-primary)]"
+                        className="flex-1 px-3 py-2 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] text-xs text-[var(--text-primary)] placeholder:text-[var(--text-subtle)] focus:outline-none focus:border-[var(--accent-primary)]"
                       />
                       <button
                         onClick={() => { if (newSkill.trim()) { update(d => ({ ...d, skills: [...d.skills, newSkill.trim()] })); setNewSkill(''); } }}
-                        className="px-3 py-2 rounded-lg text-xs font-medium bg-[var(--accent-dark)] text-[var(--accent-primary)]"
+                        className="px-3 py-2 rounded-sm text-xs font-medium bg-[var(--accent-dark)] text-[var(--text-inverse)] hover:opacity-90 transition-opacity"
                       >Add</button>
                     </div>
                   </div>
 
+                  {/* Certifications */}
                   <div>
                     <h2 className="text-sm font-bold text-[var(--text-primary)] mb-3">Certifications</h2>
                     <div className="space-y-2 mb-3">
                       {data.certifications.map((cert, i) => (
-                        <div key={i} className="flex items-center justify-between px-3 py-2 rounded-lg bg-[var(--bg-subtle)] border border-[var(--border-soft)]">
+                        <div key={i} className="flex items-center justify-between px-3 py-2 rounded-sm bg-[var(--bg-subtle)] border border-[var(--border-soft)]">
                           <span className="text-xs text-[var(--text-secondary)]">{cert}</span>
-                          <button onClick={() => update(d => ({ ...d, certifications: d.certifications.filter((_, idx) => idx !== i) }))} className="text-[var(--text-subtle)] hover:text-red-500">
+                          <button
+                            onClick={() => update(d => ({ ...d, certifications: d.certifications.filter((_, idx) => idx !== i) }))}
+                            className="text-[var(--text-subtle)] hover:text-[var(--color-error)] transition-colors"
+                          >
                             <Trash2 className="w-3 h-3" />
                           </button>
                         </div>
@@ -543,18 +596,18 @@ export function ResumeBuilderClient() {
                           }
                         }}
                         placeholder="AWS Certified Solutions Architect..."
-                        className="flex-1 px-3 py-2 rounded-lg border border-[var(--border-soft)] bg-[var(--bg-surface)] text-xs text-[var(--text-primary)] placeholder:text-[var(--text-subtle)] focus:outline-none focus:border-[var(--accent-primary)]"
+                        className="flex-1 px-3 py-2 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] text-xs text-[var(--text-primary)] placeholder:text-[var(--text-subtle)] focus:outline-none focus:border-[var(--accent-primary)]"
                       />
                       <button
                         onClick={() => { if (newCert.trim()) { update(d => ({ ...d, certifications: [...d.certifications, newCert.trim()] })); setNewCert(''); } }}
-                        className="px-3 py-2 rounded-lg text-xs font-medium bg-[var(--accent-dark)] text-[var(--accent-primary)]"
+                        className="px-3 py-2 rounded-sm text-xs font-medium bg-[var(--accent-dark)] text-[var(--text-inverse)] hover:opacity-90 transition-opacity"
                       >Add</button>
                     </div>
                   </div>
                 </div>
               )}
             </div>
-          </div>
+          </motion.div>
         )}
       </div>
     </div>

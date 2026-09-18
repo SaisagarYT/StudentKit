@@ -1,11 +1,11 @@
 'use client';
 
 import { AdminShell } from '@/features/admin/components/admin-shell';
-import { MigrateRoadmaps } from '@/features/admin/components/migrate-roadmaps';
+import { PlatformSync } from '@/features/admin/components/platform-sync';
 import { AnalyticsWidget } from '@/features/admin/components/analytics-widget';
 import { useAuth } from '@/lib/firebase/auth';
 import { roadmapService, projectService } from '@/lib/cms';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import {
   Map,
   FolderOpen,
@@ -14,7 +14,7 @@ import {
   Plus,
   ArrowUpRight,
   TrendingUp,
-  Sparkles,
+  Shield,
   Clock,
   CheckCircle2,
   BarChart3,
@@ -42,34 +42,35 @@ function DashboardContent() {
   });
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    async function load() {
-      try {
-        const [allRoadmaps, pubRoadmaps, draftRoadmaps, allProjects, pubProjects, draftProjects] =
-          await Promise.all([
-            roadmapService.list(),
-            roadmapService.list({ status: 'published' }),
-            roadmapService.list({ status: 'draft' }),
-            projectService.list(),
-            projectService.list({ status: 'published' }),
-            projectService.list({ status: 'draft' }),
-          ]);
-        setStats({
-          roadmaps: allRoadmaps.length,
-          publishedRoadmaps: pubRoadmaps.length,
-          draftRoadmaps: draftRoadmaps.length,
-          projects: allProjects.length,
-          publishedProjects: pubProjects.length,
-          draftProjects: draftProjects.length,
-        });
-      } catch {
-        // Firestore may not be configured yet
-      } finally {
-        setLoading(false);
-      }
+  const loadStats = useCallback(async () => {
+    try {
+      const [allRoadmaps, pubRoadmaps, draftRoadmaps, allProjects, pubProjects, draftProjects] =
+        await Promise.all([
+          roadmapService.list(),
+          roadmapService.list({ status: 'published' }),
+          roadmapService.list({ status: 'draft' }),
+          projectService.list(),
+          projectService.list({ status: 'published' }),
+          projectService.list({ status: 'draft' }),
+        ]);
+      setStats({
+        roadmaps: allRoadmaps.length,
+        publishedRoadmaps: pubRoadmaps.length,
+        draftRoadmaps: draftRoadmaps.length,
+        projects: allProjects.length,
+        publishedProjects: pubProjects.length,
+        draftProjects: draftProjects.length,
+      });
+    } catch {
+      // Firestore may not be configured yet
+    } finally {
+      setLoading(false);
     }
-    load();
   }, []);
+
+  useEffect(() => {
+    loadStats();
+  }, [loadStats]);
 
   const greeting = getGreeting();
   const totalPublished = stats.publishedRoadmaps + stats.publishedProjects;
@@ -79,21 +80,21 @@ function DashboardContent() {
   return (
     <div className="max-w-6xl space-y-8">
       {/* Welcome Header */}
-      <div className="relative overflow-hidden rounded-sm bg-[var(--accent-dark)] p-8">
+      <div className="relative overflow-hidden rounded-sm bg-[#151515] border border-[#272724] p-8 shadow-xs text-white">
         <div className="relative z-10">
-          <p className="text-[var(--accent-primary)] text-sm font-medium mb-1">{greeting}</p>
+          <p className="text-[#C7FF3D] text-sm font-medium mb-1">{greeting}</p>
           <h1 className="text-2xl md:text-3xl font-bold text-white">
             {user?.displayName || user?.email?.split('@')[0] || 'Admin'}
           </h1>
-          <p className="mt-2 text-white/60 text-sm max-w-md">
-            Manage your content, track performance, and keep your platform up to date.
+          <p className="mt-2 text-[#A0A09A] text-sm max-w-md leading-relaxed">
+            Manage your content, track performance, and keep your learning platform up to date.
           </p>
         </div>
         {/* Decorative elements */}
-        <div className="absolute top-0 right-0 w-64 h-64 bg-[var(--accent-primary)]/5 rounded-sm -translate-y-1/2 translate-x-1/4" />
-        <div className="absolute bottom-0 right-20 w-32 h-32 bg-[var(--accent-primary)]/10 rounded-sm translate-y-1/2" />
-        <div className="absolute top-4 right-8 text-[var(--accent-primary)]/20">
-          <Sparkles className="w-24 h-24" />
+        <div className="absolute top-0 right-0 w-64 h-64 bg-[#C7FF3D]/5 rounded-sm -translate-y-1/2 translate-x-1/4 pointer-events-none" />
+        <div className="absolute bottom-0 right-20 w-32 h-32 bg-[#C7FF3D]/10 rounded-sm translate-y-1/2 pointer-events-none" />
+        <div className="absolute top-6 right-8 text-[#C7FF3D]/20 pointer-events-none">
+          <Shield className="w-20 h-20" />
         </div>
       </div>
 
@@ -139,18 +140,18 @@ function DashboardContent() {
         <div className="lg:col-span-2 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] p-6">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-lg font-semibold text-[var(--text-primary)]">Quick Actions</h2>
-            <Zap className="w-5 h-5 text-[var(--accent-primary)]" />
+            <Zap className="w-5 h-5 text-[var(--accent-dark)]" />
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <ActionCard
-              href="/admin/roadmaps"
+              href="/admin/roadmaps/new"
               icon={Plus}
               title="New Roadmap"
               description="Create a guided learning path"
               accent="blue"
             />
             <ActionCard
-              href="/admin/projects"
+              href="/admin/projects/new"
               icon={Plus}
               title="New Project"
               description="Add a curated project guide"
@@ -177,7 +178,7 @@ function DashboardContent() {
         <div className="rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] p-6">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-lg font-semibold text-[var(--text-primary)]">Platform Status</h2>
-            <span className="flex items-center gap-1.5 text-xs text-emerald-600 bg-emerald-50 px-2 py-1 rounded-sm font-medium">
+            <span className="flex items-center gap-1.5 text-xs text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-1 rounded-sm font-medium">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
               Live
             </span>
@@ -225,10 +226,12 @@ function DashboardContent() {
         </div>
       </div>
 
-      {/* Analytics + Migration */}
+      {/* Platform Content Sync */}
+      <PlatformSync onSyncComplete={loadStats} />
+
+      {/* Analytics */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <AnalyticsWidget />
-        <MigrateRoadmaps />
       </div>
 
       {/* Footer Links */}
@@ -262,24 +265,24 @@ function getGreeting() {
 
 const STAT_COLORS = {
   emerald: {
-    bg: 'bg-emerald-50',
-    icon: 'text-emerald-600',
-    trend: 'text-emerald-600',
+    bg: 'bg-emerald-500/10 dark:bg-emerald-500/15',
+    icon: 'text-emerald-600 dark:text-emerald-400',
+    trend: 'text-emerald-600 dark:text-emerald-400',
   },
   blue: {
-    bg: 'bg-blue-50',
-    icon: 'text-blue-600',
-    trend: 'text-blue-600',
+    bg: 'bg-blue-500/10 dark:bg-blue-500/15',
+    icon: 'text-blue-600 dark:text-blue-400',
+    trend: 'text-blue-600 dark:text-blue-400',
   },
   purple: {
-    bg: 'bg-purple-50',
-    icon: 'text-purple-600',
-    trend: 'text-purple-600',
+    bg: 'bg-purple-500/10 dark:bg-purple-500/15',
+    icon: 'text-purple-600 dark:text-purple-400',
+    trend: 'text-purple-600 dark:text-purple-400',
   },
   amber: {
-    bg: 'bg-amber-50',
-    icon: 'text-amber-600',
-    trend: 'text-amber-600',
+    bg: 'bg-amber-500/10 dark:bg-amber-500/15',
+    icon: 'text-amber-600 dark:text-amber-400',
+    trend: 'text-amber-700 dark:text-amber-400',
   },
 };
 
@@ -322,10 +325,10 @@ function StatCard({
 }
 
 const ACTION_ACCENTS = {
-  blue: 'group-hover:bg-blue-50 group-hover:text-blue-600',
-  purple: 'group-hover:bg-purple-50 group-hover:text-purple-600',
-  emerald: 'group-hover:bg-emerald-50 group-hover:text-emerald-600',
-  amber: 'group-hover:bg-amber-50 group-hover:text-amber-600',
+  blue: 'group-hover:bg-blue-500/10 group-hover:text-blue-600 dark:group-hover:text-blue-400',
+  purple: 'group-hover:bg-purple-500/10 group-hover:text-purple-600 dark:group-hover:text-purple-400',
+  emerald: 'group-hover:bg-emerald-500/10 group-hover:text-emerald-600 dark:group-hover:text-emerald-400',
+  amber: 'group-hover:bg-amber-500/10 group-hover:text-amber-600 dark:group-hover:text-amber-400',
 };
 
 function ActionCard({
@@ -407,7 +410,7 @@ function FooterCard({
       <span className="text-sm font-medium text-[var(--text-secondary)] group-hover:text-[var(--text-primary)]">
         {label}
       </span>
-      <Icon className="w-4 h-4 text-[var(--text-subtle)] group-hover:text-[var(--accent-primary)] transition-colors" />
+      <Icon className="w-4 h-4 text-[var(--text-subtle)] group-hover:text-[var(--accent-dark)] transition-colors" />
     </Link>
   );
 }

@@ -1,12 +1,9 @@
+import { Suspense } from 'react';
 import {
   HeroSection,
   PillarsSection,
-  PopularToolsGrid,
-  CategoryShowcase,
-  LiveDemo,
   WhySection,
   HowItWorks,
-  ToolDirectory,
   FinalCTA,
 } from '@/components/marketing';
 import { NewsletterCapture } from '@/components/engagement/newsletter-capture';
@@ -17,12 +14,8 @@ function MarketingPage() {
     <>
       <HeroSection />
       <PillarsSection />
-      <PopularToolsGrid />
-      <CategoryShowcase />
-      <LiveDemo />
       <WhySection />
       <HowItWorks />
-      <ToolDirectory />
       <NewsletterCapture />
       <FinalCTA />
     </>
@@ -30,5 +23,9 @@ function MarketingPage() {
 }
 
 export default function HomePage() {
-  return <SmartHome marketingContent={<MarketingPage />} />;
+  return (
+    <Suspense fallback={<MarketingPage />}>
+      <SmartHome marketingContent={<MarketingPage />} />
+    </Suspense>
+  );
 }

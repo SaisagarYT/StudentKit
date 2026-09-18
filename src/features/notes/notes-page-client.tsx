@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
+import { motion, AnimatePresence } from 'motion/react';
 import {
   Bookmark, StickyNote, Search, Trash2, Map, FolderOpen, Wrench,
   Plus, X, Filter, Clock
@@ -41,10 +42,11 @@ const TYPE_HREFS = {
   project: (slug: string) => `/projects/view?slug=${slug}`,
 };
 
-const TYPE_COLORS = {
-  tool: 'bg-blue-500/10 text-blue-600',
-  roadmap: 'bg-emerald-500/10 text-emerald-600',
-  project: 'bg-purple-500/10 text-purple-600',
+// Token-based type badge styles — works in both light and dark mode
+const TYPE_BADGE: Record<string, { bg: string; text: string }> = {
+  tool:    { bg: 'var(--bg-subtle)', text: 'var(--accent-dark)' },
+  roadmap: { bg: 'color-mix(in srgb, var(--color-success) 14%, transparent)', text: 'var(--color-success)' },
+  project: { bg: 'var(--bg-subtle)', text: 'var(--text-secondary)' },
 };
 
 function formatDate(iso: string): string {
@@ -135,7 +137,7 @@ export function NotesPageClient() {
   if (!mounted) {
     return (
       <div className="py-20 flex justify-center">
-        <div className="w-6 h-6 border-2 border-[var(--accent-primary)] border-t-transparent rounded-full animate-spin" />
+        <div className="w-6 h-6 border-2 border-[var(--accent-dark)] border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
@@ -145,10 +147,15 @@ export function NotesPageClient() {
       <div className="container-main max-w-4xl">
 
         {/* Header */}
-        <div className="mb-8">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45 }}
+          className="mb-8"
+        >
           <div className="flex items-center gap-3 mb-2">
-            <div className="w-10 h-10 rounded-sm bg-[var(--accent-primary)] flex items-center justify-center">
-              <StickyNote className="w-5 h-5 text-[var(--accent-dark)]" />
+            <div className="w-10 h-10 rounded-sm bg-[var(--accent-dark)] flex items-center justify-center shrink-0">
+              <StickyNote className="w-5 h-5 text-[var(--text-inverse)]" />
             </div>
             <div>
               <h1 className="text-2xl font-bold text-[var(--text-primary)]">Notes & Bookmarks</h1>
@@ -157,10 +164,15 @@ export function NotesPageClient() {
               </p>
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* Filters */}
-        <div className="flex flex-wrap items-center gap-3 mb-6">
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.08 }}
+          className="flex flex-wrap items-center gap-3 mb-6"
+        >
           <div className="relative flex-1 min-w-[200px]">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-subtle)]" />
             <input
@@ -179,7 +191,7 @@ export function NotesPageClient() {
                 onClick={() => setFilterType(type)}
                 className={`px-3 py-1.5 rounded-sm text-xs font-medium transition-all ${
                   filterType === type
-                    ? 'bg-[var(--accent-dark)] text-[var(--accent-primary)]'
+                    ? 'bg-[var(--accent-dark)] text-[var(--text-inverse)]'
                     : 'text-[var(--text-subtle)] hover:bg-[var(--bg-subtle)] border border-[var(--border-soft)]'
                 }`}
               >
@@ -187,11 +199,16 @@ export function NotesPageClient() {
               </button>
             ))}
           </div>
-        </div>
+        </motion.div>
 
         {/* Bookmarks list */}
         {filteredBookmarks.length === 0 ? (
-          <div className="py-16 text-center rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)]">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.35 }}
+            className="py-16 text-center rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)]"
+          >
             <Bookmark className="w-10 h-10 mx-auto text-[var(--text-subtle)] opacity-30 mb-3" />
             <p className="text-sm font-medium text-[var(--text-primary)] mb-1">
               {bookmarks.length === 0 ? 'No bookmarks yet' : 'No results'}
@@ -201,26 +218,32 @@ export function NotesPageClient() {
                 ? 'Bookmark tools, roadmaps, and projects to save them here'
                 : 'Try a different search or filter'}
             </p>
-          </div>
+          </motion.div>
         ) : (
           <div className="space-y-3">
-            {filteredBookmarks.map((item) => {
+            {filteredBookmarks.map((item, i) => {
               const Icon = TYPE_ICONS[item.type as keyof typeof TYPE_ICONS] || Wrench;
               const href = TYPE_HREFS[item.type as keyof typeof TYPE_HREFS]?.(item.slug) || '#';
-              const colorClass = TYPE_COLORS[item.type as keyof typeof TYPE_COLORS] || 'bg-gray-500/10 text-gray-600';
+              const badge = TYPE_BADGE[item.type] || TYPE_BADGE.tool;
               const note = getNote(item.type, item.slug);
               const bookmarkKey = `${item.type}:${item.slug}`;
               const isEditing = editingNote === bookmarkKey;
 
               return (
-                <div
+                <motion.div
                   key={bookmarkKey}
-                  className="rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] overflow-hidden transition-all hover:border-[var(--border-default)]"
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: i * 0.04 }}
+                  className="rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] overflow-hidden transition-colors hover:border-[var(--border-default)]"
                 >
                   {/* Bookmark header row */}
                   <div className="flex items-center gap-3 p-4">
-                    <div className={`w-9 h-9 rounded-sm flex items-center justify-center shrink-0 ${colorClass}`}>
-                      <Icon className="w-4 h-4" />
+                    <div
+                      className="w-9 h-9 rounded-sm flex items-center justify-center shrink-0"
+                      style={{ background: badge.bg }}
+                    >
+                      <Icon className="w-4 h-4" style={{ color: badge.text }} />
                     </div>
 
                     <Link href={href} className="flex-1 min-w-0 group">
@@ -228,10 +251,15 @@ export function NotesPageClient() {
                         {item.title}
                       </p>
                       <div className="flex items-center gap-2 mt-0.5">
-                        <span className="text-[10px] font-medium text-[var(--text-subtle)] capitalize">{item.type}</span>
+                        <span
+                          className="text-[10px] font-semibold capitalize px-1.5 py-0.5 rounded-sm"
+                          style={{ background: badge.bg, color: badge.text }}
+                        >
+                          {item.type}
+                        </span>
                         {item.addedAt && (
                           <>
-                            <span className="text-[var(--text-subtle)]">·</span>
+                            <span className="text-[var(--border-default)]">·</span>
                             <span className="text-[10px] text-[var(--text-subtle)] flex items-center gap-0.5">
                               <Clock className="w-2.5 h-2.5" />{formatDate(item.addedAt)}
                             </span>
@@ -253,9 +281,9 @@ export function NotesPageClient() {
                         }}
                         className={`p-2 rounded-sm transition-colors ${
                           isEditing
-                            ? 'bg-[var(--accent-dark)] text-[var(--accent-primary)]'
+                            ? 'bg-[var(--accent-dark)] text-[var(--text-inverse)]'
                             : note
-                              ? 'text-yellow-500 hover:bg-yellow-50'
+                              ? 'text-[var(--color-warning)] bg-[color-mix(in_srgb,var(--color-warning)_10%,transparent)]'
                               : 'text-[var(--text-subtle)] hover:bg-[var(--bg-subtle)]'
                         }`}
                         title={isEditing ? 'Save note' : note ? 'Edit note' : 'Add note'}
@@ -264,7 +292,7 @@ export function NotesPageClient() {
                       </button>
                       <button
                         onClick={() => handleRemoveBookmark(item.type, item.slug)}
-                        className="p-2 rounded-sm text-[var(--text-subtle)] hover:text-red-500 hover:bg-red-50 transition-colors"
+                        className="p-2 rounded-sm text-[var(--text-subtle)] hover:text-[var(--color-error)] hover:bg-[color-mix(in_srgb,var(--color-error)_8%,transparent)] transition-colors"
                         title="Remove bookmark"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
@@ -273,54 +301,68 @@ export function NotesPageClient() {
                   </div>
 
                   {/* Note display */}
-                  {note && !isEditing && (
-                    <div className="px-4 pb-4 pt-0">
-                      <div className="flex items-start gap-2 p-3 rounded-sm bg-yellow-50/50 border border-yellow-200/50">
-                        <StickyNote className="w-3 h-3 text-yellow-500 shrink-0 mt-0.5" />
-                        <div className="flex-1 min-w-0">
-                          <p className="text-xs text-[var(--text-secondary)] whitespace-pre-line">{note.text}</p>
-                          <p className="text-[9px] text-[var(--text-subtle)] mt-1">{formatDate(note.createdAt)}</p>
+                  <AnimatePresence>
+                    {note && !isEditing && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        className="px-4 pb-4 pt-0"
+                      >
+                        <div className="flex items-start gap-2 p-3 rounded-sm bg-[color-mix(in_srgb,var(--color-warning)_8%,transparent)] border border-[color-mix(in_srgb,var(--color-warning)_20%,transparent)]">
+                          <StickyNote className="w-3 h-3 text-[var(--color-warning)] shrink-0 mt-0.5" />
+                          <div className="flex-1 min-w-0">
+                            <p className="text-xs text-[var(--text-secondary)] whitespace-pre-line">{note.text}</p>
+                            <p className="text-[9px] text-[var(--text-subtle)] mt-1">{formatDate(note.createdAt)}</p>
+                          </div>
+                          <button
+                            onClick={() => handleDeleteNote(bookmarkKey)}
+                            className="shrink-0 p-1 rounded-sm text-[var(--text-subtle)] hover:text-[var(--color-error)] transition-colors"
+                          >
+                            <Trash2 className="w-3 h-3" />
+                          </button>
                         </div>
-                        <button
-                          onClick={() => handleDeleteNote(bookmarkKey)}
-                          className="shrink-0 p-1 rounded-sm text-[var(--text-subtle)] hover:text-red-500 transition-colors"
-                        >
-                          <Trash2 className="w-3 h-3" />
-                        </button>
-                      </div>
-                    </div>
-                  )}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
 
                   {/* Note editor */}
-                  {isEditing && (
-                    <div className="px-4 pb-4 pt-0">
-                      <div className="space-y-2">
-                        <textarea
-                          value={noteText}
-                          onChange={(e) => setNoteText(e.target.value)}
-                          placeholder="Add a personal note..."
-                          className="w-full p-3 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-background)] text-xs text-[var(--text-primary)] placeholder:text-[var(--text-subtle)] focus:outline-none focus:border-[var(--accent-primary)] resize-none transition-colors"
-                          rows={3}
-                          autoFocus
-                        />
-                        <div className="flex items-center gap-2">
-                          <button
-                            onClick={() => handleSaveNote(bookmarkKey)}
-                            className="px-3 py-1.5 rounded-sm text-[11px] font-semibold bg-[var(--accent-dark)] text-[var(--accent-primary)] hover:opacity-90 transition-opacity"
-                          >
-                            Save Note
-                          </button>
-                          <button
-                            onClick={() => { setEditingNote(null); setNoteText(''); }}
-                            className="px-3 py-1.5 rounded-sm text-[11px] font-medium text-[var(--text-subtle)] hover:bg-[var(--bg-subtle)] transition-colors"
-                          >
-                            Cancel
-                          </button>
+                  <AnimatePresence>
+                    {isEditing && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        className="px-4 pb-4 pt-0"
+                      >
+                        <div className="space-y-2">
+                          <textarea
+                            value={noteText}
+                            onChange={(e) => setNoteText(e.target.value)}
+                            placeholder="Add a personal note..."
+                            className="w-full p-3 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-subtle)] text-xs text-[var(--text-primary)] placeholder:text-[var(--text-subtle)] focus:outline-none focus:border-[var(--accent-primary)] resize-none transition-colors"
+                            rows={3}
+                            autoFocus
+                          />
+                          <div className="flex items-center gap-2">
+                            <button
+                              onClick={() => handleSaveNote(bookmarkKey)}
+                              className="px-3 py-1.5 rounded-sm text-[11px] font-semibold bg-[var(--accent-dark)] text-[var(--text-inverse)] hover:opacity-90 transition-opacity"
+                            >
+                              Save Note
+                            </button>
+                            <button
+                              onClick={() => { setEditingNote(null); setNoteText(''); }}
+                              className="px-3 py-1.5 rounded-sm text-[11px] font-medium text-[var(--text-subtle)] hover:bg-[var(--bg-subtle)] transition-colors"
+                            >
+                              Cancel
+                            </button>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </motion.div>
               );
             })}
           </div>

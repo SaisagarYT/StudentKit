@@ -1,98 +1,143 @@
 'use client';
 
-import { useRef, useEffect } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
+import { motion } from 'motion/react';
+import { ArrowRight, CheckCircle2 } from 'lucide-react';
+import Link from 'next/link';
 
 const steps = [
   {
     number: '01',
-    title: 'Find your tool.',
-    description: 'Search or browse by category to find exactly what you need.',
+    title: 'Choose your career track.',
+    description:
+      'Select from 9 comprehensive engineering roadmaps — Full-Stack, AI/ML, DevOps, Frontend, Backend, or Placement Prep.',
+    tags: ['Full-Stack', 'AI Engineer', 'DevOps', 'Mobile'],
   },
   {
     number: '02',
-    title: 'Enter your information.',
-    description: 'Simple inputs, clear labels — no guesswork required.',
+    title: 'Master concepts & build systems.',
+    description:
+      'Work through milestones, build production-grade guided projects with architecture blueprints, and track your XP and streaks.',
+    tags: ['System Architecture', 'Microservices', 'Real Projects'],
   },
   {
     number: '03',
-    title: 'Get a clear answer.',
-    description: 'Instant results with context and explanation.',
+    title: 'Ace technical interviews.',
+    description:
+      'Tackle 250+ curated DSA patterns, review high-yield CS fundamentals (OS, DBMS, CN), and generate an ATS-ready resume.',
+    tags: ['DSA Patterns', 'CS Fundamentals', 'ATS Resume'],
   },
 ];
 
 export function HowItWorks() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const headingRef = useRef<HTMLDivElement>(null);
-  const stepsRef = useRef<HTMLDivElement>(null);
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15,
+      },
+    },
+  };
 
-  useEffect(() => {
-    const prefersReducedMotion = window.matchMedia(
-      '(prefers-reduced-motion: reduce)'
-    ).matches;
-
-    if (prefersReducedMotion) return;
-
-    const ctx = gsap.context(() => {
-      gsap.set(headingRef.current, { opacity: 0, y: 30 });
-      gsap.set(stepsRef.current?.children || [], { opacity: 0, y: 40 });
-
-      ScrollTrigger.create({
-        trigger: sectionRef.current,
-        start: 'top 78%',
-        once: true,
-        onEnter: () => {
-          gsap.to(headingRef.current, {
-            opacity: 1,
-            y: 0,
-            duration: 0.8,
-            ease: 'power3.out',
-          });
-          gsap.to(stepsRef.current?.children || [], {
-            opacity: 1,
-            y: 0,
-            duration: 0.7,
-            ease: 'power3.out',
-            stagger: 0.15,
-            delay: 0.2,
-          });
-        },
-      });
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
+  const itemVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const },
+    },
+  };
 
   return (
-    <section ref={sectionRef} className="section-spacing">
+    <section className="section-spacing">
       <div className="container-main">
-        <div ref={headingRef} className="mb-16">
+        {/* Section Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-60px' }}
+          transition={{ duration: 0.7 }}
+          className="mb-16"
+        >
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[var(--bg-subtle)] border border-[var(--border-soft)] text-xs font-semibold text-[var(--text-secondary)] mb-4">
+            <span>Proven 3-Step Strategy</span>
+          </div>
           <h2 className="text-h2 font-bold tracking-tight">
             How it works.
           </h2>
-        </div>
+          <p className="mt-3 text-body-lg text-[var(--text-secondary)] max-w-xl">
+            A frictionless, zero-distraction roadmap designed to get you from beginner to top-tier engineer.
+          </p>
+        </motion.div>
 
-        <div
-          ref={stepsRef}
-          className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12"
+        {/* Steps Grid */}
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-60px' }}
+          className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10 relative"
         >
-          {steps.map((step) => (
-            <div key={step.number} className="relative">
-              <span className="block text-6xl md:text-7xl font-bold tracking-tighter text-[var(--accent-primary)] leading-none select-none">
-                {step.number}
-              </span>
-              <h3 className="mt-4 text-xl font-semibold tracking-tight text-[var(--text-primary)]">
-                {step.title}
-              </h3>
-              <p className="mt-3 text-sm text-[var(--text-secondary)] leading-relaxed max-w-xs">
-                {step.description}
-              </p>
-            </div>
+          {steps.map((step, idx) => (
+            <motion.div
+              key={step.number}
+              variants={itemVariants}
+              whileHover={{ y: -4 }}
+              transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+              className="relative flex flex-col justify-between p-6 sm:p-7 rounded-md border border-[var(--border-soft)] bg-[var(--bg-surface)] hover:border-[var(--border-default)] transition-all shadow-sm"
+            >
+              {/* Header Step Number */}
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <span className="text-4xl md:text-5xl font-extrabold tracking-tighter text-[var(--text-primary)] bg-[var(--bg-subtle)] border border-[var(--border-soft)] px-3 py-1 rounded-md leading-none">
+                    {step.number}
+                  </span>
+                  <span className="text-xs font-semibold text-[var(--text-subtle)] uppercase tracking-wider">
+                    Phase {idx + 1}
+                  </span>
+                </div>
+
+                <h3 className="text-xl font-bold tracking-tight text-[var(--text-primary)] mb-3">
+                  {step.title}
+                </h3>
+
+                <p className="text-sm text-[var(--text-secondary)] leading-relaxed mb-6">
+                  {step.description}
+                </p>
+              </div>
+
+              {/* Tags */}
+              <div className="pt-4 border-t border-[var(--border-soft)] flex flex-wrap gap-1.5">
+                {step.tags.map((t) => (
+                  <span
+                    key={t}
+                    className="inline-flex items-center gap-1 text-[11px] font-mono font-medium text-[var(--text-secondary)] bg-[var(--bg-subtle)] border border-[var(--border-soft)] px-2 py-0.5 rounded-sm"
+                  >
+                    <CheckCircle2 className="w-3 h-3 text-[var(--color-success)]" />
+                    {t}
+                  </span>
+                ))}
+              </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
+
+        {/* Action Link below workflow */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.4 }}
+          className="mt-12 text-center"
+        >
+          <Link
+            href="/start"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--text-primary)] hover:text-[var(--accent-dark)] transition-colors group"
+          >
+            <span>Ready to start your personalized track?</span>
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          </Link>
+        </motion.div>
       </div>
     </section>
   );

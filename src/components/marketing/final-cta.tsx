@@ -1,91 +1,98 @@
 'use client';
 
-import { useRef, useEffect } from 'react';
 import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
+import { ArrowRight, Check, Terminal } from 'lucide-react';
+import { motion } from 'motion/react';
 
 export function FinalCTA() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const prefersReducedMotion = window.matchMedia(
-      '(prefers-reduced-motion: reduce)'
-    ).matches;
-
-    if (prefersReducedMotion) return;
-
-    const ctx = gsap.context(() => {
-      gsap.set(contentRef.current, { opacity: 0, y: 40, scale: 0.98 });
-
-      ScrollTrigger.create({
-        trigger: sectionRef.current,
-        start: 'top 80%',
-        once: true,
-        onEnter: () => {
-          gsap.to(contentRef.current, {
-            opacity: 1,
-            y: 0,
-            scale: 1,
-            duration: 0.9,
-            ease: 'power3.out',
-          });
-        },
-      });
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
-
   return (
-    <section ref={sectionRef} className="section-spacing">
+    <section className="section-spacing">
       <div className="container-main">
-        <div
-          ref={contentRef}
-          className="relative overflow-hidden rounded-3xl bg-[var(--bg-dark)] p-10 md:p-16 lg:p-20"
+        <motion.div
+          initial={{ opacity: 0, y: 30, scale: 0.98 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          viewport={{ once: true, margin: '-60px' }}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] as const }}
+          className="relative overflow-hidden rounded-2xl bg-[#151515] text-white border border-[#272724] p-8 md:p-14 lg:p-16 shadow-2xl"
         >
-          {/* Content */}
-          <div className="relative z-10 max-w-xl">
-            <h2 className="text-h2 font-bold tracking-tight text-[var(--text-inverse)]">
-              Your learning journey starts{' '}
-              <span className="text-[var(--accent-primary)]">now</span>.
+          {/* Ambient Glows */}
+          <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-[#C7FF3D]/10 blur-3xl pointer-events-none" />
+          <div className="absolute -bottom-24 -left-24 w-80 h-80 rounded-full bg-[#C7FF3D]/5 blur-3xl pointer-events-none" />
+
+          {/* Grid pattern overlay */}
+          <div
+            className="absolute inset-0 opacity-[0.05] pointer-events-none"
+            style={{
+              backgroundImage:
+                'linear-gradient(white 1px, transparent 1px), linear-gradient(90deg, white 1px, transparent 1px)',
+              backgroundSize: '40px 40px',
+            }}
+          />
+
+          <div className="relative z-10 max-w-2xl">
+            {/* Tagline */}
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/15 text-xs font-semibold text-[#C7FF3D] mb-6">
+              <span>Your career in tech begins today</span>
+            </div>
+
+            {/* Heading */}
+            <h2 className="text-h2 font-bold tracking-tight text-white leading-[1.05]">
+              Master engineering skills.{' '}
+              <br className="hidden sm:inline" />
+              Build real systems.{' '}
+              <span className="text-[#C7FF3D]">Get hired</span>.
             </h2>
-            <p className="mt-5 text-base text-[var(--text-inverse)]/70 leading-relaxed max-w-md">
-              Choose your goal, follow a structured path, build real projects,
-              and prepare for interviews — zero guesswork, zero cost.
+
+            {/* Description */}
+            <p className="mt-5 text-base md:text-lg text-white/75 leading-relaxed max-w-lg">
+              Follow structured roadmaps, solve 250+ interview DSA patterns, build resume-defining projects, and craft an ATS resume — 100% free.
             </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link
-                href="/start"
-                className="inline-flex items-center gap-2 px-7 py-3.5 text-sm font-semibold bg-[var(--accent-primary)] text-[var(--text-primary)] rounded-sm hover:bg-[var(--accent-primary-hover)] transition-colors"
-              >
-                Choose your path
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-              <Link
-                href="/roadmaps"
-                className="inline-flex items-center gap-2 px-7 py-3.5 text-sm font-semibold border border-white/20 text-[var(--text-inverse)] rounded-sm hover:bg-white/5 transition-colors"
-              >
-                Browse all paths
-              </Link>
+
+            {/* CTAs */}
+            <div className="mt-8 flex flex-wrap gap-4 items-center">
+              <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
+                <Link
+                  href="/start"
+                  className="inline-flex items-center gap-2 px-7 py-3.5 text-sm font-semibold bg-[#C7FF3D] text-[#111111] rounded-sm hover:bg-[#B8F030] transition-all shadow-md"
+                >
+                  Get Started Free
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              </motion.div>
+
+              <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
+                <Link
+                  href="/placement/dsa"
+                  className="inline-flex items-center gap-2 px-6 py-3.5 text-sm font-semibold border border-white/20 text-white rounded-sm hover:bg-white/10 transition-all"
+                >
+                  <Terminal className="w-4 h-4 text-[#C7FF3D]" />
+                  Explore DSA Sheet
+                </Link>
+              </motion.div>
+            </div>
+
+            {/* Trust Badges */}
+            <div className="mt-10 pt-6 border-t border-white/10 flex flex-wrap items-center gap-6 text-xs text-white/60">
+              <span className="flex items-center gap-1.5">
+                <Check className="w-4 h-4 text-[#C7FF3D]" />
+                100% Free & Open Access
+              </span>
+              <span className="flex items-center gap-1.5">
+                <Check className="w-4 h-4 text-[#C7FF3D]" />
+                No credit card required
+              </span>
+              <span className="flex items-center gap-1.5">
+                <Check className="w-4 h-4 text-[#C7FF3D]" />
+                Zero paywalled content
+              </span>
             </div>
           </div>
 
-          {/* Decorative elements */}
-          <div className="absolute top-8 right-8 w-32 h-32 border border-white/5 rounded-sm" />
-          <div className="absolute -bottom-10 right-20 w-48 h-48 border border-white/5 rounded-sm" />
-          <div className="absolute top-1/2 right-1/4 w-3 h-3 bg-[var(--accent-primary)] rounded-sm opacity-40" />
-          <div className="absolute bottom-12 right-1/3 w-2 h-2 bg-[var(--accent-primary)] rounded-full opacity-20" />
-
-          {/* Large background number */}
-          <div className="absolute -right-8 -bottom-8 text-[12rem] md:text-[16rem] font-bold tracking-tighter text-white/[0.03] leading-none select-none pointer-events-none">
+          {/* Large Stylized Logo Watermark */}
+          <div className="absolute -right-6 -bottom-10 text-[12rem] md:text-[16rem] font-black tracking-tighter text-white/[0.03] leading-none select-none pointer-events-none">
             SK
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

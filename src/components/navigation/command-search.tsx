@@ -215,7 +215,7 @@ function SearchResultItem({
   title,
   description,
   icon,
-  category,
+  category: _category,
   isSelected,
   onSelect,
 }: {

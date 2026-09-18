@@ -2,32 +2,6 @@ import { writeFileSync } from 'fs';
 
 const BASE_URL = 'https://studentkit.app';
 
-const tools = [
-  'attendance-calculator',
-  'cgpa-calculator',
-  'sgpa-calculator',
-  'cgpa-to-percentage',
-  'marks-percentage-calculator',
-  'age-calculator',
-  'ctc-to-inhand-calculator',
-  'salary-calculator',
-  'image-compressor',
-  'image-resizer',
-  'signature-resizer',
-  'readme-generator',
-  'gitignore-generator',
-  'project-structure-generator',
-  'color-palette-generator',
-  'image-color-picker',
-  'regex-tester',
-  'json-formatter',
-  'base64-encoder',
-  'lorem-ipsum-generator',
-  'uuid-generator',
-];
-
-const categories = ['college', 'exams', 'career', 'documents', 'developer'];
-
 const roadmapSlugs = [
   'frontend-developer',
   'backend-developer',
@@ -44,17 +18,14 @@ const projectSlugs = [];
 
 const staticPages = [
   { path: '', priority: '1.0', changefreq: 'weekly' },
-  { path: '/tools', priority: '0.9', changefreq: 'weekly' },
   { path: '/roadmaps', priority: '0.9', changefreq: 'weekly' },
   { path: '/projects', priority: '0.8', changefreq: 'weekly' },
   { path: '/placement', priority: '0.8', changefreq: 'weekly' },
   { path: '/placement/dsa', priority: '0.8', changefreq: 'daily' },
   { path: '/placement/cs-fundamentals', priority: '0.7', changefreq: 'weekly' },
   { path: '/placement/interview', priority: '0.7', changefreq: 'weekly' },
-  { path: '/profile', priority: '0.5', changefreq: 'daily' },
   { path: '/open-source', priority: '0.7', changefreq: 'weekly' },
   { path: '/guides', priority: '0.7', changefreq: 'weekly' },
-  { path: '/categories', priority: '0.7', changefreq: 'monthly' },
   { path: '/about', priority: '0.5', changefreq: 'monthly' },
   { path: '/contact', priority: '0.4', changefreq: 'monthly' },
   { path: '/privacy', priority: '0.3', changefreq: 'yearly' },
@@ -70,18 +41,6 @@ const urls = [
     lastmod: today,
     changefreq,
     priority,
-  })),
-  ...categories.map((slug) => ({
-    loc: `${BASE_URL}/categories/${slug}`,
-    lastmod: today,
-    changefreq: 'monthly',
-    priority: '0.7',
-  })),
-  ...tools.map((slug) => ({
-    loc: `${BASE_URL}/tools/${slug}`,
-    lastmod: today,
-    changefreq: 'monthly',
-    priority: '0.8',
   })),
   ...roadmapSlugs.map((slug) => ({
     loc: `${BASE_URL}/roadmaps/view?slug=${slug}`,

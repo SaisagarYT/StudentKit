@@ -21,6 +21,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
       <div className="min-h-screen flex items-center justify-center bg-[var(--bg-base)] p-6">
         <div className="max-w-md w-full rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] p-8 text-center">
           <AlertTriangle className="w-10 h-10 mx-auto text-yellow-500 mb-4" />
+          <AlertTriangle className="w-10 h-10 mx-auto text-amber-500 mb-4" />
           <h1 className="text-xl font-bold text-[var(--text-primary)] mb-2">Firebase Not Configured</h1>
           <p className="text-sm text-[var(--text-secondary)] mb-4">
             Add your Firebase credentials to <code className="px-1.5 py-0.5 rounded-sm bg-[var(--bg-subtle)] text-xs">.env.local</code> and restart the dev server.

@@ -1,46 +1,46 @@
 'use client';
 
-import { useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
-import gsap from 'gsap';
+import { motion } from 'motion/react';
 import { InterviewPrepView } from '@/features/placement/interview-prep-view';
 
 export function InterviewPageClient() {
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.fromTo('.iv-header', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out' });
-      gsap.fromTo('.iv-content', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out', delay: 0.15 });
-    }, ref);
-    return () => ctx.revert();
-  }, []);
-
   return (
-    <div ref={ref} className="py-8 md:py-12">
-      <div className="container-main">
-        <div className="iv-header">
+    <div className="min-h-screen bg-[var(--bg-primary)] py-8 md:py-12">
+      <div className="container-main max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="mb-8"
+        >
           <Link
             href="/placement"
-            className="inline-flex items-center gap-1.5 text-xs font-medium text-[var(--text-subtle)] hover:text-[var(--text-primary)] transition-colors mb-6"
+            className="inline-flex items-center gap-1.5 text-xs font-mono font-medium text-[var(--text-subtle)] hover:text-[var(--text-primary)] transition-colors mb-5"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
-            Placement Hub
+            <span>Placement Hub</span>
           </Link>
 
-          <h1 className="text-h1 font-bold text-[var(--text-primary)] tracking-tight">
-            Interview <span className="font-serif italic font-normal">Prep</span>
+          <h1 className="text-3xl sm:text-5xl font-bold text-[var(--text-primary)] tracking-tight">
+            Interview <span className="font-serif italic font-normal text-[var(--accent-dark)]">Preparation</span>
           </h1>
-          <p className="mt-3 text-sm text-[var(--text-secondary)] max-w-2xl leading-relaxed">
-            Master every stage of the interview — from HR screenings to final technical rounds.
-            Company-specific patterns, STAR method for behavioral, and resume best practices.
+          <p className="mt-3 text-xs sm:text-sm text-[var(--text-secondary)] max-w-2xl leading-relaxed">
+            Master every stage of the technical hiring loop — from recruiter screenings to system design and executive bar-raisers.
+            Company-specific patterns, the STAR behavioral framework, and ATS resume benchmarks.
           </p>
-        </div>
+        </motion.div>
 
-        <div className="iv-content mt-8">
+        {/* Interview Prep Content */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.15 }}
+        >
           <InterviewPrepView />
-        </div>
+        </motion.div>
       </div>
     </div>
   );

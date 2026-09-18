@@ -24,7 +24,7 @@ export interface LeaderboardEntry {
   totalActiveDays: number;
   roadmapTopics: number;
   xp: number;
-  updatedAt: any;
+  updatedAt: unknown;
 }
 
 export function calculateXP(entry: Pick<LeaderboardEntry, 'dsaSolved' | 'csSolved' | 'totalActiveDays' | 'roadmapTopics'>): number {

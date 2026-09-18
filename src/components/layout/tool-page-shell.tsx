@@ -1,9 +1,9 @@
 'use client';
 
-import { useRef, useEffect } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import { ChevronRight } from 'lucide-react';
-import gsap from 'gsap';
+import { motion, AnimatePresence } from 'motion/react';
 import { Badge } from '@/components/ui/badge';
 import { type ToolCategory } from '@/types/tool';
 import { type BreadcrumbItem, type FAQItem } from '@/types/common';
@@ -33,39 +33,6 @@ export function ToolPageShell({
   faq,
   relatedTools,
 }: ToolPageShellProps) {
-  const headerRef = useRef<HTMLDivElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const prefersReducedMotion = window.matchMedia(
-      '(prefers-reduced-motion: reduce)'
-    ).matches;
-
-    if (prefersReducedMotion) return;
-
-    const ctx = gsap.context(() => {
-      gsap.set(headerRef.current, { opacity: 0, y: 20 });
-      gsap.set(contentRef.current, { opacity: 0, y: 30 });
-
-      gsap.to(headerRef.current, {
-        opacity: 1,
-        y: 0,
-        duration: 0.7,
-        ease: 'power3.out',
-        delay: 0.1,
-      });
-      gsap.to(contentRef.current, {
-        opacity: 1,
-        y: 0,
-        duration: 0.7,
-        ease: 'power3.out',
-        delay: 0.25,
-      });
-    });
-
-    return () => ctx.revert();
-  }, []);
-
   return (
     <div className="py-8 md:py-12">
       <div className="container-main">
@@ -93,7 +60,12 @@ export function ToolPageShell({
         </nav>
 
         {/* Header */}
-        <div ref={headerRef} className="mb-10">
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, ease: 'easeOut' }}
+          className="mb-10"
+        >
           <Badge variant={category} className="mb-3">
             {category}
           </Badge>
@@ -101,12 +73,17 @@ export function ToolPageShell({
           <p className="mt-3 text-body-lg text-[var(--text-secondary)] max-w-2xl">
             {description}
           </p>
-        </div>
+        </motion.div>
 
         {/* Main tool interface */}
-        <div ref={contentRef} className="mb-16">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45, delay: 0.1, ease: 'easeOut' }}
+          className="mb-16"
+        >
           {children}
-        </div>
+        </motion.div>
 
         {/* Supplementary content */}
         <div className="max-w-3xl space-y-16">
@@ -186,48 +163,38 @@ export function ToolPageShell({
 }
 
 function FAQAccordionItem({ item }: { item: FAQItem }) {
-  const contentRef = useRef<HTMLDivElement>(null);
-  const arrowRef = useRef<SVGSVGElement>(null);
-
-  const toggle = () => {
-    if (!contentRef.current || !arrowRef.current) return;
-    const isOpen = contentRef.current.style.maxHeight !== '0px' && contentRef.current.style.maxHeight !== '';
-
-    if (isOpen) {
-      gsap.to(contentRef.current, { maxHeight: 0, opacity: 0, duration: 0.3, ease: 'power2.inOut' });
-      gsap.to(arrowRef.current, { rotation: 0, duration: 0.3, ease: 'power2.inOut' });
-    } else {
-      gsap.set(contentRef.current, { maxHeight: 'none' });
-      const height = contentRef.current.scrollHeight;
-      gsap.set(contentRef.current, { maxHeight: 0 });
-      gsap.to(contentRef.current, { maxHeight: height, opacity: 1, duration: 0.3, ease: 'power2.inOut' });
-      gsap.to(arrowRef.current, { rotation: 180, duration: 0.3, ease: 'power2.inOut' });
-    }
-  };
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div className="border border-[var(--border-soft)] rounded-sm overflow-hidden">
       <button
-        onClick={toggle}
+        onClick={() => setIsOpen(!isOpen)}
         className="w-full flex items-center justify-between p-4 text-left hover:bg-[var(--bg-subtle)] transition-colors"
       >
         <span className="text-sm font-medium text-[var(--text-primary)] pr-4">
           {item.question}
         </span>
         <ChevronRight
-          ref={arrowRef}
-          className="w-4 h-4 text-[var(--text-subtle)] shrink-0 rotate-90"
+          className={`w-4 h-4 text-[var(--text-subtle)] shrink-0 transition-transform duration-200 ${
+            isOpen ? 'rotate-90' : ''
+          }`}
         />
       </button>
-      <div
-        ref={contentRef}
-        className="overflow-hidden"
-        style={{ maxHeight: 0, opacity: 0 }}
-      >
-        <div className="px-4 pb-4 text-sm text-[var(--text-secondary)] leading-relaxed">
-          {item.answer}
-        </div>
-      </div>
+      <AnimatePresence initial={false}>
+        {isOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.25, ease: 'easeInOut' }}
+            className="overflow-hidden"
+          >
+            <div className="px-4 pb-4 text-sm text-[var(--text-secondary)] leading-relaxed">
+              {item.answer}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

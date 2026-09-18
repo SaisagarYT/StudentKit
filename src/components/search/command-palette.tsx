@@ -4,8 +4,6 @@ import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { Search, ArrowRight, X, CornerDownLeft } from 'lucide-react';
 import * as Icons from 'lucide-react';
-import { tools } from '@/config/tools';
-import { categories } from '@/config/categories';
 import { roadmaps } from '@/config/roadmaps';
 import { mainNavItems, secondaryNavItems } from '@/config/navigation';
 import { cn } from '@/lib/utils';
@@ -27,15 +25,6 @@ interface SearchItem {
 }
 
 const searchItems: SearchItem[] = [
-  ...tools.map((t) => ({
-    id: `tool-${t.slug}`,
-    title: t.title,
-    description: t.shortDescription,
-    href: `/tools/${t.slug}`,
-    icon: t.icon,
-    type: 'tool' as const,
-    keywords: t.keywords,
-  })),
   ...roadmaps.map((r) => ({
     id: `roadmap-${r.slug}`,
     title: `${r.title} Roadmap`,
@@ -44,15 +33,6 @@ const searchItems: SearchItem[] = [
     icon: 'Map',
     type: 'roadmap' as const,
     keywords: [r.slug, r.title.toLowerCase(), 'roadmap', 'career', 'path'],
-  })),
-  ...categories.map((c) => ({
-    id: `cat-${c.slug}`,
-    title: `${c.title} Tools`,
-    description: c.description,
-    href: `/categories/${c.slug}`,
-    icon: c.icon,
-    type: 'category' as const,
-    keywords: [c.slug, c.title.toLowerCase()],
   })),
   ...mainNavItems.flatMap((group) =>
     group.children.map((n) => ({

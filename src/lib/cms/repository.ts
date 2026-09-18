@@ -11,6 +11,7 @@ import {
   orderBy,
   limit,
   type Timestamp,
+  type DocumentData,
   serverTimestamp,
 } from 'firebase/firestore';
 import { getFirebaseDb } from '@/lib/firebase/client';
@@ -19,8 +20,10 @@ import type {
   CmsProject,
   CmsResource,
   RoadmapListItem,
+  RoadmapSection,
   ProjectListItem,
   ResourceListItem,
+  ResourceDomainType,
   ContentStatus,
   DsaProblemDoc,
   DsaProblemListItem,
@@ -31,7 +34,7 @@ function toDate(ts: Timestamp | null | undefined): Date | null {
   return ts ? ts.toDate() : null;
 }
 
-function docToRoadmap(id: string, data: Record<string, any>): CmsRoadmap {
+function docToRoadmap(id: string, data: DocumentData): CmsRoadmap {
   return {
     id,
     slug: data.slug ?? '',
@@ -62,7 +65,7 @@ function docToRoadmap(id: string, data: Record<string, any>): CmsRoadmap {
   };
 }
 
-function docToProject(id: string, data: Record<string, any>): CmsProject {
+function docToProject(id: string, data: DocumentData): CmsProject {
   return {
     id,
     slug: data.slug ?? '',
@@ -142,14 +145,14 @@ export const roadmapRepository = {
         category: data.category,
         featured: data.featured ?? false,
         sectionCount: sections.length,
-        topicCount: sections.reduce((sum: number, s: any) => sum + (s.topics?.length ?? 0), 0),
+        topicCount: sections.reduce((sum: number, s: RoadmapSection) => sum + (s.topics?.length ?? 0), 0),
         updatedAt: toDate(data.updatedAt) ?? new Date(),
         publishedAt: toDate(data.publishedAt),
       };
     });
   },
 
-  async create(data: Record<string, any>, userId: string): Promise<string> {
+  async create(data: DocumentData, userId: string): Promise<string> {
     const ref = await addDoc(collection(getFirebaseDb(), 'roadmaps'), {
       ...data,
       status: 'draft',
@@ -164,7 +167,7 @@ export const roadmapRepository = {
     return ref.id;
   },
 
-  async update(id: string, data: Record<string, any>, userId: string): Promise<void> {
+  async update(id: string, data: DocumentData, userId: string): Promise<void> {
     await updateDoc(doc(getFirebaseDb(), 'roadmaps', id), {
       ...data,
       updatedBy: userId,
@@ -244,7 +247,7 @@ export const projectRepository = {
     });
   },
 
-  async create(data: Record<string, any>, userId: string): Promise<string> {
+  async create(data: DocumentData, userId: string): Promise<string> {
     const ref = await addDoc(collection(getFirebaseDb(), 'projects'), {
       ...data,
       status: 'draft',
@@ -259,7 +262,7 @@ export const projectRepository = {
     return ref.id;
   },
 
-  async update(id: string, data: Record<string, any>, userId: string): Promise<void> {
+  async update(id: string, data: DocumentData, userId: string): Promise<void> {
     await updateDoc(doc(getFirebaseDb(), 'projects', id), {
       ...data,
       updatedBy: userId,
@@ -299,13 +302,18 @@ export const projectRepository = {
 
 // --- Resource Repository ---
 
-function docToResource(id: string, data: Record<string, any>): CmsResource {
+function docToResource(id: string, data: DocumentData): CmsResource {
+  const resourceType =
+    data.resourceType ??
+    (data.category === 'guides' ? 'project-guide' : 'cs-fundamentals');
+
   return {
     id,
     slug: data.slug ?? '',
     title: data.title ?? '',
     shortDescription: data.shortDescription ?? '',
-    category: data.category ?? 'dsa',
+    resourceType,
+    category: data.category ?? 'concepts',
     difficulty: data.difficulty ?? 'beginner',
     content: data.content ?? '',
     approaches: data.approaches ?? [],
@@ -319,6 +327,25 @@ function docToResource(id: string, data: Record<string, any>): CmsResource {
     featured: data.featured ?? false,
     seo: data.seo ?? {},
     order: data.order ?? 0,
+
+    // Project Guide specific domain fields
+    projectTrack: data.projectTrack ?? 'full-stack',
+    techStack: data.techStack ?? [],
+    githubStarterUrl: data.githubStarterUrl ?? '',
+    githubCompletedUrl: data.githubCompletedUrl ?? '',
+    liveDemoUrl: data.liveDemoUrl ?? '',
+    architectureDiagram: data.architectureDiagram ?? '',
+    architectureOverview: data.architectureOverview ?? '',
+    milestones: data.milestones ?? [],
+    challenges: data.challenges ?? [],
+
+    // CS Fundamentals specific domain fields
+    subject: data.subject ?? 'operating-systems',
+    diagramUrl: data.diagramUrl ?? '',
+    interviewQuestions: data.interviewQuestions ?? [],
+    cheatSheetBullets: data.cheatSheetBullets ?? [],
+    commonPitfalls: data.commonPitfalls ?? [],
+
     createdAt: toDate(data.createdAt) ?? new Date(),
     updatedAt: toDate(data.updatedAt) ?? new Date(),
     publishedAt: toDate(data.publishedAt),
@@ -347,7 +374,11 @@ export const resourceRepository = {
     return docToResource(d.id, d.data());
   },
 
-  async list(filters?: { status?: ContentStatus; category?: string }): Promise<ResourceListItem[]> {
+  async list(filters?: {
+    status?: ContentStatus;
+    category?: string;
+    resourceType?: ResourceDomainType;
+  }): Promise<ResourceListItem[]> {
     let snap;
     try {
       let q;
@@ -367,13 +398,18 @@ export const resourceRepository = {
       }
       snap = await getDocs(q);
     }
-    let items = snap.docs.map((d) => {
+    let items: ResourceListItem[] = snap.docs.map((d) => {
       const data = d.data();
+      const resourceType =
+        data.resourceType ??
+        (data.category === 'guides' ? 'project-guide' : 'cs-fundamentals');
+
       return {
         id: d.id,
         slug: data.slug,
         title: data.title,
-        category: data.category ?? 'dsa',
+        resourceType,
+        category: data.category ?? 'concepts',
         difficulty: data.difficulty ?? 'beginner',
         status: data.status,
         featured: data.featured ?? false,
@@ -381,28 +417,54 @@ export const resourceRepository = {
         readTime: data.readTime ?? 5,
         updatedAt: toDate(data.updatedAt) ?? new Date(),
         publishedAt: toDate(data.publishedAt),
+        projectTrack: data.projectTrack,
+        techStack: data.techStack ?? [],
+        subject: data.subject,
+        interviewQuestionCount: Array.isArray(data.interviewQuestions)
+          ? data.interviewQuestions.length
+          : 0,
+        milestoneCount: Array.isArray(data.milestones) ? data.milestones.length : 0,
       };
     });
     if (filters?.category) {
-      items = items.filter(i => i.category === filters.category);
+      items = items.filter((i) => i.category === filters.category);
+    }
+    if (filters?.resourceType) {
+      items = items.filter((i) => i.resourceType === filters.resourceType);
     }
     return items;
   },
 
-  async listPublished(category?: string): Promise<ResourceListItem[]> {
+  async listPublished(
+    categoryOrFilters?: string | { category?: string; resourceType?: ResourceDomainType }
+  ): Promise<ResourceListItem[]> {
+    const filters =
+      typeof categoryOrFilters === 'string'
+        ? { category: categoryOrFilters }
+        : categoryOrFilters;
+
     try {
-      return await this.list({ status: 'published', category });
+      return await this.list({
+        status: 'published',
+        category: filters?.category,
+        resourceType: filters?.resourceType,
+      });
     } catch {
       // Fallback if composite index isn't ready yet
       const q = query(collection(getFirebaseDb(), 'resources'), where('status', '==', 'published'));
       const snap = await getDocs(q);
-      let items = snap.docs.map((d) => {
+      let items: ResourceListItem[] = snap.docs.map((d) => {
         const data = d.data();
+        const resourceType =
+          data.resourceType ??
+          (data.category === 'guides' ? 'project-guide' : 'cs-fundamentals');
+
         return {
           id: d.id,
           slug: data.slug,
           title: data.title,
-          category: data.category ?? 'dsa',
+          resourceType,
+          category: data.category ?? 'concepts',
           difficulty: data.difficulty ?? 'beginner',
           status: data.status as 'published',
           featured: data.featured ?? false,
@@ -410,29 +472,37 @@ export const resourceRepository = {
           readTime: data.readTime ?? 5,
           updatedAt: toDate(data.updatedAt) ?? new Date(),
           publishedAt: toDate(data.publishedAt),
+          projectTrack: data.projectTrack,
+          techStack: data.techStack ?? [],
+          subject: data.subject,
+          interviewQuestionCount: Array.isArray(data.interviewQuestions)
+            ? data.interviewQuestions.length
+            : 0,
+          milestoneCount: Array.isArray(data.milestones) ? data.milestones.length : 0,
         };
       });
-      if (category) items = items.filter(i => i.category === category);
+      if (filters?.category) items = items.filter((i) => i.category === filters.category);
+      if (filters?.resourceType) items = items.filter((i) => i.resourceType === filters.resourceType);
       return items;
     }
   },
 
-  async create(data: Record<string, any>, userId: string): Promise<string> {
+  async create(data: DocumentData, userId: string): Promise<string> {
     const ref = await addDoc(collection(getFirebaseDb(), 'resources'), {
-      ...data,
       status: 'draft',
       featured: false,
       order: 0,
+      ...data,
       createdBy: userId,
       updatedBy: userId,
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
-      publishedAt: null,
+      publishedAt: data.status === 'published' ? serverTimestamp() : null,
     });
     return ref.id;
   },
 
-  async update(id: string, data: Record<string, any>, userId: string): Promise<void> {
+  async update(id: string, data: DocumentData, userId: string): Promise<void> {
     await updateDoc(doc(getFirebaseDb(), 'resources', id), {
       ...data,
       updatedBy: userId,
@@ -464,11 +534,12 @@ export const resourceRepository = {
 
 // --- DSA Problem Repository ---
 
-function docToDsaProblem(id: string, data: Record<string, any>): DsaProblemDoc {
+function docToDsaProblem(id: string, data: DocumentData): DsaProblemDoc {
   return {
     id,
     title: data.title ?? '',
     slug: data.slug ?? '',
+    description: data.description ?? '',
     difficulty: data.difficulty ?? 'medium',
     category: data.category ?? 'arrays-hashing',
     link: data.link ?? '',
@@ -476,6 +547,14 @@ function docToDsaProblem(id: string, data: Record<string, any>): DsaProblemDoc {
     tags: data.tags ?? [],
     companies: data.companies ?? [],
     editorial: data.editorial ?? '',
+    hints: data.hints ?? [],
+    approach: data.approach ?? '',
+    timeComplexity: data.timeComplexity ?? '',
+    spaceComplexity: data.spaceComplexity ?? '',
+    codeSolutions: data.codeSolutions ?? {},
+    approaches: data.approaches ?? [],
+    resources: data.resources ?? [],
+    curatedLists: data.curatedLists ?? [],
     order: data.order ?? 0,
     status: data.status ?? 'published',
     createdAt: toDate(data.createdAt) ?? new Date(),
@@ -510,6 +589,7 @@ export const dsaProblemRepository = {
         id: d.id,
         title: data.title ?? '',
         slug: data.slug ?? '',
+        description: data.description ?? '',
         difficulty: data.difficulty ?? 'medium',
         category: data.category ?? 'arrays-hashing',
         link: data.link ?? '',
@@ -517,6 +597,14 @@ export const dsaProblemRepository = {
         tags: data.tags ?? [],
         companies: data.companies ?? [],
         editorial: data.editorial ?? '',
+        hints: data.hints ?? [],
+        approach: data.approach ?? '',
+        timeComplexity: data.timeComplexity ?? '',
+        spaceComplexity: data.spaceComplexity ?? '',
+        codeSolutions: data.codeSolutions ?? {},
+        approaches: data.approaches ?? [],
+        resources: data.resources ?? [],
+        curatedLists: data.curatedLists ?? [],
         order: data.order ?? 0,
         status: data.status ?? 'published',
       };
@@ -548,6 +636,7 @@ export const dsaProblemRepository = {
         id: d.id,
         title: data.title ?? '',
         slug: data.slug ?? '',
+        description: data.description ?? '',
         difficulty: data.difficulty ?? 'medium',
         category: data.category ?? 'arrays-hashing',
         link: data.link ?? '',
@@ -555,6 +644,14 @@ export const dsaProblemRepository = {
         tags: data.tags ?? [],
         companies: data.companies ?? [],
         editorial: data.editorial ?? '',
+        hints: data.hints ?? [],
+        approach: data.approach ?? '',
+        timeComplexity: data.timeComplexity ?? '',
+        spaceComplexity: data.spaceComplexity ?? '',
+        codeSolutions: data.codeSolutions ?? {},
+        approaches: data.approaches ?? [],
+        resources: data.resources ?? [],
+        curatedLists: data.curatedLists ?? [],
         order: data.order ?? 0,
         status: data.status as 'published',
       };
@@ -567,7 +664,7 @@ export const dsaProblemRepository = {
     return docToDsaProblem(snap.id, snap.data());
   },
 
-  async create(data: Record<string, any>, userId: string): Promise<string> {
+  async create(data: DocumentData, userId: string): Promise<string> {
     const ref = await addDoc(collection(getFirebaseDb(), 'dsa-problems'), {
       ...data,
       status: 'published',
@@ -578,7 +675,7 @@ export const dsaProblemRepository = {
     return ref.id;
   },
 
-  async update(id: string, data: Record<string, any>, userId: string): Promise<void> {
+  async update(id: string, data: DocumentData, _userId: string): Promise<void> {
     await updateDoc(doc(getFirebaseDb(), 'dsa-problems', id), {
       ...data,
       updatedAt: serverTimestamp(),

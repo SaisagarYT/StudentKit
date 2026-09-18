@@ -27,15 +27,15 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
 
         .markdown-body ul, .markdown-body ol { margin: 12px 0; padding-left: 24px; }
         .markdown-body li { margin: 6px 0; color: var(--text-secondary); }
-        .markdown-body li::marker { color: var(--accent-primary); }
+        .markdown-body li::marker { color: var(--text-subtle); }
 
-        .markdown-body a { color: var(--accent-primary); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.2s; }
-        .markdown-body a:hover { border-bottom-color: var(--accent-primary); }
+        .markdown-body a { color: var(--text-primary); text-decoration: underline; text-underline-offset: 3px; font-weight: 500; transition: color 0.15s; }
+        .markdown-body a:hover { color: var(--accent-dark); }
 
         .markdown-body blockquote {
           margin: 16px 0;
           padding: 12px 16px;
-          border-left: 3px solid var(--accent-primary);
+          border-left: 3px solid var(--accent-dark);
           background: var(--bg-subtle);
           border-radius: 0 8px 8px 0;
         }
@@ -48,7 +48,9 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           padding: 2px 6px;
           border-radius: 4px;
           background: var(--bg-subtle);
-          color: var(--accent-primary);
+          border: 1px solid var(--border-soft);
+          color: var(--text-primary);
+          font-weight: 500;
         }
 
         .markdown-body pre {

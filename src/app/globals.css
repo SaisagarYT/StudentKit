@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *, .dark, .dark *));
 
 :root {
   /* Background */
@@ -76,7 +77,8 @@
   --leading-body: 1.6;
 }
 
-[data-theme="dark"] {
+[data-theme="dark"],
+.dark {
   /* Background */
   --bg-primary: #0F0F0F;
   --bg-surface: #1A1A1A;
@@ -95,9 +97,9 @@
   --border-soft: #272724;
   --border-strong: #444440;
 
-  /* Brand — swapped: accent-dark (lime) for button bg + link text, accent-primary (dark) for button text */
-  --accent-primary: #111111;
-  --accent-primary-hover: #222222;
+  /* Brand — accent-dark (lime) for button bg + link text, accent-primary (lime) for accents & indicators */
+  --accent-primary: #C7FF3D;
+  --accent-primary-hover: #B8F030;
   --accent-dark: #C7FF3D;
 
   /* Category accents */
@@ -110,6 +112,7 @@
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
   --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.4);
   --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.5);
+  --shadow-focus: 0 0 0 2px var(--accent-primary);
 }
 
 @theme inline {
@@ -159,7 +162,8 @@ body {
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-[data-theme="dark"] {
+[data-theme="dark"],
+.dark {
   color-scheme: dark;
 }
 
@@ -329,18 +333,18 @@ select.form-input {
 .input-field:focus {
   outline: none;
   border-color: var(--accent-dark);
-  box-shadow: 0 0 0 2px var(--accent-primary)/20;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent-primary) 30%, transparent);
 }
 
 .tour-highlight {
   position: relative;
   z-index: 96;
-  box-shadow: 0 0 0 4px var(--accent-primary), 0 0 0 8px var(--accent-primary)/20;
+  box-shadow: 0 0 0 4px var(--accent-primary), 0 0 0 8px color-mix(in srgb, var(--accent-primary) 20%, transparent);
   border-radius: 12px;
   animation: tour-pulse 2s ease-in-out infinite;
 }
 
 @keyframes tour-pulse {
-  0%, 100% { box-shadow: 0 0 0 4px var(--accent-primary), 0 0 0 8px var(--accent-primary)/20; }
-  50% { box-shadow: 0 0 0 4px var(--accent-primary), 0 0 0 12px var(--accent-primary)/10; }
+  0%, 100% { box-shadow: 0 0 0 4px var(--accent-primary), 0 0 0 8px color-mix(in srgb, var(--accent-primary) 20%, transparent); }
+  50% { box-shadow: 0 0 0 4px var(--accent-primary), 0 0 0 12px color-mix(in srgb, var(--accent-primary) 10%, transparent); }
 }

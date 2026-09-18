@@ -245,10 +245,12 @@ export function TypingPracticeForm() {
   const startTimeRef = useRef(startTime);
   const testStateRef = useRef(testState);
 
-  charStatesRef.current = charStates;
-  currentIndexRef.current = currentIndex;
-  startTimeRef.current = startTime;
-  testStateRef.current = testState;
+  useEffect(() => {
+    charStatesRef.current = charStates;
+    currentIndexRef.current = currentIndex;
+    startTimeRef.current = startTime;
+    testStateRef.current = testState;
+  }, [charStates, currentIndex, startTime, testState]);
 
   useEffect(() => {
     setPersonalBest(loadPersonalBest());
@@ -299,41 +301,6 @@ export function TypingPracticeForm() {
       textContainerRef.current.scrollTop += spanRect.height * 1.5;
     }
   }, [currentIndex, text]);
-
-  // Timer + WPM snapshot collection
-  useEffect(() => {
-    if (testState === 'running') {
-      timerRef.current = setInterval(() => {
-        if (!startTimeRef.current) return;
-        const elapsed = (Date.now() - startTimeRef.current) / 1000;
-        setElapsedTime(elapsed);
-        if (testMode === 'time' && elapsed >= timeLimit) {
-          finishTest();
-        }
-      }, 100);
-
-      // Collect WPM every second for the chart
-      wpmIntervalRef.current = setInterval(() => {
-        if (!startTimeRef.current) return;
-        const elapsed = (Date.now() - startTimeRef.current) / 1000;
-        const minutes = elapsed / 60;
-        if (minutes === 0) return;
-        const states = charStatesRef.current;
-        const idx = currentIndexRef.current;
-        const correctCount = states.slice(0, idx).filter(s => s === 'correct').length;
-        const wpm = Math.max(0, Math.round((correctCount / 5) / minutes));
-        setWpmSnapshots(prev => [...prev, wpm]);
-      }, 1000);
-    } else {
-      if (timerRef.current) { clearInterval(timerRef.current); timerRef.current = null; }
-      if (wpmIntervalRef.current) { clearInterval(wpmIntervalRef.current); wpmIntervalRef.current = null; }
-    }
-    return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
-      if (wpmIntervalRef.current) clearInterval(wpmIntervalRef.current);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [testState, testMode, timeLimit]);
 
   const finishTest = useCallback(() => {
     setTestState('finished');
@@ -404,6 +371,40 @@ export function TypingPracticeForm() {
       trackedRef.current = true;
     }
   }, [testMode, timeLimit, wordLimit, corpus, wpmSnapshots]);
+
+  // Timer + WPM snapshot collection
+  useEffect(() => {
+    if (testState === 'running') {
+      timerRef.current = setInterval(() => {
+        if (!startTimeRef.current) return;
+        const elapsed = (Date.now() - startTimeRef.current) / 1000;
+        setElapsedTime(elapsed);
+        if (testMode === 'time' && elapsed >= timeLimit) {
+          finishTest();
+        }
+      }, 100);
+
+      // Collect WPM every second for the chart
+      wpmIntervalRef.current = setInterval(() => {
+        if (!startTimeRef.current) return;
+        const elapsed = (Date.now() - startTimeRef.current) / 1000;
+        const minutes = elapsed / 60;
+        if (minutes === 0) return;
+        const states = charStatesRef.current;
+        const idx = currentIndexRef.current;
+        const correctCount = states.slice(0, idx).filter(s => s === 'correct').length;
+        const wpm = Math.max(0, Math.round((correctCount / 5) / minutes));
+        setWpmSnapshots(prev => [...prev, wpm]);
+      }, 1000);
+    } else {
+      if (timerRef.current) { clearInterval(timerRef.current); timerRef.current = null; }
+      if (wpmIntervalRef.current) { clearInterval(wpmIntervalRef.current); wpmIntervalRef.current = null; }
+    }
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+      if (wpmIntervalRef.current) clearInterval(wpmIntervalRef.current);
+    };
+  }, [testState, testMode, timeLimit, finishTest]);
 
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
     if (testStateRef.current === 'finished') return;

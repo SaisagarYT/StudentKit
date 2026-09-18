@@ -3,11 +3,12 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, Map, FolderOpen, BookOpen, LogOut, ChevronRight, Menu, X } from 'lucide-react';
+import { LayoutDashboard, Map, FolderOpen, BookOpen, Code2, LogOut, ChevronRight, Menu, X } from 'lucide-react';
 import { useAuth } from '@/lib/firebase/auth';
 
 const navItems = [
   { href: '/admin', label: 'Dashboard', icon: LayoutDashboard, exact: true },
+  { href: '/admin/dsa', label: 'DSA Sheet', icon: Code2, exact: false },
   { href: '/admin/roadmaps', label: 'Roadmaps', icon: Map, exact: false },
   { href: '/admin/projects', label: 'Projects', icon: FolderOpen, exact: false },
   { href: '/admin/resources', label: 'Resources', icon: BookOpen, exact: false },
@@ -24,7 +25,7 @@ export function AdminSidebar() {
       <div className="p-5 border-b border-[var(--border-soft)]">
         <Link href="/admin" className="flex items-center gap-2.5" onClick={() => setOpen(false)}>
           <div className="w-8 h-8 rounded-sm bg-[var(--accent-dark)] flex items-center justify-center">
-            <span className="text-[var(--accent-primary)] text-xs font-bold">SK</span>
+            <span className="text-[var(--text-inverse)] text-xs font-bold">SK</span>
           </div>
           <div>
             <p className="text-sm font-bold text-[var(--text-primary)] leading-tight">StudentKit</p>
@@ -48,7 +49,7 @@ export function AdminSidebar() {
               onClick={() => setOpen(false)}
               className={`group flex items-center justify-between px-3 py-2.5 rounded-sm text-sm font-medium transition-all duration-150 ${
                 isActive
-                  ? 'bg-[var(--accent-dark)] text-[var(--accent-primary)] shadow-sm'
+                  ? 'bg-[var(--accent-dark)] text-[var(--text-inverse)] shadow-sm'
                   : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-subtle)]'
               }`}
             >
@@ -66,6 +67,7 @@ export function AdminSidebar() {
       <div className="p-4 border-t border-[var(--border-soft)]">
         <div className="flex items-center gap-3">
           {user?.photoURL ? (
+            /* eslint-disable-next-line @next/next/no-img-element */
             <img
               src={user.photoURL}
               alt=""
@@ -73,7 +75,7 @@ export function AdminSidebar() {
             />
           ) : (
             <div className="w-9 h-9 rounded-sm bg-[var(--accent-dark)] flex items-center justify-center ring-2 ring-[var(--border-soft)]">
-              <span className="text-[var(--accent-primary)] text-xs font-bold">
+              <span className="text-[var(--text-inverse)] text-xs font-bold">
                 {(user?.displayName || user?.email || 'A')[0].toUpperCase()}
               </span>
             </div>
@@ -87,7 +89,7 @@ export function AdminSidebar() {
           <button
             type="button"
             onClick={signOut}
-            className="p-2 rounded-sm text-[var(--text-subtle)] hover:text-red-500 hover:bg-red-50 transition-colors"
+            className="p-2 rounded-sm text-[var(--text-subtle)] hover:text-red-600 dark:hover:text-red-400 hover:bg-red-500/10 transition-colors"
             title="Sign out"
           >
             <LogOut className="w-4 h-4" />
@@ -109,7 +111,7 @@ export function AdminSidebar() {
         </button>
         <div className="flex items-center gap-2 ml-3">
           <div className="w-6 h-6 rounded-sm bg-[var(--accent-dark)] flex items-center justify-center">
-            <span className="text-[var(--accent-primary)] text-[9px] font-bold">SK</span>
+            <span className="text-[var(--text-inverse)] text-[9px] font-bold">SK</span>
           </div>
           <span className="text-sm font-bold text-[var(--text-primary)]">Admin</span>
         </div>

@@ -14,7 +14,6 @@ import {
   Filter,
   Clock,
   Eye,
-  Loader2,
   ChevronDown,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -122,6 +121,7 @@ function ProjectCard({ repo, index }: { repo: GitHubRepo; index: number }) {
       <div className={cn('absolute top-0 left-0 right-0 h-1 rounded-t-sm', diffConfig.bg)} />
 
       <div className="flex items-start gap-3 mb-3">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={repo.owner.avatar_url}
           alt={repo.owner.login}
@@ -354,7 +354,7 @@ export function GitHubProjects() {
     <div className="w-full">
       {/* Hero Header */}
       <div ref={headerRef} className="mb-10">
-        <span className="text-xs font-medium uppercase tracking-wider text-[var(--accent-primary)]">
+        <span className="text-xs font-medium uppercase tracking-wider text-[var(--accent-dark)]">
           Build
         </span>
         <h1 className="mt-3 text-h1 font-bold tracking-tight">
@@ -372,7 +372,7 @@ export function GitHubProjects() {
       <div ref={statsRef} className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
         <div className="p-4 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)]">
           <div className="flex items-center gap-2 mb-1">
-            <Code2 className="w-4 h-4 text-[var(--accent-primary)]" />
+            <Code2 className="w-4 h-4 text-[var(--accent-dark)]" />
             <span className="text-[11px] text-[var(--text-subtle)] uppercase tracking-wider">Available</span>
           </div>
           <span className="text-xl font-bold text-[var(--text-primary)]">{stats.total.toLocaleString()}</span>
@@ -426,7 +426,7 @@ export function GitHubProjects() {
               className={cn(
                 'flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-[11px] font-medium transition-all',
                 sortBy === key
-                  ? 'bg-[var(--accent-dark)] text-[var(--accent-primary)] shadow-sm'
+                  ? 'bg-[var(--accent-dark)] text-[var(--text-inverse)] shadow-sm'
                   : 'text-[var(--text-secondary)] hover:bg-[var(--bg-subtle)]'
               )}
             >
@@ -449,7 +449,7 @@ export function GitHubProjects() {
               className={cn(
                 'flex items-center gap-1.5 px-4 py-2 rounded-sm text-xs font-semibold transition-all duration-200 border',
                 activeDifficulty === key
-                  ? 'bg-[var(--accent-dark)] text-[var(--accent-primary)] border-[var(--accent-dark)] shadow-sm'
+                  ? 'bg-[var(--accent-dark)] text-[var(--text-inverse)] border-[var(--accent-dark)] shadow-sm'
                   : 'bg-[var(--bg-surface)] text-[var(--text-secondary)] border-[var(--border-default)] hover:border-[var(--accent-primary)]/60'
               )}
             >
@@ -474,7 +474,7 @@ export function GitHubProjects() {
               className={cn(
                 'px-3 py-1.5 rounded-sm text-[11px] font-medium transition-all border',
                 activeCategory === cat.id
-                  ? 'bg-[var(--accent-dark)] text-[var(--accent-primary)] border-[var(--accent-dark)]'
+                  ? 'bg-[var(--accent-dark)] text-[var(--text-inverse)] border-[var(--accent-dark)]'
                   : 'text-[var(--text-secondary)] border-[var(--border-soft)] hover:border-[var(--border-default)] hover:bg-[var(--bg-subtle)]'
               )}
             >

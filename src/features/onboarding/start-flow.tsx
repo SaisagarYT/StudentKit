@@ -14,7 +14,7 @@ import {
   Cloud,
   Shield,
   GraduationCap,
-  Sparkles,
+  Compass,
   Check,
 } from 'lucide-react';
 import { useUserAuth } from '@/lib/firebase/user-auth';
@@ -35,56 +35,48 @@ const goals = [
     label: 'Frontend Developer',
     description: 'Build beautiful, interactive web interfaces',
     icon: Monitor,
-    color: '#3B82F6',
   },
   {
     id: 'backend-developer',
     label: 'Backend Developer',
     description: 'Design APIs, databases, and server systems',
     icon: Server,
-    color: '#10B981',
   },
   {
     id: 'full-stack-developer',
     label: 'Full-Stack Developer',
     description: 'Master both frontend and backend',
     icon: Layers,
-    color: '#8B5CF6',
   },
   {
     id: 'ai-engineer',
     label: 'AI / ML Engineer',
     description: 'Build intelligent systems and models',
     icon: Brain,
-    color: '#F59E0B',
   },
   {
     id: 'mobile-developer',
     label: 'Mobile Developer',
     description: 'Create apps for iOS and Android',
     icon: Smartphone,
-    color: '#EC4899',
   },
   {
     id: 'devops-engineer',
     label: 'DevOps Engineer',
     description: 'Automate infrastructure and deployment',
     icon: Cloud,
-    color: '#06B6D4',
   },
   {
     id: 'cybersecurity',
     label: 'Cybersecurity',
     description: 'Protect systems and find vulnerabilities',
     icon: Shield,
-    color: '#EF4444',
   },
   {
     id: 'placement-preparation',
     label: 'Placement Prep',
     description: 'Get ready for campus interviews and jobs',
     icon: GraduationCap,
-    color: '#F97316',
   },
 ];
 
@@ -111,7 +103,7 @@ const levels = [
 
 export function StartFlow() {
   const router = useRouter();
-  const { user, signInWithGoogle } = useUserAuth();
+  const { signInWithGoogle } = useUserAuth();
   const [step, setStep] = useState(0);
   const [selectedGoal, setSelectedGoal] = useState('');
   const [selectedLevel, setSelectedLevel] = useState('');
@@ -165,7 +157,7 @@ export function StartFlow() {
       <div className="min-h-[80vh] flex items-center justify-center py-12 px-4">
         <div className="w-full max-w-md mx-auto text-center">
           <div className="w-16 h-16 mx-auto mb-6 rounded-sm bg-[var(--accent-dark)]/10 flex items-center justify-center">
-            <Sparkles className="w-8 h-8 text-[var(--accent-dark)]" />
+            <Compass className="w-8 h-8 text-[var(--accent-dark)]" />
           </div>
 
           <h2 className="text-2xl font-bold text-[var(--text-primary)]">
@@ -253,10 +245,14 @@ export function StartFlow() {
                     )}
                   >
                     <div
-                      className="flex items-center justify-center w-10 h-10 rounded-sm shrink-0"
-                      style={{ backgroundColor: `${goal.color}18` }}
+                      className={cn(
+                        'flex items-center justify-center w-10 h-10 rounded-sm shrink-0 border transition-colors',
+                        isSelected
+                          ? 'bg-[var(--accent-dark)] text-[var(--text-inverse)] border-[var(--accent-dark)]'
+                          : 'bg-[var(--bg-subtle)] border-[var(--border-soft)] text-[var(--text-primary)]'
+                      )}
                     >
-                      <Icon className="w-5 h-5" style={{ color: goal.color }} />
+                      <Icon className="w-5 h-5" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-semibold text-[var(--text-primary)]">
@@ -268,6 +264,7 @@ export function StartFlow() {
                     </div>
                     {isSelected && (
                       <div className="absolute top-3 right-3 w-5 h-5 rounded-sm bg-[var(--accent-dark)] flex items-center justify-center">
+                        <Check className="w-3 h-3 text-[var(--accent-primary)]" />
                         <Check className="w-3 h-3 text-[var(--text-inverse)]" />
                       </div>
                     )}
@@ -336,6 +333,7 @@ export function StartFlow() {
                     </span>
                     {isSelected && (
                       <div className="absolute top-3 right-3 w-5 h-5 rounded-sm bg-[var(--accent-dark)] flex items-center justify-center">
+                        <Check className="w-3 h-3 text-[var(--accent-primary)]" />
                         <Check className="w-3 h-3 text-[var(--text-inverse)]" />
                       </div>
                     )}
@@ -360,7 +358,7 @@ export function StartFlow() {
                 className="flex items-center gap-2 px-6 py-3 rounded-sm text-sm font-semibold bg-[var(--accent-dark)] text-[var(--text-inverse)] hover:opacity-90 disabled:opacity-30 disabled:cursor-not-allowed transition-opacity"
               >
                 Start My Journey
-                <Sparkles className="w-4 h-4" />
+                <ArrowRight className="w-4 h-4" />
               </button>
             </div>
           </div>

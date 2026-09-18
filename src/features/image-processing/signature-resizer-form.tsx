@@ -202,7 +202,7 @@ export function SignatureResizerForm() {
             <button
               type="button"
               onClick={handleDownload}
-              className="mt-6 w-full h-12 flex items-center justify-center gap-2 text-sm font-semibold bg-[var(--accent-primary)] text-[var(--text-primary)] rounded-sm hover:bg-[var(--accent-primary-hover)] transition-colors"
+              className="mt-6 w-full h-12 flex items-center justify-center gap-2 text-sm font-semibold bg-[var(--accent-primary)] text-[#111111] rounded-sm hover:bg-[var(--accent-primary-hover)] transition-colors"
             >
               <Download className="w-4 h-4" />
               Download Signature

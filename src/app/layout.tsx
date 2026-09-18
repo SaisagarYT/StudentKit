@@ -20,6 +20,13 @@ const instrumentSerif = Instrument_Serif({
   display: 'swap',
 });
 
+const THEME_SCRIPT = `(function(){try{var t=localStorage.getItem('sk-theme');if(t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme:dark)').matches)){document.documentElement.setAttribute('data-theme','dark');document.documentElement.classList.add('dark');}}catch(e){}if(typeof window!=='undefined'){window.addEventListener('unhandledrejection',function(e){if(e.reason&&(e.reason.name==='AbortError'||e.reason.code===20||(typeof e.reason.message==='string'&&(e.reason.message.indexOf('aborted')!==-1||e.reason.message.indexOf('The user aborted a request')!==-1)))){e.preventDefault();if(e.stopImmediatePropagation)e.stopImmediatePropagation();}},true);}})()`;
+
+const GTAG_SCRIPT = `window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-X85YECWQZL');`;
+
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   manifest: '/manifest.json',
@@ -83,32 +90,33 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem('sk-theme');if(t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme:dark)').matches)){document.documentElement.setAttribute('data-theme','dark')}}catch(e){}})()`,
-          }}
-        />
+        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
         <link rel="apple-touch-icon" href="/icons/icon-192.png" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="mobile-web-app-capable" content="yes" />
+        {process.env.NODE_ENV === 'production' && (
+          <script
+            async
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4789559777617370"
+            crossOrigin="anonymous"
+          />
+        )}
       </head>
       <body className="min-h-screen flex flex-col bg-background text-foreground font-sans antialiased">
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-X85YECWQZL"
-          strategy="afterInteractive"
-        />
-        <Script id="gtag-init" strategy="afterInteractive">
-          {`window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', 'G-X85YECWQZL');`}
-        </Script>
-        <Script
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4789559777617370"
-          strategy="afterInteractive"
-          crossOrigin="anonymous"
-        />
+        {process.env.NODE_ENV === 'production' && (
+          <>
+            <Script
+              src="https://www.googletagmanager.com/gtag/js?id=G-X85YECWQZL"
+              strategy="afterInteractive"
+            />
+            <Script
+              id="gtag-init"
+              strategy="afterInteractive"
+              dangerouslySetInnerHTML={{ __html: GTAG_SCRIPT }}
+            />
+          </>
+        )}
         <JsonLd data={organizationSchema()} />
         <JsonLd data={websiteSchema()} />
         <LayoutShell>{children}</LayoutShell>

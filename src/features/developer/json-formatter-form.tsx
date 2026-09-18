@@ -11,7 +11,7 @@ import {
   Minimize2,
   CheckCircle2,
   AlertCircle,
-  Sparkles,
+  Wand2,
 } from 'lucide-react';
 
 const SAMPLE_JSON = JSON.stringify(
@@ -234,7 +234,7 @@ export function JsonFormatterForm() {
           onClick={handleFormat}
           className="flex items-center gap-2 px-4 py-2.5 text-sm font-semibold bg-[var(--accent-dark)] text-[var(--text-inverse)] rounded-sm hover:bg-[var(--accent-dark)]/90 transition-all"
         >
-          <Sparkles className="w-4 h-4" />
+          <Wand2 className="w-4 h-4" />
           Format / Beautify
         </button>
         <button

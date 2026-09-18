@@ -40,10 +40,13 @@ export default function GuidesPage() {
     <div className="py-8 md:py-16">
       <div className="container-main">
         <div className="max-w-2xl">
-          <span className="text-xs font-medium uppercase tracking-wider text-[var(--accent-primary)]">
-            Learn
-          </span>
-          <h1 className="mt-3 text-h1 font-bold tracking-tight">Guides</h1>
+          <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-sm bg-[var(--bg-subtle)] border border-[var(--border-soft)] mb-4">
+            <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent-dark)]" />
+            <span className="text-xs font-mono font-medium uppercase tracking-wider text-[var(--text-secondary)]">
+              Knowledge Base
+            </span>
+          </div>
+          <h1 className="text-h1 font-bold tracking-tight">Guides</h1>
           <p className="mt-4 text-body-lg text-[var(--text-secondary)] leading-relaxed">
             Step-by-step guides to help you understand calculations, prepare for
             your career, and make the most of every tool.
@@ -56,10 +59,10 @@ export default function GuidesPage() {
             return (
               <div
                 key={cat.title}
-                className="p-6 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)]"
+                className="p-6 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] hover:border-[var(--border-default)] transition-colors"
               >
-                <div className="flex items-center justify-center w-10 h-10 rounded-sm bg-[var(--bg-subtle)] mb-4">
-                  <Icon className="w-5 h-5 text-[var(--text-secondary)]" />
+                <div className="flex items-center justify-center w-10 h-10 rounded-sm bg-[var(--bg-subtle)] border border-[var(--border-soft)] text-[var(--accent-dark)] mb-4">
+                  <Icon className="w-5 h-5" />
                 </div>
                 <h3 className="text-sm font-semibold text-[var(--text-primary)]">
                   {cat.title}
@@ -67,7 +70,7 @@ export default function GuidesPage() {
                 <p className="mt-1.5 text-xs text-[var(--text-subtle)] leading-relaxed">
                   {cat.description}
                 </p>
-                <span className="inline-flex mt-4 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider text-[var(--text-subtle)] bg-[var(--bg-subtle)] rounded-sm">
+                <span className="inline-flex mt-4 px-2.5 py-0.5 text-[10px] font-mono font-medium uppercase tracking-wider text-[var(--text-subtle)] bg-[var(--bg-subtle)] border border-[var(--border-soft)] rounded-sm">
                   {cat.count}
                 </span>
               </div>

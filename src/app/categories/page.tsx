@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowRight, Layers } from 'lucide-react';
 import * as Icons from 'lucide-react';
 import { siteConfig } from '@/config/site';
 import { categories } from '@/config/categories';
@@ -18,14 +18,6 @@ function getIcon(name: string, className?: string) {
   return Icon ? <Icon className={className || 'w-6 h-6'} /> : null;
 }
 
-const accentColors: Record<string, string> = {
-  college: '#D8CCFF',
-  exams: '#FFE066',
-  career: '#FFB36B',
-  documents: '#A8F0E6',
-  developer: '#C7FF3D',
-};
-
 export default function CategoriesPage() {
   return (
     <>
@@ -41,7 +33,7 @@ export default function CategoriesPage() {
           {/* Hero header */}
           <div className="text-center max-w-2xl mx-auto mb-16">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-sm bg-[var(--bg-subtle)] border border-[var(--border-soft)] mb-5">
-              <Sparkles className="w-3.5 h-3.5 text-[var(--accent-dark)]" />
+              <Layers className="w-3.5 h-3.5 text-[var(--accent-dark)]" />
               <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)]">
                 {categories.length} Categories
               </span>
@@ -59,24 +51,14 @@ export default function CategoriesPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5">
             {categories.slice(0, 2).map((cat) => {
               const tools = getToolsByCategory(cat.slug);
-              const accent = accentColors[cat.slug] || '#C7FF3D';
               return (
                 <Link
                   key={cat.slug}
                   href={`/categories/${cat.slug}`}
                   className="group relative p-8 md:p-10 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)] hover:border-[var(--border-default)] transition-all overflow-hidden"
                 >
-                  {/* Accent glow */}
-                  <div
-                    className="absolute top-0 right-0 w-48 h-48 rounded-sm blur-[80px] opacity-20 group-hover:opacity-30 transition-opacity"
-                    style={{ background: accent }}
-                  />
-
                   <div className="relative">
-                    <div
-                      className="inline-flex items-center justify-center w-14 h-14 rounded-sm mb-5"
-                      style={{ backgroundColor: `${accent}25` }}
-                    >
+                    <div className="inline-flex items-center justify-center w-14 h-14 rounded-sm mb-5 bg-[var(--bg-subtle)] border border-[var(--border-soft)] text-[var(--text-primary)] group-hover:bg-[var(--accent-dark)] group-hover:text-[var(--text-inverse)] transition-colors">
                       {getIcon(cat.icon, 'w-6 h-6')}
                     </div>
 
@@ -123,23 +105,14 @@ export default function CategoriesPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {categories.slice(2).map((cat) => {
               const tools = getToolsByCategory(cat.slug);
-              const accent = accentColors[cat.slug] || '#C7FF3D';
               return (
                 <Link
                   key={cat.slug}
                   href={`/categories/${cat.slug}`}
                   className="group relative p-6 md:p-7 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)] hover:border-[var(--border-default)] transition-all overflow-hidden"
                 >
-                  <div
-                    className="absolute top-0 right-0 w-32 h-32 rounded-sm blur-[60px] opacity-15 group-hover:opacity-25 transition-opacity"
-                    style={{ background: accent }}
-                  />
-
                   <div className="relative">
-                    <div
-                      className="inline-flex items-center justify-center w-11 h-11 rounded-sm mb-4"
-                      style={{ backgroundColor: `${accent}25` }}
-                    >
+                    <div className="inline-flex items-center justify-center w-11 h-11 rounded-sm mb-4 bg-[var(--bg-subtle)] border border-[var(--border-soft)] text-[var(--text-primary)] group-hover:bg-[var(--accent-dark)] group-hover:text-[var(--text-inverse)] transition-colors">
                       {getIcon(cat.icon, 'w-5 h-5')}
                     </div>
 

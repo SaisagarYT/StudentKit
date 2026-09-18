@@ -12,8 +12,6 @@ import { CommandPalette } from '@/components/search/command-palette';
 import { BookmarksPanel } from '@/components/engagement/bookmarks-panel';
 import { ThemeToggle } from '@/components/theme/theme-toggle';
 import { mainNavItems, secondaryNavItems } from '@/config/navigation';
-import { tools } from '@/config/tools';
-import { categories } from '@/config/categories';
 import { cn } from '@/lib/utils';
 
 function getIcon(name: string, className?: string) {
@@ -36,9 +34,10 @@ function UserButton() {
         aria-label="Profile"
       >
         {user.photoURL ? (
+          /* eslint-disable-next-line @next/next/no-img-element */
           <img src={user.photoURL} alt="" className="w-9 h-9 rounded-sm object-cover" />
         ) : (
-          <div className="w-9 h-9 rounded-sm bg-[var(--accent-primary)] flex items-center justify-center text-xs font-bold text-[var(--accent-dark)]">
+          <div className="w-9 h-9 rounded-sm bg-[var(--accent-dark)] text-[var(--text-inverse)] flex items-center justify-center text-xs font-bold">
             {(user.displayName || user.email || 'U')[0].toUpperCase()}
           </div>
         )}
@@ -189,169 +188,6 @@ function NavDropdown({ group, isActive }: { group: typeof mainNavItems[number]; 
   );
 }
 
-function ToolsMegaDropdown() {
-  const [isOpen, setIsOpen] = useState(false);
-  const closeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const megaRef = useRef<HTMLDivElement>(null);
-  const megaContentRef = useRef<HTMLDivElement>(null);
-  const megaTimelineRef = useRef<gsap.core.Timeline | null>(null);
-  const pathname = usePathname();
-
-  useEffect(() => {
-    setIsOpen(false);
-  }, [pathname]);
-
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-    return () => { document.body.style.overflow = ''; };
-  }, [isOpen]);
-
-  useEffect(() => {
-    if (!megaRef.current || !megaContentRef.current) return;
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    if (isOpen) {
-      megaRef.current.style.display = 'block';
-      if (prefersReducedMotion) {
-        gsap.set(megaRef.current, { opacity: 1 });
-        gsap.set(megaContentRef.current, { opacity: 1, y: 0 });
-        return;
-      }
-      const tl = gsap.timeline();
-      megaTimelineRef.current = tl;
-      tl.fromTo(megaRef.current, { opacity: 0 }, { opacity: 1, duration: 0.2, ease: 'power2.out' });
-      tl.fromTo(megaContentRef.current, { opacity: 0, y: -8 }, { opacity: 1, y: 0, duration: 0.35, ease: 'power3.out' }, '-=0.1');
-      const columns = megaContentRef.current.querySelectorAll('[data-mega-col]');
-      tl.fromTo(columns, { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.4, stagger: 0.06, ease: 'power3.out' }, '-=0.25');
-    } else {
-      if (megaTimelineRef.current) megaTimelineRef.current.kill();
-      if (prefersReducedMotion) {
-        if (megaRef.current) megaRef.current.style.display = 'none';
-        return;
-      }
-      gsap.to(megaRef.current, {
-        opacity: 0, duration: 0.15, ease: 'power2.in',
-        onComplete: () => { if (megaRef.current) megaRef.current.style.display = 'none'; },
-      });
-    }
-  }, [isOpen]);
-
-  const handleEnter = useCallback(() => {
-    if (closeTimeoutRef.current) { clearTimeout(closeTimeoutRef.current); closeTimeoutRef.current = null; }
-    setIsOpen(true);
-  }, []);
-
-  const handleLeave = useCallback(() => {
-    closeTimeoutRef.current = setTimeout(() => { setIsOpen(false); }, 150);
-  }, []);
-
-  const toolsByCategory = categories.map((cat) => ({
-    category: cat,
-    tools: tools.filter((t) => t.category === cat.slug),
-  }));
-
-  return (
-    <>
-      <button
-        type="button"
-        onMouseEnter={handleEnter}
-        onMouseLeave={handleLeave}
-        onClick={() => setIsOpen(!isOpen)}
-        className={cn(
-          'flex items-center gap-1 px-3 py-2 text-sm font-medium rounded-sm transition-colors',
-          isOpen
-            ? 'text-text-primary bg-subtle/60'
-            : 'text-text-subtle hover:text-text-secondary hover:bg-subtle/60'
-        )}
-      >
-        {getIcon('Wrench', 'w-3.5 h-3.5')}
-        <span className="ml-1">Tools</span>
-        <ChevronDown className={cn('w-3 h-3 transition-transform duration-200', isOpen && 'rotate-180')} />
-      </button>
-
-      <div
-        ref={megaRef}
-        onMouseEnter={handleEnter}
-        onMouseLeave={handleLeave}
-        className="absolute top-full left-0 right-0 w-full max-h-[calc(100vh-4rem)] overflow-y-auto"
-        style={{ display: 'none' }}
-      >
-        <div className="border-b border-[var(--border-soft)] bg-[var(--bg-surface)] shadow-xl">
-          <div ref={megaContentRef} className="container-main py-8 md:py-10">
-            <div className="flex items-center justify-between mb-8">
-              <div>
-                <h3 className="text-lg font-semibold tracking-tight text-[var(--text-primary)]">
-                  Student Tools
-                </h3>
-                <p className="mt-1 text-sm text-[var(--text-subtle)]">
-                  Free calculators and utilities — fast, private, browser-based.
-                </p>
-              </div>
-              <Link
-                href="/tools"
-                onClick={() => setIsOpen(false)}
-                className="hidden md:inline-flex items-center gap-1.5 px-4 py-2 text-xs font-medium border border-[var(--border-soft)] text-[var(--text-secondary)] rounded-sm hover:bg-[var(--bg-subtle)] hover:border-[var(--border-default)] transition-all"
-              >
-                View all tools
-                <ArrowRight className="w-3 h-3" />
-              </Link>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 lg:gap-5">
-              {toolsByCategory.map((group) => (
-                <div key={group.category.slug} data-mega-col>
-                  <div className="flex items-center gap-2.5 mb-4">
-                    <div
-                      className="flex items-center justify-center w-8 h-8 rounded-sm"
-                      style={{ backgroundColor: `${group.category.accent}20` }}
-                    >
-                      {getIcon(group.category.icon, 'w-4 h-4')}
-                    </div>
-                    <div>
-                      <Link
-                        href={`/categories/${group.category.slug}`}
-                        onClick={() => setIsOpen(false)}
-                        className="text-sm font-semibold text-[var(--text-primary)] hover:text-[var(--accent-dark)] transition-colors"
-                      >
-                        {group.category.title}
-                      </Link>
-                      <p className="text-[11px] text-[var(--text-subtle)] leading-tight">
-                        {group.tools.length} tools
-                      </p>
-                    </div>
-                  </div>
-                  <div className="space-y-0.5">
-                    {group.tools.map((tool) => (
-                      <Link
-                        key={tool.slug}
-                        href={`/tools/${tool.slug}`}
-                        onClick={() => setIsOpen(false)}
-                        className="group/item flex items-center gap-3 px-3 py-2.5 rounded-sm hover:bg-[var(--bg-subtle)] transition-colors"
-                      >
-                        <div className="flex items-center justify-center w-7 h-7 rounded-sm bg-[var(--bg-subtle)] group-hover/item:bg-[var(--bg-surface)] border border-transparent group-hover/item:border-[var(--border-soft)] transition-all shrink-0">
-                          {getIcon(tool.icon, 'w-3.5 h-3.5 text-[var(--text-secondary)]')}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-[13px] font-medium text-[var(--text-primary)] truncate">{tool.title}</p>
-                          <p className="text-[11px] text-[var(--text-subtle)] truncate">{tool.shortDescription}</p>
-                        </div>
-                        <ArrowRight className="w-3 h-3 text-[var(--text-subtle)] opacity-0 group-hover/item:opacity-100 -translate-x-1 group-hover/item:translate-x-0 transition-all" />
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    </>
-  );
-}
-
 export function SiteHeader() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -418,11 +254,7 @@ export function SiteHeader() {
                 />
               ))}
 
-              <div className="mx-2 h-5 w-px bg-[var(--border-soft)]" />
-
-              <ToolsMegaDropdown />
-
-              {secondaryNavItems.filter(item => item.label !== 'Tools').map((item) => (
+              {secondaryNavItems.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}

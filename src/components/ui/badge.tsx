@@ -2,17 +2,18 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 
 const badgeVariants = cva(
-  'inline-flex items-center rounded-sm px-2.5 py-0.5 text-xs font-medium transition-colors',
+  'inline-flex items-center rounded-sm px-2.5 py-0.5 text-xs font-medium font-mono transition-colors',
   {
     variants: {
       variant: {
-        default: 'bg-[var(--bg-subtle)] text-[var(--text-secondary)]',
-        college: 'bg-[var(--accent-college)]/20 text-[#6B4FBF]',
-        exams: 'bg-[var(--accent-exams)]/20 text-[#8B6B00]',
-        career: 'bg-[var(--accent-career)]/20 text-[#A85A00]',
-        documents: 'bg-[var(--accent-documents)]/20 text-[#0F766E]',
-        developer: 'bg-[var(--accent-primary)]/20 text-[#4A6B00]',
-        accent: 'bg-[var(--accent-primary)]/20 text-[var(--text-primary)]',
+        default: 'bg-[var(--bg-subtle)] border border-[var(--border-soft)] text-[var(--text-secondary)]',
+        college: 'bg-[var(--bg-subtle)] border border-[var(--border-soft)] text-[var(--text-primary)]',
+        exams: 'bg-[var(--bg-subtle)] border border-[var(--border-soft)] text-[var(--text-primary)]',
+        career: 'bg-[var(--bg-subtle)] border border-[var(--border-soft)] text-[var(--text-primary)]',
+        documents: 'bg-[var(--bg-subtle)] border border-[var(--border-soft)] text-[var(--text-primary)]',
+        developer: 'bg-[var(--bg-subtle)] border border-[var(--border-soft)] text-[var(--text-primary)]',
+        accent: 'bg-[var(--accent-dark)] text-[var(--text-inverse)]',
+        success: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30',
       },
     },
     defaultVariants: {

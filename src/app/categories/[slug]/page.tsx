@@ -8,20 +8,12 @@ import { categories } from '@/config/categories';
 import { getToolsByCategory } from '@/config/tools';
 import { JsonLd } from '@/components/seo/json-ld';
 import { collectionPageSchema, breadcrumbSchema } from '@/lib/structured-data';
-import { type ToolCategory } from '@/types/tool';
 
 function getIcon(name: string, className?: string) {
   const Icon = Icons[name as keyof typeof Icons] as React.ElementType;
   return Icon ? <Icon className={className || 'w-4 h-4'} /> : null;
 }
 
-const accentColors: Record<string, string> = {
-  college: '#D8CCFF',
-  exams: '#FFE066',
-  career: '#FFB36B',
-  documents: '#A8F0E6',
-  developer: '#C7FF3D',
-};
 
 export function generateStaticParams() {
   return categories.map((cat) => ({ slug: cat.slug }));
@@ -52,7 +44,6 @@ export default async function CategoryPage({
   if (!category) notFound();
 
   const tools = getToolsByCategory(slug);
-  const accent = accentColors[slug] || '#C7FF3D';
 
   return (
     <>
@@ -88,15 +79,8 @@ export default async function CategoryPage({
 
           {/* Hero header */}
           <div className="relative p-8 md:p-10 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] mb-10 overflow-hidden">
-            <div
-              className="absolute top-0 right-0 w-64 h-64 rounded-sm blur-[100px] opacity-20"
-              style={{ background: accent }}
-            />
             <div className="relative flex flex-col md:flex-row md:items-center gap-5">
-              <div
-                className="flex items-center justify-center w-16 h-16 rounded-sm shrink-0"
-                style={{ backgroundColor: `${accent}25` }}
-              >
+              <div className="flex items-center justify-center w-16 h-16 rounded-sm shrink-0 bg-[var(--bg-subtle)] border border-[var(--border-soft)] text-[var(--accent-dark)]">
                 {getIcon(category.icon, 'w-7 h-7')}
               </div>
               <div className="flex-1">
@@ -119,18 +103,15 @@ export default async function CategoryPage({
           {/* Tools grid */}
           {tools.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {tools.map((tool, index) => (
+              {tools.map((tool) => (
                 <Link
                   key={tool.slug}
                   href={`/tools/${tool.slug}`}
                   className="group relative flex flex-col p-6 border border-[var(--border-soft)] rounded-sm bg-[var(--bg-surface)] hover:border-[var(--border-default)] hover:shadow-sm transition-all"
                 >
                   <div className="flex items-start justify-between mb-4">
-                    <div
-                      className="flex items-center justify-center w-10 h-10 rounded-sm"
-                      style={{ backgroundColor: `${accent}15` }}
-                    >
-                      {getIcon(tool.icon, 'w-4 h-4 text-[var(--text-secondary)]')}
+                    <div className="flex items-center justify-center w-10 h-10 rounded-sm bg-[var(--bg-subtle)] border border-[var(--border-soft)] text-[var(--text-primary)] group-hover:bg-[var(--accent-dark)] group-hover:text-[var(--text-inverse)] transition-colors">
+                      {getIcon(tool.icon, 'w-4 h-4')}
                     </div>
                     <ArrowUpRight className="w-4 h-4 text-[var(--text-subtle)] opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 translate-y-1 group-hover:translate-y-0 transition-all" />
                   </div>

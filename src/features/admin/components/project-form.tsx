@@ -13,6 +13,14 @@ import {
   Plus,
   Trash2,
 } from 'lucide-react';
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from '@/components/ui/select';
+import type { Difficulty } from '@/lib/cms';
 
 type Milestone = {
   title: string;
@@ -28,11 +36,52 @@ type Feature = {
   description: string;
 };
 
+type Phase = {
+  id: string;
+  phaseNumber: number;
+  title: string;
+  summary: string;
+  estimatedDuration: string;
+  imageUrl?: string;
+  content: string;
+  objectives: string[];
+  checkpointTasks: string[];
+};
+
+type ProjectFormState = {
+  slug: string;
+  title: string;
+  shortDescription: string;
+  description: string;
+  category: string;
+  difficulty: string;
+  estimatedDuration: string;
+  projectType: string;
+  experienceLevel: string;
+  technologies: string[];
+  skills: string[];
+  learningOutcomes: string[];
+  features: Feature[];
+  requirements: string[];
+  milestones: Milestone[];
+  phases: Phase[];
+  architecture: string;
+  folderStructure: string;
+  databaseConsiderations: string;
+  apiConsiderations: string;
+  testingGuidance: string;
+  securityConsiderations: string;
+  deploymentGuidance: string;
+  tags: string[];
+  relatedRoadmapIds: string[];
+};
+
 const STEPS = [
   'Basic Info',
   'Technologies & Skills',
   'Features & Milestones',
   'Architecture',
+  'Masterclass Phases',
   'Review',
 ];
 
@@ -53,6 +102,18 @@ const PROJECT_CATEGORIES = [
   { value: 'developer-tool', label: 'Developer Tool' },
   { value: 'game', label: 'Game' },
   { value: 'data', label: 'Data / ML' },
+];
+
+const AVAILABLE_ROADMAPS = [
+  { slug: 'full-stack-developer', title: 'Full-Stack Development' },
+  { slug: 'frontend-developer', title: 'Frontend Engineer' },
+  { slug: 'backend-developer', title: 'Backend Engineer' },
+  { slug: 'ai-engineer', title: 'AI & Machine Learning' },
+  { slug: 'devops', title: 'DevOps & Cloud' },
+  { slug: 'cybersecurity', title: 'Cybersecurity Analyst' },
+  { slug: 'mobile-developer', title: 'Mobile App Engineer' },
+  { slug: 'placement-prep', title: 'Campus Placement Prep' },
+  { slug: 'oop', title: 'OOP Mastery' },
 ];
 
 export function ProjectForm() {
@@ -78,6 +139,7 @@ export function ProjectForm() {
     features: [] as Feature[],
     requirements: [''],
     milestones: [] as Milestone[],
+    phases: [] as Phase[],
     architecture: '',
     folderStructure: '',
     databaseConsiderations: '',
@@ -86,6 +148,7 @@ export function ProjectForm() {
     securityConsiderations: '',
     deploymentGuidance: '',
     tags: [''],
+    relatedRoadmapIds: [] as string[],
   });
 
   function update(fields: Partial<typeof form>) {
@@ -124,6 +187,39 @@ export function ProjectForm() {
 
   function removeMilestone(idx: number) {
     update({ milestones: form.milestones.filter((_, i) => i !== idx) });
+  }
+
+  function addPhase() {
+    const nextNumber = form.phases.length + 1;
+    update({
+      phases: [
+        ...form.phases,
+        {
+          id: `phase-${nextNumber}`,
+          phaseNumber: nextNumber,
+          title: `Phase ${nextNumber}: `,
+          summary: '',
+          estimatedDuration: '25 min read',
+          content: '## Overview\n\nExplain this phase of the project...\n\n```typescript\n// Implementation code\n```\n',
+          objectives: [''],
+          checkpointTasks: ['Verify implementation builds without errors'],
+        },
+      ],
+    });
+  }
+
+  function updatePhase(idx: number, fields: Partial<Phase>) {
+    const phases = [...form.phases];
+    phases[idx] = { ...phases[idx], ...fields };
+    update({ phases });
+  }
+
+  function removePhase(idx: number) {
+    const remaining = form.phases.filter((_, i) => i !== idx).map((ph, i) => ({
+      ...ph,
+      phaseNumber: i + 1,
+    }));
+    update({ phases: remaining });
   }
 
   function validateStep(): boolean {
@@ -174,9 +270,15 @@ export function ProjectForm() {
           objectives: m.objectives.filter(Boolean),
           tasks: m.tasks.filter(Boolean),
         })),
+        phases: form.phases.filter((p) => p.title).map((p, idx) => ({
+          ...p,
+          phaseNumber: idx + 1,
+          objectives: (p.objectives || []).filter(Boolean),
+          checkpointTasks: (p.checkpointTasks || []).filter(Boolean),
+        })),
         extensionIdeas: [],
         seo: {},
-        relatedRoadmapIds: [],
+        relatedRoadmapIds: form.relatedRoadmapIds || [],
         prerequisiteRoadmapIds: [],
         relatedProjectIds: [],
       };
@@ -211,7 +313,7 @@ export function ProjectForm() {
 
       {/* Error */}
       {error && (
-        <div className="mb-6 p-3 rounded-sm bg-red-50 border border-red-200 text-sm text-red-600">
+        <div className="mb-6 p-3 rounded-sm bg-rose-500/10 border border-rose-500/30 text-sm text-rose-600 dark:text-rose-400">
           {error}
         </div>
       )}
@@ -232,7 +334,15 @@ export function ProjectForm() {
           />
         )}
         {step === 3 && <StepArchitecture form={form} update={update} />}
-        {step === 4 && <StepReview form={form} />}
+        {step === 4 && (
+          <StepPhases
+            form={form}
+            addPhase={addPhase}
+            updatePhase={updatePhase}
+            removePhase={removePhase}
+          />
+        )}
+        {step === 5 && <StepReview form={form} />}
       </div>
 
       {/* Navigation */}
@@ -241,11 +351,11 @@ export function ProjectForm() {
           <ArrowLeft className="w-4 h-4" /> Previous
         </button>
         {step < STEPS.length - 1 ? (
-          <button onClick={next} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-sm text-sm font-medium bg-[var(--accent-dark)] text-[var(--accent-primary)] hover:opacity-90 transition-opacity">
+          <button onClick={next} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-sm text-sm font-medium bg-[var(--accent-dark)] text-[var(--text-inverse)] hover:opacity-90 transition-opacity">
             Next <ArrowRight className="w-4 h-4" />
           </button>
         ) : (
-          <button onClick={handleSubmit} disabled={saving} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-sm text-sm font-medium bg-[var(--accent-dark)] text-[var(--accent-primary)] hover:opacity-90 disabled:opacity-50 transition-opacity">
+          <button onClick={handleSubmit} disabled={saving} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-sm text-sm font-medium bg-[var(--accent-dark)] text-[var(--text-inverse)] hover:opacity-90 disabled:opacity-50 transition-opacity">
             {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
             {saving ? 'Creating...' : 'Create Project'}
           </button>
@@ -257,7 +367,7 @@ export function ProjectForm() {
 
 // --- Step Components ---
 
-function StepBasicInfo({ form, update }: { form: any; update: (f: any) => void }) {
+function StepBasicInfo({ form, update }: { form: ProjectFormState; update: (f: Partial<ProjectFormState>) => void }) {
   return (
     <div className="space-y-5">
       <Field label="Title" required>
@@ -274,31 +384,82 @@ function StepBasicInfo({ form, update }: { form: any; update: (f: any) => void }
       </Field>
       <div className="grid grid-cols-2 gap-4">
         <Field label="Category">
-          <select value={form.category} onChange={(e) => update({ category: e.target.value })} className="input-field">
-            {PROJECT_CATEGORIES.map((c) => <option key={c.value} value={c.value}>{c.label}</option>)}
-          </select>
+          <Select value={form.category} onValueChange={(val) => update({ category: val })}>
+            <SelectTrigger className="h-10 text-sm">
+              <SelectValue placeholder="Select Category" />
+            </SelectTrigger>
+            <SelectContent>
+              {PROJECT_CATEGORIES.map((c) => (
+                <SelectItem key={c.value} value={c.value}>{c.label}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </Field>
         <Field label="Project Type">
-          <select value={form.projectType} onChange={(e) => update({ projectType: e.target.value })} className="input-field">
-            {PROJECT_TYPES.map((t) => <option key={t.value} value={t.value}>{t.label}</option>)}
-          </select>
+          <Select value={form.projectType} onValueChange={(val) => update({ projectType: val })}>
+            <SelectTrigger className="h-10 text-sm">
+              <SelectValue placeholder="Select Type" />
+            </SelectTrigger>
+            <SelectContent>
+              {PROJECT_TYPES.map((t) => (
+                <SelectItem key={t.value} value={t.value}>{t.label}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </Field>
       </div>
       <div className="grid grid-cols-2 gap-4">
         <Field label="Difficulty">
-          <select value={form.difficulty} onChange={(e) => update({ difficulty: e.target.value, experienceLevel: e.target.value })} className="input-field">
-            {DIFFICULTIES.map((d) => <option key={d.value} value={d.value}>{d.label}</option>)}
-          </select>
+          <Select
+            value={form.difficulty}
+            onValueChange={(val) => update({ difficulty: val as Difficulty, experienceLevel: val })}
+          >
+            <SelectTrigger className="h-10 text-sm">
+              <SelectValue placeholder="Select Difficulty" />
+            </SelectTrigger>
+            <SelectContent>
+              {DIFFICULTIES.map((d) => (
+                <SelectItem key={d.value} value={d.value}>{d.label}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </Field>
         <Field label="Estimated Duration">
           <input value={form.estimatedDuration} onChange={(e) => update({ estimatedDuration: e.target.value })} placeholder="e.g. 2-3 weeks" className="input-field" />
         </Field>
       </div>
+
+      <Field label="Associated Career Roadmaps (Optional)" hint="Select roadmaps where this project will be recommended as a capstone">
+        <div className="flex flex-wrap gap-2 pt-1">
+          {AVAILABLE_ROADMAPS.map((r) => {
+            const selected = (form.relatedRoadmapIds || []).includes(r.slug);
+            return (
+              <button
+                key={r.slug}
+                type="button"
+                onClick={() => {
+                  const current = form.relatedRoadmapIds || [];
+                  const next = selected ? current.filter((id: string) => id !== r.slug) : [...current, r.slug];
+                  update({ relatedRoadmapIds: next });
+                }}
+                className={`px-3 py-1.5 rounded-sm text-xs font-semibold border transition-all ${
+                  selected
+                    ? 'bg-[var(--accent-dark)] text-[var(--text-inverse)] border-[var(--accent-dark)]'
+                    : 'bg-[var(--bg-subtle)] text-[var(--text-secondary)] border-[var(--border-soft)] hover:text-[var(--text-primary)]'
+                }`}
+              >
+                {selected ? '✓ ' : '+ '}
+                {r.title}
+              </button>
+            );
+          })}
+        </div>
+      </Field>
     </div>
   );
 }
 
-function StepTechnologies({ form, update }: { form: any; update: (f: any) => void }) {
+function StepTechnologies({ form, update }: { form: ProjectFormState; update: (f: Partial<ProjectFormState>) => void }) {
   return (
     <div className="space-y-6">
       <ListField label="Technologies" required items={form.technologies} onChange={(items) => update({ technologies: items })} placeholder="e.g. React, Node.js, PostgreSQL" />
@@ -312,14 +473,30 @@ function StepTechnologies({ form, update }: { form: any; update: (f: any) => voi
   );
 }
 
-function StepFeatures({ form, addFeature, updateFeature, removeFeature, addMilestone, updateMilestone, removeMilestone }: any) {
+function StepFeatures({
+  form,
+  addFeature,
+  updateFeature,
+  removeFeature,
+  addMilestone,
+  updateMilestone,
+  removeMilestone,
+}: {
+  form: ProjectFormState;
+  addFeature: () => void;
+  updateFeature: (idx: number, fields: Partial<Feature>) => void;
+  removeFeature: (idx: number) => void;
+  addMilestone: () => void;
+  updateMilestone: (idx: number, fields: Partial<Milestone>) => void;
+  removeMilestone: (idx: number) => void;
+}) {
   return (
     <div className="space-y-8">
       {/* Features */}
       <div>
         <div className="flex items-center justify-between mb-3">
           <span className="text-sm font-semibold text-[var(--text-primary)]">Features</span>
-          <button onClick={addFeature} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-xs font-medium bg-[var(--accent-dark)] text-[var(--accent-primary)]">
+          <button onClick={addFeature} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-xs font-medium bg-[var(--accent-dark)] text-[var(--text-inverse)]">
             <Plus className="w-3.5 h-3.5" /> Add Feature
           </button>
         </div>
@@ -331,6 +508,7 @@ function StepFeatures({ form, addFeature, updateFeature, removeFeature, addMiles
                 <input value={f.description} onChange={(e) => updateFeature(i, { description: e.target.value })} placeholder="Feature description" className="input-field" />
               </div>
               <button onClick={() => removeFeature(i)} className="p-1.5 text-[var(--text-subtle)] hover:text-red-500"><Trash2 className="w-4 h-4" /></button>
+              <button onClick={() => removeFeature(i)} className="p-1.5 text-[var(--text-subtle)] hover:text-rose-600 dark:hover:text-rose-400"><Trash2 className="w-4 h-4" /></button>
             </div>
           ))}
           {form.features.length === 0 && <p className="text-xs text-[var(--text-subtle)] py-4 text-center">No features added yet.</p>}
@@ -341,7 +519,7 @@ function StepFeatures({ form, addFeature, updateFeature, removeFeature, addMiles
       <div>
         <div className="flex items-center justify-between mb-3">
           <span className="text-sm font-semibold text-[var(--text-primary)]">Milestones</span>
-          <button onClick={addMilestone} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-xs font-medium bg-[var(--accent-dark)] text-[var(--accent-primary)]">
+          <button onClick={addMilestone} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-xs font-medium bg-[var(--accent-dark)] text-[var(--text-inverse)]">
             <Plus className="w-3.5 h-3.5" /> Add Milestone
           </button>
         </div>
@@ -372,7 +550,7 @@ function StepFeatures({ form, addFeature, updateFeature, removeFeature, addMiles
   );
 }
 
-function StepArchitecture({ form, update }: { form: any; update: (f: any) => void }) {
+function StepArchitecture({ form, update }: { form: ProjectFormState; update: (f: Partial<ProjectFormState>) => void }) {
   return (
     <div className="space-y-5">
       <Field label="Architecture Overview">
@@ -400,20 +578,143 @@ function StepArchitecture({ form, update }: { form: any; update: (f: any) => voi
   );
 }
 
-function StepReview({ form }: { form: any }) {
+function StepPhases({
+  form,
+  addPhase,
+  updatePhase,
+  removePhase,
+}: {
+  form: ProjectFormState;
+  addPhase: () => void;
+  updatePhase: (idx: number, fields: Partial<Phase>) => void;
+  removePhase: (idx: number) => void;
+}) {
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h3 className="text-sm font-semibold text-[var(--text-primary)]">
+            Masterclass Phases & Guided Articles (Optional)
+          </h3>
+          <p className="text-xs text-[var(--text-secondary)] mt-0.5">
+            Break down the project into sequenced, long-form technical articles with checkpoints and code.
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={addPhase}
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-xs font-medium bg-[var(--accent-dark)] text-[var(--text-inverse)] hover:opacity-90 transition-opacity"
+        >
+          <Plus className="w-3.5 h-3.5" /> Add Phase
+        </button>
+      </div>
+
+      {form.phases.length === 0 ? (
+        <div className="text-center py-10 rounded-sm border border-dashed border-[var(--border-strong)] bg-[var(--bg-subtle)]/50">
+          <p className="text-xs text-[var(--text-secondary)]">No phases added yet.</p>
+          <p className="text-[11px] text-[var(--text-subtle)] mt-1">
+            Phases power the multi-step article reader where students follow deep-dive blueprints.
+          </p>
+          <button
+            type="button"
+            onClick={addPhase}
+            className="mt-3 inline-flex items-center gap-1 px-3 py-1.5 rounded-sm text-xs font-semibold bg-[var(--accent-dark)] text-[var(--text-inverse)]"
+          >
+            <Plus className="w-3 h-3" /> Add First Phase
+          </button>
+        </div>
+      ) : (
+        <div className="space-y-5">
+          {form.phases.map((phase: Phase, i: number) => (
+            <div
+              key={phase.id || i}
+              className="p-4 sm:p-5 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-subtle)] space-y-4"
+            >
+              <div className="flex items-center justify-between border-b border-[var(--border-soft)] pb-3">
+                <span className="text-xs font-bold uppercase tracking-wider text-[var(--accent-dark)]">
+                  Phase {i + 1}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => removePhase(i)}
+                  className="p-1 text-[var(--text-subtle)] hover:text-rose-600 dark:hover:text-rose-400 transition-colors"
+                  title="Remove phase"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="sm:col-span-2">
+                  <Field label="Phase Title" required>
+                    <input
+                      value={phase.title}
+                      onChange={(e) => updatePhase(i, { title: e.target.value })}
+                      placeholder="e.g. Architecture, PostgreSQL & Schema Modeling"
+                      className="input-field"
+                    />
+                  </Field>
+                </div>
+                <div>
+                  <Field label="Reading Duration">
+                    <input
+                      value={phase.estimatedDuration}
+                      onChange={(e) => updatePhase(i, { estimatedDuration: e.target.value })}
+                      placeholder="e.g. 25 min read"
+                      className="input-field"
+                    />
+                  </Field>
+                </div>
+              </div>
+
+              <Field label="Short Synopsis">
+                <input
+                  value={phase.summary}
+                  onChange={(e) => updatePhase(i, { summary: e.target.value })}
+                  placeholder="Summary of what is implemented in this phase..."
+                  className="input-field"
+                />
+              </Field>
+
+              <Field label="Article Content (Markdown)" hint="Supports GitHub Markdown and syntax-highlighted code">
+                <textarea
+                  value={phase.content}
+                  onChange={(e) => updatePhase(i, { content: e.target.value })}
+                  rows={8}
+                  placeholder="## Technical Guide&#10;&#10;Explain architectural decisions and include code..."
+                  className="input-field font-mono text-xs resize-y"
+                />
+              </Field>
+
+              <ListField
+                label="Verification Checkpoints"
+                placeholder="e.g. Verify database migrations run cleanly"
+                items={phase.checkpointTasks && phase.checkpointTasks.length > 0 ? phase.checkpointTasks : ['']}
+                onChange={(items) => updatePhase(i, { checkpointTasks: items })}
+              />
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function StepReview({ form }: { form: ProjectFormState }) {
   return (
     <div className="space-y-6">
       <div>
         <h3 className="text-lg font-semibold text-[var(--text-primary)]">{form.title || '(Untitled)'}</h3>
         <p className="text-sm text-[var(--text-secondary)] mt-1">{form.shortDescription}</p>
       </div>
-      <div className="grid grid-cols-3 gap-4 text-sm">
+      <div className="grid grid-cols-3 sm:grid-cols-4 gap-4 text-sm">
         <div><span className="text-[var(--text-subtle)]">Slug:</span> <span className="font-mono text-[var(--text-primary)]">{form.slug}</span></div>
         <div><span className="text-[var(--text-subtle)]">Type:</span> <span className="text-[var(--text-primary)]">{form.projectType}</span></div>
         <div><span className="text-[var(--text-subtle)]">Difficulty:</span> <span className="text-[var(--text-primary)]">{form.difficulty}</span></div>
         <div><span className="text-[var(--text-subtle)]">Duration:</span> <span className="text-[var(--text-primary)]">{form.estimatedDuration}</span></div>
         <div><span className="text-[var(--text-subtle)]">Technologies:</span> <span className="text-[var(--text-primary)]">{form.technologies.filter(Boolean).length}</span></div>
         <div><span className="text-[var(--text-subtle)]">Milestones:</span> <span className="text-[var(--text-primary)]">{form.milestones.length}</span></div>
+        <div><span className="text-[var(--text-subtle)]">Phases:</span> <span className="text-[var(--text-primary)]">{form.phases.length}</span></div>
       </div>
       {form.technologies.filter(Boolean).length > 0 && (
         <div className="flex flex-wrap gap-1.5">

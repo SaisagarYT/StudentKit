@@ -4,7 +4,6 @@ import { emitProgressChanged } from '@/lib/firebase/user-progress-sync';
 
 const STREAK_KEY = 'sk-streak';
 const BOOKMARKS_KEY = 'sk-bookmarks';
-const LAST_ACTIVE_KEY = 'sk-last-active';
 
 // --- Streak System ---
 

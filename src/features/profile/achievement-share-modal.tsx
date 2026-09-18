@@ -111,8 +111,8 @@ export function AchievementShareModal({ achievement, userName, onClose }: Achiev
               {/* Footer */}
               <div className="flex items-center justify-between pt-3 border-t border-[var(--border-soft)]">
                 <div className="flex items-center gap-2">
-                  <div className="w-5 h-5 rounded-sm bg-[var(--accent-primary)] flex items-center justify-center">
-                    <span className="text-[8px] font-bold text-[var(--accent-dark)]">SK</span>
+                  <div className="w-5 h-5 rounded-sm bg-[var(--accent-dark)] flex items-center justify-center">
+                    <span className="text-[8px] font-bold text-[var(--text-inverse)]">SK</span>
                   </div>
                   <span className="text-[11px] font-semibold text-[var(--text-secondary)]">
                     {userName || 'Learner'} on StudentKit
@@ -176,7 +176,7 @@ export function AchievementShareModal({ achievement, userName, onClose }: Achiev
                   url: 'https://studentkit.app/leaderboard',
                 }).catch(() => {});
               }}
-              className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-sm bg-[var(--accent-dark)] text-[var(--accent-primary)] text-xs font-semibold hover:opacity-90 transition-opacity"
+              className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-sm bg-[var(--accent-dark)] text-[var(--text-inverse)] text-xs font-semibold hover:opacity-90 transition-opacity"
             >
               <Share2 className="w-4 h-4" />
               Share via device

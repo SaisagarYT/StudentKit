@@ -3,6 +3,13 @@
 import { useState, useMemo, useCallback } from 'react';
 import { trackToolUsage } from '@/lib/analytics';
 import { Copy, Download, Check } from 'lucide-react';
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from '@/components/ui/select';
 
 type License = 'MIT' | 'Apache 2.0' | 'GPL 3.0' | 'ISC' | 'None';
 
@@ -422,17 +429,21 @@ export function ReadmeGeneratorForm() {
             <label className="block text-xs font-medium text-[var(--text-subtle)] uppercase tracking-wider mb-1.5">
               License
             </label>
-            <select
+            <Select
               value={form.license}
-              onChange={(e) => updateField('license', e.target.value as License)}
-              className="form-input"
+              onValueChange={(val) => updateField('license', val as License)}
             >
-              {LICENSE_OPTIONS.map((opt) => (
-                <option key={opt} value={opt}>
-                  {opt}
-                </option>
-              ))}
-            </select>
+              <SelectTrigger className="h-10 text-sm">
+                <SelectValue placeholder="Select license" />
+              </SelectTrigger>
+              <SelectContent>
+                {LICENSE_OPTIONS.map((opt) => (
+                  <SelectItem key={opt} value={opt}>
+                    {opt}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           {/* Author */}

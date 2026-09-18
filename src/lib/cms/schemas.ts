@@ -98,6 +98,21 @@ const extensionIdeaSchema = z.object({
   ideas: z.array(z.string().min(1)).min(1),
 });
 
+const phaseSchema = z.object({
+  id: z.string().default(() => Math.random().toString(36).substring(2, 9)),
+  phaseNumber: z.number().int().min(1),
+  title: z.string().min(1, 'Phase title required'),
+  summary: z.string().default(''),
+  estimatedDuration: z.string().default('20 min read'),
+  imageUrl: z.string().optional(),
+  imageCaption: z.string().optional(),
+  content: z.string().default(''),
+  objectives: z.array(z.string()).default([]),
+  checkpointTasks: z.array(z.string()).default([]),
+  expectedOutput: z.string().optional(),
+  githubBranchUrl: z.string().optional(),
+});
+
 export const createProjectSchema = z.object({
   slug: z.string().min(3).max(60).regex(/^[a-z0-9-]+$/, 'Only lowercase letters, numbers, hyphens'),
   title: z.string().min(3).max(100),
@@ -114,6 +129,7 @@ export const createProjectSchema = z.object({
   features: z.array(featureSchema).default([]),
   requirements: z.array(z.string()).default([]),
   milestones: z.array(milestoneSchema).default([]),
+  phases: z.array(phaseSchema).default([]),
   architecture: z.string().default(''),
   folderStructure: z.string().default(''),
   databaseConsiderations: z.string().default(''),

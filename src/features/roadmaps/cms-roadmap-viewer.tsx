@@ -1,14 +1,13 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 'use client';
 
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { doc, getDoc, collection, query, where, getDocs, limit, documentId } from 'firebase/firestore';
+import { collection, query, where, getDocs, limit, documentId } from 'firebase/firestore';
 import { getFirebaseDb, isFirebaseConfigured } from '@/lib/firebase/client';
 import { trackPageView } from '@/lib/cms/analytics';
 import { InteractiveRoadmap } from './interactive-roadmap';
 import type { Roadmap } from '@/types/roadmap';
-import { ArrowLeft, Clock, BookOpen, Code2, Loader2, FolderOpen, FileText } from 'lucide-react';
+import { ArrowLeft, Clock, BookOpen, Loader2, FolderOpen, FileText } from 'lucide-react';
 import Link from 'next/link';
 import { ViewCounter } from '@/components/engagement/view-counter';
 import { BookmarkButton } from '@/components/engagement/bookmark-button';
@@ -245,13 +244,13 @@ export function CmsRoadmapViewer() {
                 <Link
                   key={res.id}
                   href={`/resources/view?slug=${res.slug}`}
-                  className="group p-5 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] hover:border-blue-300 hover:shadow-sm transition-all"
+                  className="group p-5 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] hover:border-blue-500/40 hover:shadow-sm transition-all"
                 >
-                  <h3 className="text-sm font-semibold text-[var(--text-primary)] group-hover:text-blue-500 transition-colors">
+                  <h3 className="text-sm font-semibold text-[var(--text-primary)] group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                     {res.title}
                   </h3>
                   <div className="flex items-center gap-2 mt-2">
-                    <span className="px-2 py-0.5 rounded-sm text-[10px] font-medium bg-blue-500/10 text-blue-500 capitalize">
+                    <span className="px-2 py-0.5 rounded-sm text-[10px] font-medium bg-blue-500/10 text-blue-600 dark:text-blue-400 capitalize">
                       {res.category.replace('-', ' ')}
                     </span>
                     <span className="text-[10px] text-[var(--text-subtle)]">{res.readTime} min</span>

@@ -25,6 +25,8 @@ export type {
   RoadmapResource,
   RoadmapVariant,
   RoadmapRelationship,
+  StageColor,
+  ResourceType,
   ProjectMilestone,
   ProjectFeature,
   ExtensionIdea,

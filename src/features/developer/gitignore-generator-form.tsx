@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useCallback } from 'react';
 import { trackToolUsage } from '@/lib/analytics';
-import { Copy, Download, Check, Sparkles } from 'lucide-react';
+import { Copy, Download, Check, CheckSquare } from 'lucide-react';
 
 /* ─── Technology Presets ─── */
 
@@ -238,16 +238,16 @@ export function GitignoreGeneratorForm() {
             <span className="text-sm font-medium text-[var(--text-secondary)]">
               Selected:
             </span>
-            <span className="inline-flex items-center justify-center min-w-[1.5rem] h-6 px-1.5 rounded-sm bg-[var(--accent-primary)]/10 text-xs font-semibold text-[var(--accent-primary)]">
+            <span className="inline-flex items-center justify-center min-w-[1.5rem] h-6 px-1.5 rounded-sm bg-[var(--accent-dark)] text-xs font-semibold text-[var(--text-inverse)]">
               {selected.size}
             </span>
           </div>
           <button
             type="button"
             onClick={selectCommon}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[var(--accent-primary)] border border-[var(--accent-primary)]/30 rounded-sm hover:bg-[var(--accent-primary)]/5 transition-colors"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[var(--text-primary)] border border-[var(--border-default)] rounded-sm hover:bg-[var(--bg-subtle)] transition-colors"
           >
-            <Sparkles className="w-3.5 h-3.5" />
+            <CheckSquare className="w-3.5 h-3.5" />
             Select Common
           </button>
         </div>
@@ -267,7 +267,7 @@ export function GitignoreGeneratorForm() {
                     onClick={() => toggle(preset.id)}
                     className={`px-3 py-1.5 text-sm font-medium rounded-sm border transition-all ${
                       isSelected
-                        ? 'bg-[var(--accent-primary)] text-white border-[var(--accent-primary)] shadow-sm'
+                        ? 'bg-[var(--accent-dark)] text-[var(--text-inverse)] border-[var(--accent-dark)] shadow-sm'
                         : 'bg-[var(--bg-subtle)] text-[var(--text-secondary)] border-[var(--border-soft)] hover:border-[var(--border-default)] hover:text-[var(--text-primary)]'
                     }`}
                   >
@@ -303,6 +303,7 @@ export function GitignoreGeneratorForm() {
                   {copied ? (
                     <>
                       <Check className="w-3.5 h-3.5 text-green-500" />
+                      <Check className="w-3.5 h-3.5 text-emerald-500" />
                       Copied
                     </>
                   ) : (

@@ -17,6 +17,7 @@ export function AnalyticsWidget() {
       <div className="flex items-center justify-between mb-5">
         <div className="flex items-center gap-2">
           <TrendingUp className="w-5 h-5 text-[var(--accent-primary)]" />
+          <TrendingUp className="w-5 h-5 text-[var(--accent-dark)]" />
           <h2 className="text-lg font-semibold text-[var(--text-primary)]">Top Content</h2>
         </div>
         <span className="text-xs text-[var(--text-subtle)]">By page views</span>

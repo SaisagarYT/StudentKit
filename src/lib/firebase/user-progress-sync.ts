@@ -3,7 +3,7 @@
 import { doc, getDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
 import { getFirebaseDb } from './client';
 import { updateLeaderboardEntry } from './leaderboard';
-import type { StreakData } from '@/lib/user-progress';
+import type { StreakData, Bookmark } from '@/lib/user-progress';
 
 const DSA_STORAGE_KEY = 'sk-dsa-progress';
 const CS_STORAGE_KEY = 'sk-cs-progress';
@@ -23,7 +23,7 @@ export interface UserProgressData {
   dsaProgress: Record<string, boolean>;
   csProgress: Record<string, boolean>;
   roadmapProgress: Record<string, Record<string, boolean>>;
-  bookmarks: any[];
+  bookmarks: Bookmark[];
 }
 
 function getLocalProgress(): UserProgressData {
@@ -71,7 +71,7 @@ function mergeProgress(local: UserProgressData, cloud: UserProgressData): UserPr
   }
 
   // Bookmarks: union by type+slug
-  const bookmarkSet = new Map<string, any>();
+  const bookmarkSet = new Map<string, Bookmark>();
   for (const b of [...(cloud.bookmarks || []), ...(local.bookmarks || [])]) {
     bookmarkSet.set(`${b.type}:${b.slug}`, b);
   }

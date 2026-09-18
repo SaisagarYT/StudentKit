@@ -9,6 +9,13 @@ import {
   type ConversionFormula,
   type CGPAToPercentageResult,
 } from './percentage.calculator';
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from '@/components/ui/select';
 
 export function CGPAToPercentageForm() {
   const [cgpa, setCgpa] = useState<string>('');
@@ -59,17 +66,21 @@ export function CGPAToPercentageForm() {
             <label className="block text-sm font-medium text-[var(--text-primary)] mb-1.5">
               Conversion Formula
             </label>
-            <select
+            <Select
               value={formula}
-              onChange={(e) => setFormula(e.target.value as ConversionFormula)}
-              className="form-input"
+              onValueChange={(val) => setFormula(val as ConversionFormula)}
             >
-              {formulaOptions.map((opt) => (
-                <option key={opt.value} value={opt.value}>
-                  {opt.label}
-                </option>
-              ))}
-            </select>
+              <SelectTrigger className="h-11 text-sm">
+                <SelectValue placeholder="Select formula" />
+              </SelectTrigger>
+              <SelectContent>
+                {formulaOptions.map((opt) => (
+                  <SelectItem key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
             <p className="mt-1.5 text-xs text-[var(--text-subtle)]">
               Select the formula used by your university
             </p>

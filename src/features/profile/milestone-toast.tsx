@@ -102,11 +102,8 @@ export function MilestoneToast({ milestone, stats, onShare, onDismiss }: Milesto
       }`}
     >
       <div className="flex items-center gap-3 p-4 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] shadow-xl max-w-sm">
-        <div
-          className="w-10 h-10 rounded-sm flex items-center justify-center shrink-0"
-          style={{ background: `${milestone.color}20` }}
-        >
-          <Trophy className="w-5 h-5" style={{ color: milestone.color }} />
+        <div className="w-10 h-10 rounded-sm flex items-center justify-center shrink-0 bg-[var(--accent-dark)] text-[var(--text-inverse)]">
+          <Trophy className="w-5 h-5" />
         </div>
 
         <div className="flex-1 min-w-0">
@@ -116,7 +113,7 @@ export function MilestoneToast({ milestone, stats, onShare, onDismiss }: Milesto
 
         <button
           onClick={handleShare}
-          className="shrink-0 flex items-center gap-1 px-2.5 py-1.5 rounded-sm bg-[var(--accent-dark)] text-[var(--accent-primary)] text-[10px] font-semibold hover:opacity-90 transition-opacity"
+          className="shrink-0 flex items-center gap-1 px-2.5 py-1.5 rounded-sm bg-[var(--accent-dark)] text-[var(--text-inverse)] text-[10px] font-semibold hover:opacity-90 transition-opacity"
         >
           <Share2 className="w-3 h-3" />
           Share

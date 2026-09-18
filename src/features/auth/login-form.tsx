@@ -158,11 +158,12 @@ export function LoginForm() {
           </div>
 
           {error && <p className="text-xs text-red-500">{error}</p>}
+          {error && <p className="text-xs text-rose-600 dark:text-rose-400">{error}</p>}
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-sm text-sm font-semibold bg-[var(--accent-dark)] text-[var(--accent-primary)] hover:opacity-90 disabled:opacity-50 transition-opacity"
+            className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-sm text-sm font-semibold bg-[var(--accent-dark)] text-[var(--text-inverse)] hover:opacity-90 disabled:opacity-50 transition-opacity"
           >
             {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
             {mode === 'login' ? 'Sign In' : 'Create Account'}

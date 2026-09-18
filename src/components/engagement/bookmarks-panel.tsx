@@ -88,7 +88,7 @@ export function BookmarksPanel({ isOpen, onClose }: { isOpen: boolean; onClose: 
                     </Link>
                     <button
                       onClick={() => handleRemove(item.type, item.slug)}
-                      className="p-1.5 rounded-sm opacity-0 group-hover:opacity-100 hover:bg-red-50 text-[var(--text-subtle)] hover:text-red-500 transition-all"
+                      className="p-1.5 rounded-sm opacity-0 group-hover:opacity-100 hover:bg-rose-500/10 text-[var(--text-subtle)] hover:text-rose-600 dark:hover:text-rose-400 transition-all"
                       title="Remove"
                     >
                       <Trash2 className="w-3.5 h-3.5" />

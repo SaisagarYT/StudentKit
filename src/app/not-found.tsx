@@ -5,7 +5,7 @@ export default function NotFound() {
   return (
     <div className="flex flex-col items-center justify-center min-h-[60vh] py-20">
       <div className="container-main text-center">
-        <span className="text-8xl md:text-9xl font-bold tracking-tighter text-[var(--accent-primary)] select-none">
+        <span className="text-8xl md:text-9xl font-bold tracking-tighter text-[var(--accent-dark)] select-none">
           404
         </span>
         <h1 className="mt-4 text-h2 font-bold tracking-tight">

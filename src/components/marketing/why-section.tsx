@@ -1,113 +1,117 @@
 'use client';
 
-import { useRef, useEffect } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
+import { motion } from 'motion/react';
+import { Route, Code2, Award, Zap } from 'lucide-react';
 
 const benefits = [
   {
     number: '01',
-    title: 'Fast',
-    description: 'Get answers instantly. No loading screens, no sign-up walls.',
+    title: 'Structured Career Paths',
+    description:
+      'End tutorial paralysis. Every roadmap is broken down into ordered milestones, essential topics, curated tutorials, and practical assignments.',
+    icon: Route,
   },
   {
     number: '02',
-    title: 'Private',
+    title: 'Production-Grade Projects',
     description:
-      'Most calculations happen directly in your browser. Your data stays yours.',
+      'Build portfolio projects that impress tech recruiters — featuring microservices, WebSockets, vector databases, and system architecture blueprints.',
+    icon: Code2,
   },
   {
     number: '03',
-    title: 'Free',
+    title: '100% Free & Open Access',
     description:
-      'Essential student tools without unnecessary barriers or hidden charges.',
+      'All 250+ DSA patterns, core CS fundamentals (OS, DBMS, CN, OOPs), interactive roadmaps, and the ATS resume builder are completely open.',
+    icon: Award,
   },
   {
     number: '04',
-    title: 'Accurate',
+    title: 'Interview-Tested Rigor',
     description:
-      'Clear calculations with understandable formulas and transparent logic.',
+      'Curated questions mapped directly to real company hiring bars (Google, Amazon, Meta) with step-by-step approaches from brute force to optimal.',
+    icon: Zap,
   },
 ];
 
 export function WhySection() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const headingRef = useRef<HTMLDivElement>(null);
-  const itemsRef = useRef<HTMLDivElement>(null);
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.12,
+      },
+    },
+  };
 
-  useEffect(() => {
-    const prefersReducedMotion = window.matchMedia(
-      '(prefers-reduced-motion: reduce)'
-    ).matches;
-
-    if (prefersReducedMotion) return;
-
-    const ctx = gsap.context(() => {
-      gsap.set(headingRef.current, { opacity: 0, y: 30 });
-      gsap.set(itemsRef.current?.children || [], { opacity: 0, x: -30 });
-
-      ScrollTrigger.create({
-        trigger: sectionRef.current,
-        start: 'top 78%',
-        once: true,
-        onEnter: () => {
-          gsap.to(headingRef.current, {
-            opacity: 1,
-            y: 0,
-            duration: 0.8,
-            ease: 'power3.out',
-          });
-          gsap.to(itemsRef.current?.children || [], {
-            opacity: 1,
-            x: 0,
-            duration: 0.7,
-            ease: 'power3.out',
-            stagger: 0.12,
-            delay: 0.2,
-          });
-        },
-      });
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
+  const itemVariants = {
+    hidden: { opacity: 0, x: -20 },
+    visible: {
+      opacity: 1,
+      x: 0,
+      transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const },
+    },
+  };
 
   return (
-    <section ref={sectionRef} className="section-spacing bg-[var(--bg-surface)]">
+    <section className="section-spacing bg-[var(--bg-surface)] border-y border-[var(--border-soft)]">
       <div className="container-main">
-        <div ref={headingRef} className="max-w-lg mb-16">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-60px' }}
+          transition={{ duration: 0.7 }}
+          className="max-w-xl mb-16"
+        >
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[var(--bg-subtle)] border border-[var(--border-soft)] text-xs font-semibold text-[var(--text-secondary)] mb-4">
+            <span>The StudentKit Difference</span>
+          </div>
           <h2 className="text-h2 font-bold tracking-tight">
-            Useful by{' '}
-            <span className="font-serif italic font-normal">design</span>.
+            Engineered for{' '}
+            <span className="font-serif italic font-normal">clarity & depth</span>.
           </h2>
-          <p className="mt-4 text-body-lg text-[var(--text-secondary)]">
-            Built to help you get answers and move on — nothing more, nothing
-            less.
+          <p className="mt-4 text-body-lg text-[var(--text-secondary)] leading-relaxed">
+            Everything you need to break into tech without expensive bootcamps, noisy communities, or fragmented tutorials.
           </p>
-        </div>
+        </motion.div>
 
-        <div ref={itemsRef} className="space-y-0">
-          {benefits.map((benefit) => (
-            <div
-              key={benefit.number}
-              className="group flex items-start gap-6 md:gap-10 py-8 border-b border-[var(--border-soft)] last:border-b-0"
-            >
-              <span className="text-sm font-mono text-[var(--accent-primary)] font-semibold shrink-0 pt-1">
-                {benefit.number}
-              </span>
-              <div className="flex flex-col md:flex-row md:items-baseline md:gap-8 flex-1">
-                <h3 className="text-xl md:text-2xl font-semibold tracking-tight text-[var(--text-primary)] min-w-[120px]">
-                  {benefit.title}
-                </h3>
-                <p className="mt-2 md:mt-0 text-[var(--text-secondary)] leading-relaxed max-w-md">
-                  {benefit.description}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-60px' }}
+          className="space-y-0"
+        >
+          {benefits.map((benefit) => {
+            const Icon = benefit.icon;
+            return (
+              <motion.div
+                key={benefit.number}
+                variants={itemVariants}
+                className="group flex items-start gap-6 md:gap-10 py-8 border-b border-[var(--border-soft)] last:border-b-0 hover:bg-[var(--bg-muted)]/50 px-3 md:px-4 rounded-sm transition-colors duration-150"
+              >
+                <div className="flex items-center gap-3 shrink-0 pt-1">
+                  <span className="text-xs font-mono font-bold text-[var(--text-primary)] bg-[var(--bg-subtle)] border border-[var(--border-soft)] px-2 py-0.5 rounded-sm">
+                    {benefit.number}
+                  </span>
+                  <div className="w-8 h-8 rounded-sm bg-[var(--bg-subtle)] hidden sm:flex items-center justify-center text-[var(--text-secondary)] group-hover:text-[var(--text-primary)] transition-colors">
+                    <Icon className="w-4 h-4" />
+                  </div>
+                </div>
+
+                <div className="flex flex-col md:flex-row md:items-baseline md:gap-8 flex-1">
+                  <h3 className="text-lg md:text-xl font-bold tracking-tight text-[var(--text-primary)] md:w-64 shrink-0">
+                    {benefit.title}
+                  </h3>
+                  <p className="mt-2 md:mt-0 text-sm md:text-base text-[var(--text-secondary)] leading-relaxed flex-1">
+                    {benefit.description}
+                  </p>
+                </div>
+              </motion.div>
+            );
+          })}
+        </motion.div>
       </div>
     </section>
   );

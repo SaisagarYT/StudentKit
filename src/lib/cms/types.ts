@@ -99,6 +99,20 @@ export interface CmsRoadmap {
 }
 
 // --- Project Types ---
+export interface ProjectPhase {
+  id: string;
+  phaseNumber: number;
+  title: string;
+  summary: string;
+  estimatedDuration: string;
+  imageUrl?: string;
+  imageCaption?: string;
+  content: string;
+  objectives: string[];
+  checkpointTasks: string[];
+  expectedOutput?: string;
+  githubBranchUrl?: string;
+}
 
 export interface ProjectMilestone {
   title: string;
@@ -138,6 +152,7 @@ export interface CmsProject {
   features: ProjectFeature[];
   requirements: string[];
   milestones: ProjectMilestone[];
+  phases?: ProjectPhase[];
   architecture: string;
   folderStructure: string;
   databaseConsiderations: string;
@@ -161,6 +176,39 @@ export interface CmsProject {
 
 // --- Resource Types ---
 
+export type ResourceDomainType = 'project-guide' | 'cs-fundamentals';
+
+export type CsSubject =
+  | 'operating-systems'
+  | 'dbms'
+  | 'computer-networks'
+  | 'oops'
+  | 'system-design';
+
+export type ProjectTrack =
+  | 'full-stack'
+  | 'backend'
+  | 'frontend'
+  | 'ai-ml'
+  | 'mobile'
+  | 'devops';
+
+export interface ProjectMilestoneItem {
+  id: string;
+  title: string;
+  objective: string;
+  content: string;
+  checkpoint?: string;
+}
+
+export interface CsInterviewQuestion {
+  id: string;
+  question: string;
+  answer: string;
+  frequency?: 'high' | 'medium';
+  companies?: string[];
+}
+
 export type ResourceCategory = 'dsa' | 'concepts' | 'guides' | 'career' | 'system-design';
 
 export interface CodeBlock {
@@ -181,6 +229,7 @@ export interface CmsResource {
   slug: string;
   title: string;
   shortDescription: string;
+  resourceType?: ResourceDomainType;
   category: ResourceCategory;
   difficulty: Difficulty;
   content: string;
@@ -195,6 +244,25 @@ export interface CmsResource {
   featured: boolean;
   seo: SeoMetadata;
   order: number;
+
+  // Project Guide specific domain fields
+  projectTrack?: ProjectTrack;
+  techStack?: string[];
+  githubStarterUrl?: string;
+  githubCompletedUrl?: string;
+  liveDemoUrl?: string;
+  architectureDiagram?: string;
+  architectureOverview?: string;
+  milestones?: ProjectMilestoneItem[];
+  challenges?: string[];
+
+  // CS Fundamentals specific domain fields
+  subject?: CsSubject;
+  diagramUrl?: string;
+  interviewQuestions?: CsInterviewQuestion[];
+  cheatSheetBullets?: string[];
+  commonPitfalls?: string[];
+
   createdAt: Date;
   updatedAt: Date;
   publishedAt: Date | null;
@@ -206,6 +274,7 @@ export interface ResourceListItem {
   id: string;
   slug: string;
   title: string;
+  resourceType?: ResourceDomainType;
   category: ResourceCategory;
   difficulty: Difficulty;
   status: ContentStatus;
@@ -214,6 +283,13 @@ export interface ResourceListItem {
   readTime: number;
   updatedAt: Date;
   publishedAt: Date | null;
+
+  // Domain previews for cards
+  projectTrack?: ProjectTrack;
+  techStack?: string[];
+  subject?: CsSubject;
+  interviewQuestionCount?: number;
+  milestoneCount?: number;
 }
 
 // --- DSA Problem Types (dynamic, stored in Firestore) ---
@@ -237,10 +313,30 @@ export type DsaCategory =
   | 'intervals'
   | 'math-bit-manipulation';
 
+export interface DsaApproach {
+  id: string;
+  title: string;
+  tag?: 'optimal' | 'alternative' | 'brute-force';
+  intuition: string; // Text before code
+  timeComplexity: string;
+  spaceComplexity: string;
+  codeSolutions: Record<string, string>;
+  explanationAfterCode?: string; // Text after code
+}
+
+export interface DsaResource {
+  id: string;
+  title: string;
+  url: string;
+  type: 'article' | 'video' | 'cheatsheet' | 'visualization' | 'doc';
+  description?: string;
+}
+
 export interface DsaProblemDoc {
   id: string;
   title: string;
   slug: string;
+  description?: string;
   difficulty: DsaDifficulty;
   category: DsaCategory;
   link: string;
@@ -252,6 +348,10 @@ export interface DsaProblemDoc {
   approach?: string;
   timeComplexity?: string;
   spaceComplexity?: string;
+  codeSolutions?: Record<string, string>;
+  approaches?: DsaApproach[];
+  resources?: DsaResource[];
+  curatedLists?: string[];
   order: number;
   status: ContentStatus;
   createdAt: Date;
@@ -263,6 +363,7 @@ export interface DsaProblemListItem {
   id: string;
   title: string;
   slug: string;
+  description?: string;
   difficulty: DsaDifficulty;
   category: DsaCategory;
   link: string;
@@ -274,6 +375,10 @@ export interface DsaProblemListItem {
   approach?: string;
   timeComplexity?: string;
   spaceComplexity?: string;
+  codeSolutions?: Record<string, string>;
+  approaches?: DsaApproach[];
+  resources?: DsaResource[];
+  curatedLists?: string[];
   order: number;
   status: ContentStatus;
 }

@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { motion } from 'motion/react';
+import Image from 'next/image';
 import { Trophy, Flame, Code, Brain, TrendingUp, Crown, Medal, Award } from 'lucide-react';
 import { subscribeToLeaderboard, type LeaderboardEntry } from '@/lib/firebase/leaderboard';
 import { useUserAuth } from '@/lib/firebase/user-auth';
@@ -15,9 +17,9 @@ const SORT_OPTIONS: { key: SortField; label: string; icon: React.ElementType }[]
 ];
 
 function RankBadge({ rank }: { rank: number }) {
-  if (rank === 1) return <Crown className="w-5 h-5 text-yellow-500" />;
-  if (rank === 2) return <Medal className="w-5 h-5 text-gray-400" />;
-  if (rank === 3) return <Award className="w-5 h-5 text-amber-600" />;
+  if (rank === 1) return <Crown className="w-5 h-5" style={{ color: 'var(--color-warning)' }} />;
+  if (rank === 2) return <Medal className="w-5 h-5 text-[var(--text-secondary)]" />;
+  if (rank === 3) return <Award className="w-5 h-5" style={{ color: 'var(--color-warning)', opacity: 0.6 }} />;
   return (
     <span className="w-5 h-5 flex items-center justify-center text-xs font-bold text-[var(--text-subtle)]">
       {rank}
@@ -25,14 +27,21 @@ function RankBadge({ rank }: { rank: number }) {
   );
 }
 
-function LeaderboardRow({ entry, rank, isCurrentUser }: { entry: LeaderboardEntry; rank: number; isCurrentUser: boolean }) {
+function LeaderboardRow({ entry, rank, isCurrentUser, index }: {
+  entry: LeaderboardEntry; rank: number; isCurrentUser: boolean; index: number;
+}) {
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0, x: -16 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ duration: 0.3, delay: index * 0.04 }}
       className={`flex items-center gap-4 p-4 rounded-sm transition-all ${
         isCurrentUser
-          ? 'bg-[var(--accent-primary)]/10 border border-[var(--accent-primary)]/30'
+          ? 'bg-[var(--bg-subtle)] border-2 border-[var(--accent-dark)] shadow-sm'
+          : rank <= 3
+          ? 'bg-[var(--bg-surface)] border border-[var(--border-soft)]'
           : 'hover:bg-[var(--bg-subtle)]'
-      } ${rank <= 3 ? 'border border-[var(--border-soft)]' : ''}`}
+      }`}
     >
       <div className="w-8 flex justify-center shrink-0">
         <RankBadge rank={rank} />
@@ -40,10 +49,17 @@ function LeaderboardRow({ entry, rank, isCurrentUser }: { entry: LeaderboardEntr
 
       <div className="shrink-0">
         {entry.photoURL ? (
-          <img src={entry.photoURL} alt="" className="w-10 h-10 rounded-full object-cover" />
+          <Image
+            src={entry.photoURL}
+            alt={entry.displayName}
+            width={40}
+            height={40}
+            className="w-10 h-10 rounded-full object-cover"
+            unoptimized
+          />
         ) : (
-          <div className="w-10 h-10 rounded-full bg-[var(--accent-primary)] flex items-center justify-center">
-            <span className="text-sm font-bold text-[var(--accent-dark)]">
+          <div className="w-10 h-10 rounded-full bg-[var(--accent-dark)] flex items-center justify-center">
+            <span className="text-sm font-bold text-[var(--text-inverse)]">
               {entry.displayName[0]?.toUpperCase() || '?'}
             </span>
           </div>
@@ -53,7 +69,7 @@ function LeaderboardRow({ entry, rank, isCurrentUser }: { entry: LeaderboardEntr
       <div className="flex-1 min-w-0">
         <p className="text-sm font-semibold text-[var(--text-primary)] truncate">
           {entry.displayName}
-          {isCurrentUser && <span className="ml-2 text-[10px] font-medium text-[var(--accent-dark)]">YOU</span>}
+          {isCurrentUser && <span className="ml-2 text-[10px] font-bold px-1.5 py-0.5 rounded-sm bg-[var(--accent-dark)] text-[var(--text-inverse)]">YOU</span>}
         </p>
         <div className="flex items-center gap-3 mt-0.5">
           <span className="text-[11px] text-[var(--text-subtle)] flex items-center gap-1">
@@ -71,7 +87,7 @@ function LeaderboardRow({ entry, rank, isCurrentUser }: { entry: LeaderboardEntr
         </p>
         <p className="text-[10px] text-[var(--text-subtle)] uppercase font-medium">XP</p>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
@@ -122,13 +138,21 @@ export function LeaderboardClient() {
       <div className="container-main max-w-3xl">
 
         {/* Hero */}
-        <div className="text-center mb-8">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="text-center mb-8"
+        >
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-sm bg-[var(--bg-subtle)] border border-[var(--border-soft)] mb-4">
-            <Trophy className="w-3.5 h-3.5 text-[var(--accent-dark)]" />
+            <Trophy className="w-3.5 h-3.5 text-[var(--accent-primary)]" />
+            <Trophy className="w-3.5 h-3.5 text-amber-500" />
             <span className="text-[11px] font-semibold text-[var(--text-secondary)] uppercase tracking-wider">
               Leaderboard
             </span>
-            <span className={`w-2 h-2 rounded-full transition-all duration-300 ${liveIndicator ? 'bg-green-500 scale-125' : 'bg-green-500/50'}`} />
+            <span className={`w-2 h-2 rounded-full transition-all duration-300 ${liveIndicator ? 'scale-125' : ''}`}
+              style={{ background: 'var(--color-success)', opacity: liveIndicator ? 1 : 0.5 }}
+            />
             <span className="text-[10px] text-[var(--text-subtle)]">Live</span>
           </div>
           <h1 className="text-2xl md:text-3xl font-bold text-[var(--text-primary)] mb-2">
@@ -137,17 +161,22 @@ export function LeaderboardClient() {
           <p className="text-sm text-[var(--text-secondary)] max-w-md mx-auto">
             Realtime rankings based on problems solved, streaks, and learning activity. Sign in and solve problems to climb the board.
           </p>
-        </div>
+        </motion.div>
 
         {/* Sort Tabs */}
-        <div className="flex items-center justify-center gap-2 mb-6">
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.1 }}
+          className="flex items-center justify-center gap-2 mb-6"
+        >
           {SORT_OPTIONS.map(({ key, label, icon: Icon }) => (
             <button
               key={key}
               onClick={() => setSortBy(key)}
               className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-sm text-xs font-semibold transition-all ${
                 sortBy === key
-                  ? 'bg-[var(--accent-dark)] text-[var(--accent-primary)]'
+                  ? 'bg-[var(--accent-dark)] text-[var(--text-inverse)]'
                   : 'text-[var(--text-secondary)] hover:bg-[var(--bg-subtle)] border border-[var(--border-soft)]'
               }`}
             >
@@ -155,7 +184,7 @@ export function LeaderboardClient() {
               {label}
             </button>
           ))}
-        </div>
+        </motion.div>
 
         {/* Leaderboard List */}
         <div className="rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] p-4 md:p-6">
@@ -176,6 +205,7 @@ export function LeaderboardClient() {
                   key={entry.uid}
                   entry={entry}
                   rank={i + 1}
+                  index={i}
                   isCurrentUser={entry.uid === user?.uid}
                 />
               ))}
@@ -185,7 +215,12 @@ export function LeaderboardClient() {
 
         {/* Stats Footer */}
         {entries.length > 0 && (
-          <div className="mt-6 flex items-center justify-center gap-6 text-[11px] text-[var(--text-subtle)]">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.4, delay: 0.3 }}
+            className="mt-6 flex items-center justify-center gap-6 text-[11px] text-[var(--text-subtle)]"
+          >
             <span className="flex items-center gap-1.5">
               <Brain className="w-3.5 h-3.5" />
               {entries.reduce((sum, e) => sum + e.dsaSolved, 0).toLocaleString()} problems solved globally
@@ -194,7 +229,7 @@ export function LeaderboardClient() {
               <Flame className="w-3.5 h-3.5" />
               {Math.max(...entries.map(e => e.longestStreak))}d longest streak
             </span>
-          </div>
+          </motion.div>
         )}
 
         {/* Not signed in nudge */}
@@ -205,7 +240,7 @@ export function LeaderboardClient() {
             </p>
             <a
               href="/login"
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-sm text-xs font-semibold bg-[var(--accent-dark)] text-[var(--accent-primary)] hover:opacity-90 transition-opacity"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-sm text-xs font-semibold bg-[var(--accent-dark)] text-[var(--text-inverse)] hover:opacity-90 transition-opacity"
             >
               Sign in to compete
             </a>

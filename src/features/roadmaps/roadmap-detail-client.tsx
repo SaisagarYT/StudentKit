@@ -2,7 +2,19 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Clock, BookOpen, Code2, ArrowRight, Loader2, FolderKanban, GitFork, MessageSquare, Target } from 'lucide-react';
+import {
+  ArrowLeft,
+  Clock,
+  BookOpen,
+  Code2,
+  ArrowRight,
+  Loader2,
+  FolderKanban,
+  GitFork,
+  MessageSquare,
+  Target,
+} from 'lucide-react';
+import { motion } from 'motion/react';
 import { InteractiveRoadmap } from './interactive-roadmap';
 import { TrackView } from './track-view';
 import { fetchRoadmapBySlug } from '@/lib/firebase/roadmaps';
@@ -24,13 +36,11 @@ export function RoadmapDetailClient({ slug }: { slug: string }) {
             return;
           }
         }
-        // Fallback to static config if Firebase fails or roadmap not in Firestore
         const staticData = getRoadmapBySlug(slug);
         if (staticData) {
           setRoadmap(staticData);
         }
       } catch {
-        // Fallback to static config on any error
         const staticData = getRoadmapBySlug(slug);
         if (staticData) {
           setRoadmap(staticData);
@@ -44,7 +54,7 @@ export function RoadmapDetailClient({ slug }: { slug: string }) {
 
   if (loading) {
     return (
-      <div className="py-20 flex justify-center">
+      <div className="py-24 flex justify-center">
         <Loader2 className="w-6 h-6 animate-spin text-[var(--text-subtle)]" />
       </div>
     );
@@ -52,13 +62,13 @@ export function RoadmapDetailClient({ slug }: { slug: string }) {
 
   if (!roadmap) {
     return (
-      <div className="py-20 text-center">
-        <p className="text-[var(--text-secondary)]">Roadmap not found</p>
+      <div className="py-24 text-center">
+        <p className="text-sm text-[var(--text-secondary)]">Roadmap not found</p>
         <Link
           href="/roadmaps"
-          className="mt-4 inline-flex items-center gap-1.5 text-sm text-[var(--accent-dark)] hover:underline"
+          className="mt-4 inline-flex items-center gap-1.5 text-xs font-mono font-medium text-[var(--accent-dark)] hover:underline"
         >
-          <ArrowLeft className="w-4 h-4" /> Back to roadmaps
+          <ArrowLeft className="w-3.5 h-3.5" /> Back to roadmaps
         </Link>
       </div>
     );
@@ -67,184 +77,195 @@ export function RoadmapDetailClient({ slug }: { slug: string }) {
   const totalTopics = roadmap.stages.reduce((sum, s) => sum + s.topics.length, 0);
 
   return (
-    <div className="py-8 md:py-12">
-      <div className="container-main">
-        {/* Back link */}
+    <div className="min-h-screen bg-[var(--bg-primary)] py-8 md:py-12">
+      <div className="container-main max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Back Link */}
         <Link
           href="/roadmaps"
-          className="inline-flex items-center gap-1.5 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors mb-8"
+          className="inline-flex items-center gap-1.5 text-xs font-mono font-medium text-[var(--text-subtle)] hover:text-[var(--text-primary)] transition-colors mb-6"
         >
-          <ArrowLeft className="w-4 h-4" />
-          All Roadmaps
+          <ArrowLeft className="w-3.5 h-3.5" />
+          <span>All Roadmaps</span>
         </Link>
 
-        {/* Header */}
-        <div className="max-w-3xl">
-          <h1 className="text-h1 font-bold tracking-tight">
+        {/* Roadmap Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="max-w-3xl mb-8"
+        >
+          <h1 className="text-3xl sm:text-5xl font-bold text-[var(--text-primary)] tracking-tight">
             {roadmap.title}{' '}
-            <span className="font-serif italic font-normal">Roadmap</span>
+            <span className="font-serif italic font-normal text-[var(--accent-dark)]">Roadmap</span>
           </h1>
-          <p className="mt-4 text-body-lg text-[var(--text-secondary)] leading-relaxed">
+          <p className="mt-3 text-xs sm:text-sm text-[var(--text-secondary)] leading-relaxed">
             {roadmap.description}
           </p>
-          <div className="flex items-center gap-6 mt-6">
-            <span className="flex items-center gap-2 text-sm text-[var(--text-subtle)]">
-              <Clock className="w-4 h-4" />
-              {roadmap.totalTime}
+
+          <div className="flex items-center gap-5 mt-4">
+            <span className="flex items-center gap-1.5 text-xs font-mono text-[var(--text-subtle)]">
+              <Clock className="w-3.5 h-3.5" />
+              <span>{roadmap.totalTime}</span>
             </span>
-            <span className="flex items-center gap-2 text-sm text-[var(--text-subtle)]">
-              <BookOpen className="w-4 h-4" />
-              {totalTopics} topics across {roadmap.stages.length} stages
+            <span className="flex items-center gap-1.5 text-xs font-mono text-[var(--text-subtle)]">
+              <BookOpen className="w-3.5 h-3.5" />
+              <span>{totalTopics} topics across {roadmap.stages.length} stages</span>
             </span>
           </div>
 
-          {/* Language options */}
+          {/* Languages Supported */}
           {roadmap.languages && roadmap.languages.length > 0 && (
-            <div className="flex flex-wrap items-center gap-2 mt-5">
+            <div className="flex flex-wrap items-center gap-2 mt-4">
               <Code2 className="w-4 h-4 text-[var(--text-subtle)]" />
               {roadmap.languages.map((lang) => (
                 <span
                   key={lang}
-                  className="px-2.5 py-1 text-xs font-medium rounded-sm border border-[var(--border-default)] bg-[var(--bg-elevated)] text-[var(--text-secondary)]"
+                  className="px-2.5 py-0.5 text-[11px] font-mono font-medium rounded-sm border border-[var(--border-soft)] bg-[var(--bg-subtle)] text-[var(--text-secondary)]"
                 >
                   {lang}
                 </span>
               ))}
             </div>
           )}
-        </div>
+        </motion.div>
 
         {/* Track View */}
         <TrackView type="roadmap" slug={slug} />
 
-        {/* Interactive Roadmap */}
-        <div className="mt-12">
+        {/* Interactive Roadmap Mind-Map */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.15 }}
+          className="mt-8"
+        >
           <InteractiveRoadmap roadmap={roadmap} />
-        </div>
+        </motion.div>
 
-        {/* Continue Your Journey Section */}
+        {/* Continue Your Journey Cross-Links */}
         <div className="mt-16 border-t border-[var(--border-soft)] pt-12">
-          <div className="mb-8">
-            <h2 className="text-h3 font-bold text-[var(--text-primary)]">
-              Continue your journey
+          <div className="mb-6">
+            <h2 className="text-lg font-bold text-[var(--text-primary)]">
+              Continue Your Engineering Journey
             </h2>
-            <p className="mt-2 text-sm text-[var(--text-secondary)] max-w-lg">
-              Complement this learning path with hands-on projects, open-source exploration, and interview preparation.
+            <p className="mt-1 text-xs sm:text-sm text-[var(--text-secondary)] max-w-lg leading-relaxed">
+              Solidify your {roadmap.title.toLowerCase()} curriculum with hands-on guided projects, open-source codebases, and technical interviews.
             </p>
           </div>
 
-          {/* Action cards grid */}
+          {/* Action Cards Grid */}
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-12">
             <Link
               href="/projects"
-              className="group flex flex-col gap-3 p-5 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] hover:border-[var(--border-default)] hover:shadow-sm transition-all"
+              className="group flex flex-col gap-3 p-5 rounded-md border border-[var(--border-soft)] bg-[var(--bg-surface)] hover:border-[var(--border-default)] shadow-xs transition-all"
             >
-              <div className="w-10 h-10 rounded-sm bg-violet-500/10 flex items-center justify-center">
-                <FolderKanban className="w-5 h-5 text-violet-500" />
+              <div className="w-9 h-9 rounded-md bg-[var(--bg-subtle)] border border-[var(--border-soft)] flex items-center justify-center text-[var(--accent-dark)]">
+                <FolderKanban className="w-4 h-4" />
               </div>
               <div>
-                <p className="text-sm font-semibold text-[var(--text-primary)] group-hover:text-[var(--accent-dark)] transition-colors">
+                <p className="text-sm font-bold text-[var(--text-primary)] group-hover:text-[var(--accent-dark)] transition-colors">
                   Build Projects
                 </p>
-                <p className="text-xs text-[var(--text-subtle)] mt-0.5 leading-relaxed">
-                  Apply your {roadmap.title.toLowerCase()} skills with guided projects
+                <p className="text-xs text-[var(--text-subtle)] mt-1 leading-relaxed">
+                  Apply your {roadmap.title.toLowerCase()} concepts in full-stack applications
                 </p>
               </div>
-              <ArrowRight className="w-4 h-4 text-[var(--text-subtle)] mt-auto group-hover:translate-x-0.5 transition-transform" />
+              <ArrowRight className="w-3.5 h-3.5 text-[var(--text-subtle)] mt-auto group-hover:translate-x-0.5 transition-transform" />
             </Link>
 
             <Link
               href="/open-source"
-              className="group flex flex-col gap-3 p-5 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] hover:border-[var(--border-default)] hover:shadow-sm transition-all"
+              className="group flex flex-col gap-3 p-5 rounded-md border border-[var(--border-soft)] bg-[var(--bg-surface)] hover:border-[var(--border-default)] shadow-xs transition-all"
             >
-              <div className="w-10 h-10 rounded-sm bg-cyan-500/10 flex items-center justify-center">
-                <GitFork className="w-5 h-5 text-cyan-500" />
+              <div className="w-9 h-9 rounded-md bg-[var(--bg-subtle)] border border-[var(--border-soft)] flex items-center justify-center text-[var(--accent-dark)]">
+                <GitFork className="w-4 h-4" />
               </div>
               <div>
-                <p className="text-sm font-semibold text-[var(--text-primary)] group-hover:text-[var(--accent-dark)] transition-colors">
+                <p className="text-sm font-bold text-[var(--text-primary)] group-hover:text-[var(--accent-dark)] transition-colors">
                   Explore Open Source
                 </p>
-                <p className="text-xs text-[var(--text-subtle)] mt-0.5 leading-relaxed">
-                  Study real-world codebases and start contributing
+                <p className="text-xs text-[var(--text-subtle)] mt-1 leading-relaxed">
+                  Inspect production codebases and make pull requests
                 </p>
               </div>
-              <ArrowRight className="w-4 h-4 text-[var(--text-subtle)] mt-auto group-hover:translate-x-0.5 transition-transform" />
+              <ArrowRight className="w-3.5 h-3.5 text-[var(--text-subtle)] mt-auto group-hover:translate-x-0.5 transition-transform" />
             </Link>
 
             <Link
               href="/placement/dsa"
-              className="group flex flex-col gap-3 p-5 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] hover:border-[var(--border-default)] hover:shadow-sm transition-all"
+              className="group flex flex-col gap-3 p-5 rounded-md border border-[var(--border-soft)] bg-[var(--bg-surface)] hover:border-[var(--border-default)] shadow-xs transition-all"
             >
-              <div className="w-10 h-10 rounded-sm bg-emerald-500/10 flex items-center justify-center">
-                <Target className="w-5 h-5 text-emerald-500" />
+              <div className="w-9 h-9 rounded-md bg-[var(--bg-subtle)] border border-[var(--border-soft)] flex items-center justify-center text-[var(--accent-dark)]">
+                <Target className="w-4 h-4" />
               </div>
               <div>
-                <p className="text-sm font-semibold text-[var(--text-primary)] group-hover:text-[var(--accent-dark)] transition-colors">
-                  Practice DSA
+                <p className="text-sm font-bold text-[var(--text-primary)] group-hover:text-[var(--accent-dark)] transition-colors">
+                  Practice DSA Sheet
                 </p>
-                <p className="text-xs text-[var(--text-subtle)] mt-0.5 leading-relaxed">
-                  250+ problems to sharpen problem-solving skills
+                <p className="text-xs text-[var(--text-subtle)] mt-1 leading-relaxed">
+                  250+ curated problems covering foundational algorithms
                 </p>
               </div>
-              <ArrowRight className="w-4 h-4 text-[var(--text-subtle)] mt-auto group-hover:translate-x-0.5 transition-transform" />
+              <ArrowRight className="w-3.5 h-3.5 text-[var(--text-subtle)] mt-auto group-hover:translate-x-0.5 transition-transform" />
             </Link>
 
             <Link
               href="/placement/interview"
-              className="group flex flex-col gap-3 p-5 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] hover:border-[var(--border-default)] hover:shadow-sm transition-all"
+              className="group flex flex-col gap-3 p-5 rounded-md border border-[var(--border-soft)] bg-[var(--bg-surface)] hover:border-[var(--border-default)] shadow-xs transition-all"
             >
-              <div className="w-10 h-10 rounded-sm bg-amber-500/10 flex items-center justify-center">
-                <MessageSquare className="w-5 h-5 text-amber-500" />
+              <div className="w-9 h-9 rounded-md bg-[var(--bg-subtle)] border border-[var(--border-soft)] flex items-center justify-center text-[var(--accent-dark)]">
+                <MessageSquare className="w-4 h-4" />
               </div>
               <div>
-                <p className="text-sm font-semibold text-[var(--text-primary)] group-hover:text-[var(--accent-dark)] transition-colors">
+                <p className="text-sm font-bold text-[var(--text-primary)] group-hover:text-[var(--accent-dark)] transition-colors">
                   Interview Prep
                 </p>
-                <p className="text-xs text-[var(--text-subtle)] mt-0.5 leading-relaxed">
-                  Practice questions for {roadmap.title.toLowerCase()} roles
+                <p className="text-xs text-[var(--text-subtle)] mt-1 leading-relaxed">
+                  STAR method, behavioral drills, and technical rounds
                 </p>
               </div>
-              <ArrowRight className="w-4 h-4 text-[var(--text-subtle)] mt-auto group-hover:translate-x-0.5 transition-transform" />
+              <ArrowRight className="w-3.5 h-3.5 text-[var(--text-subtle)] mt-auto group-hover:translate-x-0.5 transition-transform" />
             </Link>
           </div>
 
           {/* Related Roadmaps */}
           {roadmap.relatedRoadmaps && roadmap.relatedRoadmaps.length > 0 && (
             <div>
-              <h3 className="text-base font-semibold text-[var(--text-primary)] mb-4 flex items-center gap-2">
-                <BookOpen className="w-4 h-4 text-[var(--text-subtle)]" />
-                Continue with another path
+              <h3 className="text-sm font-bold text-[var(--text-primary)] mb-3 flex items-center gap-2">
+                <BookOpen className="w-4 h-4 text-[var(--accent-dark)]" />
+                <span>Complementary Paths</span>
               </h3>
               <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                 {roadmap.relatedRoadmaps.map((related) => {
-                  const relationLabels: Record<string, { label: string; color: string }> = {
-                    'prerequisite': { label: 'Prerequisite', color: 'text-blue-500 bg-blue-500/10' },
-                    'builds-on': { label: 'Next step', color: 'text-emerald-500 bg-emerald-500/10' },
-                    'shared-topics': { label: 'Related', color: 'text-violet-500 bg-violet-500/10' },
-                    'alternative': { label: 'Alternative', color: 'text-amber-500 bg-amber-500/10' },
+                  const relationLabels: Record<string, string> = {
+                    prerequisite: 'Prerequisite',
+                    'builds-on': 'Next Step',
+                    'shared-topics': 'Related Track',
+                    alternative: 'Alternative',
                   };
-                  const rel = relationLabels[related.relation] || { label: related.relation, color: 'text-[var(--text-subtle)] bg-[var(--bg-subtle)]' };
+                  const label = relationLabels[related.relation] || related.relation;
 
                   return (
                     <Link
                       key={related.slug}
                       href={`/roadmaps/view?slug=${related.slug}`}
-                      className="group flex items-start gap-3 p-4 rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] hover:border-[var(--border-default)] hover:shadow-sm transition-all"
+                      className="group flex items-start gap-3 p-4 rounded-md border border-[var(--border-soft)] bg-[var(--bg-surface)] hover:border-[var(--border-default)] shadow-xs transition-all"
                     >
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-1">
-                          <span className={`text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-sm ${rel.color}`}>
-                            {rel.label}
+                        <div className="flex items-center gap-2 mb-1.5">
+                          <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-sm bg-[var(--bg-subtle)] text-[var(--text-secondary)] border border-[var(--border-soft)]">
+                            {label}
                           </span>
                         </div>
-                        <p className="text-sm font-semibold text-[var(--text-primary)] group-hover:text-[var(--accent-dark)] transition-colors capitalize">
+                        <p className="text-xs sm:text-sm font-bold text-[var(--text-primary)] group-hover:text-[var(--accent-dark)] transition-colors capitalize">
                           {related.slug.replace(/-/g, ' ')}
                         </p>
                         <p className="text-xs text-[var(--text-subtle)] mt-1 leading-relaxed line-clamp-2">
                           {related.description}
                         </p>
                       </div>
-                      <ArrowRight className="w-4 h-4 text-[var(--text-subtle)] shrink-0 mt-1 group-hover:translate-x-0.5 transition-transform" />
+                      <ArrowRight className="w-3.5 h-3.5 text-[var(--text-subtle)] shrink-0 mt-1 group-hover:translate-x-0.5 transition-transform" />
                     </Link>
                   );
                 })}
