@@ -9,7 +9,7 @@ import { ArrowLeft, ArrowRight, Clock, Code2, Loader2, FolderOpen, Star } from '
 import Link from 'next/link';
 import { ViewCounter } from '@/components/engagement/view-counter';
 import { BookmarkButton } from '@/components/engagement/bookmark-button';
-import { getProjectBySlug, type CuratedProject } from '@/config/projects';
+import type { CuratedProject } from '@/config/projects';
 import { ProjectArchitectureCard } from './components/project-architecture-card';
 import { ProjectFolderStructure } from './components/project-folder-structure';
 import { ProjectMilestonesTimeline } from './components/project-milestones-timeline';
@@ -67,7 +67,7 @@ export function CmsProjectViewer() {
       const next = !prev;
       if (typeof window !== 'undefined' && slug) {
         try {
-          localStorage.setItem(`sk-project-completed-${slug}`, next ? 'true' : 'false');
+          localStorage.setItem(`sk-project-completed-${slug}`, String(next));
           emitProgressChanged();
         } catch {
           // ignore
@@ -109,63 +109,57 @@ export function CmsProjectViewer() {
       return;
     }
 
-    // 1. Check static curated fallback first
-    const staticProject = getProjectBySlug(slug);
-    if (staticProject) {
-      setProject(staticProject);
+    if (!isFirebaseConfigured) {
       setLoading(false);
-      trackPageView('project', slug);
+      setError('Database is not configured');
+      return;
     }
 
-    // 2. Query Firebase if configured
-    if (isFirebaseConfigured) {
-      async function loadRemote() {
-        try {
-          const q = query(
-            collection(getFirebaseDb(), 'projects'),
-            where('slug', '==', slug),
-            where('status', '==', 'published'),
-            limit(1)
-          );
-          const snap = await getDocs(q);
-          if (!snap.empty) {
-            const data = snap.docs[0].data();
-            setProject({
-              id: snap.docs[0].id,
-              slug: data.slug,
-              title: data.title,
-              shortDescription: data.shortDescription ?? '',
-              description: data.description ?? '',
-              category: data.category ?? 'Full-Stack',
-              difficulty: data.difficulty ?? 'beginner',
-              estimatedDuration: data.estimatedDuration ?? '',
-              projectType: data.projectType ?? 'Web Application',
-              technologies: data.technologies ?? [],
-              skills: data.skills ?? [],
-              featured: data.featured ?? false,
-              architecture: data.architecture ?? '',
-              folderStructure: data.folderStructure ?? '',
-              relatedRoadmapIds: data.relatedRoadmapIds ?? [],
-              features: data.features ?? [],
-              milestones: data.milestones ?? [],
-              phases: data.phases ?? staticProject?.phases ?? [],
-            } as CuratedProject);
-          } else if (!staticProject) {
-            setError('Project not found');
-          }
-        } catch {
-          if (!staticProject) {
-            setError('Failed to load project');
-          }
-        } finally {
-          setLoading(false);
+    async function loadRemote() {
+      try {
+        setLoading(true);
+        const q = query(
+          collection(getFirebaseDb(), 'projects'),
+          where('slug', '==', slug),
+          where('status', '==', 'published'),
+          limit(1)
+        );
+        const snap = await getDocs(q);
+        if (!snap.empty) {
+          const data = snap.docs[0].data();
+          setProject({
+            id: snap.docs[0].id,
+            slug: data.slug,
+            title: data.title,
+            shortDescription: data.shortDescription ?? '',
+            description: data.description ?? '',
+            category: data.category ?? 'Full-Stack',
+            difficulty: data.difficulty ?? 'beginner',
+            estimatedDuration: data.estimatedDuration ?? '',
+            projectType: data.projectType ?? 'Web Application',
+            technologies: data.technologies ?? [],
+            skills: data.skills ?? [],
+            featured: data.featured ?? false,
+            architecture: data.architecture ?? '',
+            folderStructure: data.folderStructure ?? '',
+            relatedRoadmapIds: data.relatedRoadmapIds ?? [],
+            features: data.features ?? [],
+            milestones: data.milestones ?? [],
+            phases: data.phases ?? [],
+          } as CuratedProject);
+          if (slug) trackPageView('project', slug);
+        } else {
+          setError('Project not found or not published yet');
         }
+      } catch (err) {
+        console.error('[CmsProjectViewer] Failed to load project from database:', err);
+        setError('Failed to load project');
+      } finally {
+        setLoading(false);
       }
-      loadRemote();
-    } else if (!staticProject) {
-      setLoading(false);
-      setError('Project not found');
     }
+
+    loadRemote();
   }, [slug]);
 
   if (loading) {
@@ -178,13 +172,21 @@ export function CmsProjectViewer() {
 
   if (error || !project) {
     return (
-      <div className="py-20 text-center max-w-md mx-auto px-4">
-        <p className="text-sm text-[var(--text-secondary)]">{error || 'Project not found'}</p>
+      <div className="py-24 text-center max-w-md mx-auto px-4">
+        <div className="w-12 h-12 rounded-full bg-[var(--bg-subtle)] border border-[var(--border-soft)] flex items-center justify-center text-[var(--text-subtle)] mx-auto mb-4">
+          <FolderOpen className="w-6 h-6" />
+        </div>
+        <h2 className="text-base font-bold text-[var(--text-primary)]">
+          {error || 'Project Not Found'}
+        </h2>
+        <p className="text-xs text-[var(--text-secondary)] mt-2 leading-relaxed">
+          This project blueprint does not exist in the database or has not been published yet.
+        </p>
         <Link
           href="/projects"
-          className="mt-4 inline-flex items-center gap-1.5 px-4 py-2 rounded-md text-xs font-semibold bg-[var(--accent-dark)] text-[var(--text-inverse)] hover:opacity-90 transition-opacity"
+          className="mt-6 inline-flex items-center gap-1.5 px-4 py-2 rounded-sm text-xs font-semibold bg-[var(--accent-dark)] text-[var(--text-inverse)] hover:opacity-90 transition-opacity"
         >
-          <ArrowLeft className="w-4 h-4" /> Back to projects
+          <ArrowLeft className="w-4 h-4" /> Back to all projects
         </Link>
       </div>
     );

@@ -1,9 +1,11 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Route, ArrowRight, Play, Clock } from 'lucide-react';
 import { motion } from 'motion/react';
-import { roadmaps } from '@/config/roadmaps';
+import { fetchRoadmapBySlug } from '@/lib/firebase/roadmaps';
+import type { Roadmap } from '@/types/roadmap';
 
 interface ActiveRoadmapItem {
   slug: string;
@@ -19,7 +21,17 @@ interface ActiveRoadmapHeroProps {
 
 export function ActiveRoadmapHero({ activeRoadmaps }: ActiveRoadmapHeroProps) {
   const primary = activeRoadmaps[0];
-  const roadmapData = primary ? roadmaps.find((r) => r.slug === primary.slug) : null;
+  const [roadmapData, setRoadmapData] = useState<Roadmap | null>(null);
+
+  useEffect(() => {
+    if (!primary?.slug) {
+      setRoadmapData(null);
+      return;
+    }
+    fetchRoadmapBySlug(primary.slug)
+      .then((data) => setRoadmapData(data))
+      .catch(() => setRoadmapData(null));
+  }, [primary?.slug]);
 
   // Derive next lesson info from roadmap data
   const nextLessonTitle = roadmapData?.stages?.[0]?.topics?.[0]?.title || 'Next Scheduled Topic';

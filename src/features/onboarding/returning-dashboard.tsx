@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useUserAuth } from '@/lib/firebase/user-auth';
 import { getStreak, getProgressSummary, type StreakData, type ProgressSummary } from '@/lib/user-progress';
 import { getXpState, type XpState } from '@/lib/xp';
-import { roadmaps } from '@/config/roadmaps';
+import { fetchAllRoadmaps } from '@/lib/firebase/roadmaps';
 
 import { DashboardHeader } from './components/dashboard-header';
 import { DailySprintBar } from './components/daily-sprint-bar';
@@ -24,7 +24,7 @@ export interface ActiveRoadmap {
   percent: number;
 }
 
-function getActiveRoadmaps(): ActiveRoadmap[] {
+function getActiveRoadmaps(backendRoadmaps: { slug: string; title: string }[] = []): ActiveRoadmap[] {
   if (typeof window === 'undefined') return [];
   const active: ActiveRoadmap[] = [];
 
@@ -39,10 +39,14 @@ function getActiveRoadmaps(): ActiveRoadmap[] {
           const completed = Object.values(progress).filter(Boolean).length;
           const total = Object.keys(progress).length;
           if (completed > 0 && total > 0) {
-            const roadmap = roadmaps.find((r) => r.slug === slug);
+            const roadmap = backendRoadmaps.find((r) => r.slug === slug);
+            const fallbackTitle = slug
+              .split('-')
+              .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+              .join(' ');
             active.push({
               slug,
-              title: roadmap?.title || slug.replace(/-/g, ' '),
+              title: roadmap?.title || fallbackTitle,
               completed,
               total,
               percent: Math.round((completed / total) * 100),
@@ -81,9 +85,18 @@ export function ReturningDashboard() {
     setMounted(true);
     setStreak(getStreak());
     setProgress(getProgressSummary());
-    setActiveRoadmaps(getActiveRoadmaps());
     setDsaSolved(getDsaSolved());
     setXpState(getXpState());
+
+    // Initially populate from local storage with formatted slugs
+    setActiveRoadmaps(getActiveRoadmaps([]));
+
+    // Refine with backend roadmap titles when loaded
+    fetchAllRoadmaps()
+      .then((backendRoadmaps) => {
+        setActiveRoadmaps(getActiveRoadmaps(backendRoadmaps));
+      })
+      .catch(() => {});
   }, []);
 
   if (!mounted) return null;

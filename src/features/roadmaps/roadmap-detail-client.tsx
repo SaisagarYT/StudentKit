@@ -13,13 +13,13 @@ import {
   GitFork,
   MessageSquare,
   Target,
+  Map,
 } from 'lucide-react';
 import { motion } from 'motion/react';
 import { InteractiveRoadmap } from './interactive-roadmap';
 import { TrackView } from './track-view';
 import { fetchRoadmapBySlug } from '@/lib/firebase/roadmaps';
 import { isFirebaseConfigured } from '@/lib/firebase/client';
-import { getRoadmapBySlug } from '@/config/roadmaps';
 import type { Roadmap } from '@/types/roadmap';
 
 export function RoadmapDetailClient({ slug }: { slug: string }) {
@@ -36,15 +36,10 @@ export function RoadmapDetailClient({ slug }: { slug: string }) {
             return;
           }
         }
-        const staticData = getRoadmapBySlug(slug);
-        if (staticData) {
-          setRoadmap(staticData);
-        }
-      } catch {
-        const staticData = getRoadmapBySlug(slug);
-        if (staticData) {
-          setRoadmap(staticData);
-        }
+        setRoadmap(null);
+      } catch (err) {
+        console.error('[RoadmapDetail] Failed to load roadmap from backend:', err);
+        setRoadmap(null);
       } finally {
         setLoading(false);
       }
@@ -62,13 +57,21 @@ export function RoadmapDetailClient({ slug }: { slug: string }) {
 
   if (!roadmap) {
     return (
-      <div className="py-24 text-center">
-        <p className="text-sm text-[var(--text-secondary)]">Roadmap not found</p>
+      <div className="py-24 text-center max-w-md mx-auto px-4">
+        <div className="w-12 h-12 rounded-full bg-[var(--bg-subtle)] border border-[var(--border-soft)] flex items-center justify-center text-[var(--text-subtle)] mx-auto mb-4">
+          <Map className="w-6 h-6" />
+        </div>
+        <h2 className="text-base font-bold text-[var(--text-primary)]">
+          Roadmap Not Found
+        </h2>
+        <p className="text-xs text-[var(--text-secondary)] mt-2 leading-relaxed">
+          This roadmap does not exist in the database or has not been published yet.
+        </p>
         <Link
           href="/roadmaps"
-          className="mt-4 inline-flex items-center gap-1.5 text-xs font-mono font-medium text-[var(--accent-dark)] hover:underline"
+          className="mt-6 inline-flex items-center gap-1.5 px-4 py-2 rounded-sm text-xs font-semibold bg-[var(--accent-dark)] text-[var(--text-inverse)] hover:opacity-90 transition-opacity"
         >
-          <ArrowLeft className="w-3.5 h-3.5" /> Back to roadmaps
+          <ArrowLeft className="w-4 h-4" /> Back to all roadmaps
         </Link>
       </div>
     );

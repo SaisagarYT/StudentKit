@@ -296,8 +296,37 @@ export function ResourcesHub() {
           </div>
         )}
 
-        {/* Empty State */}
-        {!loading && filtered.length === 0 && (
+        {/* Empty State when database has no published resources */}
+        {!loading && resources.length === 0 && (
+          <div className="py-20 text-center rounded-sm border border-dashed border-[var(--border-soft)] bg-[var(--bg-surface)] p-8 my-6">
+            <div className="w-12 h-12 mx-auto rounded-full bg-[var(--bg-subtle)] border border-[var(--border-soft)] flex items-center justify-center text-[var(--text-subtle)] mb-4">
+              <BookOpen className="w-6 h-6" />
+            </div>
+            <h3 className="text-base font-bold text-[var(--text-primary)]">
+              No Learning Resources Published Yet
+            </h3>
+            <p className="text-xs text-[var(--text-secondary)] mt-2 max-w-md mx-auto leading-relaxed">
+              Curated study notes, CS theory guides, and project implementation walkthroughs added via the Admin Dashboard will appear here.
+            </p>
+            <div className="mt-6 flex items-center justify-center gap-3">
+              <Link
+                href="/roadmaps"
+                className="px-4 py-2 rounded-sm text-xs font-semibold bg-[var(--accent-dark)] text-[var(--text-inverse)] hover:opacity-90 transition-opacity"
+              >
+                Explore Roadmaps
+              </Link>
+              <Link
+                href="/projects"
+                className="px-4 py-2 rounded-sm text-xs font-semibold bg-[var(--bg-subtle)] text-[var(--text-primary)] border border-[var(--border-soft)] hover:bg-[var(--border-soft)] transition-colors"
+              >
+                Browse Projects
+              </Link>
+            </div>
+          </div>
+        )}
+
+        {/* Empty State when filters yield no matches */}
+        {!loading && resources.length > 0 && filtered.length === 0 && (
           <div className="py-20 text-center rounded-sm border border-[var(--border-soft)] bg-[var(--bg-surface)] p-8">
             <BookOpen className="w-10 h-10 text-[var(--text-subtle)] mx-auto mb-3 opacity-40" />
             <p className="text-sm font-bold text-[var(--text-primary)]">

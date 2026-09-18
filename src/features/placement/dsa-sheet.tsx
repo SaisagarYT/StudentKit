@@ -8,11 +8,12 @@ import { dsaTopicsMeta, type DsaTopicMeta } from '@/config/placement/dsa-topics'
 import { dsaProblemRepository, resourceRepository } from '@/lib/cms/repository';
 import type { DsaProblemListItem, DsaCategory } from '@/lib/cms/types';
 
+import Link from 'next/link';
+import { Code2 } from 'lucide-react';
 import { DsaStatsBar } from './dsa/components/dsa-stats-bar';
 import { DsaFilterToolbar } from './dsa/components/dsa-filter-toolbar';
 import { DsaTopicAccordion } from './dsa/components/dsa-topic-accordion';
 import { DsaSolutionDrawer } from './dsa/components/dsa-solution-drawer';
-import { CANONICAL_DSA_PROBLEMS } from '@/config/placement/canonical-dsa-problems';
 
 const STORAGE_KEY = 'sk-dsa-progress';
 
@@ -87,14 +88,14 @@ export function DsaSheet() {
           }));
           setProblems(derived);
         } else {
-          // Pre-populate with rich canonical problems
-          setProblems(CANONICAL_DSA_PROBLEMS);
+          setProblems([]);
         }
         setPublishedSlugs(new Set(resources.map((r) => r.slug)));
         setLoading(false);
       })
-      .catch(() => {
-        setProblems(CANONICAL_DSA_PROBLEMS);
+      .catch((err) => {
+        console.error('[DsaSheet] Failed to load problems from backend:', err);
+        setProblems([]);
         setLoading(false);
       });
   }, []);
@@ -178,13 +179,30 @@ export function DsaSheet() {
 
       {/* Empty State if no problems exist */}
       {!loading && problems.length === 0 && (
-        <div className="py-20 text-center p-8 rounded-md border border-[var(--border-soft)] bg-[var(--bg-surface)]">
-          <p className="text-sm font-semibold text-[var(--text-primary)]">
-            No problems found
+        <div className="py-20 text-center p-8 rounded-md border border-dashed border-[var(--border-soft)] bg-[var(--bg-surface)] my-6">
+          <div className="w-12 h-12 mx-auto rounded-full bg-[var(--bg-subtle)] border border-[var(--border-soft)] flex items-center justify-center text-[var(--text-subtle)] mb-4">
+            <Code2 className="w-6 h-6" />
+          </div>
+          <h2 className="text-base font-bold text-[var(--text-primary)]">
+            No DSA Problems Published Yet
+          </h2>
+          <p className="mt-2 text-xs text-[var(--text-secondary)] max-w-md mx-auto leading-relaxed">
+            Curated algorithm practice problems and editorial solutions added via the Admin Dashboard will appear here.
           </p>
-          <p className="text-xs text-[var(--text-secondary)] mt-1">
-            Curated problems will appear here once loaded.
-          </p>
+          <div className="mt-6 flex items-center justify-center gap-3">
+            <Link
+              href="/placement/cs-fundamentals"
+              className="px-4 py-2 rounded-sm text-xs font-semibold bg-[var(--accent-dark)] text-[var(--text-inverse)] hover:opacity-90 transition-opacity"
+            >
+              CS Fundamentals
+            </Link>
+            <Link
+              href="/placement/interview"
+              className="px-4 py-2 rounded-sm text-xs font-semibold bg-[var(--bg-subtle)] text-[var(--text-primary)] border border-[var(--border-soft)] hover:bg-[var(--border-soft)] transition-colors"
+            >
+              Interview Prep
+            </Link>
+          </div>
         </div>
       )}
 

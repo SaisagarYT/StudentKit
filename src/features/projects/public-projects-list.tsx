@@ -5,20 +5,24 @@ import { collection, query, where, orderBy, getDocs } from 'firebase/firestore';
 import { getFirebaseDb, isFirebaseConfigured } from '@/lib/firebase/client';
 import { AnimatePresence } from 'motion/react';
 import { FolderOpen } from 'lucide-react';
-import { curatedProjects, type CuratedProject } from '@/config/projects';
+import Link from 'next/link';
+import type { CuratedProject } from '@/config/projects';
 import { ProjectsHeader } from './components/projects-header';
 import { ProjectsFilterBar, type DifficultyFilter } from './components/projects-filter-bar';
 import { ProjectCard } from './components/project-card';
 
 export function PublicProjectsList() {
-  const [projects, setProjects] = useState<CuratedProject[]>(curatedProjects);
-  const [loading, setLoading] = useState(false);
+  const [projects, setProjects] = useState<CuratedProject[]>([]);
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [difficulty, setDifficulty] = useState<DifficultyFilter>('all');
   const [category, setCategory] = useState<string>('all');
 
   useEffect(() => {
-    if (!isFirebaseConfigured) return;
+    if (!isFirebaseConfigured) {
+      setLoading(false);
+      return;
+    }
 
     async function loadFirebaseProjects() {
       try {
@@ -52,17 +56,13 @@ export function PublicProjectsList() {
               milestones: data.milestones ?? [],
             } as CuratedProject;
           });
-
-          // Combine remote projects with curated static projects without duplicates
-          const remoteSlugs = new Set(remote.map((p) => p.slug));
-          const merged = [
-            ...remote,
-            ...curatedProjects.filter((p) => !remoteSlugs.has(p.slug)),
-          ];
-          setProjects(merged);
+          setProjects(remote);
+        } else {
+          setProjects([]);
         }
-      } catch {
-        // Fallback gracefully to curatedProjects
+      } catch (err) {
+        console.error('[ProjectsList] Failed to load projects from backend:', err);
+        setProjects([]);
       } finally {
         setLoading(false);
       }
@@ -164,8 +164,37 @@ export function PublicProjectsList() {
         </div>
       )}
 
-      {/* Empty State */}
-      {!loading && filtered.length === 0 && (
+      {/* 1. Database is completely empty */}
+      {!loading && projects.length === 0 && (
+        <div className="text-center py-20 rounded-md border border-dashed border-[var(--border-soft)] bg-[var(--bg-surface)] p-8 my-6">
+          <div className="w-12 h-12 rounded-full bg-[var(--bg-subtle)] border border-[var(--border-soft)] flex items-center justify-center text-[var(--text-subtle)] mx-auto mb-4">
+            <FolderOpen className="w-6 h-6" />
+          </div>
+          <h2 className="text-base font-bold text-[var(--text-primary)]">
+            No Projects Published Yet
+          </h2>
+          <p className="mt-2 text-xs text-[var(--text-secondary)] max-w-md mx-auto leading-relaxed">
+            Curated engineering project blueprints and phase-by-phase masterclasses will appear here once published from the Admin Dashboard.
+          </p>
+          <div className="mt-6 flex items-center justify-center gap-3">
+            <Link
+              href="/roadmaps"
+              className="px-4 py-2 rounded-sm text-xs font-semibold bg-[var(--accent-dark)] text-[var(--text-inverse)] hover:opacity-90 transition-opacity"
+            >
+              Explore Roadmaps
+            </Link>
+            <Link
+              href="/tools"
+              className="px-4 py-2 rounded-sm text-xs font-semibold bg-[var(--bg-subtle)] text-[var(--text-primary)] border border-[var(--border-soft)] hover:bg-[var(--border-soft)] transition-colors"
+            >
+              Student Tools
+            </Link>
+          </div>
+        </div>
+      )}
+
+      {/* 2. Filter / Search mismatch when projects exist */}
+      {!loading && projects.length > 0 && filtered.length === 0 && (
         <div className="text-center py-16 rounded-md border border-dashed border-[var(--border-soft)] bg-[var(--bg-surface)] p-8">
           <FolderOpen className="w-10 h-10 mx-auto text-[var(--text-subtle)] mb-3 opacity-50" />
           <h2 className="text-base font-bold text-[var(--text-primary)]">

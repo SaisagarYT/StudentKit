@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { Search, ArrowRight, X, CornerDownLeft } from 'lucide-react';
 import * as Icons from 'lucide-react';
-import { roadmaps } from '@/config/roadmaps';
+import { fetchAllRoadmaps } from '@/lib/firebase/roadmaps';
 import { mainNavItems, secondaryNavItems } from '@/config/navigation';
 import { cn } from '@/lib/utils';
 import { trackSearch } from '@/lib/analytics';
@@ -24,16 +24,7 @@ interface SearchItem {
   keywords: string[];
 }
 
-const searchItems: SearchItem[] = [
-  ...roadmaps.map((r) => ({
-    id: `roadmap-${r.slug}`,
-    title: `${r.title} Roadmap`,
-    description: r.description.slice(0, 80),
-    href: `/roadmaps/view?slug=${r.slug}`,
-    icon: 'Map',
-    type: 'roadmap' as const,
-    keywords: [r.slug, r.title.toLowerCase(), 'roadmap', 'career', 'path'],
-  })),
+const baseSearchItems: SearchItem[] = [
   ...mainNavItems.flatMap((group) =>
     group.children.map((n) => ({
       id: `page-${n.href}`,
@@ -81,10 +72,10 @@ function fuzzyMatch(query: string, text: string): number {
   return qi === q.length ? score : 0;
 }
 
-function searchAndRank(query: string): SearchItem[] {
-  if (!query.trim()) return searchItems.slice(0, 8);
+function searchAndRank(query: string, items: SearchItem[]): SearchItem[] {
+  if (!query.trim()) return items.slice(0, 8);
 
-  const scored = searchItems.map((item) => {
+  const scored = items.map((item) => {
     const titleScore = fuzzyMatch(query, item.title);
     const descScore = fuzzyMatch(query, item.description) * 0.5;
     const keywordScore = Math.max(
@@ -110,13 +101,33 @@ interface CommandPaletteProps {
 export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
   const [query, setQuery] = useState('');
   const [activeIndex, setActiveIndex] = useState(0);
+  const [roadmapItems, setRoadmapItems] = useState<SearchItem[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
-  const results = useMemo(() => searchAndRank(query), [query]);
+  useEffect(() => {
+    fetchAllRoadmaps()
+      .then((list) => {
+        setRoadmapItems(
+          list.map((r) => ({
+            id: `roadmap-${r.slug}`,
+            title: `${r.title} Roadmap`,
+            description: r.description ? r.description.slice(0, 80) : '',
+            href: `/roadmaps/view?slug=${r.slug}`,
+            icon: 'Map',
+            type: 'roadmap' as const,
+            keywords: [r.slug, r.title.toLowerCase(), 'roadmap', 'career', 'path'],
+          }))
+        );
+      })
+      .catch(() => {});
+  }, []);
+
+  const allItems = useMemo(() => [...roadmapItems, ...baseSearchItems], [roadmapItems]);
+  const results = useMemo(() => searchAndRank(query, allItems), [query, allItems]);
 
   useEffect(() => {
     setActiveIndex(0);

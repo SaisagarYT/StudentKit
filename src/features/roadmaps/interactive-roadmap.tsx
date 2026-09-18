@@ -12,7 +12,6 @@ import { RoadmapPrerequisites } from './components/roadmap-prerequisites';
 import { RoadmapStageNode } from './components/roadmap-stage-node';
 import { RoadmapTopicNode } from './components/roadmap-topic-node';
 import { RoadmapProjectMilestone } from './components/roadmap-project-milestone';
-import { curatedProjects } from '@/config/projects';
 
 // ─── Persistence helpers ──────────────────────────────────────────────────────
 
@@ -90,10 +89,6 @@ export function InteractiveRoadmap({ roadmap }: { roadmap: Roadmap }) {
     }
     return roadmap.variants?.[0]?.id ?? '';
   });
-
-  const matchingProject = useMemo(() => {
-    return curatedProjects.find((p) => p.relatedRoadmapIds?.includes(roadmap.slug));
-  }, [roadmap.slug]);
 
   useEffect(() => {
     setProgress(loadProgress(roadmap.slug));
@@ -291,7 +286,6 @@ export function InteractiveRoadmap({ roadmap }: { roadmap: Roadmap }) {
                   title={lastTopicInStage.project.title}
                   description={lastTopicInStage.project.description}
                   stageIndex={stageIdx + 1}
-                  projectSlug={matchingProject?.slug}
                 />
               )}
             </div>
