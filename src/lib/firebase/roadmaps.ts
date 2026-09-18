@@ -89,15 +89,24 @@ export interface RoadmapListEntry {
 export async function fetchAllRoadmaps(): Promise<RoadmapListEntry[]> {
   if (!isFirebaseConfigured) return [];
 
-  const q = query(
-    collection(getFirebaseDb(), 'roadmaps'),
-    where('status', '==', 'published'),
-    orderBy('order', 'asc')
-  );
-  const snap = await getDocs(q);
+  let snap;
+  try {
+    const q = query(
+      collection(getFirebaseDb(), 'roadmaps'),
+      where('status', '==', 'published'),
+      orderBy('order', 'asc')
+    );
+    snap = await getDocs(q);
+  } catch {
+    const q = query(
+      collection(getFirebaseDb(), 'roadmaps'),
+      where('status', '==', 'published')
+    );
+    snap = await getDocs(q);
+  }
 
-  return snap.docs.map((d) => {
-    const data = d.data() as FirestoreRoadmapData;
+  const items = snap.docs.map((d) => {
+    const data = d.data() as FirestoreRoadmapData & { order?: number };
     const totalTopics = (data.sections || []).reduce(
       (sum, s) => sum + (s.topics?.length ?? 0),
       0
@@ -111,8 +120,11 @@ export async function fetchAllRoadmaps(): Promise<RoadmapListEntry[]> {
       totalTime: data.estimatedDuration || '',
       totalTopics,
       stageCount: (data.sections || []).length,
+      order: data.order ?? 0,
     };
   });
+
+  return items.sort((a, b) => a.order - b.order);
 }
 
 export async function fetchRoadmapBySlug(slug: string): Promise<Roadmap | null> {

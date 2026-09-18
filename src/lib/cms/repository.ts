@@ -125,13 +125,24 @@ export const roadmapRepository = {
   },
 
   async list(filters?: { status?: ContentStatus }): Promise<RoadmapListItem[]> {
-    let q;
-    if (filters?.status) {
-      q = query(collection(getFirebaseDb(), 'roadmaps'), where('status', '==', filters.status), orderBy('updatedAt', 'desc'));
-    } else {
-      q = query(collection(getFirebaseDb(), 'roadmaps'), orderBy('updatedAt', 'desc'));
+    let snap;
+    try {
+      let q;
+      if (filters?.status) {
+        q = query(collection(getFirebaseDb(), 'roadmaps'), where('status', '==', filters.status), orderBy('updatedAt', 'desc'));
+      } else {
+        q = query(collection(getFirebaseDb(), 'roadmaps'), orderBy('updatedAt', 'desc'));
+      }
+      snap = await getDocs(q);
+    } catch {
+      let q;
+      if (filters?.status) {
+        q = query(collection(getFirebaseDb(), 'roadmaps'), where('status', '==', filters.status));
+      } else {
+        q = query(collection(getFirebaseDb(), 'roadmaps'));
+      }
+      snap = await getDocs(q);
     }
-    const snap = await getDocs(q);
     return snap.docs.map((d) => {
       const data = d.data();
       const sections = data.sections ?? [];
@@ -223,13 +234,24 @@ export const projectRepository = {
   },
 
   async list(filters?: { status?: ContentStatus }): Promise<ProjectListItem[]> {
-    let q;
-    if (filters?.status) {
-      q = query(collection(getFirebaseDb(), 'projects'), where('status', '==', filters.status), orderBy('updatedAt', 'desc'));
-    } else {
-      q = query(collection(getFirebaseDb(), 'projects'), orderBy('updatedAt', 'desc'));
+    let snap;
+    try {
+      let q;
+      if (filters?.status) {
+        q = query(collection(getFirebaseDb(), 'projects'), where('status', '==', filters.status), orderBy('updatedAt', 'desc'));
+      } else {
+        q = query(collection(getFirebaseDb(), 'projects'), orderBy('updatedAt', 'desc'));
+      }
+      snap = await getDocs(q);
+    } catch {
+      let q;
+      if (filters?.status) {
+        q = query(collection(getFirebaseDb(), 'projects'), where('status', '==', filters.status));
+      } else {
+        q = query(collection(getFirebaseDb(), 'projects'));
+      }
+      snap = await getDocs(q);
     }
-    const snap = await getDocs(q);
     return snap.docs.map((d) => {
       const data = d.data();
       return {

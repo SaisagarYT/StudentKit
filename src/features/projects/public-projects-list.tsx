@@ -27,12 +27,23 @@ export function PublicProjectsList() {
     async function loadFirebaseProjects() {
       try {
         setLoading(true);
-        const q = query(
-          collection(getFirebaseDb(), 'projects'),
-          where('status', '==', 'published'),
-          orderBy('order', 'asc')
-        );
-        const snap = await getDocs(q);
+        let snap;
+        try {
+          const q = query(
+            collection(getFirebaseDb(), 'projects'),
+            where('status', '==', 'published'),
+            orderBy('order', 'asc')
+          );
+          snap = await getDocs(q);
+        } catch {
+          // If Firestore composite index is not created, query by status alone
+          const q = query(
+            collection(getFirebaseDb(), 'projects'),
+            where('status', '==', 'published')
+          );
+          snap = await getDocs(q);
+        }
+
         if (!snap.empty) {
           const remote = snap.docs.map((d) => {
             const data = d.data();
@@ -54,8 +65,10 @@ export function PublicProjectsList() {
               relatedRoadmapIds: data.relatedRoadmapIds ?? [],
               features: data.features ?? [],
               milestones: data.milestones ?? [],
-            } as CuratedProject;
+              order: data.order ?? 0,
+            } as CuratedProject & { order?: number };
           });
+          remote.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
           setProjects(remote);
         } else {
           setProjects([]);
