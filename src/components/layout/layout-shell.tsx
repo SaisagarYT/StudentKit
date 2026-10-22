@@ -11,7 +11,8 @@ import { RegisterSW } from '@/components/pwa/register-sw';
 import { MilestoneProvider } from '@/features/profile/milestone-provider';
 import { XpToast } from '@/components/engagement/xp-toast';
 
-const NO_FOOTER_ROUTES = ['/login', '/profile', '/start'];
+const NO_NAV_ROUTES = ['/login', '/register'];
+const NO_FOOTER_ROUTES = ['/login', '/register', '/profile', '/start'];
 
 function FooterWrapper() {
   const pathname = usePathname();
@@ -62,13 +63,15 @@ export function LayoutShell({ children }: { children: React.ReactNode }) {
     return <ThemeProvider>{children}</ThemeProvider>;
   }
 
+  const isAuthRoute = NO_NAV_ROUTES.some((route) => pathname.startsWith(route));
+
   return (
     <ThemeProvider>
       <UserAuthProvider>
         <RegisterSW />
         <MilestoneProvider />
-        <SiteHeader />
-        <ProductTour />
+        {!isAuthRoute && <SiteHeader />}
+        {!isAuthRoute && <ProductTour />}
         <main className="flex-1">{children}</main>
         <XpToast />
         <FooterWrapper />

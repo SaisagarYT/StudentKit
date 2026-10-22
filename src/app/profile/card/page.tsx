@@ -1,10 +1,9 @@
 import { Metadata } from 'next';
 import { Suspense } from 'react';
-import { siteConfig } from '@/config/site';
 import { PublicProfileCard } from '@/features/profile/public-profile-card';
 
 export const metadata: Metadata = {
-  title: `Dev Card | ${siteConfig.name}`,
+  title: 'Dev Card',
   description: 'Your shareable developer learning card. Show off your DSA progress, streaks, and XP.',
 };
 

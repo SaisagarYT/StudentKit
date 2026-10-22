@@ -194,6 +194,8 @@ export function SiteHeader() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isBookmarksOpen, setIsBookmarksOpen] = useState(false);
   const pathname = usePathname();
+  const isAuthPage = pathname === '/login';
+  const isProfilePage = pathname.startsWith('/profile');
 
   useEffect(() => {
     const handleScroll = () => { setIsScrolled(window.scrollY > 10); };
@@ -295,15 +297,21 @@ export function SiteHeader() {
                 <ThemeToggle />
               </div>
 
-              <UserButton />
+              {!isAuthPage && (
+                <>
+                  <UserButton />
 
-              <Link
-                href="/profile"
-                className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium bg-accent-dark text-text-inverse rounded-sm hover:bg-accent-dark/90 transition-colors"
-              >
-                <LayoutDashboard className="w-3.5 h-3.5" />
-                Dashboard
-              </Link>
+                  {!isProfilePage && (
+                    <Link
+                      href="/profile"
+                      className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium bg-accent-dark text-text-inverse rounded-sm hover:bg-accent-dark/90 transition-colors"
+                    >
+                      <LayoutDashboard className="w-3.5 h-3.5" />
+                      Dashboard
+                    </Link>
+                  )}
+                </>
+              )}
 
               {/* Mobile menu toggle */}
               <button
@@ -383,15 +391,21 @@ export function SiteHeader() {
             </nav>
 
             <div className="mt-6 pt-6 border-t border-border-soft space-y-3">
-              <Link
-                href="/profile"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="flex items-center justify-center gap-2 w-full px-4 py-3 text-sm font-medium bg-accent-dark text-text-inverse rounded-sm"
-              >
-                <LayoutDashboard className="w-4 h-4" />
-                Dashboard
-              </Link>
-              <MobileAuthLink onClose={() => setIsMobileMenuOpen(false)} />
+              {!isAuthPage && (
+                <>
+                  {!isProfilePage && (
+                    <Link
+                      href="/profile"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="flex items-center justify-center gap-2 w-full px-4 py-3 text-sm font-medium bg-accent-dark text-text-inverse rounded-sm"
+                    >
+                      <LayoutDashboard className="w-4 h-4" />
+                      Dashboard
+                    </Link>
+                  )}
+                  <MobileAuthLink onClose={() => setIsMobileMenuOpen(false)} />
+                </>
+              )}
               <div className="flex justify-center pt-2">
                 <ThemeToggle />
               </div>

@@ -1,10 +1,9 @@
 import { Metadata } from 'next';
 import { Suspense } from 'react';
-import { siteConfig } from '@/config/site';
 import { ProfileDashboard } from '@/features/profile/profile-dashboard';
 
 export const metadata: Metadata = {
-  title: `My Profile | ${siteConfig.name}`,
+  title: 'My Profile',
   description: 'Track your learning progress, streaks, solved problems, and achievements.',
 };
 
